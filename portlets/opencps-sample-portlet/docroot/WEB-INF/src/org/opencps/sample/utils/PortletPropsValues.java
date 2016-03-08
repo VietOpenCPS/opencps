@@ -1,0 +1,36 @@
+/*******************************************************************************
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *******************************************************************************/
+
+package org.opencps.sample.utils;
+
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.util.portlet.PortletProps;
+
+/**
+ * @author trungnt
+ *
+ */
+public class PortletPropsValues {
+	public static final int _OPENCPS_SAMPLE_DEPARTMENT_DESCRIPTION_LENGTH = GetterUtil
+			.getInteger(PortletProps.get(PortletPropsKeys._OPENCPS_SAMPLE_DEPARTMENT_DESCRIPTION_LENGTH), 500);
+	public static final int _OPENCPS_SAMPLE_DEPARTMENT_NAME_LENGTH = GetterUtil
+			.getInteger(PortletProps.get(PortletPropsKeys._OPENCPS_SAMPLE_DEPARTMENT_NAME_LENGTH), 255);
+	public static final int _OPENCPS_SAMPLE_STAFF_DESCRIPTION_LENGTH = GetterUtil
+			.getInteger(PortletProps.get(PortletPropsKeys._OPENCPS_SAMPLE_STAFF_DESCRIPTION_LENGTH), 255);
+	public static final int _OPENCPS_SAMPLE_STAFF_NAME_LENGTH = GetterUtil
+			.getInteger(PortletProps.get(PortletPropsKeys._OPENCPS_SAMPLE_STAFF_NAME_LENGTH), 500);
+}

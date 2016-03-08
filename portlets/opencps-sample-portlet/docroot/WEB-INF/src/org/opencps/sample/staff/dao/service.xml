@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.sample.staff">
+	<author>trungnt</author>
+	<namespace>staff</namespace>
+
+	<entity name="Staff" local-service="true" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="staffId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+        <column name="departmentId" type="long"></column>
+
+		<column name="fullName" type="String" />
+		<column name="birthDay" type="Date" />
+		<column name="address" type="String" />
+        <column name="email" type="String"></column>
+		<column name="phoneNumber" type="String" />
+        <column name="position" type="String"></column>
+		<column name="description" type="String" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="fullName" order-by="asc"/>
+		</order>
+
+		<!-- Finder methods -->
+        <reference entity="Department" package-path="org.opencps.sample.department.dao">
+        </reference>
+	</entity>
+    <exceptions>
+        <exception>EnptyStaffName</exception>
+        <exception>EmptyStaffEmail</exception>
+        <exception>DuplicateStaffEmail</exception>
+        <exception>DuplicateStaffName</exception>
+        <exception>OutOfLenghtStaffEmail</exception>
+        <exception>OutOfLenghtStaffName</exception>
+        <exception>OutOfLenghtStaffDescription</exception>
+    </exceptions>
+</service-builder>

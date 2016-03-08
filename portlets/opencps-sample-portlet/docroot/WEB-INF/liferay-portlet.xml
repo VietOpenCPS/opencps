@@ -2,12 +2,24 @@
 <!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
 
 <liferay-portlet-app>
+	
 	<portlet>
-		<portlet-name>opencps-sample</portlet-name>
-		<icon>/icon.png</icon>
+		<portlet-name>1</portlet-name>
+		<icon>/stafficon.png</icon>
+		<control-panel-entry-category>
+			site_administration.content
+		</control-panel-entry-category>
+		<control-panel-entry-weight>1.5</control-panel-entry-weight>
+		<control-panel-entry-class>
+			org.opencps.sample.portlet.StaffManagementPortletControlPanelEntry
+		</control-panel-entry-class>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		<css-class-wrapper>opencps-sample-portlet</css-class-wrapper>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>
+			1-staff-management-portlet
+		</css-class-wrapper>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

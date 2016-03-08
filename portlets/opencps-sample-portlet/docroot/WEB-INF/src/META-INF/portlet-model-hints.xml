@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="org.opencps.sample.department.model.Department">
+		<field name="departmentId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="parentId" type="long" />
+		<field name="name" type="String" />
+		<field name="description" type="String" />
+	</model>
+	<model name="org.opencps.sample.staff.model.Staff">
+		<field name="staffId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="departmentId" type="long" />
+		<field name="fullName" type="String" />
+		<field name="birthDay" type="Date" />
+		<field name="address" type="String" />
+		<field name="email" type="String" />
+		<field name="phoneNumber" type="String" />
+		<field name="position" type="String" />
+		<field name="description" type="String" />
+	</model>
+</model-hints>

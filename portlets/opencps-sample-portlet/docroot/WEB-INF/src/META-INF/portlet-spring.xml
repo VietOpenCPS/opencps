@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="org.opencps.sample.department.service.DepartmentLocalService" class="org.opencps.sample.department.service.impl.DepartmentLocalServiceImpl" />
+	<bean id="org.opencps.sample.department.service.DepartmentService" class="org.opencps.sample.department.service.impl.DepartmentServiceImpl" />
+	<bean id="org.opencps.sample.department.service.persistence.DepartmentPersistence" class="org.opencps.sample.department.service.persistence.DepartmentPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.sample.staff.service.StaffLocalService" class="org.opencps.sample.staff.service.impl.StaffLocalServiceImpl" />
+	<bean id="org.opencps.sample.staff.service.StaffService" class="org.opencps.sample.staff.service.impl.StaffServiceImpl" />
+	<bean id="org.opencps.sample.staff.service.persistence.StaffPersistence" class="org.opencps.sample.staff.service.persistence.StaffPersistenceImpl" parent="basePersistence" />
+</beans>

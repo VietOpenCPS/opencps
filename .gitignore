@@ -42,4 +42,18 @@ portlets/build-common-portlet.xml
 portlets/create.bat
 portlets/create.sh
 themes/
+.project
+portlets/opencps-portlet/.tern-project
+portlets/opencps-sample-portlet/docroot/WEB-INF/classes/
+portlets/opencps-sample-portlet/docroot/WEB-INF/service/
+portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/department/model/
+portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/department/service/base/
+portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/department/service/http/
+portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/department/service/persistence/
+portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/staff/model/
+portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/staff/service/base/
+portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/staff/service/http/
+portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/staff/service/persistence/
 
+portlets/opencps-sample-portlet/.classpath
+portlets/opencps-sample-portlet/.settings/org.eclipse.wst.common.component

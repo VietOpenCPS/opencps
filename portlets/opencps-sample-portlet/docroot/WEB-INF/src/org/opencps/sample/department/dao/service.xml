@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.sample.department">
+	<author>trungnt</author>
+	<namespace>department</namespace>
+
+	<entity name="Department" local-service="true" remote-service="true" 
+													table="opencps_department">
+
+		<!-- PK fields -->
+
+		<column name="departmentId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="parentId" type="long" />
+		<column name="name" type="String" />
+		<column name="description" type="String" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="name" order-by="asc"/>
+		</order>
+
+		<!-- Finder methods -->
+	</entity>
+    <exceptions>
+        <exception>EmptyDepartmentName</exception>
+        <exception>OutOfLengthDepartmentName</exception>
+        <exception>DuplicateDepartment</exception>
+        <exception>OutOfLengthDepartmentDescription</exception>
+    </exceptions>
+</service-builder>
