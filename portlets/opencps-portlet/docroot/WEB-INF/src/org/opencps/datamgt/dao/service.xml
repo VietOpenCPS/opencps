@@ -6,9 +6,7 @@
 
 	<entity name="DictCollection" local-service="true" remote-service="true" 
 		data-source="opencpsdatasource"	table="opencps_dictcollection">
-		
-		<column name="dictCollectionId" type="long" primary="true" />
-
+		<column name="collectionId" type="long" primary="true"/>
 		<!-- Group instance -->
 
 		<column name="groupId" type="long" />
@@ -20,11 +18,16 @@
 		<column name="userName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
-
-		<column name="collectionId" type="long" primary="true"/>
 		<column name="collectionCode" type="String"/>
 		<column name="collectionName" type="String"/>
 		<column name="description" type="String"/>
+		<finder return-type="DictCollection" name="getCollectionByCode">
+			<finder-column name="collectionCode"></finder-column>
+		</finder>
+		<finder return-type="DictCollection" name="getCollectionByName">
+			<finder-column name="collectionName"></finder-column>
+		</finder>
+		
 	</entity>
 
 	<entity name="DictVersion" local-service="true" remote-service="true" 
