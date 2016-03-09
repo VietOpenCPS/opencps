@@ -6,7 +6,7 @@
 
 	<entity name="DictCollection" local-service="true" remote-service="true" 
 		data-source="opencpsdatasource"	table="opencps_dictcollection">
-		<column name="collectionId" type="long" primary="true"/>
+		<column name="dictCollectionId" type="long" primary="true"/>
 		<!-- Group instance -->
 
 		<column name="groupId" type="long" />
@@ -33,7 +33,7 @@
 	<entity name="DictVersion" local-service="true" remote-service="true" 
 		data-source="opencpsdatasource"	table="opencps_dictversion">
 
-		<column name="dictCollectionId" type="long" primary="true" />
+		<column name="dictVersionId" type="long" primary="true" />
 
 		<!-- Group instance -->
 
@@ -57,7 +57,7 @@
 	<entity name="DictItem" local-service="true" remote-service="true" 
 		data-source="opencpsdatasource"	table="opencps_dictitem">
 		
-		<column name="id" type="long" primary="true" />
+		<column name="dictItemId" type="long" primary="true" />
 
 		<!-- Group instance -->
 
