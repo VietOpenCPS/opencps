@@ -83,6 +83,7 @@
 		<column name="validatedFrom" type="Date"/>
 		<column name="validatedTo" type="Date"/>
 		<column name="issueStatus" type="int"/>
+        <column name="order" type="int"></column>
 	</entity>
 
 	<exceptions>
