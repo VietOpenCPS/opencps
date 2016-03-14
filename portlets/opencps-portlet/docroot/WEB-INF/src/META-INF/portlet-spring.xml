@@ -3,17 +3,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<bean id="org.opencps.datamgt.service.DictCollectionLocalService" class="org.opencps.datamgt.service.impl.DictCollectionLocalServiceImpl" />
 	<bean id="org.opencps.datamgt.service.DictCollectionService" class="org.opencps.datamgt.service.impl.DictCollectionServiceImpl" />
-	<bean id="org.opencps.datamgt.service.persistence.DictCollectionPersistence" class="org.opencps.datamgt.service.persistence.DictCollectionPersistenceImpl" parent="basePersistence">
-		<property name="dataSource" ref="opencpsdatasource" />
-	</bean>
+	<bean id="org.opencps.datamgt.service.persistence.DictCollectionPersistence" class="org.opencps.datamgt.service.persistence.DictCollectionPersistenceImpl" parent="basePersistence" />
 	<bean id="org.opencps.datamgt.service.DictItemLocalService" class="org.opencps.datamgt.service.impl.DictItemLocalServiceImpl" />
 	<bean id="org.opencps.datamgt.service.DictItemService" class="org.opencps.datamgt.service.impl.DictItemServiceImpl" />
-	<bean id="org.opencps.datamgt.service.persistence.DictItemPersistence" class="org.opencps.datamgt.service.persistence.DictItemPersistenceImpl" parent="basePersistence">
-		<property name="dataSource" ref="opencpsdatasource" />
-	</bean>
+	<bean id="org.opencps.datamgt.service.persistence.DictItemPersistence" class="org.opencps.datamgt.service.persistence.DictItemPersistenceImpl" parent="basePersistence" />
 	<bean id="org.opencps.datamgt.service.DictVersionLocalService" class="org.opencps.datamgt.service.impl.DictVersionLocalServiceImpl" />
 	<bean id="org.opencps.datamgt.service.DictVersionService" class="org.opencps.datamgt.service.impl.DictVersionServiceImpl" />
-	<bean id="org.opencps.datamgt.service.persistence.DictVersionPersistence" class="org.opencps.datamgt.service.persistence.DictVersionPersistenceImpl" parent="basePersistence">
-		<property name="dataSource" ref="opencpsdatasource" />
-	</bean>
+	<bean id="org.opencps.datamgt.service.persistence.DictVersionPersistence" class="org.opencps.datamgt.service.persistence.DictVersionPersistenceImpl" parent="basePersistence" />
 </beans>

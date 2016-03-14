@@ -5,7 +5,7 @@
 	<namespace>datamgt</namespace>
 
 	<entity name="DictCollection" local-service="true"
-		remote-service="true" data-source="opencpsdatasource" table="opencps_dictcollection">
+		remote-service="true" table="opencps_dictcollection">
 
 		<!-- PK fields -->
 
@@ -35,11 +35,24 @@
 			unique="true">
 			<finder-column name="collectionCode" />
 		</finder>
+		
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId" />
+		</finder>
+		
+		<finder name="G_C" return-type="DictCollection">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="collectionCode"></finder-column>
+		</finder>
+        <finder name="G_N" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="collectionName" comparator="LIKE" arrayable-operator="OR"></finder-column>
+        </finder>
 
 	</entity>
 
 	<entity name="DictVersion" local-service="true" remote-service="true"
-		data-source="opencpsdatasource" table="opencps_dictversion">
+		table="opencps_dictversion">
 
 		<!-- PK fields -->
 
@@ -72,7 +85,7 @@
 	</entity>
 
 	<entity name="DictItem" local-service="true" remote-service="true"
-		data-source="opencpsdatasource" table="opencps_dictitem">
+		table="opencps_dictitem">
 
 		<!-- PK fields -->
 
@@ -102,7 +115,7 @@
 		</order>
 
 		<!-- Finder methods -->
-		<finder name="CollectionId_ItemCode" return-type="DictItem"
+		<finder name="C_C_I" return-type="DictItem"
 			where="issueStatus = 1">
 			<finder-column name="dictCollectionId" />
 			<finder-column name="itemCode" />
@@ -119,6 +132,13 @@
 		<finder name="TreeIndex" return-type="Collection">
 			<finder-column name="treeIndex" comparator="LIKE" />
 		</finder>
+        <finder name="D_I" return-type="Collection" where="issueStatus = 1">
+            <finder-column name="dictCollectionId"></finder-column>
+        </finder>
+        <finder name="C_N" return-type="Collection">
+            <finder-column name="dictCollectionId"></finder-column>
+            <finder-column name="itemName" comparator="LIKE" arrayable-operator="OR"></finder-column>
+        </finder>
 
 	</entity>
 
@@ -133,6 +153,10 @@
 		<exception>OutOfLengthCollectionDescription</exception>
 		<exception>OutOfLengthVesionDescription</exception>
 		<exception>OutOfLengthItemDescription</exception>
+        <exception>OutOfLengthCollectionCode</exception>
+        <exception>OutOfLengthItemCode</exception>
+        <exception>EmptyCollectionCode</exception>
+        <exception>EmptyItemCode</exception>
 	</exceptions>
 
 </service-builder>
