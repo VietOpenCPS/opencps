@@ -14,13 +14,22 @@
 		<css-class-wrapper>1-opencps-datamgt-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
-		<portlet-name>99</portlet-name>
+		<portlet-name>2</portlet-name>
 		<icon>/icon.png</icon>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
-		<css-class-wrapper>99-portlet</css-class-wrapper>
+		<css-class-wrapper>2-opencps-usermgt-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>3</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>3-opencps-usermgt-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.usermgt">
+	<author>khoavd</author>
+	<namespace>usermgt</namespace>
+
+	<entity name="WorkingUnit" local-service="true"
+		remote-service="true" table="opencps_workingunit">
+
+		<!-- PK fields -->
+
+		<column name="workingunitId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="name" type="String" />
+		<column name="enName" type="String" />
+		<column name="govAgencyCode" type="String"/>
+		<column name="parentWorkingUnitId" type="long" />
+		<column name="treeIndex" type="String" />
+		<column name="address" type="String" />
+		<column name="cityCode" type="String" />
+		<column name="districtCode" type="String" />
+		<column name="wardCode" type="String" />
+		<column name="telNo" type="String" />
+		<column name="faxNo" type="String" />
+		<column name="email" type="String" />
+		<column name="website" type="String" />
+		<column name="isEmployer" type="boolean" />
+		<column name="mappingOrganisationId" type="long" />
+		
+		<column name="entries" type="Collection" entity="JobPos" 
+			mapping-table="opencps_workingunit_jobpos" />
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="name" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="G_E" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="isEmployer" />
+		</finder>
+		
+		<finder name="G_E_P" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="isEmployer" />
+			<finder-column name="parentWorkingUnitId" />
+		</finder>
+	</entity>
+
+	<entity name="JobPos" local-service="true" remote-service="true"
+		table="opencps_jobpos">
+
+		<!-- PK fields -->
+
+		<column name="jobposId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="title" type="String" />
+		<column name="description" type="String" />
+		<column name="workingUnitId" type="long" />
+		<column name="directWorkingUnitId" type="long" />
+		<column name="leader" type="int" />
+		<column name="mappingRoleId" type="long" />
+
+		<!-- Relationships -->
+		<column name="entries" type="Collection" entity="Employee" 
+			mapping-table="opencps_employee_jobpos" />
+
+		<column name="entries" type="Collection" entity="WorkingUnit" 
+			mapping-table="opencps_workingunit_jobpos" />
+
+		<!-- Order -->
+
+		<!-- Finder methods -->
+		<finder name="G_W" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="workingUnitId" />
+		</finder>
+
+		<finder name="G_W_D" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="workingUnitId" />
+			<finder-column name="directWorkingUnitId" />
+		</finder>
+	</entity>
+
+	<entity name="Employee" local-service="true" remote-service="true"
+		table="opencps_employee">
+
+		<!-- PK fields -->
+
+		<column name="employeeId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="workingUnitId" type="long" />
+		<column name="employeeNo" type="String" />
+		<column name="fullName" type="String"/>
+		<column name="gender" type="int"/>
+		<column name="birthdate" type="Date" />
+		<column name="telNo" type="String" />
+		<column name="mobile" type="String" />
+		<column name="email" type="String" />
+		<column name="workingStatus" type="int" />
+		<column name="mainJobPosId" type="long" />
+
+		<column name="entries" type="Collection" entity="JobPos" 
+			mapping-table="opencps_employee_jobpos" />
+
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="fullName" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="G_W" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="mainJobPosId" />
+		</finder>
+		
+		<finder name="G_W_MJP" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="workingUnitId" />
+			<finder-column name="mainJobPosId" />
+		</finder>
+	</entity>
+
+	<exceptions>
+		<exception>EmptyWorkingUnitName</exception>
+		<exception>EmptyJobPosTitle</exception>
+		<exception>DuplicatEgovAgencyCode</exception>
+		<exception>DuplicateWorkingUnit</exception>
+		<exception>DuplicateJobPos</exception>
+		<exception>OutOfLengthUnitName</exception>
+		<exception>OutOfLengthUnitEnName</exception>
+		<exception>OutOfLengthJobTitle</exception>
+		<exception>OutOfLengthFullName</exception>
+		<exception>OutOfLengthDescription</exception>
+	</exceptions>
+</service-builder>

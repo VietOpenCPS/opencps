@@ -43,33 +43,32 @@
 		</security-role-ref>
 	</portlet>
 	<portlet>
-		<portlet-name>99</portlet-name>
-		<display-name>Sample API</display-name>
+	<portlet-name>2</portlet-name>
+		<display-name>User Management</display-name>
 		<portlet-class>
-			org.opencps.sample.ui.portlet.SamplePortlet
+			org.opencps.usermgt.portlet.UserMgtPortlet	
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/samples/view.jsp</value>
+			<value>/html/portlets/usermgt/admin/employees.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
-			<value>/html/portlets/samples/</value>
+			<value>/html/portlets/usermgt/admin/</value>
 		</init-param>
 		<init-param>
 			<name>config-template</name>
-			<value>/html/portlets/samples/configuration.jsp</value>
+			<value>/html/portlets/usermgt/admin/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
 		</supports>
-		<resource-bundle>content.Language_99</resource-bundle>
+		<resource-bundle>content.Language_2</resource-bundle>
 		<portlet-info>
-			<title>Sample API</title>
-			<short-title>99</short-title>
-			<keywords></keywords>
+			<title>Data Management</title>
+			<short-title>Data Management</short-title>
+			<keywords>Data Management</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
@@ -84,4 +83,43 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+	
+	<portlet>	
+		<portlet-name>3</portlet-name>
+		<display-name>Account Management</display-name>
+		<portlet-class>
+			org.opencps.usermgt.portlet.UserMgtEditProfilePortlet	
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/usermgt/edit_info/info.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/usermgt/edit_info/</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>content.Language_3</resource-bundle>
+		<portlet-info>
+			<title>Account Management</title>
+			<short-title>Account Management</short-title>
+			<keywords>Account Management</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
 </portlet-app>

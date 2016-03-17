@@ -61,4 +61,69 @@
 		<field name="validatedTo" type="Date" />
 		<field name="issueStatus" type="int" />
 	</model>
+	<model name="org.opencps.usermgt.model.Employee">
+		<field name="employeeId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="workingUnitId" type="long" />
+		<field name="employeeNo" type="String" />
+		<field name="fullName" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="gender" type="int" />
+		<field name="birthdate" type="Date" />
+		<field name="telNo" type="String" />
+		<field name="mobile" type="String" />
+		<field name="email" type="String" />
+		<field name="workingStatus" type="int" />
+		<field name="mainJobPosId" type="long" />
+	</model>
+	<model name="org.opencps.usermgt.model.JobPos">
+		<field name="jobposId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="title" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="description" type="String">
+			<hint-collection name="TEXTAREA" />
+		</field>
+		<field name="workingUnitId" type="long" />
+		<field name="directWorkingUnitId" type="long" />
+		<field name="leader" type="int" />
+		<field name="mappingRoleId" type="long" />
+	</model>
+	<model name="org.opencps.usermgt.model.WorkingUnit">
+		<field name="workingunitId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="enName" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="govAgencyCode" type="String" />
+		<field name="parentWorkingUnitId" type="long" />
+		<field name="treeIndex" type="String" />
+		<field name="address" type="String" />
+		<field name="cityCode" type="String" />
+		<field name="districtCode" type="String" />
+		<field name="wardCode" type="String" />
+		<field name="telNo" type="String" />
+		<field name="faxNo" type="String" />
+		<field name="email" type="String" />
+		<field name="website" type="String" />
+		<field name="isEmployer" type="boolean" />
+		<field name="mappingOrganisationId" type="long" />
+	</model>
 </model-hints>

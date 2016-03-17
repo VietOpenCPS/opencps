@@ -10,4 +10,13 @@
 	<bean id="org.opencps.datamgt.service.DictVersionLocalService" class="org.opencps.datamgt.service.impl.DictVersionLocalServiceImpl" />
 	<bean id="org.opencps.datamgt.service.DictVersionService" class="org.opencps.datamgt.service.impl.DictVersionServiceImpl" />
 	<bean id="org.opencps.datamgt.service.persistence.DictVersionPersistence" class="org.opencps.datamgt.service.persistence.DictVersionPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.usermgt.service.EmployeeLocalService" class="org.opencps.usermgt.service.impl.EmployeeLocalServiceImpl" />
+	<bean id="org.opencps.usermgt.service.EmployeeService" class="org.opencps.usermgt.service.impl.EmployeeServiceImpl" />
+	<bean id="org.opencps.usermgt.service.persistence.EmployeePersistence" class="org.opencps.usermgt.service.persistence.EmployeePersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.usermgt.service.JobPosLocalService" class="org.opencps.usermgt.service.impl.JobPosLocalServiceImpl" />
+	<bean id="org.opencps.usermgt.service.JobPosService" class="org.opencps.usermgt.service.impl.JobPosServiceImpl" />
+	<bean id="org.opencps.usermgt.service.persistence.JobPosPersistence" class="org.opencps.usermgt.service.persistence.JobPosPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.usermgt.service.WorkingUnitLocalService" class="org.opencps.usermgt.service.impl.WorkingUnitLocalServiceImpl" />
+	<bean id="org.opencps.usermgt.service.WorkingUnitService" class="org.opencps.usermgt.service.impl.WorkingUnitServiceImpl" />
+	<bean id="org.opencps.usermgt.service.persistence.WorkingUnitPersistence" class="org.opencps.usermgt.service.persistence.WorkingUnitPersistenceImpl" parent="basePersistence" />
 </beans>

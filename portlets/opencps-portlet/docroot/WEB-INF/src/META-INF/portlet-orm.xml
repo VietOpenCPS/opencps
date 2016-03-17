@@ -85,6 +85,93 @@
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
+	<mapped-superclass class="org.opencps.usermgt.model.impl.EmployeeModelImpl">
+		<attributes>
+			<id name="employeeId" />
+			<basic name="companyId" />
+			<basic name="groupId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="workingUnitId" />
+			<basic name="employeeNo" />
+			<basic name="fullName" />
+			<basic name="gender" />
+			<basic name="birthdate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="telNo" />
+			<basic name="mobile" />
+			<basic name="email" />
+			<basic name="workingStatus" />
+			<basic name="mainJobPosId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.opencps.usermgt.model.impl.JobPosModelImpl">
+		<attributes>
+			<id name="jobposId" />
+			<basic name="companyId" />
+			<basic name="groupId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="title" />
+			<basic name="description" />
+			<basic name="workingUnitId" />
+			<basic name="directWorkingUnitId" />
+			<basic name="leader" />
+			<basic name="mappingRoleId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.opencps.usermgt.model.impl.WorkingUnitModelImpl">
+		<attributes>
+			<id name="workingunitId" />
+			<basic name="companyId" />
+			<basic name="groupId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="name" />
+			<basic name="enName" />
+			<basic name="govAgencyCode" />
+			<basic name="parentWorkingUnitId" />
+			<basic name="treeIndex" />
+			<basic name="address" />
+			<basic name="cityCode" />
+			<basic name="districtCode" />
+			<basic name="wardCode" />
+			<basic name="telNo" />
+			<basic name="faxNo" />
+			<basic name="email" />
+			<basic name="website" />
+			<basic name="isEmployer" />
+			<basic name="mappingOrganisationId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
 	<entity class="org.opencps.datamgt.model.impl.DictCollectionImpl" name="DictCollection">
 		<table name="opencps_dictcollection" />
 		<attributes />
@@ -95,6 +182,18 @@
 	</entity>
 	<entity class="org.opencps.datamgt.model.impl.DictVersionImpl" name="DictVersion">
 		<table name="opencps_dictversion" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.usermgt.model.impl.EmployeeImpl" name="Employee">
+		<table name="opencps_employee" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.usermgt.model.impl.JobPosImpl" name="JobPos">
+		<table name="opencps_jobpos" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.usermgt.model.impl.WorkingUnitImpl" name="WorkingUnit">
+		<table name="opencps_workingunit" />
 		<attributes />
 	</entity>
 </entity-mappings>

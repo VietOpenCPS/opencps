@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,16 +18,4 @@
  */
 %>
 
-<%@ include file="/init.jsp"%>
-
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-util:include page="/html/portlets/samples/methods.jsp" servletContext="<%=application %>" />
-	</aui:col>
-	
-	<aui:col width="70">
-		<liferay-util:include page="/html/portlets/samples/invoke_form.jsp" servletContext="<%=application %>" />
-	</aui:col>
-</aui:row>					
-
+<%@ include file="../init.jsp"%>

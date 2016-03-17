@@ -5,7 +5,10 @@
 	<category name="org.opencps.backend">
 		<portlet id="1" />
 	</category>
-	<category name="org.opencps.frontend">
-		<portlet id="99"></portlet>
+	
+	<category name="org.opencps.backoffice">
+		<portlet id="2" />
+		<portlet id="3"/>
 	</category>
+	
 </display>
