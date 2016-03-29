@@ -22,9 +22,52 @@ package org.opencps.util;
  */
 
 public class PortletPropsKeys {
+
+	// Data Management validate
 	public static final String DATAMGT_DICTCOLLECTION_CODE_LENGHT = "opencps.datamgt.dictcollection.code.length";
 	public static final String DATAMGT_DICTCOLLECTION_NAME_LENGHT = "opencps.datamgt.dictcollection.name.length";
 	public static final String DATAMGT_DICTITEM_CODE_LENGHT = "opencps.datamgt.dictitem.code.length";
 	public static final String DATAMGT_DICTITEM_NAME_LENGHT = "opencps.datamgt.dictitem.name.lengths";
+	
+	//workingunit validate
+	public static final String USERMGT_WORKINGUNIT_NAME_LENGTH = "opencps.usermgt.workingunit.name.lengths";
+	public static final String USERMGT_WORKINGUNIT_ENNAME_LENGTH = "opencps.usermgt.workingunit.enname.lengths";
+	public static final String USERMGT_WORKINGUNIT_ADRESS_LENGTH = "opencps.usermgt.workingunit.adress.lengths";
+	public static final String USERMGT_WORKINGUNIT_FAXNO_LENGTH = "opencps.usermgt.workingunit.faxno.lengths";
+	public static final String USERMGT_WORKINGUNIT_EMAIL_LENGTH = "opencps.usermgt.workingunit.email.lengths";
+	public static final String USERMGT_WORKINGUNIT_WEBSITE_LENGTH = "opencps.usermgt.workingunit.website.lengths";
+
+	// Data Management Master Data
 	public static final String DATAMGT_MASTERDATA_CODE = "opencps.datamgt.masterdata.code";
+
+	// User Management
+	public static final String USERMGT_JOBPOS_LEADER = "opencps.usermgt.jobpos.leader";
+
+	public static final String USERMGT_USERGROUP_NAME_EMPLOYEE = "opencps.usermgt.usergroup.name.employee";
+
+	public static final String USERMGT_USERGROUP_NAME_BUSINESS = "opencps.usermgt.usergroup.name.business";
+
+	public static final String USERMGT_USERGROUP_NAME_CITIZEN = "opencps.usermgt.usergroup.name.citizen";
+
+	public static final String USERMGT_GENDER_VALUES = "opencps.usermgt.gender.values";
+	
+	public static final String JOBPOS_NOMAL = "opencps.usermgt.jobpos.nomal";
+	
+	public static final String JOBPOS_LEADER = "opencps.usermgt.jobpos.boss";
+	
+	public static final String JOBPOS_DEPUTY = "opencps.usermgt.jobpos.deputy";
+	
+	public static final String USERMGT_WORKINGUNIT_RESOURCE = "opencps.usermgt.workingunit.resource";
+	public static final String USERMGT_JOBPOS_RESOURCE = "opencps.usermgt.jobpos.resource";
+	public static final String USERMGT_EMPLOYEE_RESOURCE = "opencps.usermgt.employee.resource";
+	
+	// User Management validate
+	public static final String USERMGT_EMPLOYEE_FULLNAME_LENGTH = "opencps.usermgt.employee.fullname.length";
+	public static final String USERMGT_EMPLOYEE_EMAIL_LENGTH = "opencps.usermgt.employee.email.length";
+	public static final String USERMGT_EMPLOYEE_EMPLOYEENO_LENGTH = "opencps.usermgt.employee.employeeno.length";
+	public static final String USERMGT_EMPLOYEE_TELNO_LENGTH = "opencps.usermgt.employee.telno.length";
+	public static final String USERMGT_EMPLOYEE_MOBILE_LENGTH = "opencps.usermgt.employee.mobile.length";
+	
+	public static final String USERMGT_GENDER_VALUES2 = "opencps.usermgt.gender.values";
+
 }

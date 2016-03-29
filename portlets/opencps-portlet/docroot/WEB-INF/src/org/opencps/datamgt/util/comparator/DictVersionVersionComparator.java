@@ -22,52 +22,67 @@ import org.opencps.datamgt.model.DictVersion;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
+
 /**
  * @author Dunglt
  */
-public class DictVersionVersionComparator extends OrderByComparator{
+public class DictVersionVersionComparator extends OrderByComparator {
 
 	public static final String ORDER_BY_ASC = "version ASC";
-	
+
 	public static final String ORDER_BY_DESC = "version DESC";
 
-	public static final String[] ORDER_BY_FIELDS = { "version" };
-	
+	public static final String[] ORDER_BY_FIELDS = {
+		"version"
+	};
+
 	public DictVersionVersionComparator() {
-		this(false);
+		this(
+			false);
 	}
 
 	public DictVersionVersionComparator(boolean ascending) {
 		this._ascending = ascending;
 	}
+
 	@Override
 	public int compare(Object obj1, Object obj2) {
+
 		DictVersion dictVersion1 = (DictVersion) obj1;
 		DictVersion dictVersion2 = (DictVersion) obj2;
-		String version1 = StringUtil.toLowerCase(dictVersion1.getVersion());
-		String version2 = StringUtil.toLowerCase(dictVersion2.getVersion());
-		
-		int compareValue = version1.compareTo(version2);
-		
+		String version1 = StringUtil
+			.toLowerCase(dictVersion1
+				.getVersion());
+		String version2 = StringUtil
+			.toLowerCase(dictVersion2
+				.getVersion());
+
+		int compareValue = version1
+			.compareTo(version2);
+
 		return _ascending ? compareValue : -compareValue;
 	}
 
 	@Override
 	public String getOrderBy() {
+
 		if (_ascending) {
 			return ORDER_BY_ASC;
-		} else {
+		}
+		else {
 			return ORDER_BY_DESC;
 		}
 	}
 
 	@Override
 	public String[] getOrderByFields() {
+
 		return ORDER_BY_FIELDS;
 	}
 
 	@Override
 	public boolean isAscending() {
+
 		return _ascending;
 	}
 

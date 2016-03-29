@@ -68,4 +68,8 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/model/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/base/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/http/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/persistence/
-
+portlets/opencps-portlet/docroot/WEB-INF/src/service.properties
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/model/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/base/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/http/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/persistence

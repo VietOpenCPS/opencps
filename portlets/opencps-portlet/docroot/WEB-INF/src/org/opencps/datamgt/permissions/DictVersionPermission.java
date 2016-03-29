@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
+
 package org.opencps.datamgt.permissions;
 
 import org.opencps.datamgt.model.DictVersion;
@@ -25,35 +26,47 @@ import com.liferay.portal.security.permission.PermissionChecker;
 
 /**
  * @author trungnt
- *
  */
 public class DictVersionPermission {
 
-	public static void check(PermissionChecker permissionChecker, long threadId, String actionId)
-			throws PortalException, SystemException {
+	public static void check(
+		PermissionChecker permissionChecker, long threadId, String actionId)
+		throws PortalException, SystemException {
 
 		if (!contains(permissionChecker, threadId, actionId)) {
 			throw new PrincipalException();
 		}
 	}
 
-	public static void check(PermissionChecker permissionChecker, DictVersion version, String actionId)
-			throws PortalException, SystemException {
+	public static void check(
+		PermissionChecker permissionChecker, DictVersion version,
+		String actionId)
+		throws PortalException, SystemException {
 
 		if (!contains(permissionChecker, version, actionId)) {
 			throw new PrincipalException();
 		}
 	}
 
-	public static boolean contains(PermissionChecker permissionChecker, DictVersion version, String actionId)
-			throws PortalException, SystemException {
+	public static boolean contains(
+		PermissionChecker permissionChecker, DictVersion version,
+		String actionId)
+		throws PortalException, SystemException {
 
-		return permissionChecker.hasPermission(version.getGroupId(), DictVersion.class.getName(),
-				version.getPrimaryKey(), actionId);
+		return permissionChecker
+			.hasPermission(version
+				.getGroupId(), DictVersion.class
+					.getName(),
+				version
+					.getPrimaryKey(),
+				actionId);
 	}
 
-	public static boolean contains(PermissionChecker permissionChecker, long groupId, String actionId) {
+	public static boolean contains(
+		PermissionChecker permissionChecker, long groupId, String actionId) {
 
-		return permissionChecker.hasPermission(groupId, DictVersion.class.getName(), groupId, actionId);
+		return permissionChecker
+			.hasPermission(groupId, DictVersion.class
+				.getName(), groupId, actionId);
 	}
 }

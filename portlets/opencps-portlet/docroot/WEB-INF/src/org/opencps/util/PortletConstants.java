@@ -19,10 +19,13 @@ package org.opencps.util;
 
 /**
  * @author trungnt
- *
  */
 public class PortletConstants {
+
 	public static final int DRAFTING = 0;
 	public static final int INUSE = 1;
 	public static final int EXPIRED = 2;
+
+	public static final int WORKING_STATUS_ACTIVATE = 1;
+	public static final int WORKING_STATUS_DEACTIVATE = 0;
 }

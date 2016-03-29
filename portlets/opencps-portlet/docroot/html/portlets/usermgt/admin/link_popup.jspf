@@ -1,0 +1,46 @@
+<%
+/**
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+%>
+<a id="<portlet:namespace />openDialog">Jobpos</a>
+
+<aui:script use="liferay-util-window">
+	A.one('#<portlet:namespace/>openDialog').on('click', function(event) {
+		Liferay.Util.openWindow({
+			dialog : {
+				centered : true,
+				height : 1000,
+				modal : true,
+				width : 900
+			},
+			id : '<portlet:namespace/>dialog',
+			title : 'Edit-JobPos',
+			uri : '<%=dialogURL %>'
+		});
+	});
+</aui:script>
+	
+
+<aui:script>
+	Liferay.provide(window, '<portlet:namespace/>closePopup', function(data,
+			dialogId) {
+		var A = AUI();
+		// Closing the dialog
+		var dialog = Liferay.Util.Window.getById(dialogId);
+		dialog.destroy();
+	}, [ 'liferay-util-window' ]);
+</aui:script>

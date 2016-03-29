@@ -44,22 +44,37 @@ public class DictItemSearch extends SearchContainer<DictItem> {
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
-		headerNames.add("id");
-		headerNames.add("code");
-		headerNames.add("name");
-		headerNames.add("tree-index");
-		headerNames.add("create-date");
-		headerNames.add("modified-date");
-		headerNames.add("version");
-		headerNames.add("author");
-		headerNames.add("inuse");
-		headerNames.add(StringPool.BLANK);
+		headerNames
+			.add("id");
+		headerNames
+			.add("code");
+		headerNames
+			.add("name");
+		headerNames
+			.add("tree-index");
+		headerNames
+			.add("create-date");
+		headerNames
+			.add("modified-date");
+		headerNames
+			.add("version");
+		headerNames
+			.add("author");
+		headerNames
+			.add("inuse");
+		headerNames
+			.add(StringPool.BLANK);
 
-		orderableHeaders.put("name", DictItemDisplayTerms.ITEM_NAME);
-		orderableHeaders.put("code", DictItemDisplayTerms.ITEM_CODE);
-		orderableHeaders.put("create-date", DictItemDisplayTerms.CREATE_DATE);
-		orderableHeaders.put("modified-date", DictItemDisplayTerms.MODIFIED_DATE);
-		orderableHeaders.put("author", DictItemDisplayTerms.USER_ID);
+		orderableHeaders
+			.put("name", DictItemDisplayTerms.ITEM_NAME);
+		orderableHeaders
+			.put("code", DictItemDisplayTerms.ITEM_CODE);
+		orderableHeaders
+			.put("create-date", DictItemDisplayTerms.CREATE_DATE);
+		orderableHeaders
+			.put("modified-date", DictItemDisplayTerms.MODIFIED_DATE);
+		orderableHeaders
+			.put("author", DictItemDisplayTerms.USER_ID);
 	}
 
 	public static final String EMPTY_RESULTS_MESSAGE = "no-dict-item-were-found";

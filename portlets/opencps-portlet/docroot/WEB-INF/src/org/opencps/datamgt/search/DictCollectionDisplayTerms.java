@@ -30,7 +30,6 @@ import com.liferay.portal.theme.ThemeDisplay;
 
 /**
  * @author trungnt
- *
  */
 public class DictCollectionDisplayTerms extends DisplayTerms {
 
@@ -53,93 +52,120 @@ public class DictCollectionDisplayTerms extends DisplayTerms {
 	public static final String USER_ID = "userId";
 
 	public DictCollectionDisplayTerms(PortletRequest portletRequest) {
-		super(portletRequest);
+		super(
+			portletRequest);
 
-		createDate = ParamUtil.getDate(portletRequest, CREATE_DATE,
-				DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-		dictCollectionId = ParamUtil.getLong(portletRequest, DICTCOLLECTION_ID, 0L);
-		description = ParamUtil.getString(portletRequest, DESCRIPTION);
-		modifiedDate = ParamUtil.getDate(portletRequest, MODIFIED_DATE,
-				DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-		collectionName = ParamUtil.getString(portletRequest, COLLECTION_NAME);
-		collectionCode = ParamUtil.getString(portletRequest, COLLECTION_CODE);
-		userId = ParamUtil.getLong(portletRequest, USER_ID);
+		createDate = ParamUtil
+			.getDate(portletRequest, CREATE_DATE, DateTimeUtil
+				.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
+		dictCollectionId = ParamUtil
+			.getLong(portletRequest, DICTCOLLECTION_ID, 0L);
+		description = ParamUtil
+			.getString(portletRequest, DESCRIPTION);
+		modifiedDate = ParamUtil
+			.getDate(portletRequest, MODIFIED_DATE, DateTimeUtil
+				.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
+		collectionName = ParamUtil
+			.getString(portletRequest, COLLECTION_NAME);
+		collectionCode = ParamUtil
+			.getString(portletRequest, COLLECTION_CODE);
+		userId = ParamUtil
+			.getLong(portletRequest, USER_ID);
 
 		groupId = setGroupId(portletRequest);
 	}
 
 	public long setGroupId(PortletRequest portletRequest) {
-		groupId = ParamUtil.getLong(portletRequest, GROUP_ID);
+
+		groupId = ParamUtil
+			.getLong(portletRequest, GROUP_ID);
 
 		if (groupId != 0) {
 			return groupId;
 		}
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest
+			.getAttribute(WebKeys.THEME_DISPLAY);
 
-		return themeDisplay.getScopeGroupId();
+		return themeDisplay
+			.getScopeGroupId();
 	}
 
 	public String getCollectionCode() {
+
 		return collectionCode;
 	}
 
 	public void setCollectionCode(String collectionCode) {
+
 		this.collectionCode = collectionCode;
 	}
 
 	public String getCollectionName() {
+
 		return collectionName;
 	}
 
 	public void setCollectionName(String collectionName) {
+
 		this.collectionName = collectionName;
 	}
 
 	public Date getCreateDate() {
+
 		return createDate;
 	}
 
 	public void setCreateDate(Date createDate) {
+
 		this.createDate = createDate;
 	}
 
 	public String getDescription() {
+
 		return description;
 	}
 
 	public void setDescription(String description) {
+
 		this.description = description;
 	}
 
 	public long getDictCollectionId() {
+
 		return dictCollectionId;
 	}
 
 	public void setDictCollectionId(long dictCollectionId) {
+
 		this.dictCollectionId = dictCollectionId;
 	}
 
 	public Date getModifiedDate() {
+
 		return modifiedDate;
 	}
 
 	public void setModifiedDate(Date modifiedDate) {
+
 		this.modifiedDate = modifiedDate;
 	}
 
 	public long getUserId() {
+
 		return userId;
 	}
 
 	public void setUserId(long userId) {
+
 		this.userId = userId;
 	}
 
 	public long getGroupId() {
+
 		return groupId;
 	}
-	
+
 	protected String collectionCode;
 	protected String collectionName;
 	protected Date createDate;

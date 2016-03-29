@@ -55,6 +55,7 @@
 	iteratorURL.setParameter("tabs1", DataMgtUtil.TOP_TABS_DICTITEM);
 	
 	List<DictItem> dictItems = new ArrayList<DictItem>();
+	
 	int totalCount = 0;
 	
 %>
@@ -155,8 +156,6 @@
 	
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
-
-
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.data_management.admin.dictitem.jsp");

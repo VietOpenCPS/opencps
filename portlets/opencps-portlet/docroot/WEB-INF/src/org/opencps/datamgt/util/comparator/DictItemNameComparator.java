@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
+
 package org.opencps.datamgt.util.comparator;
 
 import org.opencps.datamgt.model.DictItem;
@@ -23,17 +24,20 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 /**
  * @author trungnt
- *
  */
 public class DictItemNameComparator extends OrderByComparator {
+
 	public static final String ORDER_BY_ASC = "opencps_dictitem.itemName ASC";
 
 	public static final String ORDER_BY_DESC = "opencps_dictitem.itemName DESC";
 
-	public static final String[] ORDER_BY_FIELDS = { "itemName" };
+	public static final String[] ORDER_BY_FIELDS = {
+		"itemName"
+	};
 
 	public DictItemNameComparator() {
-		this(false);
+		this(
+			false);
 	}
 
 	public DictItemNameComparator(boolean ascending) {
@@ -42,36 +46,47 @@ public class DictItemNameComparator extends OrderByComparator {
 
 	@Override
 	public int compare(Object obj1, Object obj2) {
+
 		DictItem dictItem1 = (DictItem) obj1;
 		DictItem dictItem2 = (DictItem) obj2;
-		String name1 = StringUtil.toLowerCase(dictItem1.getItemName());
-		String name2 = StringUtil.toLowerCase(dictItem2.getItemName());
+		String name1 = StringUtil
+			.toLowerCase(dictItem1
+				.getItemName());
+		String name2 = StringUtil
+			.toLowerCase(dictItem2
+				.getItemName());
 
-		int value = name1.compareTo(name2);
+		int value = name1
+			.compareTo(name2);
 
 		if (_ascending) {
 			return value;
-		} else {
+		}
+		else {
 			return -value;
 		}
 	}
 
 	@Override
 	public String getOrderBy() {
+
 		if (_ascending) {
 			return ORDER_BY_ASC;
-		} else {
+		}
+		else {
 			return ORDER_BY_DESC;
 		}
 	}
 
 	@Override
 	public String[] getOrderByFields() {
+
 		return ORDER_BY_FIELDS;
 	}
 
 	@Override
 	public boolean isAscending() {
+
 		return _ascending;
 	}
 

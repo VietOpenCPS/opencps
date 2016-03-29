@@ -28,79 +28,100 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 /**
  * @author trungnt
- *
  */
 public class DictCollectionSearchTerms extends DictCollectionDisplayTerms {
 
 	public DictCollectionSearchTerms(PortletRequest portletRequest) {
-		super(portletRequest);
+		super(
+			portletRequest);
 
-		createDate = ParamUtil.getDate(portletRequest, CREATE_DATE,
-				DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-		dictCollectionId = DAOParamUtil.getLong(portletRequest, DICTCOLLECTION_ID);
-		description = DAOParamUtil.getString(portletRequest, DESCRIPTION);
-		modifiedDate = ParamUtil.getDate(portletRequest, MODIFIED_DATE,
-				DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-		collectionCode = DAOParamUtil.getString(portletRequest, COLLECTION_CODE);
-		collectionName = DAOParamUtil.getString(portletRequest, COLLECTION_NAME);
-		userId = DAOParamUtil.getLong(portletRequest, USER_ID);
+		createDate = ParamUtil
+			.getDate(portletRequest, CREATE_DATE, DateTimeUtil
+				.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
+		dictCollectionId = DAOParamUtil
+			.getLong(portletRequest, DICTCOLLECTION_ID);
+		description = DAOParamUtil
+			.getString(portletRequest, DESCRIPTION);
+		modifiedDate = ParamUtil
+			.getDate(portletRequest, MODIFIED_DATE, DateTimeUtil
+				.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
+		collectionCode = DAOParamUtil
+			.getString(portletRequest, COLLECTION_CODE);
+		collectionName = DAOParamUtil
+			.getString(portletRequest, COLLECTION_NAME);
+		userId = DAOParamUtil
+			.getLong(portletRequest, USER_ID);
 
 		groupId = setGroupId(portletRequest);
 	}
 
 	public String getCollectionCode() {
+
 		return collectionCode;
 	}
 
 	public String getCollectionName() {
+
 		return collectionName;
 	}
 
 	public Date getCreateDate() {
+
 		return createDate;
 	}
 
 	public long getDictCollectionId() {
+
 		return dictCollectionId;
 	}
 
 	public long getGroupId() {
+
 		return groupId;
 	}
 
 	public Date getModifiedDate() {
+
 		return modifiedDate;
 	}
 
 	public long getUserId() {
+
 		return userId;
 	}
 
 	public void setCollectionCode(String collectionCode) {
+
 		this.collectionCode = collectionCode;
 	}
 
 	public void setCollectionName(String collectionName) {
+
 		this.collectionName = collectionName;
 	}
 
 	public void setCreateDate(Date createDate) {
+
 		this.createDate = createDate;
 	}
 
 	public void setDictCollectionId(long dictCollectionId) {
+
 		this.dictCollectionId = dictCollectionId;
 	}
 
 	public void setGroupId(long groupId) {
+
 		this.groupId = groupId;
 	}
 
 	public void setModifiedDate(Date modifiedDate) {
+
 		this.modifiedDate = modifiedDate;
 	}
 
 	public void setUserId(long userId) {
+
 		this.userId = userId;
 	}
 

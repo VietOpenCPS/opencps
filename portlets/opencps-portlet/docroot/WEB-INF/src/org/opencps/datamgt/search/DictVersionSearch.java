@@ -39,7 +39,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
  * @author Dunglt
  */
 
-public class DictVersionSearch extends SearchContainer<DictVersion>{
+public class DictVersionSearch extends SearchContainer<DictVersion> {
+
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
@@ -60,54 +61,86 @@ public class DictVersionSearch extends SearchContainer<DictVersion>{
 		orderableHeaders.put("validatedfrom-date", DictVersionDisplayTerms.VALIDATED_FROM);
 		orderableHeaders.put("validatedto-date", DictVersionDisplayTerms.VALIDATED_TO);
 	}
-	public static final String EMPTY_RESULTS_MESSAGE = "no-dict-version-were-found";
-	
-	public DictVersionSearch(PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
+	public static final String EMPTY_RESULTS_MESSAGE =
+		"no-dict-version-were-found";
 
-		super(portletRequest, new DictVersionDisplayTerms(portletRequest),
-				new DictVersionSearchTerms(portletRequest), DEFAULT_CUR_PARAM, delta, iteratorURL,
-				headerNames, EMPTY_RESULTS_MESSAGE);
+	public DictVersionSearch(
+		PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
 
-		DictVersionDisplayTerms displayTerms = (DictVersionDisplayTerms) getDisplayTerms();
+		super(
+			portletRequest, new DictVersionDisplayTerms(
+				portletRequest), new DictVersionSearchTerms(
+					portletRequest), DEFAULT_CUR_PARAM, delta, iteratorURL, headerNames, EMPTY_RESULTS_MESSAGE);
+
+		DictVersionDisplayTerms displayTerms =
+			(DictVersionDisplayTerms) getDisplayTerms();
 		// DictVersionSearchTerms searchTerms = (DictVersionSearchTerms)
 		// getSearchTerms();
 
-		iteratorURL.setParameter(DictVersionDisplayTerms.DESCRIPTION, displayTerms.getDescription());
+		iteratorURL
+			.setParameter(DictVersionDisplayTerms.DESCRIPTION, displayTerms
+				.getDescription());
 
-		iteratorURL.setParameter(DictVersionDisplayTerms.GROUP_ID, String.valueOf(displayTerms.getGroupId()));
-		iteratorURL.setParameter(DictVersionDisplayTerms.CREATE_DATE,
-				DateTimeUtil.convertDateToString(displayTerms.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-		iteratorURL.setParameter(DictVersionDisplayTerms.MODIFIED_DATE,
-				DateTimeUtil.convertDateToString(displayTerms.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-		iteratorURL.setParameter(DictVersionDisplayTerms.VALIDATED_FROM,
-				DateTimeUtil.convertDateToString(displayTerms.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-		iteratorURL.setParameter(DictVersionDisplayTerms.VALIDATED_TO,
-				DateTimeUtil.convertDateToString(displayTerms.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-		iteratorURL.setParameter(DictVersionDisplayTerms.USER_ID, String.valueOf(displayTerms.getUserId()));
-		iteratorURL.setParameter(DictVersionDisplayTerms.VERSION, displayTerms.getVersion());
-		iteratorURL.setParameter(DictVersionDisplayTerms.ISSUE_STATUS, String.valueOf(displayTerms.getIssueStatus()));
+		iteratorURL
+			.setParameter(DictVersionDisplayTerms.GROUP_ID, String
+				.valueOf(displayTerms
+					.getGroupId()));
+		iteratorURL
+			.setParameter(DictVersionDisplayTerms.CREATE_DATE, DateTimeUtil
+				.convertDateToString(displayTerms
+					.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		iteratorURL
+			.setParameter(DictVersionDisplayTerms.MODIFIED_DATE, DateTimeUtil
+				.convertDateToString(displayTerms
+					.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		iteratorURL
+			.setParameter(DictVersionDisplayTerms.VALIDATED_FROM, DateTimeUtil
+				.convertDateToString(displayTerms
+					.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		iteratorURL
+			.setParameter(DictVersionDisplayTerms.VALIDATED_TO, DateTimeUtil
+				.convertDateToString(displayTerms
+					.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		iteratorURL
+			.setParameter(DictVersionDisplayTerms.USER_ID, String
+				.valueOf(displayTerms
+					.getUserId()));
+		iteratorURL
+			.setParameter(DictVersionDisplayTerms.VERSION, displayTerms
+				.getVersion());
+		iteratorURL
+			.setParameter(DictVersionDisplayTerms.ISSUE_STATUS, String
+				.valueOf(displayTerms
+					.getIssueStatus()));
 
 		try {
 
-			String orderByCol = ParamUtil.getString(portletRequest, "orderByCol");
-			String orderByType = ParamUtil.getString(portletRequest, "orderByType");
+			String orderByCol = ParamUtil
+				.getString(portletRequest, "orderByCol");
+			String orderByType = ParamUtil
+				.getString(portletRequest, "orderByType");
 
-			OrderByComparator orderByComparator = DataMgtUtil.getDictVersionOrderByComparator(orderByCol,
-					orderByType);
+			OrderByComparator orderByComparator = DataMgtUtil
+				.getDictVersionOrderByComparator(orderByCol, orderByType);
 
 			setOrderableHeaders(orderableHeaders);
 			setOrderByCol(orderByCol);
 			setOrderByType(orderByType);
 			setOrderByComparator(orderByComparator);
-		} catch (Exception e) {
-			_log.error(e);
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
 		}
 	}
-	
-	public DictVersionSearch(PortletRequest portletRequest, PortletURL iteratorURL) {
 
-		this(portletRequest, DEFAULT_DELTA, iteratorURL);
+	public DictVersionSearch(
+		PortletRequest portletRequest, PortletURL iteratorURL) {
+
+		this(
+			portletRequest, DEFAULT_DELTA, iteratorURL);
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(DictVersionSearch.class);
+	private static Log _log = LogFactoryUtil
+		.getLog(DictVersionSearch.class);
 }

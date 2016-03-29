@@ -139,6 +139,14 @@
             <finder-column name="dictCollectionId"></finder-column>
             <finder-column name="itemName" comparator="LIKE" arrayable-operator="OR"></finder-column>
         </finder>
+        <finder name="DictCollectionId_ParentItemId" return-type="Collection">
+            <finder-column name="dictCollectionId"></finder-column>
+            <finder-column name="parentItemId"></finder-column>
+        </finder>
+        <finder name="DictCollectionId_ParentItemId_Inuse" return-type="Collection" where="issueStatus = 1">
+            <finder-column name="dictCollectionId"></finder-column>
+            <finder-column name="parentItemId"></finder-column>
+        </finder>
 
 	</entity>
 

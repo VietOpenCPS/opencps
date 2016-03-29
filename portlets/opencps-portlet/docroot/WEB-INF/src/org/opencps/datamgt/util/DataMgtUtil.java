@@ -37,12 +37,13 @@ import org.opencps.datamgt.util.comparator.DictVersionVersionComparator;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 /**
- * @author Dunglt
+ * @author trungnt
  */
 
 public class DataMgtUtil {
+
 	public static OrderByComparator getDictCollectionOrderByComparator(
-			String orderByCol, String orderByType) {
+		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
 
@@ -53,18 +54,20 @@ public class DataMgtUtil {
 		OrderByComparator orderByComparator = null;
 
 		if (orderByCol.equals(DictCollectionDisplayTerms.CREATE_DATE)) {
-			orderByComparator = new DictCollectionCreateDateComparator(
-					orderByAsc);
-		} else if (orderByCol.equals(DictCollectionDisplayTerms.MODIFIED_DATE)) {
-			orderByComparator = new DictCollectionModifiedDateComparator(
-					orderByAsc);
-		} else if (orderByCol
-				.equals(DictCollectionDisplayTerms.COLLECTION_NAME)) {
+			orderByComparator =
+				new DictCollectionCreateDateComparator(orderByAsc);
+		}
+		else if (orderByCol.equals(DictCollectionDisplayTerms.MODIFIED_DATE)) {
+			orderByComparator =
+				new DictCollectionModifiedDateComparator(orderByAsc);
+		}
+		else if (orderByCol.equals(DictCollectionDisplayTerms.COLLECTION_NAME)) {
 			orderByComparator = new DictCollectionNameComparator(orderByAsc);
-		} else if (orderByCol
-				.equals(DictCollectionDisplayTerms.COLLECTION_CODE)) {
+		}
+		else if (orderByCol.equals(DictCollectionDisplayTerms.COLLECTION_CODE)) {
 			orderByComparator = new DictCollectionCodeComparator(orderByAsc);
-		} else if (orderByCol.equals(DictCollectionDisplayTerms.USER_ID)) {
+		}
+		else if (orderByCol.equals(DictCollectionDisplayTerms.USER_ID)) {
 
 		}
 
@@ -72,7 +75,8 @@ public class DataMgtUtil {
 	}
 
 	public static OrderByComparator getDictVersionOrderByComparator(
-			String orderByCol, String orderByType) {
+		String orderByCol, String orderByType) {
+
 		boolean orderByAsc = false;
 		if (orderByType.endsWith("asc")) {
 			orderByAsc = true;
@@ -82,20 +86,24 @@ public class DataMgtUtil {
 
 		if (orderByCol.equals(DictVersionDisplayTerms.CREATE_DATE)) {
 			orderByComparator = new DictVersionCreateDateComparator();
-		} else if (orderByCol.equals(DictVersionDisplayTerms.MODIFIED_DATE)) {
+		}
+		else if (orderByCol.equals(DictVersionDisplayTerms.MODIFIED_DATE)) {
 			orderByComparator = new DictVersionModifiedDateComparator();
-		} else if (orderByCol.equals(DictVersionDisplayTerms.VALIDATED_FROM)) {
+		}
+		else if (orderByCol.equals(DictVersionDisplayTerms.VALIDATED_FROM)) {
 			orderByComparator = new DictVersionValidatedFromComparator();
-		} else if (orderByCol.equals(DictVersionDisplayTerms.VALIDATED_TO)) {
+		}
+		else if (orderByCol.equals(DictVersionDisplayTerms.VALIDATED_TO)) {
 			orderByComparator = new DictVersionValidatedToComparator();
-		} else if (orderByCol.equals(DictVersionDisplayTerms.VERSION)) {
+		}
+		else if (orderByCol.equals(DictVersionDisplayTerms.VERSION)) {
 			orderByComparator = new DictVersionVersionComparator();
 		}
 		return orderByComparator;
 	}
 
 	public static OrderByComparator getDictItemOrderByComparator(
-			String orderByCol, String orderByType) {
+		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
 
@@ -107,13 +115,17 @@ public class DataMgtUtil {
 
 		if (orderByCol.equals(DictItemDisplayTerms.CREATE_DATE)) {
 			orderByComparator = new DictItemCreateDateComparator(orderByAsc);
-		} else if (orderByCol.equals(DictItemDisplayTerms.MODIFIED_DATE)) {
+		}
+		else if (orderByCol.equals(DictItemDisplayTerms.MODIFIED_DATE)) {
 			orderByComparator = new DictItemModifiedDateComparator(orderByAsc);
-		} else if (orderByCol.equals(DictItemDisplayTerms.ITEM_NAME)) {
+		}
+		else if (orderByCol.equals(DictItemDisplayTerms.ITEM_NAME)) {
 			orderByComparator = new DictItemNameComparator(orderByAsc);
-		} else if (orderByCol.equals(DictItemDisplayTerms.ITEM_CODE)) {
+		}
+		else if (orderByCol.equals(DictItemDisplayTerms.ITEM_CODE)) {
 			orderByComparator = new DictItemCodeComparator(orderByAsc);
-		} else if (orderByCol.equals(DictItemDisplayTerms.USER_ID)) {
+		}
+		else if (orderByCol.equals(DictItemDisplayTerms.USER_ID)) {
 
 		}
 

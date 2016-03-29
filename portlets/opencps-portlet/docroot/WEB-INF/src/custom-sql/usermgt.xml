@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.opencps.usermgt.service.persistence.WorkingUnitFinder.findMaxSibling">	
+		<![CDATA[
+	    	SELECT 
+	    		opencps_workingunit.sibling AS SIBLING
+	    	FROM
+	    		opencps_workingunit
+	    	WHERE
+	    		opencps_workingunit.groupId = ?
+	    	ORDER BY opencps_workingunit.sibling DESC LIMIT 0,1;
+		]]>
+	</sql>
+</custom-sql>

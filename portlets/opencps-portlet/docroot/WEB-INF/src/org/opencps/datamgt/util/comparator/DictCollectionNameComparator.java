@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
+
 package org.opencps.datamgt.util.comparator;
 
 import org.opencps.datamgt.model.DictCollection;
@@ -23,17 +24,22 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 /**
  * @author trungnt
- *
  */
 public class DictCollectionNameComparator extends OrderByComparator {
-	public static final String ORDER_BY_ASC = "opencps_dictcollection.collectionName ASC";
 
-	public static final String ORDER_BY_DESC = "opencps_dictcollection.collectionName DESC";
+	public static final String ORDER_BY_ASC =
+		"opencps_dictcollection.collectionName ASC";
 
-	public static final String[] ORDER_BY_FIELDS = { "collectionName" };
+	public static final String ORDER_BY_DESC =
+		"opencps_dictcollection.collectionName DESC";
+
+	public static final String[] ORDER_BY_FIELDS = {
+		"collectionName"
+	};
 
 	public DictCollectionNameComparator() {
-		this(false);
+		this(
+			false);
 	}
 
 	public DictCollectionNameComparator(boolean ascending) {
@@ -42,36 +48,47 @@ public class DictCollectionNameComparator extends OrderByComparator {
 
 	@Override
 	public int compare(Object obj1, Object obj2) {
+
 		DictCollection dictCollection1 = (DictCollection) obj1;
 		DictCollection dictCollection2 = (DictCollection) obj2;
-		String name1 = StringUtil.toLowerCase(dictCollection1.getCollectionName());
-		String name2 = StringUtil.toLowerCase(dictCollection2.getCollectionName());
+		String name1 = StringUtil
+			.toLowerCase(dictCollection1
+				.getCollectionName());
+		String name2 = StringUtil
+			.toLowerCase(dictCollection2
+				.getCollectionName());
 
-		int value = name1.compareTo(name2);
+		int value = name1
+			.compareTo(name2);
 
 		if (_ascending) {
 			return value;
-		} else {
+		}
+		else {
 			return -value;
 		}
 	}
 
 	@Override
 	public String getOrderBy() {
+
 		if (_ascending) {
 			return ORDER_BY_ASC;
-		} else {
+		}
+		else {
 			return ORDER_BY_DESC;
 		}
 	}
 
 	@Override
 	public String[] getOrderByFields() {
+
 		return ORDER_BY_FIELDS;
 	}
 
 	@Override
 	public boolean isAscending() {
+
 		return _ascending;
 	}
 

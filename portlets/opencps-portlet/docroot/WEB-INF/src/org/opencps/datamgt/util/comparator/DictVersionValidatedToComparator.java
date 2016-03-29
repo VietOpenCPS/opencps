@@ -26,46 +26,57 @@ import com.liferay.portal.kernel.util.OrderByComparator;
  * @author Dunglt
  */
 
-public class DictVersionValidatedToComparator extends OrderByComparator{
+public class DictVersionValidatedToComparator extends OrderByComparator {
+
 	public static final String ORDER_BY_ASC = "validatedTo ASC";
 
 	public static final String ORDER_BY_DESC = "validatedTo DESC";
 
-	public static final String[] ORDER_BY_FIELDS = { "validatedTo" };
-	
+	public static final String[] ORDER_BY_FIELDS = {
+		"validatedTo"
+	};
+
 	public DictVersionValidatedToComparator() {
-		this(false);
+		this(
+			false);
 	}
 
 	public DictVersionValidatedToComparator(boolean ascending) {
 		this._ascending = ascending;
 	}
-	
+
 	@Override
 	public int compare(Object obj1, Object obj2) {
+
 		DictVersion dictVersion1 = (DictVersion) obj1;
 		DictVersion dictVersion2 = (DictVersion) obj2;
-		int compareValue = DateUtil.compareTo(dictVersion1.getValidatedTo(),
-				dictVersion2.getValidatedTo());
+		int compareValue = DateUtil
+			.compareTo(dictVersion1
+				.getValidatedTo(), dictVersion2
+					.getValidatedTo());
 		return _ascending ? compareValue : -compareValue;
 	}
 
 	@Override
 	public String getOrderBy() {
+
 		if (_ascending) {
 			return ORDER_BY_ASC;
-		} else {
+		}
+		else {
 			return ORDER_BY_DESC;
 		}
 	}
 
 	@Override
 	public String[] getOrderByFields() {
+
 		return ORDER_BY_FIELDS;
 	}
 
 	@Override
 	public boolean isAscending() {
+
 		return _ascending;
 	}
 

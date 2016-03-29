@@ -65,22 +65,25 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
  * @author trungnt
- *
  */
 public class DataMamagementPortlet extends MVCPortlet {
-	
 
-	public void deleteDictCollection(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
-		long dictCollectionId = ParamUtil.getLong(actionRequest, DictCollectionDisplayTerms.DICTCOLLECTION_ID);
+	public void deleteDictCollection(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
+
+		long dictCollectionId = ParamUtil.getLong(actionRequest,
+				DictCollectionDisplayTerms.DICTCOLLECTION_ID);
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
 		try {
 			DictCollectionLocalServiceUtil.deleteCollection(dictCollectionId);
 		} catch (NoSuchDictCollectionException e) {
-			SessionErrors.add(actionRequest, NoSuchDictCollectionException.class);
+			SessionErrors.add(actionRequest,
+					NoSuchDictCollectionException.class);
 			_log.error(e);
 		} catch (SystemException e) {
-			SessionErrors.add(actionRequest, MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			SessionErrors.add(actionRequest,
+					MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			_log.error(e);
 		} finally {
 			if (Validator.isNotNull(redirectURL)) {
@@ -89,13 +92,17 @@ public class DataMamagementPortlet extends MVCPortlet {
 		}
 	}
 
-	public void deleteDictItem(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
-		long dictItemId = ParamUtil.getLong(actionRequest, DictItemDisplayTerms.DICTITEM_ID, 0L);
+	public void deleteDictItem(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
+
+		long dictItemId = ParamUtil.getLong(actionRequest,
+				DictItemDisplayTerms.DICTITEM_ID, 0L);
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 		try {
 			DictItemLocalServiceUtil.deleteDictItem(dictItemId);
 		} catch (Exception e) {
-			SessionErrors.add(actionRequest, MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			SessionErrors.add(actionRequest,
+					MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			_log.error(e);
 		} finally {
 			if (Validator.isNotNull(redirectURL)) {
@@ -105,26 +112,34 @@ public class DataMamagementPortlet extends MVCPortlet {
 	}
 
 	@Override
-	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
+	public void render(RenderRequest renderRequest,
+			RenderResponse renderResponse)
 			throws PortletException, IOException {
 
-		long dictCollectionId = ParamUtil.getLong(renderRequest, DictCollectionDisplayTerms.DICTCOLLECTION_ID);
+		long dictCollectionId = ParamUtil.getLong(renderRequest,
+				DictCollectionDisplayTerms.DICTCOLLECTION_ID);
 		long dictVersionId = ParamUtil.getLong(renderRequest, "dictVersionId");
-		long dictItemId = ParamUtil.getLong(renderRequest, DictItemDisplayTerms.DICTITEM_ID);
+		long dictItemId = ParamUtil.getLong(renderRequest,
+				DictItemDisplayTerms.DICTITEM_ID);
 
 		try {
 			if (dictCollectionId > 0) {
-				DictCollection dictCollection = DictCollectionLocalServiceUtil.getDictCollection(dictCollectionId);
-				renderRequest.setAttribute(WebKeys.DICT_COLLECTION_ENTRY, dictCollection);
+				DictCollection dictCollection = DictCollectionLocalServiceUtil
+						.getDictCollection(dictCollectionId);
+				renderRequest.setAttribute(WebKeys.DICT_COLLECTION_ENTRY,
+						dictCollection);
 			}
 
 			if (dictVersionId > 0) {
-				DictVersion dictVersion = DictVersionLocalServiceUtil.getDictVersion(dictVersionId);
-				renderRequest.setAttribute(WebKeys.DICT_VERSION_ENTRY, dictVersion);
+				DictVersion dictVersion = DictVersionLocalServiceUtil
+						.getDictVersion(dictVersionId);
+				renderRequest.setAttribute(WebKeys.DICT_VERSION_ENTRY,
+						dictVersion);
 			}
 
 			if (dictItemId > 0) {
-				DictItem dictItem = DictItemLocalServiceUtil.getDictItem(dictItemId);
+				DictItem dictItem = DictItemLocalServiceUtil
+						.getDictItem(dictItemId);
 				renderRequest.setAttribute(WebKeys.DICT_ITEM_ENTRY, dictItem);
 			}
 		} catch (Exception e) {
@@ -134,16 +149,22 @@ public class DataMamagementPortlet extends MVCPortlet {
 		super.render(renderRequest, renderResponse);
 	}
 
-	public void updateDictCollection(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
+	public void updateDictCollection(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
 
-		long collectionId = ParamUtil.getLong(actionRequest, DictCollectionDisplayTerms.DICTCOLLECTION_ID, 0L);
+		long collectionId = ParamUtil.getLong(actionRequest,
+				DictCollectionDisplayTerms.DICTCOLLECTION_ID, 0L);
 
-		Map<Locale, String> collectionNameMap = LocalizationUtil.getLocalizationMap(actionRequest,
-				DictCollectionDisplayTerms.COLLECTION_NAME);
-		String collectionCode = ParamUtil.getString(actionRequest, DictCollectionDisplayTerms.COLLECTION_CODE);
-		String description = ParamUtil.getString(actionRequest, DictCollectionDisplayTerms.DESCRIPTION);
+		Map<Locale, String> collectionNameMap = LocalizationUtil
+				.getLocalizationMap(actionRequest,
+						DictCollectionDisplayTerms.COLLECTION_NAME);
+		String collectionCode = ParamUtil.getString(actionRequest,
+				DictCollectionDisplayTerms.COLLECTION_CODE);
+		String description = ParamUtil.getString(actionRequest,
+				DictCollectionDisplayTerms.DESCRIPTION);
 
-		String collectionName = collectionNameMap.get(actionRequest.getLocale());
+		String collectionName = collectionNameMap
+				.get(actionRequest.getLocale());
 
 		for (Map.Entry<Locale, String> entry : collectionNameMap.entrySet()) {
 			if (entry.getValue().length() > collectionName.length()) {
@@ -155,33 +176,47 @@ public class DataMamagementPortlet extends MVCPortlet {
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 		try {
 
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
-			validatetDictCollection(collectionId, collectionName, collectionCode, serviceContext);
+			ServiceContext serviceContext = ServiceContextFactory
+					.getInstance(actionRequest);
+			validatetDictCollection(collectionId, collectionName,
+					collectionCode, serviceContext);
 
 			if (collectionId == 0) {
-				DictCollectionLocalServiceUtil.addDictCollection(serviceContext.getUserId(), collectionCode,
+				DictCollectionLocalServiceUtil.addDictCollection(
+						serviceContext.getUserId(), collectionCode,
 						collectionNameMap, description, serviceContext);
-				SessionMessages.add(actionRequest, MessageKeys.DATAMGT_ADD_SUCESS);
+				SessionMessages.add(actionRequest,
+						MessageKeys.DATAMGT_ADD_SUCESS);
 			} else {
-				DictCollectionLocalServiceUtil.updateDictCollection(collectionId, serviceContext.getUserId(),
-						collectionCode, collectionNameMap, description, serviceContext);
-				SessionMessages.add(actionRequest, MessageKeys.DATAMGT_UPDATE_SUCESS);
+				DictCollectionLocalServiceUtil.updateDictCollection(
+						collectionId, serviceContext.getUserId(),
+						collectionCode, collectionNameMap, description,
+						serviceContext);
+				SessionMessages.add(actionRequest,
+						MessageKeys.DATAMGT_UPDATE_SUCESS);
 			}
 		} catch (Exception e) {
 			if (e instanceof OutOfLengthCollectionCodeException) {
-				SessionErrors.add(actionRequest, OutOfLengthCollectionCodeException.class);
+				SessionErrors.add(actionRequest,
+						OutOfLengthCollectionCodeException.class);
 			} else if (e instanceof OutOfLengthCollectionNameException) {
-				SessionErrors.add(actionRequest, OutOfLengthCollectionNameException.class);
+				SessionErrors.add(actionRequest,
+						OutOfLengthCollectionNameException.class);
 			} else if (e instanceof DuplicateCollectionException) {
-				SessionErrors.add(actionRequest, DuplicateCollectionException.class);
+				SessionErrors.add(actionRequest,
+						DuplicateCollectionException.class);
 			} else if (e instanceof NoSuchDictCollectionException) {
-				SessionErrors.add(actionRequest, NoSuchDictCollectionException.class);
+				SessionErrors.add(actionRequest,
+						NoSuchDictCollectionException.class);
 			} else if (e instanceof EmptyDictCollectionNameException) {
-				SessionErrors.add(actionRequest, EmptyDictCollectionNameException.class);
+				SessionErrors.add(actionRequest,
+						EmptyDictCollectionNameException.class);
 			} else if (e instanceof EmptyCollectionCodeException) {
-				SessionErrors.add(actionRequest, EmptyCollectionCodeException.class);
+				SessionErrors.add(actionRequest,
+						EmptyCollectionCodeException.class);
 			} else {
-				SessionErrors.add(actionRequest, MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+				SessionErrors.add(actionRequest,
+						MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			}
 
 			redirectURL = returnURL;
@@ -194,20 +229,26 @@ public class DataMamagementPortlet extends MVCPortlet {
 
 	}
 
-	public void updateDictItem(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
+	public void updateDictItem(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
 
-		long dictItemId = ParamUtil.getLong(actionRequest, DictItemDisplayTerms.DICTITEM_ID, 0L);
+		long dictItemId = ParamUtil.getLong(actionRequest,
+				DictItemDisplayTerms.DICTITEM_ID, 0L);
 
-		long dictCollectionId = ParamUtil.getLong(actionRequest, DictItemDisplayTerms.DICTCOLLECTION_ID, 0L);
+		long dictCollectionId = ParamUtil.getLong(actionRequest,
+				DictItemDisplayTerms.DICTCOLLECTION_ID, 0L);
 
-		long dictVersionId = ParamUtil.getLong(actionRequest, DictItemDisplayTerms.DICTVERSION_ID, 0L);
+		long dictVersionId = ParamUtil.getLong(actionRequest,
+				DictItemDisplayTerms.DICTVERSION_ID, 0L);
 
-		long parentItemId = ParamUtil.getLong(actionRequest, DictItemDisplayTerms.PARENTITEM_ID, 0L);
+		long parentItemId = ParamUtil.getLong(actionRequest,
+				DictItemDisplayTerms.PARENTITEM_ID, 0L);
 
-		Map<Locale, String> itemNameMap = LocalizationUtil.getLocalizationMap(actionRequest,
-				DictItemDisplayTerms.ITEM_NAME);
+		Map<Locale, String> itemNameMap = LocalizationUtil.getLocalizationMap(
+				actionRequest, DictItemDisplayTerms.ITEM_NAME);
 
-		String itemCode = ParamUtil.getString(actionRequest, DictItemDisplayTerms.ITEM_CODE);
+		String itemCode = ParamUtil.getString(actionRequest,
+				DictItemDisplayTerms.ITEM_CODE);
 
 		String itemName = itemNameMap.get(actionRequest.getLocale());
 
@@ -221,39 +262,51 @@ public class DataMamagementPortlet extends MVCPortlet {
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 		try {
 
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+			ServiceContext serviceContext = ServiceContextFactory
+					.getInstance(actionRequest);
 			validatetDictItem(dictItemId, itemName, itemCode, serviceContext);
 
 			if (dictItemId == 0) {
 				if (dictVersionId == 0) {
-					DictItemLocalServiceUtil.addDictItem(serviceContext.getUserId(), dictCollectionId, itemCode,
-							itemNameMap, parentItemId, serviceContext);
+					DictItemLocalServiceUtil.addDictItem(
+							serviceContext.getUserId(), dictCollectionId,
+							itemCode, itemNameMap, parentItemId,
+							serviceContext);
 				} else {
-					DictItemLocalServiceUtil.addDictItem(serviceContext.getUserId(), dictCollectionId, dictVersionId,
-							itemCode, itemNameMap, parentItemId, serviceContext);
+					DictItemLocalServiceUtil.addDictItem(
+							serviceContext.getUserId(), dictCollectionId,
+							dictVersionId, itemCode, itemNameMap, parentItemId,
+							serviceContext);
 				}
 
-				SessionMessages.add(actionRequest, MessageKeys.DATAMGT_ADD_SUCESS);
+				SessionMessages.add(actionRequest,
+						MessageKeys.DATAMGT_ADD_SUCESS);
 			} else {
-				DictItemLocalServiceUtil.updateDictItem(dictItemId, dictCollectionId, dictVersionId, itemCode,
-						itemNameMap, parentItemId, serviceContext);
-				SessionMessages.add(actionRequest, MessageKeys.DATAMGT_UPDATE_SUCESS);
+				DictItemLocalServiceUtil.updateDictItem(dictItemId,
+						dictCollectionId, dictVersionId, itemCode, itemNameMap,
+						parentItemId, serviceContext);
+				SessionMessages.add(actionRequest,
+						MessageKeys.DATAMGT_UPDATE_SUCESS);
 			}
 		} catch (Exception e) {
 			if (e instanceof EmptyItemCodeException) {
 				SessionErrors.add(actionRequest, EmptyItemCodeException.class);
 			} else if (e instanceof OutOfLengthItemCodeException) {
-				SessionErrors.add(actionRequest, OutOfLengthItemCodeException.class);
+				SessionErrors.add(actionRequest,
+						OutOfLengthItemCodeException.class);
 			} else if (e instanceof EmptyDictItemNameException) {
-				SessionErrors.add(actionRequest, EmptyDictItemNameException.class);
+				SessionErrors.add(actionRequest,
+						EmptyDictItemNameException.class);
 			} else if (e instanceof OutOfLengthItemNameException) {
-				SessionErrors.add(actionRequest, OutOfLengthItemNameException.class);
+				SessionErrors.add(actionRequest,
+						OutOfLengthItemNameException.class);
 			} else if (e instanceof DuplicateItemException) {
 				SessionErrors.add(actionRequest, DuplicateItemException.class);
 			} else if (e instanceof NoSuchDictItemException) {
 				SessionErrors.add(actionRequest, NoSuchDictItemException.class);
 			} else {
-				SessionErrors.add(actionRequest, MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+				SessionErrors.add(actionRequest,
+						MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			}
 
 			redirectURL = returnURL;
@@ -265,15 +318,19 @@ public class DataMamagementPortlet extends MVCPortlet {
 		}
 	}
 
-	protected void validatetDictCollection(long collectionId, String collectionName, String collectionCode,
+	protected void validatetDictCollection(long collectionId,
+			String collectionName, String collectionCode,
 			ServiceContext serviceContext)
-			throws OutOfLengthCollectionCodeException, OutOfLengthCollectionNameException, DuplicateCollectionException,
+			throws OutOfLengthCollectionCodeException,
+			OutOfLengthCollectionNameException, DuplicateCollectionException,
 			EmptyCollectionCodeException, EmptyDictCollectionNameException {
+
 		if (Validator.isNull(collectionCode)) {
 			throw new EmptyCollectionCodeException();
 		}
 
-		if (collectionCode.trim().length() > PortletPropsValues.DATAMGT_DICTCOLLECTION_CODE_LENGHT) {
+		if (collectionCode.trim()
+				.length() > PortletPropsValues.DATAMGT_DICTCOLLECTION_CODE_LENGHT) {
 			throw new OutOfLengthCollectionCodeException();
 		}
 
@@ -281,34 +338,41 @@ public class DataMamagementPortlet extends MVCPortlet {
 			throw new EmptyDictCollectionNameException();
 		}
 
-		if (collectionName.length() > PortletPropsValues.DATAMGT_DICTCOLLECTION_NAME_LENGHT) {
+		if (collectionName
+				.length() > PortletPropsValues.DATAMGT_DICTCOLLECTION_NAME_LENGHT) {
 			throw new OutOfLengthCollectionNameException();
 		}
 
 		if (collectionId > 0) {
 			DictCollection dictCollection = null;
 			try {
-				dictCollection = DictCollectionLocalServiceUtil.getDictCollection(serviceContext.getScopeGroupId(),
-						collectionCode);
+				dictCollection = DictCollectionLocalServiceUtil
+						.getDictCollection(serviceContext.getScopeGroupId(),
+								collectionCode);
 
 			} catch (Exception e) {
 				// Nothing to do
 			}
 
-			if (dictCollection != null && dictCollection.getDictCollectionId() != collectionId) {
+			if (dictCollection != null
+					&& dictCollection.getDictCollectionId() != collectionId) {
 				throw new DuplicateCollectionException();
 			}
 		}
 	}
 
-	protected void validatetDictItem(long dictItemId, String itemName, String itemCode, ServiceContext serviceContext)
-			throws EmptyItemCodeException, OutOfLengthItemCodeException, EmptyDictItemNameException,
-			OutOfLengthItemNameException, DuplicateItemException {
+	protected void validatetDictItem(long dictItemId, String itemName,
+			String itemCode, ServiceContext serviceContext)
+			throws EmptyItemCodeException, OutOfLengthItemCodeException,
+			EmptyDictItemNameException, OutOfLengthItemNameException,
+			DuplicateItemException {
+
 		if (Validator.isNull(itemCode)) {
 			throw new EmptyItemCodeException();
 		}
 
-		if (itemCode.trim().length() > PortletPropsValues.DATAMGT_DICTITEM_CODE_LENGHT) {
+		if (itemCode.trim()
+				.length() > PortletPropsValues.DATAMGT_DICTITEM_CODE_LENGHT) {
 			throw new OutOfLengthItemCodeException();
 		}
 
@@ -316,7 +380,8 @@ public class DataMamagementPortlet extends MVCPortlet {
 			throw new EmptyDictItemNameException();
 		}
 
-		if (itemName.length() > PortletPropsValues.DATAMGT_DICTITEM_NAME_LENGHT) {
+		if (itemName
+				.length() > PortletPropsValues.DATAMGT_DICTITEM_NAME_LENGHT) {
 			throw new OutOfLengthItemNameException();
 		}
 
@@ -333,6 +398,7 @@ public class DataMamagementPortlet extends MVCPortlet {
 			}
 		}
 	}
-	
-	private Log _log = LogFactoryUtil.getLog(DataMamagementPortlet.class.getName());
+
+	private Log _log = LogFactoryUtil
+			.getLog(DataMamagementPortlet.class.getName());
 }

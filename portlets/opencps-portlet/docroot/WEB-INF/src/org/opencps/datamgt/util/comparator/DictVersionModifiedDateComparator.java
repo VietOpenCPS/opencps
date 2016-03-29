@@ -27,14 +27,18 @@ import com.liferay.portal.kernel.util.OrderByComparator;
  */
 
 public class DictVersionModifiedDateComparator extends OrderByComparator {
+
 	public static final String ORDER_BY_ASC = "modifiedDate ASC";
 
 	public static final String ORDER_BY_DESC = "modifiedDate DESC";
 
-	public static final String[] ORDER_BY_FIELDS = { "modifiedDate" };
+	public static final String[] ORDER_BY_FIELDS = {
+		"modifiedDate"
+	};
 
 	public DictVersionModifiedDateComparator() {
-		this(false);
+		this(
+			false);
 	}
 
 	public DictVersionModifiedDateComparator(boolean ascending) {
@@ -43,20 +47,25 @@ public class DictVersionModifiedDateComparator extends OrderByComparator {
 
 	@Override
 	public int compare(Object obj1, Object obj2) {
+
 		DictVersion dictVersion1 = (DictVersion) obj1;
 		DictVersion dictVersion2 = (DictVersion) obj2;
-		int compareValue = DateUtil.compareTo(dictVersion1.getModifiedDate(),
-				dictVersion2.getModifiedDate());
+		int compareValue = DateUtil
+			.compareTo(dictVersion1
+				.getModifiedDate(), dictVersion2
+					.getModifiedDate());
 		return _ascending ? compareValue : -compareValue;
 	}
 
 	@Override
 	public String[] getOrderByFields() {
+
 		return ORDER_BY_FIELDS;
 	}
 
 	@Override
 	public boolean isAscending() {
+
 		return _ascending;
 	}
 

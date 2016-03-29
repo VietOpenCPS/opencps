@@ -24,17 +24,22 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 /**
  * @author trungnt
- *
  */
 public class DictCollectionCodeComparator extends OrderByComparator {
-	public static final String ORDER_BY_ASC = "opencps_dictcollection.collectionCode ASC";
 
-	public static final String ORDER_BY_DESC = "opencps_dictcollection.collectionCode DESC";
+	public static final String ORDER_BY_ASC =
+		"opencps_dictcollection.collectionCode ASC";
 
-	public static final String[] ORDER_BY_FIELDS = { "collectionCode" };
+	public static final String ORDER_BY_DESC =
+		"opencps_dictcollection.collectionCode DESC";
+
+	public static final String[] ORDER_BY_FIELDS = {
+		"collectionCode"
+	};
 
 	public DictCollectionCodeComparator() {
-		this(false);
+		this(
+			false);
 	}
 
 	public DictCollectionCodeComparator(boolean ascending) {
@@ -43,36 +48,47 @@ public class DictCollectionCodeComparator extends OrderByComparator {
 
 	@Override
 	public int compare(Object obj1, Object obj2) {
+
 		DictCollection dictCollection1 = (DictCollection) obj1;
 		DictCollection dictCollection2 = (DictCollection) obj2;
-		String code1 = StringUtil.toLowerCase(dictCollection1.getCollectionCode());
-		String code2 = StringUtil.toLowerCase(dictCollection2.getCollectionCode());
+		String code1 = StringUtil
+			.toLowerCase(dictCollection1
+				.getCollectionCode());
+		String code2 = StringUtil
+			.toLowerCase(dictCollection2
+				.getCollectionCode());
 
-		int value = code1.compareTo(code2);
+		int value = code1
+			.compareTo(code2);
 
 		if (_ascending) {
 			return value;
-		} else {
+		}
+		else {
 			return -value;
 		}
 	}
 
 	@Override
 	public String getOrderBy() {
+
 		if (_ascending) {
 			return ORDER_BY_ASC;
-		} else {
+		}
+		else {
 			return ORDER_BY_DESC;
 		}
 	}
 
 	@Override
 	public String[] getOrderByFields() {
+
 		return ORDER_BY_FIELDS;
 	}
 
 	@Override
 	public boolean isAscending() {
+
 		return _ascending;
 	}
 

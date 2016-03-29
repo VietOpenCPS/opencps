@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 
 <model-hints>
+	<hint-collection name="URL">
+		<hint name="max-length">4000</hint>
+	</hint-collection>
 	<hint-collection name="TEXTAREA">
 		<hint name="display-height">105</hint>
 		<hint name="display-width">500</hint>
@@ -60,5 +63,154 @@
 		<field name="validatedFrom" type="Date" />
 		<field name="validatedTo" type="Date" />
 		<field name="issueStatus" type="int" />
+	</model>
+	<model name="org.opencps.usermgt.model.Employee">
+		<field name="employeeId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="workingUnitId" type="long" />
+		<field name="employeeNo" type="String" />
+		<field name="fullName" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="gender" type="int" />
+		<field name="birthdate" type="Date" />
+		<field name="telNo" type="String" />
+		<field name="mobile" type="String" />
+		<field name="email" type="String" />
+		<field name="workingStatus" type="int" />
+		<field name="mainJobPosId" type="long" />
+		<field name="mappingUserId" type="long" />
+	</model>
+	<model name="org.opencps.usermgt.model.JobPos">
+		<field name="jobPosId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="title" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="description" type="String">
+			<hint-collection name="TEXTAREA" />
+		</field>
+		<field name="workingUnitId" type="long" />
+		<field name="directWorkingUnitId" type="long" />
+		<field name="leader" type="int" />
+		<field name="mappingRoleId" type="long" />
+	</model>
+	<model name="org.opencps.usermgt.model.WorkingUnit">
+		<field name="workingunitId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="enName" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="govAgencyCode" type="String" />
+		<field name="managerWorkingUnitId" type="long" />
+		<field name="parentWorkingUnitId" type="long" />
+		<field name="sibling" type="int" />
+		<field name="treeIndex" type="String" />
+		<field name="address" type="String" />
+		<field name="cityCode" type="String" />
+		<field name="districtCode" type="String" />
+		<field name="wardCode" type="String" />
+		<field name="telNo" type="String" />
+		<field name="faxNo" type="String" />
+		<field name="email" type="String" />
+		<field name="website" type="String">
+			<hint-collection name="URL" />
+		</field>
+		<field name="isEmployer" type="boolean" />
+		<field name="mappingOrganisationId" type="long" />
+	</model>
+	<model name="org.opencps.accountmgt.model.Business">
+		<field name="businessId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="uuid" type="String" />
+		<field name="name" type="String">
+			<hint name="display-width">255</hint>
+		</field>
+		<field name="enName" type="String">
+			<hint name="display-width">255</hint>
+		</field>
+		<field name="shortName" type="String">
+			<hint name="display-width">255</hint>
+		</field>
+		<field name="businessType" type="String" />
+		<field name="address" type="String">
+			<hint name="display-width">255</hint>
+		</field>
+		<field name="cityCode" type="String" />
+		<field name="districtCode" type="String" />
+		<field name="wardCode" type="String" />
+		<field name="telNo" type="String" />
+		<field name="email" type="String" />
+		<field name="representativeName" type="String" />
+		<field name="representativeRole" type="String" />
+		<field name="attachFile" type="long" />
+		<field name="mappingOrganizationId" type="long" />
+		<field name="mappingUserId" type="long" />
+		<field name="accountStatus" type="int" />
+	</model>
+	<model name="org.opencps.accountmgt.model.BusinessAccount">
+		<field name="businessAccountId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="businessId" type="long" />
+		<field name="fullName" type="String">
+			<hint name="display-width">255</hint>
+		</field>
+		<field name="workingRole" type="String" />
+		<field name="telNo" type="String" />
+		<field name="email" type="String" />
+		<field name="mappingUserId" type="long" />
+		<field name="hasPermissions" type="String" />
+		<field name="accountStatus" type="int" />
+	</model>
+	<model name="org.opencps.accountmgt.model.BusinessDomain">
+		<field name="businessId" type="long" />
+		<field name="businessDomains" type="String" />
+	</model>
+	<model name="org.opencps.accountmgt.model.Citizen">
+		<field name="citizenId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="uuid" type="String" />
+		<field name="fullName" type="String">
+			<hint name="display-width">255</hint>
+		</field>
+		<field name="personalId" type="String" />
+		<field name="gender" type="int" />
+		<field name="birthdate" type="Date" />
+		<field name="address" type="String" />
+		<field name="cityCode" type="String" />
+		<field name="districtCode" type="String" />
+		<field name="wardCode" type="String" />
+		<field name="telNo" type="String" />
+		<field name="email" type="String" />
+		<field name="attachFile" type="long" />
+		<field name="mappingUserId" type="long" />
+		<field name="accountStatus" type="int" />
 	</model>
 </model-hints>

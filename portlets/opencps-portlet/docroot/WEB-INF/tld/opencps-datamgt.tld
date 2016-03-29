@@ -32,16 +32,10 @@
 			<type>java.lang.Integer</type>
 		</attribute>
 		<attribute>
-			<name>labelItems</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-			<type>java.util.List</type>
-		</attribute>
-		<attribute>
 			<name>selectedItems</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>java.util.List</type>
+			<type>java.util.String</type>
 		</attribute>
 		<attribute>
 			<description><![CDATA[]]></description>
@@ -58,8 +52,29 @@
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
+			<description><![CDATA[String of long value. etc: 100,1001,10002]]></description>
+			<name>itemNames</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description><![CDATA[String of boolean value. etc: true,false,true]]></description>
+			<name>itemsEmptyOption</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
 			<description><![CDATA[]]></description>
 			<name>cssClass</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description><![CDATA[horizontal or vertical]]></description>
+			<name>displayStyle</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>

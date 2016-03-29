@@ -16,13 +16,41 @@
 */
 
 package org.opencps.util;
-
+/**
+ * @author trungnt
+ */
 public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
+
 	public static final String DATA_MANAGEMENT_ADMIN_PORTLET = "1_WAR_opencpsportlet";
-	
+
 	public static final String DICT_COLLECTION_ENTRY = "DICT_COLLECTION_ENTRY";
-	
+
 	public static final String DICT_VERSION_ENTRY = "DICT_VERSION_ENTRY";
-	
+
 	public static final String DICT_ITEM_ENTRY = "DICT_ITEM_ENTRY";
+
+	public static final String WORKING_UNIT_ENTRY = "WORKING_UNIT_ENTRY";
+
+	public static final String EMPLOYEE_ENTRY = "EMPLOYEE_ENTRY";
+
+	public static final String TURN_BACK_EMPLOYEE_ENTRY = "TURN_BACK_EMPLOYEE_ENTRY";
+
+	public static final String JOBPOS_ENTRY = "JOBPOS_ENTRY";
+
+	public static final String USER_MAPPING_ENTRY = "USER_MAPPING_ENTRY";
+
+	public static final String TURN_BACK_USER_MAPPING_ENTRY = "TURN_BACK_USER_MAPPING_ENTRY";
+
+	public static final String WORKING_UNIT_MAPPING_ENTRY = "WORKING_UNIT_MAPPING_ENTRY";
+
+	public static final String MAIN_JOB_POS_ENTRY = "MAIN_JOB_POS_ENTRY";
+
+	public static final String TURN_BACK_SCREEN_NAME = "TURN_BACK_SCREEN_NAME";
+
+	public static final String TURN_BACK_ACCOUNT_EMAIL = "TURN_BACK_ACCOUNT_EMAIL";
+
+	public static final String TURN_BACK_JOBPOS_INDEXES = "TURN_BACK_JOBPOS_INDEXES";
+	
+	public static final String USERMGT_VIEW_PROFILE = "USERMGT_VIEW_PROFILE";
+
 }
