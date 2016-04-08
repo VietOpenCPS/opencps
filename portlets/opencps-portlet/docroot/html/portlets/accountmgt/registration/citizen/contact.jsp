@@ -60,7 +60,7 @@
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, "ADMINISTRATIVE_REGION");
 		
-		if(dictCollection != null && citizen != null) {
+		if(dictCollection != null) {
 			long dictCollectionId = dictCollection.getDictCollectionId();
 			dictItemCity = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getCityCode());
 			dictItemDistrict = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getDistrictCode());
@@ -71,10 +71,9 @@
 				getAddress.append(dictItemWard.getDictItemId()+ ",");
 				getAddress.append(dictItemDistrict.getDictItemId());
 			}
-			dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(citizen.getAttachFile());
 		}
 		
-		
+		dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(citizen.getAttachFile());
 		
 		if(dlFileEntry != null) {
 			 url = themeDisplay.getPortalURL()+"/c/document_library/get_file?uuid="+dlFileEntry.getUuid()+"&groupId="+themeDisplay.getScopeGroupId() ;
@@ -142,11 +141,7 @@
 	</aui:row>
 </c:if>
 
-<c:if test="<%=isAdminViewProfile && citizenID > 0 %>">
-	<a href="<%=url%>"><liferay-ui:message key="url.file.entry"></liferay-ui:message></a>
-</c:if>
-
-
+<a href="<%=url%>"><liferay-ui:message key="url.file.entry"></liferay-ui:message></a>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration/citizen.contact_info.jsp");

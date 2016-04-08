@@ -131,7 +131,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
 			// remove condition query
-			if (Validator.equals(adminCode, "0") || Validator.equals(adminCode, StringPool.BLANK)) {
+			if (Validator.equals(adminCode, StringPool.BLANK)) {
 				sql =
 				    StringUtil.replace(
 				        sql,
@@ -139,7 +139,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 				        StringPool.BLANK);
 			}
 
-			if (Validator.equals(domainCode, "0") || Validator.equals(domainCode, StringPool.BLANK)) {
+			if (Validator.equals(domainCode, StringPool.BLANK)) {
 				sql =
 				    StringUtil.replace(
 				        sql, "AND (opencps_serviceinfo.domainCode = ?)",
@@ -159,11 +159,11 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 			qPos.add(keywords, 2);
 			qPos.add(keywords, 2);
 
-			if (!Validator.equals(adminCode, "0") && !Validator.equals(adminCode, StringPool.BLANK) ) {
+			if (!Validator.equals(adminCode, StringPool.BLANK)) {
 				qPos.add(adminCode);
 			}
 
-			if (!Validator.equals(domainCode, "0") && !Validator.equals(domainCode, StringPool.BLANK)) {
+			if (!Validator.equals(domainCode, StringPool.BLANK)) {
 				qPos.add(domainCode);
 			}
 
@@ -219,7 +219,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
 			// remove condition query
-			if (Validator.equals(adminCode, "0") || Validator.equals(adminCode, StringPool.BLANK)) {
+			if (Validator.equals(adminCode, StringPool.BLANK)) {
 				sql =
 				    StringUtil.replace(
 				        sql,
@@ -227,7 +227,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 				        StringPool.BLANK);
 			}
 
-			if (Validator.equals(domainCode, "0") || Validator.equals(domainCode, StringPool.BLANK)) {
+			if (Validator.equals(domainCode, StringPool.BLANK)) {
 				sql =
 				    StringUtil.replace(
 				        sql, "AND (opencps_serviceinfo.domainCode = ?)",
@@ -247,11 +247,11 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 			qPos.add(keywords, 2);
 			qPos.add(keywords, 2);
 
-			if (!Validator.equals(adminCode, "0") && !Validator.equals(adminCode, StringPool.BLANK) ) {
+			if (!Validator.equals(adminCode, StringPool.BLANK)) {
 				qPos.add(adminCode);
 			}
 
-			if (!Validator.equals(domainCode, "0") && !Validator.equals(domainCode, StringPool.BLANK)) {
+			if (!Validator.equals(domainCode, StringPool.BLANK)) {
 				qPos.add(domainCode);
 			}
 

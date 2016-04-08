@@ -17,21 +17,6 @@
 
 package org.opencps.servicemgt.portlet;
 
-import java.io.IOException;
-
-import javax.portlet.PortletException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
-import org.opencps.servicemgt.model.ServiceInfo;
-import org.opencps.servicemgt.model.TemplateFile;
-import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
-import org.opencps.servicemgt.service.TemplateFileLocalServiceUtil;
-import org.opencps.util.WebKeys;
-
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 
@@ -40,40 +25,5 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  *
  */
 public class ServiceDirectoryPortlet extends MVCPortlet {
-	@Override
-	public void render(
-	    RenderRequest renderRequest, RenderResponse renderResponse)
-	    throws PortletException, IOException {
-
-		long serviceinfoId = ParamUtil.getLong(renderRequest, "serviceinfoId");
-
-		long templatefileId =
-		    ParamUtil.getLong(renderRequest, "templateFileId");
-
-		TemplateFile templateFile = null;
-
-		ServiceInfo serviceInfo = null;
-
-		try {
-
-			templateFile =
-			    TemplateFileLocalServiceUtil.fetchTemplateFile(templatefileId);
-
-			serviceInfo =
-			    ServiceInfoLocalServiceUtil.fetchServiceInfo(serviceinfoId);
-		}
-		catch (Exception e) {
-			_log.info(e);
-		}
-
-		renderRequest.setAttribute(WebKeys.SERVICE_ENTRY, serviceInfo);
-		renderRequest.setAttribute(WebKeys.SERVICE_TEMPLATE_ENTRY, templateFile);
-
-		super.render(renderRequest, renderResponse);
-
-	}
-
-	private static final Log _log =
-				    LogFactoryUtil.getLog(ServiceDirectoryPortlet.class);
-
+	
 }

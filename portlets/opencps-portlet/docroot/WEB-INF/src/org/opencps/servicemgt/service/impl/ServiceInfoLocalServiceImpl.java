@@ -63,10 +63,10 @@ public class ServiceInfoLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<ServiceInfo> searchService(
-	    long groupId, String keywords, String administrationCode,
-	    String domainCode, int start, int end)
+	    long groupId, String keywords, String administrationCode, String domainCode,
+	    int start, int end)
 	    throws PortalException, SystemException {
-
+		
 		return serviceInfoFinder.searchService(
 		    groupId, keywords, administrationCode, domainCode, start, end);
 	}
@@ -83,8 +83,7 @@ public class ServiceInfoLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public int countService(
-	    long groupId, String keywords, String administrationCode,
-	    String domainCode)
+	    long groupId, String keywords, String administrationCode, String domainCode)
 	    throws PortalException, SystemException {
 
 		return serviceInfoFinder.countService(
@@ -362,40 +361,6 @@ public class ServiceInfoLocalServiceImpl
 
 	}
 
-	/**
-	 * @param groupId
-	 * @param administrationCode
-	 * @param activateStatus
-	 * @return
-	 */
-	public int countServiceInAdmin(
-	    long groupId, String administrationCode, int activateStatus) {
 
-		try {
-			return serviceInfoPersistence.countByG_AC_S(
-			    groupId, administrationCode, activateStatus);
-		}
-		catch (Exception e) {
-			return 0;
-		}
-	}
-
-	/**
-	 * @param groupId
-	 * @param domainCode
-	 * @param activateStatus
-	 * @return
-	 */
-	public int countServiceInDomain(
-	    long groupId, String domainCode, int activateStatus) {
-
-		try {
-			return serviceInfoPersistence.countByG_DC_S(
-			    groupId, domainCode, activateStatus);
-		}
-		catch (Exception e) {
-			return 0;
-		}
-	}
 
 }

@@ -65,7 +65,7 @@
 
 <aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
 
-<c:if test="<%=isAdminViewProfile  && businessId > 0%>">
+<c:if test="<%=isAdminViewProfile %>">
 	<aui:row>
 		<aui:col width="50">
 			<aui:input 

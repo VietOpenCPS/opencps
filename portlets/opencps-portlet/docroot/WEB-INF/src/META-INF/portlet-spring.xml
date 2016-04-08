@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="org.opencps.datamgt.service.DictCollectionLocalService" class="org.opencps.datamgt.service.impl.DictCollectionLocalServiceImpl" />
+	<bean id="org.opencps.datamgt.service.DictCollectionService" class="org.opencps.datamgt.service.impl.DictCollectionServiceImpl" />
+	<bean id="org.opencps.datamgt.service.persistence.DictCollectionPersistence" class="org.opencps.datamgt.service.persistence.DictCollectionPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.datamgt.service.DictItemLocalService" class="org.opencps.datamgt.service.impl.DictItemLocalServiceImpl" />
+	<bean id="org.opencps.datamgt.service.DictItemService" class="org.opencps.datamgt.service.impl.DictItemServiceImpl" />
+	<bean id="org.opencps.datamgt.service.persistence.DictItemPersistence" class="org.opencps.datamgt.service.persistence.DictItemPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.datamgt.service.DictVersionLocalService" class="org.opencps.datamgt.service.impl.DictVersionLocalServiceImpl" />
+	<bean id="org.opencps.datamgt.service.DictVersionService" class="org.opencps.datamgt.service.impl.DictVersionServiceImpl" />
+	<bean id="org.opencps.datamgt.service.persistence.DictVersionPersistence" class="org.opencps.datamgt.service.persistence.DictVersionPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.usermgt.service.EmployeeLocalService" class="org.opencps.usermgt.service.impl.EmployeeLocalServiceImpl" />
+	<bean id="org.opencps.usermgt.service.EmployeeService" class="org.opencps.usermgt.service.impl.EmployeeServiceImpl" />
+	<bean id="org.opencps.usermgt.service.persistence.EmployeePersistence" class="org.opencps.usermgt.service.persistence.EmployeePersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.usermgt.service.JobPosLocalService" class="org.opencps.usermgt.service.impl.JobPosLocalServiceImpl" />
+	<bean id="org.opencps.usermgt.service.JobPosService" class="org.opencps.usermgt.service.impl.JobPosServiceImpl" />
+	<bean id="org.opencps.usermgt.service.persistence.JobPosPersistence" class="org.opencps.usermgt.service.persistence.JobPosPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.usermgt.service.WorkingUnitLocalService" class="org.opencps.usermgt.service.impl.WorkingUnitLocalServiceImpl" />
+	<bean id="org.opencps.usermgt.service.WorkingUnitService" class="org.opencps.usermgt.service.impl.WorkingUnitServiceImpl" />
+	<bean id="org.opencps.usermgt.service.persistence.WorkingUnitPersistence" class="org.opencps.usermgt.service.persistence.WorkingUnitPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.usermgt.service.persistence.WorkingUnitFinder" class="org.opencps.usermgt.service.persistence.WorkingUnitFinderImpl" parent="basePersistence" />
+	<bean id="org.opencps.accountmgt.service.BusinessLocalService" class="org.opencps.accountmgt.service.impl.BusinessLocalServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.BusinessService" class="org.opencps.accountmgt.service.impl.BusinessServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.persistence.BusinessPersistence" class="org.opencps.accountmgt.service.persistence.BusinessPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.accountmgt.service.BusinessAccountLocalService" class="org.opencps.accountmgt.service.impl.BusinessAccountLocalServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.BusinessAccountService" class="org.opencps.accountmgt.service.impl.BusinessAccountServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.persistence.BusinessAccountPersistence" class="org.opencps.accountmgt.service.persistence.BusinessAccountPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.accountmgt.service.BusinessDomainLocalService" class="org.opencps.accountmgt.service.impl.BusinessDomainLocalServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.BusinessDomainService" class="org.opencps.accountmgt.service.impl.BusinessDomainServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.persistence.BusinessDomainPersistence" class="org.opencps.accountmgt.service.persistence.BusinessDomainPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.accountmgt.service.CitizenLocalService" class="org.opencps.accountmgt.service.impl.CitizenLocalServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.CitizenService" class="org.opencps.accountmgt.service.impl.CitizenServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.persistence.CitizenPersistence" class="org.opencps.accountmgt.service.persistence.CitizenPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.servicemgt.service.ServiceFileTemplateLocalService" class="org.opencps.servicemgt.service.impl.ServiceFileTemplateLocalServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.ServiceFileTemplateService" class="org.opencps.servicemgt.service.impl.ServiceFileTemplateServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.persistence.ServiceFileTemplatePersistence" class="org.opencps.servicemgt.service.persistence.ServiceFileTemplatePersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.servicemgt.service.ServiceInfoLocalService" class="org.opencps.servicemgt.service.impl.ServiceInfoLocalServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.ServiceInfoService" class="org.opencps.servicemgt.service.impl.ServiceInfoServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.persistence.ServiceInfoPersistence" class="org.opencps.servicemgt.service.persistence.ServiceInfoPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.servicemgt.service.persistence.ServiceInfoFinder" class="org.opencps.servicemgt.service.persistence.ServiceInfoFinderImpl" parent="basePersistence" />
+	<bean id="org.opencps.servicemgt.service.TemplateFileLocalService" class="org.opencps.servicemgt.service.impl.TemplateFileLocalServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.TemplateFileService" class="org.opencps.servicemgt.service.impl.TemplateFileServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.persistence.TemplateFilePersistence" class="org.opencps.servicemgt.service.persistence.TemplateFilePersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.servicemgt.service.persistence.TemplateFileFinder" class="org.opencps.servicemgt.service.persistence.TemplateFileFinderImpl" parent="basePersistence" />
+</beans>
