@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
@@ -41,8 +41,11 @@
 	long businessId = business!=null ? business.getBusinessId() : 0L;
 	
 	List<DictItem> dictItems = new ArrayList<DictItem>();
+	DictItem dictItemDomain = null;
 	
 	DictCollection dictCollection = null;
+	
+	StringBuilder getBussinessType = new StringBuilder();
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
@@ -56,6 +59,15 @@
 		if(dictCollection!=null) {
 			dictItems = DictItemLocalServiceUtil
 							.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
+			if(business!=null) {
+				dictItemDomain = DictItemLocalServiceUtil
+								.getDictItemInuseByItemCode(dictCollection.getDictCollectionId(), business.getBusinessType());
+				if(dictItemDomain!=null) {
+					getBussinessType.append(dictItemDomain.getDictItemId());
+				}
+			
+			}
+		
 		}
 	} catch(Exception e) {
 		_log.error(e);
@@ -91,7 +103,8 @@
 	</aui:col>
 	
 	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_IDNUMBER %>">
+		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_IDNUMBER %>"	
+	>
 			<aui:validator name="required" />
 			<aui:validator name="maxLength">100</aui:validator>
 		</aui:input>
@@ -119,6 +132,7 @@
 		dictCollectionCode="BUSINESS_DOMAIN"
 		itemNames="businessType"
 		itemsEmptyOption="true"	
+		selectedItems="<%=getBussinessType.toString()%>"
 	/>	
 </aui:row>
 <c:if test="<%= !dictItems.isEmpty() %>">

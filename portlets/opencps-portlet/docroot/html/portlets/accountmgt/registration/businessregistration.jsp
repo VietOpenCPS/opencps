@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,6 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessRepresentativeRoleException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessRepresentativeNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessShortNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessEnNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessEmailException"%>
+<%@page import="org.opencps.accountmgt.DuplicateBusinessEmailException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessNameException"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
@@ -29,6 +36,46 @@
 
 	long businessId = business!=null ? business.getBusinessId() : 0L;
 %>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessNameException.class %>" 
+	message="<%= OutOfLengthBusinessNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= DuplicateBusinessEmailException.class %>" 
+	message="<%= DuplicateBusinessEmailException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessEmailException.class %>" 
+	message="<%= OutOfLengthBusinessEmailException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= DuplicateBusinessEmailException.class %>" 
+	message="<%= DuplicateBusinessEmailException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessShortNameException.class %>" 
+	message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessRepresentativeNameException.class %>" 
+	message="<%= OutOfLengthBusinessRepresentativeNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessRepresentativeRoleException.class %>" 
+	message="<%= OutOfLengthBusinessRepresentativeRoleException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	key="<%=MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED %>" 
+	message="system.exception.occured" 
+/>
 
 <portlet:renderURL var="switcherCitizenRegisterURL">
 	<portlet:param name="mvcPath" value='<%= templatePath + "citizenregistration.jsp" %>'/>
@@ -45,12 +92,12 @@
 
 <div class="bottom-horizontal-line"></div>
 
-
 <portlet:actionURL var="updateBusinessURL" name="updateBusiness">
 	<portlet:param 
 		name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 
 		value="<%=String.valueOf(businessId) %>"
 	/>	
+	<portlet:param name="currentURL" value="<%=currentURL %>"/>
 </portlet:actionURL>
 
 <aui:form 

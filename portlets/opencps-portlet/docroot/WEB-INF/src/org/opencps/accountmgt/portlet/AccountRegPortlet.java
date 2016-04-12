@@ -1,18 +1,20 @@
 /**
- * OpenCPS is the open source Core Public Services software Copyright (C)
- * 2016-present OpenCPS community This program is free software: you can
- * redistribute it and/or modify it under the terms of the GNU Affero General
- * Public License as published by the Free Software Foundation, either version 3
- * of the License, or any later version. This program is distributed in the hope
- * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Affero General Public License for more details. You should have received a
- * copy of the GNU Affero General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>
- */
+* OpenCPS is the open source Core Public Services software
+* Copyright (C) 2016-present OpenCPS community
 
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>
+*/
 package org.opencps.accountmgt.portlet;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -74,113 +76,109 @@ public class AccountRegPortlet extends MVCPortlet {
 	    RenderRequest renderRequest, RenderResponse renderResponse)
 	    throws PortletException, IOException {
 
-		long citizenId = ParamUtil
-		    .getLong(renderRequest, CitizenDisplayTerms.CITIZEN_ID);
+		long citizenId =
+		    ParamUtil.getLong(renderRequest, CitizenDisplayTerms.CITIZEN_ID);
 
-		long businessId = ParamUtil
-		    .getLong(renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
+		long businessId =
+		    ParamUtil.getLong(
+		        renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
 
 		try {
 			if (citizenId > 0) {
-				Citizen citizen = CitizenLocalServiceUtil
-				    .fetchCitizen(citizenId);
-				renderRequest
-				    .setAttribute(WebKeys.CITIZEN_ENTRY, citizen);
+				Citizen citizen =
+				    CitizenLocalServiceUtil.fetchCitizen(citizenId);
+				renderRequest.setAttribute(WebKeys.CITIZEN_ENTRY, citizen);
 			}
 
 			if (businessId > 0) {
-				Business business = BusinessLocalServiceUtil
-				    .fetchBusiness(businessId);
-				renderRequest
-				    .setAttribute(WebKeys.BUSINESS_ENTRY, business);
+				Business business =
+				    BusinessLocalServiceUtil.fetchBusiness(businessId);
+				renderRequest.setAttribute(WebKeys.BUSINESS_ENTRY, business);
 			}
 		}
 
 		catch (Exception e) {
-			_log
-			    .error(e);
+			_log.error(e);
 		}
 
 		super.render(renderRequest, renderResponse);
 	}
 
 	public void updateBusiness(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
 
-		UploadPortletRequest uploadPortletRequest = PortalUtil
-		    .getUploadPortletRequest(actionRequest);
+		UploadPortletRequest uploadPortletRequest =
+		    PortalUtil.getUploadPortletRequest(actionRequest);
 
-		long businessId = ParamUtil
-		    .getLong(
+		long businessId =
+		    ParamUtil.getLong(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
 
-		long cityId = ParamUtil
-		    .getLong(
+		long cityId =
+		    ParamUtil.getLong(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_CITY_ID);
-		long districtId = ParamUtil
-		    .getLong(
-		        uploadPortletRequest,
-		        BusinessDisplayTerms.BUSINESS_DISTRICT_ID);
-		long wardId = ParamUtil
-		    .getLong(
+		long districtId =
+		    ParamUtil.getLong(
+		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_DISTRICT_ID);
+		long wardId =
+		    ParamUtil.getLong(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_WARD_ID);
 
 		long repositoryId = 0;
 
-		long size = uploadPortletRequest
-		    .getSize(BusinessDisplayTerms.BUSINESS_ATTACHFILE);
-
-		String name = ParamUtil
-		    .getString(
+		long size =
+		    uploadPortletRequest.getSize(BusinessDisplayTerms.BUSINESS_ATTACHFILE);
+		String currentURL = ParamUtil.getString(uploadPortletRequest, "currentURL");
+		
+		String name =
+		    ParamUtil.getString(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_NAME);
-		String enName = ParamUtil
-		    .getString(
+		String enName =
+		    ParamUtil.getString(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_ENNAME);
-		String idNumber = ParamUtil
-		    .getString(
+		String idNumber =
+		    ParamUtil.getString(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_IDNUMBER);
-		String shortName = ParamUtil
-		    .getString(
+		String shortName =
+		    ParamUtil.getString(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_SHORTNAME);
-		String type = ParamUtil
-		    .getString(
+		long type =
+		    ParamUtil.getLong(
 		        uploadPortletRequest,
 		        BusinessDisplayTerms.BUSINESS_BUSINESSTYPE);
-		String address = ParamUtil
-		    .getString(
+		String address =
+		    ParamUtil.getString(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_ADDRESS);
-		String email = ParamUtil
-		    .getString(
+		String email =
+		    ParamUtil.getString(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_EMAIL);
-		String telNo = ParamUtil
-		    .getString(
+		String telNo =
+		    ParamUtil.getString(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_TELNO);
-		String representativeName = ParamUtil
-		    .getString(
+		String representativeName =
+		    ParamUtil.getString(
 		        uploadPortletRequest,
 		        BusinessDisplayTerms.BUSINESS_REPRESENTATIVENAME);
-		String representativeRole = ParamUtil
-		    .getString(
+		String representativeRole =
+		    ParamUtil.getString(
 		        uploadPortletRequest,
 		        BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE);
 
-		String contentType = uploadPortletRequest
-		    .getContentType(BusinessDisplayTerms.BUSINESS_ATTACHFILE);
+		String contentType =
+		    uploadPortletRequest.getContentType(BusinessDisplayTerms.BUSINESS_ATTACHFILE);
 
-		String sourceFileName = uploadPortletRequest
-		    .getFileName(BusinessDisplayTerms.BUSINESS_ATTACHFILE);
+		String sourceFileName =
+		    uploadPortletRequest.getFileName(BusinessDisplayTerms.BUSINESS_ATTACHFILE);
 
-		String[] domain = ParamUtil
-		    .getParameterValues(
+		String[] domain =
+		    ParamUtil.getParameterValues(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_DOMAIN);
 
-		Date defaultBirthDate = DateTimeUtil
-		    .convertStringToDate("01/01/1970");
+		Date defaultBirthDate = DateTimeUtil.convertStringToDate("01/01/1970");
 
 		PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
 
-		contentType = MimeTypesUtil
-		    .getContentType(contentType);
+		contentType = MimeTypesUtil.getContentType(contentType);
 
 		String title = "Business File";
 
@@ -190,65 +188,49 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		DictItem ward = null;
 
+		DictItem businessType = null;
+
 		InputStream inputStream = null;
 
 		try {
 			ValidateBusiness(
 			    businessId, email, sourceFileName, enName, shortName, address,
 			    representativeName, representativeRole);
-			ServiceContext serviceContext = ServiceContextFactory
-			    .getInstance(uploadPortletRequest);
+			ServiceContext serviceContext =
+			    ServiceContextFactory.getInstance(uploadPortletRequest);
 
-			inputStream = uploadPortletRequest
-			    .getFileAsStream(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
+			inputStream =
+			    uploadPortletRequest.getFileAsStream(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
 
-			repositoryId = serviceContext
-			    .getScopeGroupId();
-			city = DictItemLocalServiceUtil
-			    .getDictItem(cityId);
-			district = DictItemLocalServiceUtil
-			    .getDictItem(districtId);
-			ward = DictItemLocalServiceUtil
-			    .getDictItem(wardId);
+			repositoryId = serviceContext.getScopeGroupId();
+			city = DictItemLocalServiceUtil.getDictItem(cityId);
+			district = DictItemLocalServiceUtil.getDictItem(districtId);
+			ward = DictItemLocalServiceUtil.getDictItem(wardId);
+			businessType = DictItemLocalServiceUtil.getDictItem(type);
 
 			if (businessId == 0) {
 
-				Business business = BusinessLocalServiceUtil
-				    .addBusiness(
-				        name, enName, shortName, type, idNumber, address, city
-				            .getItemCode(),
-				        district
-				            .getItemCode(),
-				        ward
-				            .getItemCode(),
-				        city
-				            .getItemName(serviceContext
-				                .getLocale(), true),
-				        district
-				            .getItemName(serviceContext
-				                .getLocale(), true),
-				        ward
-				            .getItemName(serviceContext
-				                .getLocale(), true),
+				Business business =
+				    BusinessLocalServiceUtil.addBusiness(
+				        name, enName, shortName, businessType.getItemName(
+				            serviceContext.getLocale(), true), idNumber,
+				        address, city.getItemCode(), district.getItemCode(),
+				        ward.getItemCode(), city.getItemName(
+				            serviceContext.getLocale(), true),
+				        district.getItemName(serviceContext.getLocale(), true),
+				        ward.getItemName(serviceContext.getLocale(), true),
 				        telNo, email, representativeName, representativeRole,
-				        domain, spd
-				            .getDayOfMoth(),
-				        spd
-				            .getMonth(),
-				        spd
-				            .getYear(),
-				        repositoryId, sourceFileName, contentType, title,
-				        inputStream, size, serviceContext);
+				        domain, spd.getDayOfMoth(), spd.getMonth(),
+				        spd.getYear(), repositoryId, sourceFileName,
+				        contentType, title, inputStream, size, serviceContext);
 
 				if (business != null) {
-					User mappingUser = UserLocalServiceUtil
-					    .getUser(business
-					        .getMappingUserId());
-					MessageBusUtil
-					    .sendEmailAddressVerification(business
-					        .getUuid(), mappingUser, email,
-					        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
-					        serviceContext);
+					User mappingUser =
+					    UserLocalServiceUtil.getUser(business.getMappingUserId());
+					MessageBusUtil.sendEmailAddressVerification(
+					    business.getUuid(), mappingUser, email,
+					    PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
+					    serviceContext);
 				}
 			}
 			else {
@@ -259,56 +241,47 @@ public class AccountRegPortlet extends MVCPortlet {
 		catch (Exception e) {
 
 			if (e instanceof DuplicateBusinessEmailException) {
-				SessionErrors
-				    .add(actionRequest, DuplicateBusinessEmailException.class);
+				SessionErrors.add(
+				    actionRequest, DuplicateBusinessEmailException.class);
 			}
 			else if (e instanceof OutOfLengthBusinessEmailException) {
-				SessionErrors
-				    .add(
-				        actionRequest, OutOfLengthBusinessEmailException.class);
+				SessionErrors.add(
+				    actionRequest, OutOfLengthBusinessEmailException.class);
 			}
 			else if (e instanceof OutOfLengthBusinessNameException) {
-				SessionErrors
-				    .add(actionRequest, OutOfLengthBusinessNameException.class);
+				SessionErrors.add(
+				    actionRequest, OutOfLengthBusinessNameException.class);
 			}
 			else if (e instanceof OutOfLengthBusinessEnNameException) {
-				SessionErrors
-				    .add(
-				        actionRequest,
-				        OutOfLengthBusinessEnNameException.class);
+				SessionErrors.add(
+				    actionRequest, OutOfLengthBusinessEnNameException.class);
 			}
 			else if (e instanceof OutOfLengthBusinessShortNameException) {
-				SessionErrors
-				    .add(
-				        actionRequest,
-				        OutOfLengthBusinessShortNameException.class);
+				SessionErrors.add(
+				    actionRequest, OutOfLengthBusinessShortNameException.class);
 			}
 			else if (e instanceof OutOfLengthBusinessRepresentativeNameException) {
-				SessionErrors
-				    .add(
-				        actionRequest,
-				        OutOfLengthBusinessRepresentativeNameException.class);
+				SessionErrors.add(
+				    actionRequest,
+				    OutOfLengthBusinessRepresentativeNameException.class);
 			}
 			else if (e instanceof OutOfLengthBusinessRepresentativeRoleException) {
-				SessionErrors
-				    .add(
-				        actionRequest,
-				        OutOfLengthBusinessRepresentativeRoleException.class);
+				SessionErrors.add(
+				    actionRequest,
+				    OutOfLengthBusinessRepresentativeRoleException.class);
 			}
 			else if (e instanceof OutOfLengthCitizenAddressException) {
-				SessionErrors
-				    .add(
-				        actionRequest,
-				        OutOfLengthCitizenAddressException.class);
+				SessionErrors.add(
+				    actionRequest, OutOfLengthCitizenAddressException.class);
 			}
 			else {
-				SessionErrors
-				    .add(
-				        uploadPortletRequest,
-				        MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+				SessionErrors.add(
+				    uploadPortletRequest,
+				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			}
-			_log
-			    .error(e);
+			if (Validator.isNotNull(currentURL)) {
+				actionResponse.sendRedirect(currentURL);
+			}
 
 		}
 		finally {
@@ -318,63 +291,69 @@ public class AccountRegPortlet extends MVCPortlet {
 	}
 
 	public void updateCitizen(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
 
-		UploadPortletRequest uploadPortletRequest = PortalUtil
-		    .getUploadPortletRequest(actionRequest);
+		UploadPortletRequest uploadPortletRequest =
+		    PortalUtil.getUploadPortletRequest(actionRequest);
 
-		long citizenId = ParamUtil
-		    .getLong(uploadPortletRequest, CitizenDisplayTerms.CITIZEN_ID);
+		long citizenId =
+		    ParamUtil.getLong(
+		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_ID);
 
-		long cityId = ParamUtil
-		    .getLong(uploadPortletRequest, CitizenDisplayTerms.CITIZEN_CITY_ID);
-		long districtId = ParamUtil
-		    .getLong(
+		long cityId =
+		    ParamUtil.getLong(
+		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_CITY_ID);
+		long districtId =
+		    ParamUtil.getLong(
 		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_DISTRICT_ID);
-		long wardId = ParamUtil
-		    .getLong(uploadPortletRequest, CitizenDisplayTerms.CITIZEN_WARD_ID);
+		long wardId =
+		    ParamUtil.getLong(
+		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_WARD_ID);
 
-		long size = uploadPortletRequest
-		    .getSize(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
+		long size =
+		    uploadPortletRequest.getSize(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
 
 		long repositoryId = 0;
-
-		String fullName = ParamUtil
-		    .getString(
+		String currentURL = ParamUtil.getString(uploadPortletRequest, "currentURL");
+		
+		String fullName =
+		    ParamUtil.getString(
 		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_FULLNAME);
-		String personId = ParamUtil
-		    .getString(
+		String personId =
+		    ParamUtil.getString(
 		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_PERSONALID);
-		String adress = ParamUtil
-		    .getString(
+		String adress =
+		    ParamUtil.getString(
 		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_ADDRESS);
-		String email = ParamUtil
-		    .getString(uploadPortletRequest, CitizenDisplayTerms.CITIZEN_EMAIL);
-		String telNo = ParamUtil
-		    .getString(uploadPortletRequest, CitizenDisplayTerms.CITIZEN_TELNO);
+		String email =
+		    ParamUtil.getString(
+		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_EMAIL);
+		String telNo =
+		    ParamUtil.getString(
+		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_TELNO);
 
-		String contentType = uploadPortletRequest
-		    .getContentType(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
+		String contentType =
+		    uploadPortletRequest.getContentType(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
 
-		String sourceFileName = uploadPortletRequest
-		    .getFileName(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
+		String sourceFileName =
+		    uploadPortletRequest.getFileName(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
 
-		int birthDateDay = ParamUtil
-		    .getInteger(
+		int birthDateDay =
+		    ParamUtil.getInteger(
 		        uploadPortletRequest, CitizenDisplayTerms.BIRTH_DATE_DAY);
-		int birthDateMonth = ParamUtil
-		    .getInteger(
+		int birthDateMonth =
+		    ParamUtil.getInteger(
 		        uploadPortletRequest, CitizenDisplayTerms.BIRTH_DATE_MONTH);
-		int birthDateYear = ParamUtil
-		    .getInteger(
+		int birthDateYear =
+		    ParamUtil.getInteger(
 		        uploadPortletRequest, CitizenDisplayTerms.BIRTH_DATE_YEAR);
-		int gender = ParamUtil
-		    .getInteger(
+		int gender =
+		    ParamUtil.getInteger(
 		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_GENDER);
 
-		contentType = Validator
-		    .isNotNull(contentType) ? MimeTypesUtil
-		        .getContentType(contentType) : StringPool.BLANK;
+		contentType =
+		    Validator.isNotNull(contentType)
+		        ? MimeTypesUtil.getContentType(contentType) : StringPool.BLANK;
 
 		String title = "Personal File";
 
@@ -392,57 +371,42 @@ public class AccountRegPortlet extends MVCPortlet {
 			    citizenId, fullName, personId, adress, email, telNo, size,
 			    contentType);
 
-			ServiceContext serviceContext = ServiceContextFactory
-			    .getInstance(actionRequest);
+			ServiceContext serviceContext =
+			    ServiceContextFactory.getInstance(actionRequest);
 
-			inputStream = uploadPortletRequest
-			    .getFileAsStream(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
+			inputStream =
+			    uploadPortletRequest.getFileAsStream(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
 
-			repositoryId = serviceContext
-			    .getScopeGroupId();
+			repositoryId = serviceContext.getScopeGroupId();
 
-			city = DictItemLocalServiceUtil
-			    .getDictItem(cityId);
+			city = DictItemLocalServiceUtil.getDictItem(cityId);
 
-			district = DictItemLocalServiceUtil
-			    .getDictItem(districtId);
+			district = DictItemLocalServiceUtil.getDictItem(districtId);
 
-			ward = DictItemLocalServiceUtil
-			    .getDictItem(wardId);
+			ward = DictItemLocalServiceUtil.getDictItem(wardId);
 
 			if (citizenId == 0) {
-				Citizen citizen = CitizenLocalServiceUtil
-				    .addCitizen(
+				Citizen citizen =
+				    CitizenLocalServiceUtil.addCitizen(
 				        fullName, personId, gender, birthDateDay,
-				        birthDateMonth, birthDateYear, adress, city
-				            .getItemCode(),
-				        district
-				            .getItemCode(),
-				        ward
-				            .getItemCode(),
-				        city
-				            .getItemName(serviceContext
-				                .getLocale(), true),
-				        district
-				            .getItemName(serviceContext
-				                .getLocale(), true),
-				        ward
-				            .getItemName(serviceContext
-				                .getLocale(), true),
+				        birthDateMonth, birthDateYear, adress,
+				        city.getItemCode(), district.getItemCode(),
+				        ward.getItemCode(),
+				        city.getItemName(serviceContext.getLocale(), true),
+				        district.getItemName(serviceContext.getLocale(), true),
+				        ward.getItemName(serviceContext.getLocale(), true),
 				        email,
 
-				        telNo, repositoryId, sourceFileName, contentType, title,
-				        inputStream, size, serviceContext);
+				        telNo, repositoryId, sourceFileName, contentType,
+				        title, inputStream, size, serviceContext);
 
 				if (citizen != null) {
-					User mappingUser = UserLocalServiceUtil
-					    .getUser(citizen
-					        .getMappingUserId());
-					MessageBusUtil
-					    .sendEmailAddressVerification(citizen
-					        .getUuid(), mappingUser, email,
-					        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
-					        serviceContext);
+					User mappingUser =
+					    UserLocalServiceUtil.getUser(citizen.getMappingUserId());
+					MessageBusUtil.sendEmailAddressVerification(
+					    citizen.getUuid(), mappingUser, email,
+					    PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
+					    serviceContext);
 				}
 
 			}
@@ -453,31 +417,29 @@ public class AccountRegPortlet extends MVCPortlet {
 		}
 		catch (Exception e) {
 			if (e instanceof OutOfLengthCitizenAddressException) {
-				SessionErrors
-				    .add(
-				        actionRequest,
-				        OutOfLengthCitizenAddressException.class);
+				SessionErrors.add(
+				    actionRequest, OutOfLengthCitizenAddressException.class);
 			}
 			else if (e instanceof OutOfLengthCitizenEmailException) {
-				SessionErrors
-				    .add(actionRequest, OutOfLengthCitizenEmailException.class);
+				SessionErrors.add(
+				    actionRequest, OutOfLengthCitizenEmailException.class);
 			}
 			else if (e instanceof OutOfLengthCitizenNameException) {
-				SessionErrors
-				    .add(actionRequest, OutOfLengthCitizenNameException.class);
+				SessionErrors.add(
+				    actionRequest, OutOfLengthCitizenNameException.class);
 			}
 			else if (e instanceof DuplicateCitizenEmailException) {
-				SessionErrors
-				    .add(actionRequest, DuplicateCitizenEmailException.class);
+				SessionErrors.add(
+				    actionRequest, DuplicateCitizenEmailException.class);
 			}
 			else {
-				SessionErrors
-				    .add(
-				        uploadPortletRequest,
-				        MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+				SessionErrors.add(
+				    uploadPortletRequest,
+				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			}
-			_log
-			    .error(e);
+			if (Validator.isNotNull(currentURL)) {
+				actionResponse.sendRedirect(currentURL);
+			}
 
 		}
 		finally {
@@ -495,10 +457,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		Citizen citizen = null;
 
 		try {
-			if (!email
-			    .equals(StringPool.BLANK)) {
-				citizen = CitizenLocalServiceUtil
-				    .getCitizen(email);
+			if (!email.equals(StringPool.BLANK)) {
+				citizen = CitizenLocalServiceUtil.getCitizen(email);
 			}
 		}
 		catch (Exception e) {
@@ -507,21 +467,17 @@ public class AccountRegPortlet extends MVCPortlet {
 		if (citizenId == 0 && citizen != null) {
 			throw new DuplicateCitizenEmailException();
 		}
-		if (citizenId > 0 && citizen
-		    .getCitizenId() != citizenId) {
+		if (citizenId > 0 && citizen.getCitizenId() != citizenId) {
 			throw new DuplicateCitizenEmailException();
 		}
 
-		if (fullName
-		    .length() > 255) {
+		if (fullName.length() > 255) {
 			throw new OutOfLengthCitizenNameException();
 		}
-		else if (address
-		    .length() > 500) {
+		else if (address.length() > 500) {
 			throw new OutOfLengthCitizenAddressException();
 		}
-		else if (email
-		    .length() > 255) {
+		else if (email.length() > 255) {
 			throw new OutOfLengthCitizenEmailException();
 		}
 
@@ -541,10 +497,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		Business business = null;
 
 		try {
-			if (!email
-			    .equals(StringPool.BLANK)) {
-				business = BusinessLocalServiceUtil
-				    .getBusiness(email);
+			if (!email.equals(StringPool.BLANK)) {
+				business = BusinessLocalServiceUtil.getBusiness(email);
 			}
 
 		}
@@ -556,42 +510,33 @@ public class AccountRegPortlet extends MVCPortlet {
 			throw new DuplicateBusinessEmailException();
 		}
 
-		if (businessId != 0 && business != null && business
-		    .getBusinessId() != businessId) {
+		if (businessId != 0 && business != null &&
+		    business.getBusinessId() != businessId) {
 			throw new DuplicateBusinessEmailException();
 		}
-		if (email
-		    .length() > 255) {
+		if (email.length() > 255) {
 			throw new OutOfLengthBusinessEmailException();
 		}
-		else if (name
-		    .length() > 255) {
+		else if (name.length() > 255) {
 			throw new OutOfLengthBusinessNameException();
 		}
-		else if (enName
-		    .length() > 255) {
+		else if (enName.length() > 255) {
 			throw new OutOfLengthBusinessEnNameException();
 		}
-		else if (address
-		    .length() > 500) {
+		else if (address.length() > 500) {
 			throw new OutOfLengthCitizenAddressException();
 		}
-		else if (representativeName
-		    .length() > 75) {
+		else if (representativeName.length() > 75) {
 			throw new OutOfLengthBusinessRepresentativeNameException();
 		}
-		else if (representativeRole
-		    .length() > 75) {
+		else if (representativeRole.length() > 75) {
 			throw new OutOfLengthBusinessRepresentativeRoleException();
 		}
-		else if (shortName
-		    .length() > 75) {
+		else if (shortName.length() > 75) {
 			throw new OutOfLengthBusinessShortNameException();
 		}
 
 	}
 
-	private Log _log = LogFactoryUtil
-	    .getLog(AccountRegPortlet.class
-	        .getName());
+	private Log _log = LogFactoryUtil.getLog(AccountRegPortlet.class.getName());
 }

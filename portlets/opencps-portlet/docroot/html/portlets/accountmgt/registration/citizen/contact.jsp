@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.util.PortletUtil"%>
@@ -46,7 +47,7 @@
 	DictItem dictItemDistrict = null;
 	DictItem dictItemWard = null;
 	
-	StringBuilder getAddress = new StringBuilder();
+	StringBuilder sbSelectItems = new StringBuilder();
 	String url = StringPool.BLANK;
 	
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
@@ -67,9 +68,9 @@
 			dictItemWard = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getWardCode());
 			
 			if(dictItemCity != null && dictItemDistrict!= null && dictItemWard!=null) {
-				getAddress.append(dictItemCity.getDictItemId()+ ",");
-				getAddress.append(dictItemWard.getDictItemId()+ ",");
-				getAddress.append(dictItemDistrict.getDictItemId());
+				sbSelectItems.append(dictItemCity.getDictItemId()+ StringPool.COMMA);
+				sbSelectItems.append(dictItemWard.getDictItemId()+ StringPool.COMMA);
+				sbSelectItems.append(dictItemDistrict.getDictItemId());
 			}
 			dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(citizen.getAttachFile());
 		}
@@ -84,8 +85,6 @@
 		
 	}
 %>
-
-
 
 <aui:model-context bean="<%=citizen %>" model="<%=Citizen.class%>" />
 
@@ -109,7 +108,7 @@
 			dictCollectionCode="ADMINISTRATIVE_REGION"
 			itemNames="cityId,districtId,wardId"
 			itemsEmptyOption="true,true,true"	
-			selectedItems="<%=getAddress.toString() %>"
+			selectedItems="<%=sbSelectItems.toString() %>"
 		/>	
 	</aui:col>
 </aui:row>

@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
+
 package org.opencps.accountmgt.search;
 
 import java.util.ArrayList;
@@ -35,7 +36,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
 
-
 public class CitizenSearch extends SearchContainer<Citizen>{
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
@@ -43,7 +43,7 @@ public class CitizenSearch extends SearchContainer<Citizen>{
 	static {
 		
 		headerNames.add("personal-id");
-		headerNames.add("fullname");
+		headerNames.add("full-name");
 		headerNames.add("gender");
 		headerNames.add("birth-date");
 		headerNames.add("account");
@@ -51,7 +51,7 @@ public class CitizenSearch extends SearchContainer<Citizen>{
 		headerNames.add("action");
 		
 		orderableHeaders.put("personal-id", CitizenSearchTerm.CITIZEN_PERSONALID);
-		orderableHeaders.put("fullname", CitizenSearchTerm.CITIZEN_FULLNAME);
+		orderableHeaders.put("full-name", CitizenSearchTerm.CITIZEN_FULLNAME);
 		orderableHeaders.put("gender", CitizenSearchTerm.CITIZEN_GENDER);
 		orderableHeaders.put("birth-date", CitizenSearchTerm.CITIZEN_BIRTHDATE);
 		orderableHeaders.put("account", CitizenSearchTerm.CITIZEN_EMAIL);

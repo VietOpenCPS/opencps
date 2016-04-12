@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -107,6 +106,7 @@
 			<liferay-ui:message key="birth-date"/>
 		</label>
 		<liferay-ui:input-date 
+			nullable="true"
 			dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
 			dayValue="<%= spd.getDayOfMoth() %>"
 			disabled="<%=isViewProfile%>"
@@ -117,14 +117,18 @@
 			yearValue="<%= spd.getYear() %>"
 			formName="fm"
 			autoFocus="<%=true %>"
-		/>	
+			
+		>
+		</liferay-ui:input-date>
 	</aui:col>
 	
 	<aui:col width="50">
 		<aui:select 
 			name="<%=CitizenDisplayTerms.CITIZEN_GENDER %>"
 			disabled="<%=isViewProfile %>"
+			required="true"
 		>
+			<aui:option label="<%=StringPool.BLANK %>" value="" />
 			<%
 				if(PortletPropsValues.USERMGT_GENDER_VALUES != null && 
 					PortletPropsValues.USERMGT_GENDER_VALUES.length > 0){
@@ -143,7 +147,6 @@
 		</aui:select>
 	</aui:col>
 </aui:row>
-
 
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration/citizen.general_info.jsp");

@@ -12,7 +12,6 @@
  */
 
 package org.opencps.accountmgt.service.impl;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,11 +80,6 @@ import com.liferay.util.PwdGenerator;
  * @see org.opencps.accountmgt.service.BusinessLocalServiceUtil
  */
 public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS: Never reference this interface directly. Always use
-	 * {@link org.opencps.accountmgt.service.BusinessLocalServiceUtil} to access
-	 * the business local service.
-	 */
 
 	public Business addBusiness(
 	    String fullName, String enName, String shortName, String businessType,
@@ -367,7 +361,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			    .deleteOrganization(mappingOrgId);
 		}
 
-		// Ham chua kiem tra ca dieu kien lien quan nhu tai khoan phu...
+		businessPersistence.remove(business);
 
 	}
 

@@ -47,7 +47,7 @@
 	DictItem dictItemDistrict = null;
 	DictItem dictItemWard = null;
 	
-	StringBuilder getAddress = new StringBuilder();
+	StringBuilder sbSelectItems = new StringBuilder();
 	String url = StringPool.BLANK;
 	
 	DLFileEntry dlFileEntry = null;
@@ -76,9 +76,12 @@
 			dictItemWard = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, business.getWardCode());
 			
 			if(dictItemCity != null && dictItemDistrict!= null && dictItemWard!=null) {
-				getAddress.append(dictItemCity.getDictItemId()+ ",");
-				getAddress.append(dictItemWard.getDictItemId()+ ",");
-				getAddress.append(dictItemDistrict.getDictItemId());
+				sbSelectItems.append(dictItemCity.getDictItemId()+ StringPool.COMMA);
+				
+				sbSelectItems.append(dictItemDistrict.getDictItemId() + StringPool.COMMA);
+				sbSelectItems.append(dictItemWard.getDictItemId());
+				
+				
 			}
 			dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(business.getAttachFile());
 		}
@@ -109,7 +112,7 @@
 			dictCollectionCode="ADMINISTRATIVE_REGION"
 			itemNames="cityId,districtId,wardId"
 			itemsEmptyOption="true,true,true"	
-			selectedItems="<%=getAddress.toString() %>"
+			selectedItems="<%=sbSelectItems.toString() %>"
 		/>	
 	</aui:col>
 </aui:row>

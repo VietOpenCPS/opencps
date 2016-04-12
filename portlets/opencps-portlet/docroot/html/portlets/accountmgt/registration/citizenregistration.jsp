@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,18 +16,47 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+
+<%@page import="org.opencps.accountmgt.DuplicateCitizenEmailException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthCitizenEmailException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthCitizenAddressException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthCitizenNameException"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-
 <%@ include file="../init.jsp" %>
 
 <%
 	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
 %>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthCitizenAddressException.class %>" 
+	message="<%= OutOfLengthCitizenAddressException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthCitizenEmailException.class %>" 
+	message="<%= OutOfLengthCitizenEmailException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthCitizenNameException.class %>" 
+	message="<%= OutOfLengthCitizenNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= DuplicateCitizenEmailException.class %>" 
+	message="<%= DuplicateCitizenEmailException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	key="<%=MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED %>" 
+	message="system.exception.occured" 
+/>
 
 <portlet:renderURL var="switcherBusinessRegisterURL">
 	<portlet:param name="mvcPath" value='<%= templatePath + "businessregistration.jsp" %>'/>
@@ -50,7 +78,8 @@
 	<portlet:param 
 		name="<%=CitizenDisplayTerms.CITIZEN_ID %>" 
 		value="<%=String.valueOf(citizenID) %>"
-	/>	
+	/>
+	<portlet:param name="currentURL" value="<%=currentURL %>"/>
 </portlet:actionURL>
 
 <aui:form 
@@ -85,6 +114,9 @@
 <aui:script>
 	AUI().ready(function(A) {
 		var termsOfUseCheckbox = A.one('#<portlet:namespace />termsOfUseCheckbox');
+		
+		
+		
 		if(termsOfUseCheckbox) {
 			termsOfUseCheckbox.on('click',function() {
 				
@@ -101,6 +133,7 @@
 				}
 			});
 		}
+		
 	});
 
 	Liferay.provide(window, '<portlet:namespace />registerAccount', function() {
