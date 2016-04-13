@@ -16,6 +16,18 @@
 	width : 100% !important;
 }
 
+.input50{
+	width : 50% !important;
+}
+
+.input60{
+	width : 60% !important;
+}
+
+.input30{
+	width : 30% !important;
+}
+
 .input30_1 select {
 	width: 150px !important;
 }

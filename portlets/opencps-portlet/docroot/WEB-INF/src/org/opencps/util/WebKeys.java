@@ -67,5 +67,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String ACCOUNT_TYPE = "ACCOUNT_TYPE";
 	public static final String SERVICE_TEMPLATE_ENTRY = "SERVICE_TEMPLATE_ENTRY";
+	
+	public static final String DOSSIER_PART_ENTRY = "dossier_part_entry";
+	public static final String DOSSIER_TEMPLATE_ENTRY = "dossier_template_entry";
 
 }

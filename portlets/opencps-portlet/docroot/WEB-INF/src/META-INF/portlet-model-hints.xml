@@ -258,4 +258,27 @@
 		<field name="fileNo" type="String" />
 		<field name="fileEntryId" type="long" />
 	</model>
+	<model name="org.opencps.dossiermgt.model.DossierPart">
+		<field name="dossierpartId" type="long" />
+		<field name="dossierTemplateId" type="long" />
+		<field name="partNo" type="String" />
+		<field name="partName" type="String" />
+		<field name="partTip" type="String" />
+		<field name="partType" type="int" />
+		<field name="parentId" type="long" />
+		<field name="sibling" type="double" />
+		<field name="treeIndex" type="String" />
+		<field name="formScript" type="String">
+			<hint-collection name="TEXTAREA" />
+		</field>
+		<field name="sampleData" type="String" />
+		<field name="required" type="boolean" />
+		<field name="templateFileNo" type="String" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.DossierTemplate">
+		<field name="dossierTemplateId" type="long" />
+		<field name="templateName" type="String" />
+		<field name="description" type="String" />
+		<field name="templateNo" type="String" />
+	</model>
 </model-hints>

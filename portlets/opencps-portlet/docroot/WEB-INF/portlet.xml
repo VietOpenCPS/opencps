@@ -434,11 +434,11 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>html/portlets/dossiermgt/frontoffice/frontofficedossierlist.jsp</value>
+			<value>/html/portlets/dossiermgt/frontoffice/frontofficedossierlist.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
-			<value>html/portlets/dossiermgt/frontoffice/</value>
+			<value>/html/portlets/dossiermgt/frontoffice/</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
