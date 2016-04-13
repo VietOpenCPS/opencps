@@ -26,6 +26,12 @@
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.accountmgt.FileTypeFailException"%>
+<%@page import="org.opencps.accountmgt.OutOfSizeFileUploadException"%>
+<%@page import="org.opencps.accountmgt.InvalidFileUploadException"%>
+<%@page import="org.opencps.accountmgt.InvalidWardCodeException"%>
+<%@page import="org.opencps.accountmgt.InvalidDistricCodeException"%>
+<%@page import="org.opencps.accountmgt.InvalidCityCodeException"%>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -56,6 +62,31 @@
 <liferay-ui:error 
 	key="<%=MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED %>" 
 	message="system.exception.occured" 
+/>
+
+<liferay-ui:error 
+	exception="<%= InvalidCityCodeException.class %>" 
+	message="<%= InvalidCityCodeException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= InvalidDistricCodeException.class %>" 
+	message="<%= InvalidDistricCodeException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= InvalidWardCodeException.class %>" 
+	message="<%= InvalidWardCodeException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= InvalidFileUploadException.class %>" 
+	message="<%= InvalidFileUploadException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= FileTypeFailException.class %>" 
+	message="<%= FileTypeFailException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= OutOfSizeFileUploadException.class %>" 
+	message="<%= OutOfSizeFileUploadException.class.getName() %>" 
 />
 
 <portlet:renderURL var="switcherBusinessRegisterURL">

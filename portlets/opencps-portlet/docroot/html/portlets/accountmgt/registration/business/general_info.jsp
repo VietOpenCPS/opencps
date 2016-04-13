@@ -60,10 +60,14 @@
 			dictItems = DictItemLocalServiceUtil
 							.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
 			if(business!=null) {
-				dictItemDomain = DictItemLocalServiceUtil
-								.getDictItemInuseByItemCode(dictCollection.getDictCollectionId(), business.getBusinessType());
-				if(dictItemDomain!=null) {
-					getBussinessType.append(dictItemDomain.getDictItemId());
+				if(!business.getBusinessType().equals(StringPool.BLANK)) {
+					dictItemDomain = DictItemLocalServiceUtil
+									.getDictItemInuseByItemCode(dictCollection.getDictCollectionId(), business.getBusinessType());
+					if(dictItemDomain!=null) {
+						getBussinessType.append(dictItemDomain.getDictItemId());
+					}
+				} else {
+					getBussinessType.append(0);
 				}
 			
 			}

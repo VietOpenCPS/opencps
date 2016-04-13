@@ -25,6 +25,9 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.accountmgt.InvalidCityCodeException;
+import org.opencps.accountmgt.InvalidDistricCodeException;
+import org.opencps.accountmgt.InvalidWardCodeException;
 import org.opencps.accountmgt.OutOfLengthBusinessEnNameException;
 import org.opencps.accountmgt.OutOfLengthBusinessNameException;
 import org.opencps.accountmgt.OutOfLengthBusinessRepresentativeNameException;
@@ -44,6 +47,7 @@ import org.opencps.usermgt.search.EmployeeDisplayTerm;
 import org.opencps.util.MessageBusUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.PortletPropsValues;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.UserPasswordException;
@@ -288,10 +292,12 @@ public class AccountMgtPortlet extends MVCPortlet {
 		}
 
 		try {
+			
 			AccountRegPortlet
 			    .ValidateCitizen(
 			        citizenId, StringPool.BLANK, StringPool.BLANK, address,
-			        StringPool.BLANK, telNo, 0, StringPool.BLANK);
+			        StringPool.BLANK, telNo, 1, StringPool.BLANK, cityId, districtId, wardId
+			        ,PortletPropsValues.ACCOUNTMGT_FILE_TYPE[0]);
 
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
@@ -341,6 +347,18 @@ public class AccountMgtPortlet extends MVCPortlet {
 			else if (e instanceof OutOfLengthCitizenNameException) {
 				SessionErrors
 				    .add(actionRequest, OutOfLengthCitizenNameException.class);
+			}
+			else if(e instanceof InvalidCityCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidCityCodeException.class);
+			}
+			else if(e instanceof InvalidDistricCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidDistricCodeException.class);
+			}
+			else if(e instanceof InvalidWardCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidWardCodeException.class);
 			}
 			else {
 				SessionErrors
@@ -427,7 +445,8 @@ public class AccountMgtPortlet extends MVCPortlet {
 			AccountRegPortlet
 			    .ValidateBusiness(
 			        businessId, email, StringPool.BLANK, enName, shortName,
-			        address, representativeName, representativeRole);
+			        address, representativeName, representativeRole, cityId, districtId, wardId,
+			        1,PortletPropsValues.ACCOUNTMGT_FILE_TYPE[0]);
 
 			city = DictItemLocalServiceUtil
 			    .getDictItem(cityId);
@@ -503,13 +522,25 @@ public class AccountMgtPortlet extends MVCPortlet {
 				        actionRequest,
 				        OutOfLengthBusinessRepresentativeRoleException.class);
 			}
+			else if(e instanceof InvalidCityCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidCityCodeException.class);
+			}
+			else if(e instanceof InvalidDistricCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidDistricCodeException.class);
+			}
+			else if(e instanceof InvalidWardCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidWardCodeException.class);
+			}
 			else {
 				SessionErrors
 				    .add(
 				        actionRequest,
 				        MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			}
-
+			
 			if (Validator
 			    .isNotNull(returnURL)) {
 				actionResponse

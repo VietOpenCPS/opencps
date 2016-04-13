@@ -27,6 +27,9 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.accountmgt.InvalidCityCodeException;
+import org.opencps.accountmgt.InvalidDistricCodeException;
+import org.opencps.accountmgt.InvalidWardCodeException;
 import org.opencps.accountmgt.OutOfLengthBusinessEnNameException;
 import org.opencps.accountmgt.OutOfLengthBusinessNameException;
 import org.opencps.accountmgt.OutOfLengthBusinessRepresentativeNameException;
@@ -164,6 +167,11 @@ public class AccountProfilePortlet extends MVCPortlet {
 		}
 
 		try {
+			AccountRegPortlet
+		    .ValidateCitizen(
+		        citizenId, StringPool.BLANK, StringPool.BLANK, address,
+		        StringPool.BLANK, telNo, 1, StringPool.BLANK, cityId, districtId, wardId,
+		        PortletPropsValues.ACCOUNTMGT_FILE_TYPE[0]);
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
 			city = DictItemLocalServiceUtil.getDictItem(cityId);
@@ -195,6 +203,18 @@ public class AccountProfilePortlet extends MVCPortlet {
 			else if (e instanceof OutOfLengthCitizenNameException) {
 				SessionErrors.add(
 				    actionRequest, OutOfLengthCitizenNameException.class);
+			}
+			else if(e instanceof InvalidCityCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidCityCodeException.class);
+			}
+			else if(e instanceof InvalidDistricCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidDistricCodeException.class);
+			}
+			else if(e instanceof InvalidWardCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidWardCodeException.class);
 			}
 			else {
 				SessionErrors.add(
@@ -278,6 +298,11 @@ public class AccountProfilePortlet extends MVCPortlet {
 		DictItem ward = null;
 
 		try {
+			AccountRegPortlet
+		    .ValidateBusiness(
+		        businessId, StringPool.BLANK, StringPool.BLANK, enName, shortName,
+		        address, representativeName, representativeRole, cityId, districtId, wardId,
+		        1 , PortletPropsValues.ACCOUNTMGT_FILE_TYPE[0]);
 			city = DictItemLocalServiceUtil.getDictItem(cityId);
 
 			district = DictItemLocalServiceUtil.getDictItem(districtId);
@@ -327,6 +352,18 @@ public class AccountProfilePortlet extends MVCPortlet {
 				SessionErrors.add(
 				    actionRequest,
 				    OutOfLengthBusinessRepresentativeRoleException.class);
+			}
+			else if(e instanceof InvalidCityCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidCityCodeException.class);
+			}
+			else if(e instanceof InvalidDistricCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidDistricCodeException.class);
+			}
+			else if(e instanceof InvalidWardCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidWardCodeException.class);
 			}
 			else {
 				SessionErrors.add(

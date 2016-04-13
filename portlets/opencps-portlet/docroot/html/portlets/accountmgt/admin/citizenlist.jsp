@@ -1,3 +1,5 @@
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.accountmgt.permissions.CitizenPermission"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -40,10 +42,8 @@
 	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
 	long citizenId = citizen != null ? citizen.getCitizenId() : 0L;
 	
-	String fullName = ParamUtil.getString(request, CitizenDisplayTerms.CITIZEN_FULLNAME );
 	int accountStatus = ParamUtil.getInteger(request, CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS);
-	
-	int [] accoutStatusArr = {0,1,2,3}; 
+	 
 	int countRegistered = 0;
 	int countConfirmed = 0;
 	int countApproved = 0;
@@ -72,13 +72,12 @@
 	} catch(Exception e) {
 		
 	}
-	PortletURL searchURL = renderResponse.createRenderURL();
+	/* PortletURL searchURL = renderResponse.createRenderURL();
 	searchURL.setParameter("tabs1", AccountMgtUtil.TOP_TABS_CITIZEN);
 	searchURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/citizenlist.jsp");
-	
+	 */
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "citizenlist.jsp");
-	iteratorURL.setParameter(CitizenDisplayTerms.CITIZEN_FULLNAME, fullName);
 	iteratorURL.setParameter(CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS, String.valueOf(accountStatus));
 	List<Citizen> citizens = new ArrayList<Citizen>();
 	
@@ -108,33 +107,10 @@
 	</aui:col>
 	
 </aui:row>
-<aui:form action="<%=searchURL.toString() %>" method="post" name="fm">
-	<aui:row>
-		<aui:col width="30">
-			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" label="<%=StringPool.BLANK %>"/>
-		</aui:col>
-		
-		<aui:col width="30">
-			<aui:select name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" label="<%=StringPool.BLANK %>">
-				<%
-					for(int i=0; i<accoutStatusArr.length; i++) {
-						%>
-							<aui:option value="<%=accoutStatusArr[i] %>">
-							<%=PortletUtil.getAccountStatus(accoutStatusArr[i], themeDisplay.getLocale()) %>
-							</aui:option>
-						<%
-						
-					}
-				%>
-			</aui:select>
-		</aui:col>
 
-		<aui:col width="30">
-			<aui:input label="<%=StringPool.BLANK %>" name="search" type="submit" value="search"/> 		
-		</aui:col>
-	</aui:row>
-</aui:form>
-
+<c:if test="<%=CitizenPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_CITIZEN) %>" >
+	<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+</c:if>
 
 <liferay-ui:search-container searchContainer="<%= new CitizenSearch(
 	renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
@@ -143,12 +119,12 @@
 		<%
 			CitizenSearchTerm searchTerms = (CitizenSearchTerm) searchContainer.getSearchTerms();
 			
-			if(!fullName.equals(StringPool.BLANK)) {
-				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), fullName);
+			if(Validator.isNotNull(searchTerms.getKeywords())) {
+				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
 			} else if(accountStatus!=0) {
 				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), accountStatus);
-			} else if(!fullName.equals(StringPool.BLANK) && accountStatus!=0)  {
-				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), fullName, accountStatus);
+			} else if(Validator.isNotNull(searchTerms.getKeywords()) && accountStatus!=0)  {
+				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
 			} else {
 				citizens = CitizenLocalServiceUtil.getCitizens(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 			}

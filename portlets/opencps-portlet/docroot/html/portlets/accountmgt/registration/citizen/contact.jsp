@@ -49,13 +49,19 @@
 	
 	StringBuilder sbSelectItems = new StringBuilder();
 	String url = StringPool.BLANK;
-	
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 	DLFileEntry dlFileEntry = null;
+	StringBuilder fileTypeList = new StringBuilder();
+	fileTypeList.append(StringPool.APOSTROPHE);
+		for(String str : PortletPropsValues.ACCOUNTMGT_FILE_TYPE) {
+			fileTypeList.append(str + StringPool.COMMA);
+		}
+		fileTypeList.deleteCharAt(fileTypeList.length()-1);
+	fileTypeList.append(StringPool.APOSTROPHE);
 	
 	try {
 		dictCollection = DictCollectionLocalServiceUtil
@@ -69,8 +75,9 @@
 			
 			if(dictItemCity != null && dictItemDistrict!= null && dictItemWard!=null) {
 				sbSelectItems.append(dictItemCity.getDictItemId()+ StringPool.COMMA);
-				sbSelectItems.append(dictItemWard.getDictItemId()+ StringPool.COMMA);
-				sbSelectItems.append(dictItemDistrict.getDictItemId());
+				sbSelectItems.append(dictItemDistrict.getDictItemId() + StringPool.COMMA);
+				sbSelectItems.append(dictItemWard.getDictItemId());
+				
 			}
 			dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(citizen.getAttachFile());
 		}
@@ -136,7 +143,12 @@
 <c:if test="<%= !isViewProfile && !isAdminViewProfile %>">
 	<aui:row>
 		<aui:col width="100">
-		<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" />
+		<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" >
+			<aui:validator name="acceptFiles">
+				<%= fileTypeList.toString() %>
+			</aui:validator>
+			<aui:validator name="required" />
+		</aui:input>
 		</aui:col>
 	</aui:row>
 </c:if>

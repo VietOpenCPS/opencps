@@ -1,4 +1,9 @@
 
+<%@page import="org.opencps.accountmgt.OutOfSizeFileUploadException"%>
+<%@page import="org.opencps.accountmgt.FileTypeFailException"%>
+<%@page import="org.opencps.accountmgt.InvalidFileUploadException"%>
+<%@page import="org.opencps.accountmgt.InvalidWardCodeException"%>
+<%@page import="org.opencps.accountmgt.InvalidDistricCodeException"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,6 +27,7 @@
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
+<%@page import="org.opencps.accountmgt.InvalidCityCodeException"%>
 
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.accountmgt.OutOfLengthBusinessNameException"%>
@@ -87,7 +93,30 @@
 	message="system.exception.occured" 
 />
 
-
+<liferay-ui:error 
+	exception="<%= InvalidCityCodeException.class %>" 
+	message="<%= InvalidCityCodeException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= InvalidDistricCodeException.class %>" 
+	message="<%= InvalidDistricCodeException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= InvalidWardCodeException.class %>" 
+	message="<%= InvalidWardCodeException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= InvalidFileUploadException.class %>" 
+	message="<%= InvalidFileUploadException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= FileTypeFailException.class %>" 
+	message="<%= FileTypeFailException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= OutOfSizeFileUploadException.class %>" 
+	message="<%= OutOfSizeFileUploadException.class.getName() %>" 
+/>
 <%
 	long citizenId = ParamUtil.getLong(request, CitizenDisplayTerms.CITIZEN_ID);
 	long businessId = ParamUtil.getLong(request, BusinessDisplayTerms.BUSINESS_BUSINESSID);
@@ -96,7 +125,7 @@
 	String path = StringPool.BLANK;
 	Citizen citizen = null;
 	Business business = null;
-	
+	String backURL = ParamUtil.getString(request, "backURL");
 	if(citizenId > 0 ) {
 		ProfileSections = new String[2];
 		ProfileSections[0] = "general_info";
@@ -117,6 +146,11 @@
 	
 	
 %>
+
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title='<%= "update-profile" %>'
+/>
 
 <portlet:actionURL var="updateCitizenProfileURL" name="updateCitizenProfile" >
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>

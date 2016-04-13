@@ -39,7 +39,7 @@
 		<portlet:renderURL var="updateBusiness"> 
 			<portlet:param name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" value="<%=String.valueOf(business.getBusinessId()) %>"/>
 			<portlet:param name="mvcPath" value="/html/portlets/accountmgt/admin/update_profile.jsp"/>
-			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:renderURL>
 	
 		<liferay-ui:icon 

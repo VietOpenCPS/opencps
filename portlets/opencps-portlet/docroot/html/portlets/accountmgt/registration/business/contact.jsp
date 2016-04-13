@@ -43,6 +43,14 @@
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 	
+	StringBuilder fileTypeList = new StringBuilder();
+	fileTypeList.append(StringPool.APOSTROPHE);
+		for(String str : PortletPropsValues.ACCOUNTMGT_FILE_TYPE) {
+			fileTypeList.append(str + StringPool.COMMA);
+		}
+		fileTypeList.deleteCharAt(fileTypeList.length()-1);
+	fileTypeList.append(StringPool.APOSTROPHE);
+	
 	DictItem dictItemCity = null;
 	DictItem dictItemDistrict = null;
 	DictItem dictItemWard = null;
@@ -155,7 +163,12 @@
 
 <c:if test="<%= !isViewProfile && !isAdminViewProfile %>">
 	<aui:row>
-		<aui:input type="file" name="attachFile" />
+		<aui:input type="file" name="attachFile" >
+			<aui:validator name="acceptFiles">
+				<%= fileTypeList.toString() %>
+			</aui:validator>
+			<aui:validator name="required" />
+		</aui:input>
 	</aui:row>
 </c:if>
 

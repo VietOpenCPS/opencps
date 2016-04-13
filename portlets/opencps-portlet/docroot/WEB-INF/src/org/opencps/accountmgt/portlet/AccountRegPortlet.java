@@ -14,7 +14,9 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
+
 package org.opencps.accountmgt.portlet;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -27,6 +29,11 @@ import javax.portlet.RenderResponse;
 
 import org.opencps.accountmgt.DuplicateBusinessEmailException;
 import org.opencps.accountmgt.DuplicateCitizenEmailException;
+import org.opencps.accountmgt.FileTypeFailException;
+import org.opencps.accountmgt.InvalidCityCodeException;
+import org.opencps.accountmgt.InvalidDistricCodeException;
+import org.opencps.accountmgt.InvalidFileUploadException;
+import org.opencps.accountmgt.InvalidWardCodeException;
 import org.opencps.accountmgt.OutOfLengthBusinessEmailException;
 import org.opencps.accountmgt.OutOfLengthBusinessEnNameException;
 import org.opencps.accountmgt.OutOfLengthBusinessNameException;
@@ -36,6 +43,7 @@ import org.opencps.accountmgt.OutOfLengthBusinessShortNameException;
 import org.opencps.accountmgt.OutOfLengthCitizenAddressException;
 import org.opencps.accountmgt.OutOfLengthCitizenEmailException;
 import org.opencps.accountmgt.OutOfLengthCitizenNameException;
+import org.opencps.accountmgt.OutOfSizeFileUploadException;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.search.BusinessDisplayTerms;
@@ -105,7 +113,8 @@ public class AccountRegPortlet extends MVCPortlet {
 	}
 
 	public void updateBusiness(
-	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
 		UploadPortletRequest uploadPortletRequest =
 		    PortalUtil.getUploadPortletRequest(actionRequest);
@@ -128,8 +137,9 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		long size =
 		    uploadPortletRequest.getSize(BusinessDisplayTerms.BUSINESS_ATTACHFILE);
-		String currentURL = ParamUtil.getString(uploadPortletRequest, "currentURL");
-		
+		String currentURL =
+		    ParamUtil.getString(uploadPortletRequest, "currentURL");
+
 		String name =
 		    ParamUtil.getString(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_NAME);
@@ -173,6 +183,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		String[] domain =
 		    ParamUtil.getParameterValues(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_DOMAIN);
+		
+		String businessTypeName = StringPool.BLANK;
 
 		Date defaultBirthDate = DateTimeUtil.convertStringToDate("01/01/1970");
 
@@ -195,7 +207,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		try {
 			ValidateBusiness(
 			    businessId, email, sourceFileName, enName, shortName, address,
-			    representativeName, representativeRole);
+			    representativeName, representativeRole, cityId, districtId, wardId,
+			    size, sourceFileName);
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(uploadPortletRequest);
 
@@ -206,14 +219,18 @@ public class AccountRegPortlet extends MVCPortlet {
 			city = DictItemLocalServiceUtil.getDictItem(cityId);
 			district = DictItemLocalServiceUtil.getDictItem(districtId);
 			ward = DictItemLocalServiceUtil.getDictItem(wardId);
-			businessType = DictItemLocalServiceUtil.getDictItem(type);
+			if(type != 0) {
+				businessType = DictItemLocalServiceUtil.getDictItem(type);
+				businessTypeName = businessType.getItemName(
+		            serviceContext.getLocale(), true);
+			} 
+			
 
 			if (businessId == 0) {
 
 				Business business =
 				    BusinessLocalServiceUtil.addBusiness(
-				        name, enName, shortName, businessType.getItemName(
-				            serviceContext.getLocale(), true), idNumber,
+				        name, enName, shortName, businessTypeName, idNumber,
 				        address, city.getItemCode(), district.getItemCode(),
 				        ward.getItemCode(), city.getItemName(
 				            serviceContext.getLocale(), true),
@@ -274,9 +291,33 @@ public class AccountRegPortlet extends MVCPortlet {
 				SessionErrors.add(
 				    actionRequest, OutOfLengthCitizenAddressException.class);
 			}
+			else if(e instanceof InvalidCityCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidCityCodeException.class);
+			}
+			else if(e instanceof InvalidDistricCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidDistricCodeException.class);
+			}
+			else if(e instanceof InvalidWardCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidWardCodeException.class);
+			}
+			else if(e instanceof InvalidFileUploadException){
+				SessionErrors.add(
+				    actionRequest, InvalidFileUploadException.class);
+			}
+			else if(e instanceof FileTypeFailException) {
+				SessionErrors.add(
+				    actionRequest, FileTypeFailException.class);
+			}
+			else if(e instanceof OutOfSizeFileUploadException) {
+				SessionErrors.add(
+				    actionRequest, OutOfSizeFileUploadException.class);
+			}
 			else {
 				SessionErrors.add(
-					actionRequest,
+				    actionRequest,
 				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			}
 			if (Validator.isNotNull(currentURL)) {
@@ -284,14 +325,12 @@ public class AccountRegPortlet extends MVCPortlet {
 			}
 
 		}
-		finally {
-
-		}
 
 	}
 
 	public void updateCitizen(
-	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
 		UploadPortletRequest uploadPortletRequest =
 		    PortalUtil.getUploadPortletRequest(actionRequest);
@@ -314,8 +353,9 @@ public class AccountRegPortlet extends MVCPortlet {
 		    uploadPortletRequest.getSize(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
 
 		long repositoryId = 0;
-		String currentURL = ParamUtil.getString(uploadPortletRequest, "currentURL");
-		
+		String currentURL =
+		    ParamUtil.getString(uploadPortletRequest, "currentURL");
+
 		String fullName =
 		    ParamUtil.getString(
 		        uploadPortletRequest, CitizenDisplayTerms.CITIZEN_FULLNAME);
@@ -354,7 +394,7 @@ public class AccountRegPortlet extends MVCPortlet {
 		contentType =
 		    Validator.isNotNull(contentType)
 		        ? MimeTypesUtil.getContentType(contentType) : StringPool.BLANK;
-
+		System.out.println("city code" + cityId);
 		String title = "Personal File";
 
 		DictItem city = null;
@@ -369,7 +409,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 			ValidateCitizen(
 			    citizenId, fullName, personId, adress, email, telNo, size,
-			    contentType);
+			    contentType, cityId, districtId, wardId, sourceFileName);
 
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
@@ -431,6 +471,30 @@ public class AccountRegPortlet extends MVCPortlet {
 			else if (e instanceof DuplicateCitizenEmailException) {
 				SessionErrors.add(
 				    actionRequest, DuplicateCitizenEmailException.class);
+			} 
+			else if(e instanceof InvalidCityCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidCityCodeException.class);
+			}
+			else if(e instanceof InvalidDistricCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidDistricCodeException.class);
+			}
+			else if(e instanceof InvalidWardCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidWardCodeException.class);
+			}
+			else if(e instanceof InvalidFileUploadException){
+				SessionErrors.add(
+				    actionRequest, InvalidFileUploadException.class);
+			}
+			else if(e instanceof FileTypeFailException) {
+				SessionErrors.add(
+				    actionRequest, FileTypeFailException.class);
+			}
+			else if(e instanceof OutOfSizeFileUploadException) {
+				SessionErrors.add(
+				    actionRequest, OutOfSizeFileUploadException.class);
 			}
 			else {
 				SessionErrors.add(
@@ -442,17 +506,17 @@ public class AccountRegPortlet extends MVCPortlet {
 			}
 
 		}
-		finally {
-
-		}
 	}
 
 	protected static void ValidateCitizen(
 	    long citizenId, String fullName, String personalId, String address,
-	    String email, String telNo, long size, String mimeType)
+	    String email, String telNo, long size, String mimeType, long cityId,
+	    long districId, long wardId, String sourceFileName)
 	    throws OutOfLengthCitizenAddressException,
 	    OutOfLengthCitizenNameException, OutOfLengthCitizenEmailException,
-	    DuplicateCitizenEmailException {
+	    DuplicateCitizenEmailException, InvalidCityCodeException,
+	    InvalidDistricCodeException, InvalidWardCodeException,
+	    InvalidFileUploadException, OutOfSizeFileUploadException, FileTypeFailException {
 
 		Citizen citizen = null;
 
@@ -471,14 +535,32 @@ public class AccountRegPortlet extends MVCPortlet {
 			throw new DuplicateCitizenEmailException();
 		}
 
-		if (fullName.length() > 255) {
+		if (fullName.length() > PortletPropsValues.ACCOUNTMGT_CITIZEN_NAME_LENGTH) {
 			throw new OutOfLengthCitizenNameException();
 		}
-		else if (address.length() > 500) {
+		else if (address.length() > PortletPropsValues.ACCOUNTMGT_CITIZEN_ADDRESS_LENGTH) {
 			throw new OutOfLengthCitizenAddressException();
 		}
-		else if (email.length() > 255) {
+		else if (email.length() > PortletPropsValues.ACCOUNTMGT_CITIZEN_EMAIL_LENGTH) {
 			throw new OutOfLengthCitizenEmailException();
+		} 
+		else if(!Validator.isNotNull(cityId) || cityId == 0) {
+			throw new InvalidCityCodeException();
+		}
+		else if(!Validator.isNotNull(districId) || districId == 0) {
+			throw new InvalidDistricCodeException();
+		}
+		else if(!Validator.isNotNull(wardId) || wardId == 0) {
+			throw new InvalidWardCodeException();
+		} 
+		else if(size == 0) {
+			throw new InvalidFileUploadException();
+		} 
+		else if(size > PortletPropsValues.ACCOUNTMGT_FILE_SIZE) {
+			throw new OutOfSizeFileUploadException();
+		}
+		else if(!isFileType(sourceFileName)) {
+			throw new FileTypeFailException();
 		}
 
 	}
@@ -486,13 +568,16 @@ public class AccountRegPortlet extends MVCPortlet {
 	protected static void ValidateBusiness(
 	    long businessId, String email, String name, String enName,
 	    String shortName, String address, String representativeName,
-	    String representativeRole)
+	    String representativeRole, long cityId, long districId, long wardId,
+	    long size, String sourceFileName)
 	    throws DuplicateBusinessEmailException,
 	    OutOfLengthBusinessEmailException, OutOfLengthBusinessNameException,
 	    OutOfLengthBusinessEnNameException, OutOfLengthCitizenAddressException,
 	    OutOfLengthBusinessRepresentativeNameException,
 	    OutOfLengthBusinessRepresentativeRoleException,
-	    OutOfLengthBusinessShortNameException {
+	    OutOfLengthBusinessShortNameException, InvalidCityCodeException, 
+	    InvalidWardCodeException, InvalidDistricCodeException, FileTypeFailException,
+	    OutOfSizeFileUploadException, InvalidFileUploadException {
 
 		Business business = null;
 
@@ -514,29 +599,58 @@ public class AccountRegPortlet extends MVCPortlet {
 		    business.getBusinessId() != businessId) {
 			throw new DuplicateBusinessEmailException();
 		}
-		if (email.length() > 255) {
+		if (email.length() > PortletPropsValues.ACCOUNTMGT_BUSINESS_EMAIL_LENGTH) {
 			throw new OutOfLengthBusinessEmailException();
 		}
-		else if (name.length() > 255) {
+		else if (name.length() > PortletPropsValues.ACCOUNTMGT_BUSINESS_NAME_LENGTH) {
 			throw new OutOfLengthBusinessNameException();
 		}
-		else if (enName.length() > 255) {
+		else if (enName.length() > PortletPropsValues.ACCOUNTMGT_BUSINESS_ENNAME_LENGTH) {
 			throw new OutOfLengthBusinessEnNameException();
 		}
-		else if (address.length() > 500) {
+		else if (address.length() > PortletPropsValues.ACCOUNTMGT_BUSINESS_ADDRESS_LENGTH) {
 			throw new OutOfLengthCitizenAddressException();
 		}
-		else if (representativeName.length() > 75) {
+		else if (representativeName.length() > PortletPropsValues.ACCOUNTMGT_BUSINESS_REPRESENTATIVENAME_LENGTH) {
 			throw new OutOfLengthBusinessRepresentativeNameException();
 		}
-		else if (representativeRole.length() > 75) {
+		else if (representativeRole.length() > PortletPropsValues.ACCOUNTMGT_BUSINESS_REPRESENTATIVEROLE_LENGTH) {
 			throw new OutOfLengthBusinessRepresentativeRoleException();
 		}
-		else if (shortName.length() > 75) {
+		else if (shortName.length() > PortletPropsValues.ACCOUNTMGT_BUSINESS_SHORTNAME_LENGTH) {
 			throw new OutOfLengthBusinessShortNameException();
 		}
-
+		else if(!Validator.isNotNull(cityId) || cityId == 0) {
+			throw new InvalidCityCodeException();
+		}
+		else if(!Validator.isNotNull(districId) || districId == 0) {
+			throw new InvalidDistricCodeException();
+		}
+		else if(!Validator.isNotNull(wardId) || wardId == 0) {
+			throw new InvalidWardCodeException();
+		}
+		else if(size == 0) {
+			throw new InvalidFileUploadException();
+		} 
+		else if(size > PortletPropsValues.ACCOUNTMGT_FILE_SIZE) {
+			throw new OutOfSizeFileUploadException();
+		}
+		else if(!isFileType(sourceFileName)) {
+			throw new FileTypeFailException();
+		}
 	}
-
+	
+	public static boolean isFileType(String sourceFileName) {
+		String fileType = MimeTypesUtil.getContentType(sourceFileName);
+		for(String str : PortletPropsValues.ACCOUNTMGT_FILE_TYPE) {
+			if(fileType.equals(str)) {
+				return true;
+			}
+		}
+		
+		return false;
+		
+	}
+	
 	private Log _log = LogFactoryUtil.getLog(AccountRegPortlet.class.getName());
 }
