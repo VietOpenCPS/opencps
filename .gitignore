@@ -119,3 +119,11 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/pers
 portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
 
 
+portlets/opencps-portlet/.settings/org.eclipse.jdt.ui.prefs
+portlets/opencps-portlet/docroot/WEB-INF/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/.gitignore
+portlets/opencps-portlet/docroot/html/portlets/processmgt/
+
