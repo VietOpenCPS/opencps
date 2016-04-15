@@ -65,6 +65,7 @@
 					searchURL.setParameter("mvcPath", templatePath + "servicetemplatefilelist.jsp");
 					searchURL.setParameter("tabs1", ServiceUtil.TOP_TABS_TEMPLATE);
 				%>
+
 				<portlet:renderURL var="editTemplateURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_template.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>

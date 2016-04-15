@@ -40,7 +40,10 @@
 			<li>
 				<a href="<%= filter.toString() %>">
 					<%= di.getItemName(locale) %>
-					
+
+					(<%= ServiceInfoLocalServiceUtil.countServiceInAdmin(scopeGroupId,
+							Long.toString(di.getDictItemId()), 1) %>)
+
 				</a>
 			</li>
 		<%

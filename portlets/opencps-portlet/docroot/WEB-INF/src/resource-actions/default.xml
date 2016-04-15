@@ -137,6 +137,7 @@
 			<supports>
 				<action-key>VIEW</action-key>
 				<action-key>ADD_WORKINGUNIT</action-key>
+				<action-key>ADD_JOBPOS</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>				
@@ -149,6 +150,7 @@
 			</guest-defaults>
 			<guest-unsupported>
 				<action-key>ADD_WORKINGUNIT</action-key>
+				<action-key>ADD_JOBPOS</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>
