@@ -142,7 +142,7 @@
 		<aui:col width="100">
 		<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" >
 			<aui:validator name="acceptFiles">
-				<%= StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>
+				<%= StringPool.APOSTROPHE + StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) + StringPool.APOSTROPHE %>
 			</aui:validator>
 			<aui:validator name="required" />
 		</aui:input>
