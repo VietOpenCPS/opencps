@@ -3,4 +3,5 @@
 <custom-sql>
 	<sql file="custom-sql/usermgt.xml" />
 	<sql file="custom-sql/servicemgt.xml" />
+	<sql file="custom-sql/processmgt.xml" />
 </custom-sql>

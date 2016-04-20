@@ -44,6 +44,27 @@
 		</permissions>
 	</portlet-resource>
 	
+	<portlet-resource>
+		<portlet-name>13</portlet-name>
+		<permissions>
+			<supports>
+				<action-key>ADD_TO_PAGE</action-key>
+				<action-key>ACCESS_IN_CONTROL_PANEL</action-key>
+				<action-key>VIEW</action-key>
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_TO_PAGE</action-key>
+				<action-key>ACCESS_IN_CONTROL_PANEL</action-key>
+			</guest-unsupported>
+		</permissions>
+	</portlet-resource>
+	
 	<model-resource>
 		<model-name>org.opencps.datamgt.model.DictCollection</model-name>
 		<portlet-ref>
@@ -137,6 +158,7 @@
 			<supports>
 				<action-key>VIEW</action-key>
 				<action-key>ADD_WORKINGUNIT</action-key>
+				<action-key>ADD_JOBPOS</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>				
@@ -149,6 +171,7 @@
 			</guest-defaults>
 			<guest-unsupported>
 				<action-key>ADD_WORKINGUNIT</action-key>
+				<action-key>ADD_JOBPOS</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>
@@ -317,6 +340,180 @@
 			</guest-defaults>
 			<guest-unsupported>
 				<action-key>ADD_SERVICE</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>
+			</guest-unsupported>
+		</permissions>
+	</model-resource>
+	
+	<model-resource>
+		<model-name>org.opencps.dossiermgt.model.Dossier</model-name>
+		<portlet-ref>
+			<portlet-name>13</portlet-name>
+		</portlet-ref>
+		<permissions>
+			<supports>
+				<action-key>VIEW</action-key>
+				<action-key>VIEW_EXTERNAL_DOSSIER</action-key>
+				<action-key>ADD_DOSSIER</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>				
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+				<action-key>VIEW_EXTERNAL_DOSSIER</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+				<action-key>VIEW_EXTERNAL_DOSSIER</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_DOSSIER</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>
+			</guest-unsupported>
+		</permissions>
+	</model-resource>
+	
+	<model-resource>
+		<model-name>org.opencps.dossiermgt.model.DossierFile</model-name>
+		<portlet-ref>
+			<portlet-name>13</portlet-name>
+		</portlet-ref>
+		<permissions>
+			<supports>
+				<action-key>VIEW</action-key>
+				<action-key>VIEW_DOSSIER_FILE</action-key>
+				<action-key>ADD_DOSSIER_FILE</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>				
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+				<action-key>VIEW_DOSSIER_FILE</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+				<action-key>VIEW_DOSSIER_FILE</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_DOSSIER_FILE</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>
+			</guest-unsupported>
+		</permissions>
+	</model-resource>
+
+	<model-resource>
+		<model-name>org.opencps.processmgt.model.ServiceProcess</model-name>
+		<portlet-ref>
+			<portlet-name>15</portlet-name>
+		</portlet-ref>
+		<permissions>
+			<supports>
+				<action-key>VIEW</action-key>
+				<action-key>ADD_PROCESS</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_PROCESS</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>
+			</guest-unsupported>
+		</permissions>
+	</model-resource>
+	
+	<model-resource>
+		<model-name>org.opencps.dossiermgt.model.DossierTemplate</model-name>
+		<portlet-ref>
+			<portlet-name>12</portlet-name>
+		</portlet-ref>
+		<permissions>
+			<supports>
+				<action-key>VIEW</action-key>
+				<action-key>ADD_DOSSIER_TEMPLATE</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>				
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_DOSSIER_TEMPLATE</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>
+			</guest-unsupported>
+		</permissions>
+	</model-resource>
+	
+	<model-resource>
+		<model-name>org.opencps.dossiermgt.model.DossierPart</model-name>
+		<portlet-ref>
+			<portlet-name>12</portlet-name>
+		</portlet-ref>
+		<permissions>
+			<supports>
+				<action-key>VIEW</action-key>
+				<action-key>ADD_DOSSIER_PART</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>				
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_DOSSIER_PART</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>
+			</guest-unsupported>
+		</permissions>
+	</model-resource>
+	
+	<model-resource>
+		<model-name>org.opencps.dossiermgt.model.ServiceConfig</model-name>
+		<portlet-ref>
+			<portlet-name>12</portlet-name>
+		</portlet-ref>
+		<permissions>
+			<supports>
+				<action-key>VIEW</action-key>
+				<action-key>ADD_SERVICE_CONFIG</action-key>
+				<action-key>UPDATE</action-key>
+				<action-key>DELETE</action-key>
+				<action-key>PERMISSIONS</action-key>				
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_SERVICE_CONFIG</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>

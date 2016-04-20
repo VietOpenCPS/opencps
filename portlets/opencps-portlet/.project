@@ -25,6 +25,11 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>net.sourceforge.metrics.builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
@@ -33,5 +38,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.apache.ivyde.eclipse.ivynature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
+<<<<<<< HEAD
+=======
+		<nature>com.jaspersoft.studio.babel.editor.rbeNature</nature>
+		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
+		<nature>net.sourceforge.metrics.nature</nature>
+>>>>>>> 4fa258edb250bcc61f13a12307dbbb1fba9d7088
 	</natures>
 </projectDescription>

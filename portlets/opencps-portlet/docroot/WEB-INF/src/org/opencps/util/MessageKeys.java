@@ -49,6 +49,18 @@ public class MessageKeys {
 	public static final String SERVICE_TEMPLATE_FILE_NO_EXCEPTION = "service.template.file.no.exception";
 	public static final String SERVICE_TEMPLATE_UPLOAD_EXCEPTION = "service.template.file.upload.exception";
 	
+	public static final String ACCOUNT_SYSTEM_EXCEPTION_OCCURRED = "account.system.exception.occurred";
+	public static final String ACCOUNT_BUSINESS_DELETE_ERROR = "account.business.delete.error";
+	public static final String ACCOUNT_CITIZEN_DELETE_ERROR = "account.citizen.delete.error";
+	public static final String ACCOUNT_CITIZEN_DELETE_SUCCESS = "account.citizen.delete.success";
+	public static final String ACCOUNT_BUSINESS_DELETE_SUCCESS = "account.business.delete.success";
+	
 	public static final String NO_ACCOUNT_STATUS_FOUND = "no.account.status.found";
+	
+	public static final String DOSSIER_TEMPLATE_DELETE_ERROR = "dossier.part.has.existed";
+	
+	public static final String DOSSIER_PART_DELETE_ERROR = "dossier.part.childs.has.existed";
+	
+	public static final String DOSSIER_SYSTEM_EXCEPTION_OCCURRED = "dossier.system.exception.occurred";
 
 }

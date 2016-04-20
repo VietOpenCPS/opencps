@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.dossiermgt"
+	auto-namespace-tables="false">
+	<author>trungnt</author>
+	<namespace>dossiermgt</namespace>
+	<entity name="DossierTemplate" local-service="true"
+		table="opencps_dossiertemplate">
+
+		<!-- PK fields -->
+		
+		<column name="dossierTemplateId" type="long" primary="true"></column>
+		
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other field -->
+		<column name="templateName" type="String"></column>
+		<column name="description" type="String"></column>
+		<column name="templateNo" type="String"></column>
+
+		<finder return-type="Collection" name="TemplateName">
+			<finder-column name="templateName" />
+		</finder>
+
+		<finder return-type="DossierTemplate" name="TemplateNo">
+			<finder-column name="templateNo"></finder-column>
+		</finder>
+		
+		<finder return-type="Collection" name="GroupId">
+			<finder-column name="groupId" />
+		</finder>
+	</entity>
+	
+	<entity name="DossierPart" local-service="true" table="opencps_dossierpart">
+		
+		<!-- PK fields -->
+		
+		<column name="dossierpartId" type="long" primary="true"></column>
+		
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other field -->
+		<column name="dossierTemplateId" type="long"></column>
+		<column name="partNo" type="String"></column>
+		<column name="partName" type="String"></column>
+		<column name="partTip" type="String"></column>
+		<column name="partType" type="int"></column>
+		<column name="parentId" type="long"></column>
+		<column name="sibling" type="double"></column>
+		<column name="treeIndex" type="String"></column>
+		<column name="formScript" type="String"></column>
+		<column name="sampleData" type="String"></column>
+		<column name="required" type="boolean"></column>
+		<column name="templateFileNo" type="String"></column>
+
+		<!-- order -->
+		<order by="asc">
+			<order-column name="sibling" />
+		</order>
+
+		<!-- finder -->
+
+		<finder return-type="Collection" name="PartName">
+			<finder-column name="partName" />
+		</finder>
+
+		<finder return-type="Collection" name="DossierTemplateId">
+			<finder-column name="dossierTemplateId"></finder-column>
+		</finder>
+
+		<finder return-type="Collection" name="ParentId">
+			<finder-column name="parentId"></finder-column>
+		</finder>
+
+		<finder return-type="DossierPart" name="Sibling">
+			<finder-column name="sibling"></finder-column>
+		</finder>
+
+		<finder return-type="DosserPart" name="PartNo">
+			<finder-column name="partNo"></finder-column>
+		</finder>
+	</entity>
+
+	<entity name="ServiceConfig" local-service="true"
+		table="opencps_service_config">
+		
+		<!-- PK fields -->
+		
+		<column name="serviceConfigId" type="long" primary="true"></column>
+		
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other field -->
+		
+		<column name="serviceInfoId" type="long"></column>
+		<column name="serviceDomainIndex" type="String"></column>
+		<column name="serviceAdministrationIndex" type="String"></column>
+		<column name="dossierTemplateId" type="long"></column>
+		<column name="govAgencyCode" type="String"></column>
+		<column name="govAgencyName" type="String"></column>
+		<column name="govAgencyOrganizationId" type="long"></column>
+		<column name="serviceMode" type="int"></column>
+		<column name="serviceProcessId" type="long"></column>
+		<column name="domainCode" type="String"></column>
+
+		<finder return-type="Collection" name="DossierTemplateId">
+			<finder-column name="dossierTemplateId"></finder-column>
+		</finder>
+
+	</entity>
+	
+	
+	<entity name="Dossier" local-service="true">
+    
+    	<!-- PK fields -->
+    	
+        <column name="dossierId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+		
+        <column name="uuid" type="String"/>
+        <column name="externalRefNo" type="String"/>
+        <column name="externalRefUrl" type="String"/>
+        <column name="ownerOrganizationId" type="long"/>
+        <column name="serviceConfigId" type="long"/>
+        <column name="serviceInfoId" type="long"/>
+        <column name="serviceDomainIndex" type="String"/>
+        <column name="serviceAdministrationIndex" type="String"/>
+        <column name="dossierTemplateId" type="long"/>
+        <column name="govAgencyCode" type="String"/>
+        <column name="govAgencyName" type="String"/>
+        <column name="govAgencyOrganizationId" type="long"/>
+        <column name="serviceMode" type="int"/>
+        <column name="counter" type="int"/>
+        <column name="subjectId" type="long"/>
+        <column name="subjectName" type="String"/>
+        <column name="address" type="String"/>
+        <column name="cityCode" type="String"/>
+        <column name="cityName" type="String"/>
+        <column name="districtCode" type="String"/>
+        <column name="districtName" type="String"/>
+        <column name="wardCode" type="String"/>
+        <column name="wardName" type="String"/>
+        <column name="contactName" type="String"/>
+        <column name="contactTelNo" type="String"/>
+        <column name="contactEmail" type="String"/>
+        <column name="note" type="String"/>
+        <column name="submitDatetime" type="Date"/>
+        <column name="receiveDatetime" type="Date"/>
+        <column name="receptionNo" type="String"/>
+        <column name="estimateDatetime" type="Date"/>
+        <column name="finishDatetime" type="Date"/>
+        <column name="dossierStatus" type="int"/>
+        <column name="dossierSource" type="int"/>
+        <order by="desc">
+            <order-column name="modifiedDate" order-by="desc"></order-column>
+        </order>
+        
+    </entity>
+    
+    <entity name="DossierStatus" local-service="true">
+    
+   		<!-- PK fields -->
+   		
+        <column name="dossierStatusId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+		
+        <column name="dossierId" type="long"/>
+        <column name="fileGroupId" type="long"/>
+        <column name="dossierStatus" type="int"/>
+        <column name="actionInfo" type="String"/>
+        <column name="messageInfo" type="String"/>
+        <column name="updateDatetime" type="Date"/>
+        <column name="syncStatus" type="int"/>
+    </entity>
+    
+    <entity name="DossierLog" local-service="true">
+    
+   		<!-- PK fields -->
+    
+        <column name="dossierLogId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+		
+        <column name="dossierId" type="long"/>
+        <column name="fileGroupId" type="long"/>
+        <column name="dossierStatus" type="int"/>
+        <column name="actionInfo" type="String"/>
+        <column name="messageInfo" type="String"/>
+        <column name="updateDatetime" type="Date"/>
+        <column name="level" type="int"/>
+    </entity>
+    
+    <entity name="FileGroup" local-service="true">
+    
+    	<!-- PK fields -->
+    
+        <column name="fileGroupId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+        <column name="dossierId" type="long"/>
+        <column name="dossierPartId" type="long"/>
+        <column name="displayName" type="String"/>
+        <column name="removed" type="int"/>
+        <column name="syncStatus" type="int"/>
+    </entity>
+    
+    <entity name="DossierFile" local-service="true">
+    
+    	<!-- PK fields -->
+    	
+        <column name="dossierFileId" type="long" primary="true"/>
+        
+         <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+        <column name="dossierId" type="long"/>
+        
+        <column name="uuid" type="String" />
+        <column name="dossierPartId" type="long"/>
+        <column name="templateFileNo" type="String"/>
+        <column name="groupFileId" type="long"/>
+        <column name="ownerUserId" type="long"/>
+        <column name="ownerOrganizationId" type="long"/>
+        <column name="displayName" type="String"/>
+        <column name="formData" type="String"/>
+        <column name="fileEntryId" type="long"/>
+        <column name="dossierFileMark" type="int"/>
+        <column name="dossierFileType" type="int"/>
+        <column name="dossierFileNo" type="String"/>
+        <column name="dossierFileDate" type="Date"/>
+        <column name="removed" type="int"/>
+        <column name="original" type="int"/>
+        <column name="syncStatus" type="int"/>
+    </entity>
+
+	<exceptions>
+		<exception>OutOfLengthDossierTemplateName</exception>
+		<exception>OutOfLengthDossierTemplateNumber</exception>
+		<exception>DuplicateDossierTemplateNumber</exception>
+
+		<exception>OutOfLengthDossierPartName</exception>
+		<exception>OutOfLengthDossierPartNumber</exception>
+		<exception>OutOfLengthDossierTemplateFileNumber</exception>
+		<exception>DuplicateDossierPartNumber</exception>
+		<exception>DuplicateDossierPartSibling</exception>
+
+		<exception>OutOfLengthServiceConfigGovName</exception>
+		<exception>OutOfLengthServiceConfigGovCode</exception>
+
+		<exception>InvalidServiceConfigGovName</exception>
+		<exception>InvalidServiceConfigGovCode</exception>
+		<exception>InvalidInWorkingUnit</exception>
+		<exception>InvalidServiceDomain</exception>
+	</exceptions>
+
+</service-builder>

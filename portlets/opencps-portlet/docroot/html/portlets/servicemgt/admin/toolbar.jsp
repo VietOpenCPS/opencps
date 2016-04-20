@@ -23,12 +23,25 @@
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", ServiceUtil.TOP_TABS_SERVICE);
 	PortletURL searchURL = renderResponse.createRenderURL();
+	
+	String administrationCode = ParamUtil.getString(request, ServiceDisplayTerms.SERVICE_ADMINISTRATION);
+	
+	String domainCode = ParamUtil.getString(request, ServiceDisplayTerms.SERVICE_DOMAINCODE);
+	
+	request.setAttribute(ServiceDisplayTerms.SERVICE_ADMINISTRATION, administrationCode);
+	
+	request.setAttribute(ServiceDisplayTerms.SERVICE_DOMAINCODE, domainCode);
+	
 %>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		<c:choose>
 			
 			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_SERVICE) %>">
+				<%
+					searchURL.setParameter("mvcPath", templatePath + "serviceinfolist.jsp");
+					searchURL.setParameter("tabs1", ServiceUtil.TOP_TABS_SERVICE);
+				%>
 				
 				<portlet:renderURL var="editServiceURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_service.jsp" %>'/>
@@ -48,6 +61,10 @@
 			</c:when>
 			
 			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_TEMPLATE) %>">
+				<%
+					searchURL.setParameter("mvcPath", templatePath + "servicetemplatefilelist.jsp");
+					searchURL.setParameter("tabs1", ServiceUtil.TOP_TABS_TEMPLATE);
+				%>
 				<portlet:renderURL var="editTemplateURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_template.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
@@ -92,7 +109,7 @@
 											dictCollectionCode="SERVICE_ADMINISTRATION"
 											itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
 											itemsEmptyOption="true"
-												
+											selectedItems="<%= administrationCode %>"	
 										>
 										</datamgt:ddr>
 		
@@ -103,6 +120,7 @@
 											dictCollectionCode="SERVICE_DOMAIN"
 											itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
 											itemsEmptyOption="true"	
+											selectedItems="<%= domainCode %>"
 										>
 										</datamgt:ddr>
 

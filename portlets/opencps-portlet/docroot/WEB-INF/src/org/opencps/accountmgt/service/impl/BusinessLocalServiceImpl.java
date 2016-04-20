@@ -1,15 +1,19 @@
 /**
- * OpenCPS is the open source Core Public Services software Copyright (C)
- * 2016-present OpenCPS community This program is free software: you can
- * redistribute it and/or modify it under the terms of the GNU Affero General
- * Public License as published by the Free Software Foundation, either version 3
- * of the License, or any later version. This program is distributed in the hope
- * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Affero General Public License for more details. You should have received a
- * copy of the GNU Affero General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>
- */
+* OpenCPS is the open source Core Public Services software
+* Copyright (C) 2016-present OpenCPS community
+
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>
+*/
 
 package org.opencps.accountmgt.service.impl;
 
@@ -81,11 +85,6 @@ import com.liferay.util.PwdGenerator;
  * @see org.opencps.accountmgt.service.BusinessLocalServiceUtil
  */
 public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS: Never reference this interface directly. Always use
-	 * {@link org.opencps.accountmgt.service.BusinessLocalServiceUtil} to access
-	 * the business local service.
-	 */
 
 	public Business addBusiness(
 	    String fullName, String enName, String shortName, String businessType,
@@ -346,28 +345,68 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		    .getMappingOrganizationId();
 
 		if (mappingUserId > 0) {
-			userLocalService
-			    .deleteUser(mappingUserId);
+			User mappingUser = null;
+			try {
+				mappingUser = userLocalService
+				    .getUser(mappingUserId);
+			}
+			catch (Exception e) {
+
+			}
+
+			if (mappingUser != null) {
+				userLocalService
+				    .deleteUser(mappingUserId);
+			}
 		}
 
 		if (fileEntryId > 0) {
-			FileEntry fileEntry = DLAppServiceUtil
-			    .getFileEntry(fileEntryId);
-			long folderId = fileEntry
-			    .getFolderId();
+			FileEntry fileEntry = null;
+			try {
+				fileEntry = DLAppServiceUtil
+				    .getFileEntry(fileEntryId);
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+			}
+			long folderId = 0;
 
-			DLAppServiceUtil
-			    .deleteFileEntry(fileEntryId);
-			DLFolderLocalServiceUtil
-			    .deleteFolder(folderId);
+			if (fileEntry != null) {
+				folderId = fileEntry
+				    .getFolderId();
+			}
+
+			if (fileEntry != null) {
+				DLAppServiceUtil
+				    .deleteFileEntry(fileEntryId);
+			}
+
+			if (fileEntryId > 0) {
+				DLFolderLocalServiceUtil
+				    .deleteFolder(folderId);
+			}
+
 		}
 
 		if (mappingOrgId > 0) {
-			organizationLocalService
-			    .deleteOrganization(mappingOrgId);
+			Organization organization = null;
+			try {
+				organization = organizationLocalService
+				    .getOrganization(mappingOrgId);
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+			}
+
+			if (organization != null) {
+				organizationLocalService
+				    .deleteOrganization(mappingOrgId);
+			}
+
 		}
 
-		// Ham chua kiem tra ca dieu kien lien quan nhu tai khoan phu...
+		businessPersistence
+		    .remove(business);
 
 	}
 
@@ -741,6 +780,11 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		return businessPersistence
 		    .countAll();
 	}
+	
+	public int countByG_S(long groupId , int accountStatus) throws SystemException {
+		return businessPersistence.countByG_S(groupId, accountStatus);
+	}
+	
 	private Log _log = LogFactoryUtil
 	    .getLog(BusinessLocalServiceImpl.class
 	        .getName());

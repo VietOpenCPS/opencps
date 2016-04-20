@@ -56,7 +56,26 @@ public class PortletPropsValues {
 	public static final String DATAMGT_MASTERDATA_BUSINESS_DOMAIN = GetterUtil
 					.getString(PortletProps
 						.get(PortletPropsKeys.DATAMGT_MASTERDATA_BUSINESS_DOMAIN));
-
+	
+	public static final String DATAMGT_MASTERDATA_BUSINESS_TYPE = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.DATAMGT_MASTERDATA_BUSINESS_TYPE));
+	
+	public static final String DATAMGT_MASTERDATA_SERVICE_DOMAIN = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.DATAMGT_MASTERDATA_SERVICE_DOMAIN));
+	public static final String DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION = GetterUtil
+	.getString(PortletProps
+		.get(PortletPropsKeys.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION));
+	
+	//validate file 
+	
+	public static final String[] ACCOUNTMGT_FILE_TYPE = GetterUtil
+					.getStringValues(
+						PortletProps.getArray(PortletPropsKeys.ACCOUNTMGT_FILE_TYPE));
+	public static final long ACCOUNTMGT_FILE_SIZE = GetterUtil
+					.getLong(PortletProps
+							.get(PortletPropsKeys.ACCOUNTMGT_FILE_SIZE));
 	// User Management
 	public static final int[] USERMGT_JOBPOS_LEADER = GetterUtil
 			.getIntegerValues(
@@ -184,5 +203,31 @@ public class PortletPropsValues {
 					.getString(PortletProps
 						.get(PortletPropsKeys.USERMGT_EMPLOYEE_RESOURCE));
 	
-
+	//dossier validare
+	
+	public static final int DOSSIERMGT_TEMPLATE_NAME_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.DOSSIERMGT_TEMPLATE_NAME_LENGTH));
+	
+	public static final int DOSSIERMGT_TEMPLATE_NUMBER_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.DOSSIERMGT_TEMPLATE_NUMBER_LENGTH));
+	
+	public static final int DOSSIERMGT_PART_NAME_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.DOSSIERMGT_PART_NAME_LENGTH));
+	
+	public static final int DOSSIERMGT_PART_NUMBER_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.DOSSIERMGT_PART_NUMBER_LENGTH));
+	
+	public static final int DOSSIERMGT_PART_TEMPLATE_FILE_NUMBER_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.DOSSIERMGT_PART_TEMPLATE_FILE_NUMBER_LENGTH));
+	public static final int DOSSIERMGT_SERVICE_CONFIG_GOVNAME_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.DOSSIERMGT_SERVICE_CONFIG_GOVNAME_LENGTH));
+	public static final int DOSSIERMGT_SERVICE_CONFIG_GOVCODE_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.DOSSIERMGT_SERVICE_CONFIG_GOVCODE_LENGTH));
 }

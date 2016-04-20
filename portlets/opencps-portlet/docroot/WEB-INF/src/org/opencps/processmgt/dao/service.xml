@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.processmgt" auto-namespace-tables="false">
+	<author>khoavd</author>
+	<namespace>processmgt</namespace>
+
+	<entity name="ServiceProcess" local-service="true"
+		remote-service="true" table="opencps_serviceprocess">
+
+		<!-- PK fields -->
+
+		<column name="serviceProcessId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="processNo" type="String" />
+		<column name="processName" type="String"/>
+		<column name="description" type="String" />
+		<column name="dossierTemplateId" type="long" />
+
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="processNo" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId" />
+		</finder>
+		
+		<finder return-type="Collection" name="G_T">
+			<finder-column name="groupId" />
+			<finder-column name="dossierTemplateId" />
+		</finder>
+
+
+	</entity>
+
+	<entity name="ProcessStep" local-service="true" remote-service="true"
+		table="opencps_processstep">
+
+		<!-- PK fields -->
+
+		<column name="processStepId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="serviceProcessId" type="long" />
+		<column name="stepName" type="String" />
+		<column name="sequenceNo" type="int" />
+		<column name="dossierStatus" type="String" />
+		<column name="daysDuration" type="int" />
+		<column name="referenceDossierPartId" type="long" />
+		<column name="externalAppUrl" type="String" />
+		
+		<!-- Order -->
+		<order by="desc">
+			<order-column name="sequenceNo"/>
+		</order>
+		
+		<!-- Finder -->
+		<finder return-type="Collection" name="GroupId">
+			<finder-column name="groupId"/>
+		</finder>
+		
+		<finder return-type="Collection" name="S_P_ID">
+			<finder-column name="serviceProcessId"/>
+		</finder>
+	
+	</entity>
+
+	<entity name="ProcessStepDossierPart" local-service="true" remote-service="true"
+		table="opencps_processstep_dossierpart">
+
+		<column name="processStepId" type="long" primary="true" />
+		<column name="dossierPartId" type="long" primary="true" />
+
+	</entity>
+
+	<entity name="StepAllowance" local-service="true" remote-service="true"
+		table="opencps_stepallowance">
+
+		<!-- PK fields -->
+
+		<column name="stepAllowanceId" type="long" primary="true" />
+
+		<!-- Other fields -->
+
+		<column name="processStepId" type="long" />
+		<column name="roleId" type="long" />
+		<column name="readOnly" type="boolean"/>
+		
+		<finder return-type="Collection" name="processStepId">
+			<finder-column name="processStepId"/>
+		</finder>
+		
+		<finder return-type="Collection" name="P_S_R_O">
+			<finder-column name="processStepId"/>
+			<finder-column name="readOnly"/>
+		</finder>
+		
+		<finder return-type="StepAllowance" name="STEP_ROLE">
+			<finder-column name="processStepId"/>
+			<finder-column name="readOnly"/>
+		</finder>
+	</entity>
+
+	<entity name="ProcessWorkflow" local-service="true" remote-service="true"
+		table="opencps_processworkflow">
+
+		<!-- PK fields -->
+
+		<column name="processWorkflowId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="serviceProcessId" type="long" />
+		<column name="preProcessStepId" type="long" />
+		<column name="postProcessStepId" type="long"/>
+		<column name="autoEvent" type="String"/>
+		<column name="actionName" type="String"/>
+		<column name="assignUser" type="boolean"/>
+		<column name="actionUserId" type="long"/>
+		<column name="requestPayment" type="boolean"/>
+		<column name="paymentFee" type="double"/>
+		<column name="generateReceptionNo" type="String"/>
+		<column name="receptionNoPattern" type="String"/>
+		<column name="generateDeadline" type="boolean"/>
+		<column name="deadlinePattern" type="boolean"/>
+		
+		<finder return-type="Collection" name="S_P_ID">
+			<finder-column name="serviceProcessId"/>
+		</finder>
+
+	</entity>
+
+	<entity name="WorkflowOutput" local-service="true" remote-service="true"
+		table="opencps_workflowoutput">
+
+		<!-- PK fields -->
+
+		<column name="workflowOutputId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="processWorkflowId" type="long" />
+		<column name="dossierPartId" type="long" />
+		<column name="required" type="int"/>
+		<column name="esign" type="int"/>
+		<column name="postback" type="int"/>
+	</entity>
+
+	<entity name="ProcessOrder" local-service="true" remote-service="true"
+		table="opencps_processorder">
+
+		<!-- PK fields -->
+
+		<column name="processOrderId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="serviceInfoId" type="long" />
+		<column name="dossierTemplateId" type="long" />
+		<column name="govAgencyCode" type="String"/>
+		<column name="govAgencyName" type="String"/>
+		<column name="govAgencyOrganizationId" type="long"/>
+		<column name="serviceProcessId" type="long"/>
+		<column name="dossierId" type="long"/>
+		<column name="fileGroupId" type="long"/>
+		<column name="processStepId" type="long"/>
+		<column name="actionUserId" type="long"/>
+		<column name="actionDatetime" type="Date"/>
+		<column name="actionNote" type="String"/>
+		<column name="assignToUserId" type="long"/>
+		<column name="processWorkflowId" type="long"/>
+		<column name="dossierStatus" type="int"/>
+		<column name="errorInfo" type="String"/>
+	</entity>
+
+	<entity name="ActionHistory" local-service="true" remote-service="true"
+		table="opencps_actionhistory">
+
+		<!-- PK fields -->
+
+		<column name="actionHistoryId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="processOrderId" type="long" />
+		<column name="processWorkflowId" type="long" />
+		<column name="actionDatetime" type="Date"/>
+		<column name="stepName" type="String"/>
+		<column name="actionName" type="String"/>
+		<column name="actionNote" type="String"/>
+		<column name="actionUserId" type="long"/>
+		<column name="daysDoing" type="int"/>
+		<column name="daysDelay" type="int"/>
+	</entity>
+
+	<exceptions>
+		<exception>EmptyProcessNo</exception>
+		<exception>EmptyProcessName</exception>
+		<exception>EmptyStepName</exception>
+		<exception>EmptyStepNo</exception>
+	</exceptions>
+
+</service-builder>

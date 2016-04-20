@@ -101,7 +101,80 @@
 		</footer-portlet-javascript>
 		<css-class-wrapper>11-opencps-servicemgt-portlet</css-class-wrapper>
 	</portlet>	
+	<portlet>
+		<portlet-name>15</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>11-opencps-processmgt-portlet</css-class-wrapper>
+	</portlet>	
+	<portlet>
+		<portlet-name>16</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>16-opencps-processmgt-portlet</css-class-wrapper>
+	</portlet>	
+	<portlet>
+		<portlet-name>17</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>17-opencps-processmgt-portlet</css-class-wrapper>
+	</portlet>	
+	<portlet>
+		<portlet-name>18</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>18-opencps-processmgt-portlet</css-class-wrapper>
+	</portlet>	
 	
+	<portlet>
+		<portlet-name>12</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>12-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>13</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>13-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>14</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>14-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>19</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>19-portlet</css-class-wrapper>
+	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

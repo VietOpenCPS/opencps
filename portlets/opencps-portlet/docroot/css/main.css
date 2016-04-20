@@ -16,6 +16,22 @@
 	width : 100% !important;
 }
 
+.input50{
+	width : 50% !important;
+}
+
+.input60{
+	width : 60% !important;
+}
+
+.input30{
+	width : 30% !important;
+}
+
+.input40{
+	width : 40% !important;
+}
+
 .input30_1 select {
 	width: 150px !important;
 }
@@ -36,4 +52,27 @@
 
 .txtarea-medium {
 	width : 95% !important;
+}
+
+.opencps-icon{
+	display: block;
+	background-image: url("/sprite/html/themes/classic/images/common/_sprite.png");
+	background-repeat: no-repeat;
+	height: 16px;
+    width: 16px
+}
+.opencps-icon.checked{
+    background-position: 50% -336px;
+}
+
+.opencps-icon.removed{
+    background-position: 50% -368px;
+}
+
+.opencps-icon.employees{
+    background-position: 50% -1589px;
+}
+
+.opencps-icon.not-employee{
+    background-position: 50% -769px;
 }

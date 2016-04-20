@@ -619,13 +619,20 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 	public int countAll()
 	    throws SystemException {
-
+		
 		return citizenPersistence
 		    .countAll();
+	}
+	
+	public int countByG_S(long groupId, int accountStatus) 
+		throws SystemException {
+		
+		return citizenPersistence
+			.countByG_S(groupId, accountStatus);
 	}
 
 	private Log _log = LogFactoryUtil
 	    .getLog(CitizenLocalServiceImpl.class
 	        .getName());
-
+	
 }

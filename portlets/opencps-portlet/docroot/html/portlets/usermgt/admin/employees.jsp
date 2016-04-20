@@ -100,13 +100,14 @@
 				editURL.setParameter("backURL", currentURL);
 				
 				// no column
-				row.addText(String.valueOf(row.getPos() + 1), editURL);
+				row.addText(String.valueOf(row.getPos() + 1));
 			
 				// employee no
-				row.addText(employee.getEmployeeNo(), editURL);
+				//row.addText(employee.getEmployeeNo(), editURL);
+				row.addText(employee.getEmployeeNo());
 				
 				// full name
-				row.addText(employee.getFullName(), editURL);
+				row.addText(employee.getFullName());
 				
 				// working unit
 				long workingUnitIdTemp = employee.getWorkingUnitId();
@@ -123,7 +124,7 @@
 						// nothing todo
 					}
 				}
-				row.addText(workingUnitName, editURL);
+				row.addText(workingUnitName);
 				
 				// screen name
 				String screenName = StringPool.BLANK;
@@ -149,7 +150,7 @@
 					status = "<i class=\"opencps-icon removed\"></i>";
 				}
 				
-				row.addText(status, editURL);
+				row.addText(status);
 				
 				
 				//action column

@@ -120,7 +120,7 @@
 	
 	<aui:input name="redirectURL" type="hidden" value="<%= backURL%>"/>
 	<aui:input name="returnURL" type="hidden" value="<%= currentURL%>"/>
-	
+	<aui:input name="<%=EmployeeDisplayTerm.EMPLOYEE_ID %>" type="hidden" value="<%= employee != null ? employee.getEmployeeId() : 0L%>"/>
 	<aui:input name="<%=EmployeeDisplayTerm.GROUP_ID %>" type="hidden" value="<%= scopeGroupId%>"/>
 	<aui:input name="<%=EmployeeDisplayTerm.COMPANY_ID %>" type="hidden" value="<%= company.getCompanyId()%>"/>
 
@@ -144,14 +144,23 @@
 
 	var autoFieldRows = AUI().all('#<portlet:namespace/>boundingBox .lfr-form-row-inline');
 	
+	var selectedMainJobPosId = '<%= employee != null ? employee.getMainJobPosId() : 0%>';
+	
+	var selectedMainWorkingUnitId = '<%= employee != null ? employee.getWorkingUnitId() : 0%>';
+	
 	AUI().ready(function(A){
 		
-		<portlet:namespace/>renderWorkingUnitJobPos();
-		<portlet:namespace/>renderWorkingUnitMainJobPos();
+		
+		<portlet:namespace/>renderWorkingUnitMainJobPos(selectedMainJobPosId);
 		
 		workingUnitInput.on('change', function(){
 			<portlet:namespace/>renderWorkingUnitJobPos();
-			<portlet:namespace/>renderWorkingUnitMainJobPos();
+			if(parseInt(workingUnitInput.val()) == parseInt(selectedMainWorkingUnitId)){
+				<portlet:namespace/>renderWorkingUnitMainJobPos(selectedMainJobPosId);
+			}else{
+				<portlet:namespace/>renderWorkingUnitMainJobPos(0);
+			}
+			
 		});
 		
 	});
@@ -204,7 +213,7 @@
 		}
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>renderWorkingUnitMainJobPos', function() {
+	Liferay.provide(window, '<portlet:namespace/>renderWorkingUnitMainJobPos', function(selectedMainJobPosId) {
 		
 		var A = AUI();
 		
@@ -216,6 +225,7 @@
 				    dataType : 'json',
 				    data:{    	
 				    	<portlet:namespace/>workingUnitId : value,
+				    	<portlet:namespace/>mainJobPosId : selectedMainJobPosId
 				    },   
 				    on: {
 				        success: function(event, id, obj) {

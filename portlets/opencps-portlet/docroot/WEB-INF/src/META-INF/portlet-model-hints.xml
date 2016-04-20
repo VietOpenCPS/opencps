@@ -258,4 +258,275 @@
 		<field name="fileNo" type="String" />
 		<field name="fileEntryId" type="long" />
 	</model>
+	<model name="org.opencps.processmgt.model.ActionHistory">
+		<field name="actionHistoryId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="processOrderId" type="long" />
+		<field name="processWorkflowId" type="long" />
+		<field name="actionDatetime" type="Date" />
+		<field name="stepName" type="String" />
+		<field name="actionName" type="String" />
+		<field name="actionNote" type="String" />
+		<field name="actionUserId" type="long" />
+		<field name="daysDoing" type="int" />
+		<field name="daysDelay" type="int" />
+	</model>
+	<model name="org.opencps.processmgt.model.ProcessOrder">
+		<field name="processOrderId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="serviceInfoId" type="long" />
+		<field name="dossierTemplateId" type="long" />
+		<field name="govAgencyCode" type="String" />
+		<field name="govAgencyName" type="String" />
+		<field name="govAgencyOrganizationId" type="long" />
+		<field name="serviceProcessId" type="long" />
+		<field name="dossierId" type="long" />
+		<field name="fileGroupId" type="long" />
+		<field name="processStepId" type="long" />
+		<field name="actionUserId" type="long" />
+		<field name="actionDatetime" type="Date" />
+		<field name="actionNote" type="String" />
+		<field name="assignToUserId" type="long" />
+		<field name="processWorkflowId" type="long" />
+		<field name="dossierStatus" type="int" />
+		<field name="errorInfo" type="String" />
+	</model>
+	<model name="org.opencps.processmgt.model.ProcessStep">
+		<field name="processStepId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="serviceProcessId" type="long" />
+		<field name="stepName" type="String" />
+		<field name="sequenceNo" type="int" />
+		<field name="dossierStatus" type="String" />
+		<field name="daysDuration" type="int" />
+		<field name="referenceDossierPartId" type="long" />
+		<field name="externalAppUrl" type="String" />
+	</model>
+	<model name="org.opencps.processmgt.model.ProcessStepDossierPart">
+		<field name="processStepId" type="long" />
+		<field name="dossierPartId" type="long" />
+	</model>
+	<model name="org.opencps.processmgt.model.ProcessWorkflow">
+		<field name="processWorkflowId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="serviceProcessId" type="long" />
+		<field name="preProcessStepId" type="long" />
+		<field name="postProcessStepId" type="long" />
+		<field name="autoEvent" type="String" />
+		<field name="actionName" type="String" />
+		<field name="assignUser" type="boolean" />
+		<field name="actionUserId" type="long" />
+		<field name="requestPayment" type="boolean" />
+		<field name="paymentFee" type="double" />
+		<field name="generateReceptionNo" type="String" />
+		<field name="receptionNoPattern" type="String" />
+		<field name="generateDeadline" type="boolean" />
+		<field name="deadlinePattern" type="boolean" />
+	</model>
+	<model name="org.opencps.processmgt.model.ServiceProcess">
+		<field name="serviceProcessId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="processNo" type="String" />
+		<field name="processName" type="String" />
+		<field name="description" type="String" />
+		<field name="dossierTemplateId" type="long" />
+	</model>
+	<model name="org.opencps.processmgt.model.StepAllowance">
+		<field name="stepAllowanceId" type="long" />
+		<field name="processStepId" type="long" />
+		<field name="roleId" type="long" />
+		<field name="readOnly" type="boolean" />
+	</model>
+	<model name="org.opencps.processmgt.model.WorkflowOutput">
+		<field name="workflowOutputId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="processWorkflowId" type="long" />
+		<field name="dossierPartId" type="long" />
+		<field name="required" type="int" />
+		<field name="esign" type="int" />
+		<field name="postback" type="int" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.Dossier">
+		<field name="dossierId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="uuid" type="String" />
+		<field name="externalRefNo" type="String" />
+		<field name="externalRefUrl" type="String" />
+		<field name="ownerOrganizationId" type="long" />
+		<field name="serviceConfigId" type="long" />
+		<field name="serviceInfoId" type="long" />
+		<field name="serviceDomainIndex" type="String" />
+		<field name="serviceAdministrationIndex" type="String" />
+		<field name="dossierTemplateId" type="long" />
+		<field name="govAgencyCode" type="String" />
+		<field name="govAgencyName" type="String" />
+		<field name="govAgencyOrganizationId" type="long" />
+		<field name="serviceMode" type="int" />
+		<field name="counter" type="int" />
+		<field name="subjectId" type="long" />
+		<field name="subjectName" type="String" />
+		<field name="address" type="String" />
+		<field name="cityCode" type="String" />
+		<field name="cityName" type="String" />
+		<field name="districtCode" type="String" />
+		<field name="districtName" type="String" />
+		<field name="wardCode" type="String" />
+		<field name="wardName" type="String" />
+		<field name="contactName" type="String" />
+		<field name="contactTelNo" type="String" />
+		<field name="contactEmail" type="String" />
+		<field name="note" type="String" />
+		<field name="submitDatetime" type="Date" />
+		<field name="receiveDatetime" type="Date" />
+		<field name="receptionNo" type="String" />
+		<field name="estimateDatetime" type="Date" />
+		<field name="finishDatetime" type="Date" />
+		<field name="dossierStatus" type="int" />
+		<field name="dossierSource" type="int" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.DossierFile">
+		<field name="dossierFileId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="dossierId" type="long" />
+		<field name="uuid" type="String" />
+		<field name="dossierPartId" type="long" />
+		<field name="templateFileNo" type="String" />
+		<field name="groupFileId" type="long" />
+		<field name="ownerUserId" type="long" />
+		<field name="ownerOrganizationId" type="long" />
+		<field name="displayName" type="String" />
+		<field name="formData" type="String" />
+		<field name="fileEntryId" type="long" />
+		<field name="dossierFileMark" type="int" />
+		<field name="dossierFileType" type="int" />
+		<field name="dossierFileNo" type="String" />
+		<field name="dossierFileDate" type="Date" />
+		<field name="removed" type="int" />
+		<field name="original" type="int" />
+		<field name="syncStatus" type="int" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.DossierLog">
+		<field name="dossierLogId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="dossierId" type="long" />
+		<field name="fileGroupId" type="long" />
+		<field name="dossierStatus" type="int" />
+		<field name="actionInfo" type="String" />
+		<field name="messageInfo" type="String" />
+		<field name="updateDatetime" type="Date" />
+		<field name="level" type="int" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.DossierPart">
+		<field name="dossierpartId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="dossierTemplateId" type="long" />
+		<field name="partNo" type="String" />
+		<field name="partName" type="String" />
+		<field name="partTip" type="String" />
+		<field name="partType" type="int" />
+		<field name="parentId" type="long" />
+		<field name="sibling" type="double" />
+		<field name="treeIndex" type="String" />
+		<field name="formScript" type="String" />
+		<field name="sampleData" type="String" />
+		<field name="required" type="boolean" />
+		<field name="templateFileNo" type="String" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.DossierStatus">
+		<field name="dossierStatusId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="dossierId" type="long" />
+		<field name="fileGroupId" type="long" />
+		<field name="dossierStatus" type="int" />
+		<field name="actionInfo" type="String" />
+		<field name="messageInfo" type="String" />
+		<field name="updateDatetime" type="Date" />
+		<field name="syncStatus" type="int" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.DossierTemplate">
+		<field name="dossierTemplateId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="templateName" type="String" />
+		<field name="description" type="String" />
+		<field name="templateNo" type="String" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.FileGroup">
+		<field name="fileGroupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="dossierId" type="long" />
+		<field name="dossierPartId" type="long" />
+		<field name="displayName" type="String" />
+		<field name="removed" type="int" />
+		<field name="syncStatus" type="int" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.ServiceConfig">
+		<field name="serviceConfigId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="serviceInfoId" type="long" />
+		<field name="serviceDomainIndex" type="String" />
+		<field name="serviceAdministrationIndex" type="String" />
+		<field name="dossierTemplateId" type="long" />
+		<field name="govAgencyCode" type="String" />
+		<field name="govAgencyName" type="String" />
+		<field name="govAgencyOrganizationId" type="long" />
+		<field name="serviceMode" type="int" />
+		<field name="serviceProcessId" type="long" />
+		<field name="domainCode" type="String" />
+	</model>
 </model-hints>

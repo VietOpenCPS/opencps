@@ -17,6 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.accountmgt.permissions.BusinessPermission"%>
 <%@page import="com.liferay.portal.kernel.upgrade.RenameUpgradePortletPreferences"%>
 <%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
 <%@page import="org.opencps.util.PortletUtil"%>
@@ -38,52 +41,24 @@
 
 
 <liferay-util:include page="/html/portlets/accountmgt/admin/toptabs.jsp" servletContext="<%=application %>" />
+
+
 <%
 	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	long businessId = business != null ? business.getBusinessId() : 0L;
 	
-	String fullName = ParamUtil.getString(request, BusinessDisplayTerms.BUSINESS_NAME);
 	int accountStatus = ParamUtil.getInteger(request, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);
 	
-	int countRegistered = 0;
-	int countConfirmed = 0;
-	int countApproved = 0;
-	int countLocked = 0;
+	int countRegistered = BusinessLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_REGISTERED);
 	
-	int [] accoutStatusArr = {0,1,2,3}; 
-	
-	List<Business> businessRegistered = null;
-	List<Business> businessConfirmed = null;
-	List<Business> businessApproved = null;
-	List<Business> businessLocked = null;
-	
-	try {
-		businessRegistered = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 0);
-		businessConfirmed = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 1);
-		businessApproved = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 2);
-		businessLocked = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 3);
-		
-		if(businessRegistered != null) {
-			countRegistered = businessRegistered.size();
-		} else if(businessConfirmed!=null) {
-			countConfirmed = businessConfirmed.size();
-		} else if(businessApproved != null) {
-			countApproved = businessApproved.size();
-		} else if(businessLocked!=null) {
-			countLocked = businessLocked.size(); 
-		}
-	} catch(Exception e) {
-		
-	}
-					
-	
-	PortletURL searchURL = renderResponse.createRenderURL();
-	searchURL.setParameter("tabs1", AccountMgtUtil.TOP_TABS_BUSINESS);
-	searchURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
+	int countConfirmed = BusinessLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_CONFIRMED);
+
+	int countApproved = BusinessLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_APPROVED);
+
+	int countLocked = BusinessLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_LOCKED);
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
-	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_NAME, fullName);
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS, String.valueOf(accountStatus));
 	
 	List<Business> businesses = new ArrayList<Business>();
@@ -112,32 +87,9 @@
 	
 </aui:row>
 
-<aui:form action="<%=searchURL.toString() %>" method="post" name="fm">
-	<aui:row>
-		<aui:col width="30">
-			<aui:input name="<%=BusinessDisplayTerms.BUSINESS_NAME %>" label="<%=StringPool.BLANK %>"/>
-		</aui:col>
-		
-		<aui:col width="30">
-			<aui:select name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS %>" label="<%=StringPool.BLANK %>">
-				<%
-					for(int i=0; i<accoutStatusArr.length; i++) {
-						%>
-							<aui:option value="<%=accoutStatusArr[i] %>">
-							<%=PortletUtil.getAccountStatus(accoutStatusArr[i], themeDisplay.getLocale()) %>
-							</aui:option>
-						<%
-						
-					}
-				%>
-			</aui:select>
-		</aui:col>
-
-		<aui:col width="30">
-			<aui:input label="<%=StringPool.BLANK %>" name="search" type="submit" value="search"/> 		
-		</aui:col>
-	</aui:row>
-</aui:form>
+<c:if test="<%=BusinessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_BUSINESS) %>" >
+	<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+</c:if>
 
 <liferay-ui:search-container searchContainer="<%= new BusinessSearch(
 	renderRequest ,SearchContainer	.DEFAULT_DELTA, iteratorURL) %>">
@@ -146,12 +98,12 @@
 		<%
 			BusinessSearchTerm searchTerms = (BusinessSearchTerm) searchContainer.getSearchTerms();
 			
-			if(!fullName.equals(StringPool.BLANK)) {
-				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), fullName);
+			if(Validator.isNotNull(searchTerms.getKeywords())) {
+				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
 			} else if(accountStatus!=0) {
 				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), accountStatus);
-			} else if(!fullName.equals(StringPool.BLANK) && accountStatus!=0)  {
-				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), fullName, accountStatus);
+			} else if(Validator.isNotNull(searchTerms.getKeywords()) && accountStatus!=0)  {
+				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
 			} else {
 				businesses = BusinessLocalServiceUtil.getBusinesses(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 			}

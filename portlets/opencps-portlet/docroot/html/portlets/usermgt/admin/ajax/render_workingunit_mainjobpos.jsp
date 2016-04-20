@@ -22,11 +22,29 @@
 <%@page import="org.opencps.usermgt.model.WorkingUnit"%>
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="org.opencps.usermgt.service.JobPosLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.usermgt.model.JobPos"%>
 
 <%@ include file="../../init.jsp"%>
 <%
 	long workingUnitId = ParamUtil.getLong(request, EmployeeDisplayTerm.WORKING_UNIT_ID, 0L);
+
+	long mainJobPosId  = ParamUtil.getLong(request, EmployeeDisplayTerm.MAIN_JOBPOS_ID);
+	
 	List<WorkingUnit> workingUnits = UserMgtUtil.getWorkingUnitsForEmployess(scopeGroupId, workingUnitId);
+	
+	List<JobPos> jobPoses = new ArrayList<JobPos>();
+	
+	if(workingUnitId > 0){
+		try{
+			jobPoses = JobPosLocalServiceUtil.getJobPoss(scopeGroupId, workingUnitId);
+		}catch(Exception e){
+			_log.error(e);
+		}
+	}
 %>
 
 <aui:col width="50">
@@ -56,5 +74,18 @@
 		required='<%=true %>'
 	>
 		<aui:option value=""><liferay-ui:message key="select-jobpos"/></aui:option>
+		<%
+			if(jobPoses != null){
+				for(JobPos jobPos : jobPoses){
+					%>
+						<aui:option value="<%=jobPos.getJobPosId() %>" selected="<%=mainJobPosId == jobPos.getJobPosId() %>"><%=jobPos.getTitle() %></aui:option>
+					<%
+				}
+			}
+		%>
 	</aui:select>
 </aui:col>
+
+<%!
+	private Log _log = LogFactoryUtil.getLog("html.portlets.usermgt.admin.ajax.render_workingunitid_mainjobpos.jsp");
+%>

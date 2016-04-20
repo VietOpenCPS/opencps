@@ -43,12 +43,12 @@
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 	
+	String selectItems = StringPool.BLANK;
+	String url = StringPool.BLANK;
+	
 	DictItem dictItemCity = null;
 	DictItem dictItemDistrict = null;
 	DictItem dictItemWard = null;
-	
-	StringBuilder getAddress = new StringBuilder();
-	String url = StringPool.BLANK;
 	
 	DLFileEntry dlFileEntry = null;
 	
@@ -76,9 +76,13 @@
 			dictItemWard = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, business.getWardCode());
 			
 			if(dictItemCity != null && dictItemDistrict!= null && dictItemWard!=null) {
-				getAddress.append(dictItemCity.getDictItemId()+ ",");
-				getAddress.append(dictItemWard.getDictItemId()+ ",");
-				getAddress.append(dictItemDistrict.getDictItemId());
+				String [] strs = new String[3];
+				strs[0] = String.valueOf(dictItemCity.getDictItemId());
+				strs[1] = String.valueOf(dictItemDistrict.getDictItemId());
+				strs[2] = String.valueOf(dictItemWard.getDictItemId());
+				
+				selectItems = StringUtil.merge(strs);
+				
 			}
 		}
 		dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(business.getAttachFile());
@@ -108,7 +112,7 @@
 			dictCollectionCode="ADMINISTRATIVE_REGION"
 			itemNames="cityId,districtId,wardId"
 			itemsEmptyOption="true,true,true"	
-			selectedItems="<%=getAddress.toString() %>"
+			selectedItems="<%=selectItems.toString() %>"
 		/>	
 	</aui:col>
 </aui:row>
@@ -151,7 +155,12 @@
 
 <c:if test="<%= !isViewProfile && !isAdminViewProfile %>">
 	<aui:row>
-		<aui:input type="file" name="attachFile" />
+		<aui:input type="file" name="attachFile" >
+			<aui:validator name="acceptFiles">
+				<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>
+			</aui:validator>
+			<aui:validator name="required" />
+		</aui:input>
 	</aui:row>
 </c:if>
 

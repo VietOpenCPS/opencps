@@ -26,7 +26,8 @@
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@ include file="../../init.jsp"%>
-<%
+<%	
+
 	long workingUnitId = ParamUtil.getLong(request, EmployeeDisplayTerm.WORKING_UNIT_ID, 0L);
 	List<JobPos> jobPoses = new ArrayList<JobPos>();
 	
@@ -37,7 +38,9 @@
 			_log.error(e);
 		}
 	}
-	
+	%>
+		<option value=""><liferay-ui:message key="select-jobpos"/></option>
+	<%
 	if(jobPoses != null){
 		
 		for(JobPos jobPos : jobPoses){

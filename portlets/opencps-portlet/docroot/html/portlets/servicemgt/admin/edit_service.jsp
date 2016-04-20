@@ -31,7 +31,6 @@
 	
 	String[][] categorySections = {serviceSections};
 	
-	System.out.println(themeDisplay.getLanguageId());
 %>
 
 <liferay-ui:header

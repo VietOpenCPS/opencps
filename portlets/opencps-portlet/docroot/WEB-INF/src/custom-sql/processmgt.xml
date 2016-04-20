@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.opencps.processmgt.service.persistence.ServiceProcessFinder.searchProcess">	
+		<![CDATA[
+			SELECT
+				opencps_serviceprocess.*
+			FROM
+				opencps_serviceprocess
+			WHERE
+				(groupId = ?) 
+			AND	
+				((lower(opencps_serviceprocess.processName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_serviceprocess.processNo) LIKE ? [$AND_OR_NULL_CHECK$]))
+		]]>
+	</sql>
+	<sql id="org.opencps.processmgt.service.persistence.ServiceProcessFinder.countProcess">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_serviceprocess
+			WHERE
+				(groupId = ?) 
+			AND	
+				((lower(opencps_serviceprocess.processName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_serviceprocess.processNo) LIKE ? [$AND_OR_NULL_CHECK$]))
+		]]>
+	</sql>
+
+</custom-sql>

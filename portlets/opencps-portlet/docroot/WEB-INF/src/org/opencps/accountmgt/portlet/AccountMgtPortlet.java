@@ -1,15 +1,19 @@
 /**
- * OpenCPS is the open source Core Public Services software Copyright (C)
- * 2016-present OpenCPS community This program is free software: you can
- * redistribute it and/or modify it under the terms of the GNU Affero General
- * Public License as published by the Free Software Foundation, either version 3
- * of the License, or any later version. This program is distributed in the hope
- * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Affero General Public License for more details. You should have received a
- * copy of the GNU Affero General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>
- */
+* OpenCPS is the open source Core Public Services software
+* Copyright (C) 2016-present OpenCPS community
+
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>
+*/
 
 package org.opencps.accountmgt.portlet;
 
@@ -21,6 +25,9 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.accountmgt.InvalidCityCodeException;
+import org.opencps.accountmgt.InvalidDistricCodeException;
+import org.opencps.accountmgt.InvalidWardCodeException;
 import org.opencps.accountmgt.OutOfLengthBusinessEnNameException;
 import org.opencps.accountmgt.OutOfLengthBusinessNameException;
 import org.opencps.accountmgt.OutOfLengthBusinessRepresentativeNameException;
@@ -40,6 +47,7 @@ import org.opencps.usermgt.search.EmployeeDisplayTerm;
 import org.opencps.util.MessageBusUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.PortletPropsValues;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.UserPasswordException;
@@ -53,7 +61,6 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.util.PwdGenerator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -62,12 +69,14 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 public class AccountMgtPortlet extends MVCPortlet {
 
 	public void deleteBusiness(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
 		long businessId = ParamUtil
 		    .getLong(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID, 0L);
-
+		String redirectURL = ParamUtil
+		    .getString(actionRequest, "redirectURL");
 		try {
 			BusinessLocalServiceUtil
 			    .deleteBusinessByBusinessId(businessId);
@@ -75,15 +84,26 @@ public class AccountMgtPortlet extends MVCPortlet {
 		catch (Exception e) {
 			_log
 			    .error(e);
+			SessionErrors
+			    .add(actionRequest, MessageKeys.ACCOUNT_BUSINESS_DELETE_ERROR);
+		}
+		finally {
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .sendRedirect(redirectURL);
+			}
 		}
 	}
 
 	public void deleteCitizen(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
 		long citizenId = ParamUtil
 		    .getLong(actionRequest, CitizenDisplayTerms.CITIZEN_ID, 0L);
-
+		String redirectURL = ParamUtil
+		    .getString(actionRequest, "redirectURL");
 		try {
 			CitizenLocalServiceUtil
 			    .deleteCitizenByCitizenId(citizenId);
@@ -91,6 +111,15 @@ public class AccountMgtPortlet extends MVCPortlet {
 		catch (Exception e) {
 			_log
 			    .error(e);
+			SessionErrors
+			    .add(actionRequest, MessageKeys.ACCOUNT_CITIZEN_DELETE_ERROR);
+		}
+		finally {
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .sendRedirect(redirectURL);
+			}
 		}
 	}
 
@@ -207,16 +236,9 @@ public class AccountMgtPortlet extends MVCPortlet {
 				    .getUser(mappingUserId);
 
 				if (mappingUser != null) {
-					String password = PwdGenerator
-					    .getPassword();
-
-					UserLocalServiceUtil
-					    .updatePassword(
-					        mappingUserId, password, password, false);
 
 					MessageBusUtil
-					    .sendEmailActiveAccount(
-					        mappingUser, password, serviceContext);
+					    .sendEmailWelcomeNewUser(mappingUser, serviceContext);
 				}
 
 			}
@@ -270,10 +292,12 @@ public class AccountMgtPortlet extends MVCPortlet {
 		}
 
 		try {
+			
 			AccountRegPortlet
 			    .ValidateCitizen(
 			        citizenId, StringPool.BLANK, StringPool.BLANK, address,
-			        StringPool.BLANK, telNo, 0, StringPool.BLANK);
+			        StringPool.BLANK, telNo, 1, StringPool.BLANK, cityId, districtId, wardId
+			        ,PortletPropsValues.ACCOUNTMGT_FILE_TYPE[0]);
 
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
@@ -323,6 +347,18 @@ public class AccountMgtPortlet extends MVCPortlet {
 			else if (e instanceof OutOfLengthCitizenNameException) {
 				SessionErrors
 				    .add(actionRequest, OutOfLengthCitizenNameException.class);
+			}
+			else if(e instanceof InvalidCityCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidCityCodeException.class);
+			}
+			else if(e instanceof InvalidDistricCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidDistricCodeException.class);
+			}
+			else if(e instanceof InvalidWardCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidWardCodeException.class);
 			}
 			else {
 				SessionErrors
@@ -409,7 +445,8 @@ public class AccountMgtPortlet extends MVCPortlet {
 			AccountRegPortlet
 			    .ValidateBusiness(
 			        businessId, email, StringPool.BLANK, enName, shortName,
-			        address, representativeName, representativeRole);
+			        address, representativeName, representativeRole, cityId, districtId, wardId,
+			        1,PortletPropsValues.ACCOUNTMGT_FILE_TYPE[0]);
 
 			city = DictItemLocalServiceUtil
 			    .getDictItem(cityId);
@@ -485,13 +522,25 @@ public class AccountMgtPortlet extends MVCPortlet {
 				        actionRequest,
 				        OutOfLengthBusinessRepresentativeRoleException.class);
 			}
+			else if(e instanceof InvalidCityCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidCityCodeException.class);
+			}
+			else if(e instanceof InvalidDistricCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidDistricCodeException.class);
+			}
+			else if(e instanceof InvalidWardCodeException) {
+				SessionErrors.add(
+				    actionRequest, InvalidWardCodeException.class);
+			}
 			else {
 				SessionErrors
 				    .add(
 				        actionRequest,
 				        MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			}
-
+			
 			if (Validator
 			    .isNotNull(returnURL)) {
 				actionResponse

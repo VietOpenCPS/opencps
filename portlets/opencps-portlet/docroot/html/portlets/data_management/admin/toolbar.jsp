@@ -1,5 +1,3 @@
-
-<%@page import="org.opencps.datamgt.search.DictItemDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -33,6 +31,7 @@
 <%@page import="org.opencps.datamgt.permissions.DictItemPermission"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.datamgt.util.DataMgtUtil"%>
+<%@page import="org.opencps.datamgt.search.DictItemDisplayTerms"%>
 <%@ include file="../init.jsp"%>
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", DataMgtUtil.TOP_TABS_DICTITEM);

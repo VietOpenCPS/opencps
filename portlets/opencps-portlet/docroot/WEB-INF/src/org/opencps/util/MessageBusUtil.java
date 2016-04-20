@@ -1,22 +1,30 @@
 /**
- * OpenCPS is the open source Core Public Services software Copyright (C)
- * 2016-present OpenCPS community This program is free software: you can
- * redistribute it and/or modify it under the terms of the GNU Affero General
- * Public License as published by the Free Software Foundation, either version 3
- * of the License, or any later version. This program is distributed in the hope
- * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Affero General Public License for more details. You should have received a
- * copy of the GNU Affero General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>
- */
+* OpenCPS is the open source Core Public Services software
+* Copyright (C) 2016-present OpenCPS community
+
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>
+*/
 
 package org.opencps.util;
 
+import javax.portlet.PortletPreferences;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
@@ -58,9 +66,8 @@ public class MessageBusUtil {
 		        serviceContext);
 
 		String verifyEmailAddressURL = serviceContext
-		    .getPortalURL() +
-		    "/opencps-portlet/verify/email?token=" + uuid + "&ticketKey=" +
-		    ticket
+		    .getPortalURL() + "/opencps-portlet/verify/email?token=" + uuid +
+		    "&ticketKey=" + ticket
 		        .getKey() +
 		    "&type=" + type;
 
@@ -200,6 +207,74 @@ public class MessageBusUtil {
 		        .getUserId(), "[$USER_PASSWORD$]", password,
 		        "[$USER_SCREENNAME$]", user
 		            .getScreenName());
+		subscriptionSender
+		    .setFrom(fromAddress, fromName);
+		subscriptionSender
+		    .setHtmlFormat(true);
+		subscriptionSender
+		    .setMailId("user", user
+		        .getUserId(), System
+		            .currentTimeMillis(),
+		        PwdGenerator
+		            .getPassword());
+		subscriptionSender
+		    .setServiceContext(serviceContext);
+		subscriptionSender
+		    .setSubject(subject);
+		subscriptionSender
+		    .setUserId(user
+		        .getUserId());
+
+		subscriptionSender
+		    .addRuntimeSubscribers(toAddress, toName);
+
+		subscriptionSender
+		    .flushNotificationsAsync();
+	}
+
+	public static void sendEmailWelcomeNewUser(
+	    User user, ServiceContext serviceContext)
+	    throws SystemException {
+
+		String fromName = PrefsPropsUtil
+		    .getString(user
+		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+		String fromAddress = PrefsPropsUtil
+		    .getString(user
+		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+
+		String toName = user
+		    .getFullName();
+		String toAddress = user
+		    .getEmailAddress();
+
+		String subject = PrefsPropsUtil
+		    .getContent(user
+		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_SUBJECT);
+
+
+		PortletPreferences preferences = PrefsPropsUtil
+		    .getPreferences(serviceContext
+		        .getCompanyId(), true);
+
+		/*
+		 * String emailWelcomeSubject = GetterUtil .getString(preferences
+		 * .getValue("WELCOME_NEW_USER_SUBJECT", StringPool.BLANK));
+		 */
+		String emailWelcomeBody = GetterUtil
+		    .getString(preferences
+		        .getValue("WELCOME_NEW_USER_BODY", StringPool.BLANK));
+
+		
+
+		SubscriptionSender subscriptionSender = new SubscriptionSender();
+
+		subscriptionSender
+		    .setBody(emailWelcomeBody);
+		subscriptionSender
+		    .setCompanyId(user
+		        .getCompanyId());
+		
 		subscriptionSender
 		    .setFrom(fromAddress, fromName);
 		subscriptionSender
