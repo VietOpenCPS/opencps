@@ -33,5 +33,5 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
-
+<!-- adsasd -->
 <div class="portlet-msg-error"><liferay-ui:message key="confirm-email-address-error"/> Click <a href="/home">here</a> to turn back portal</div>

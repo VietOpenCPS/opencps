@@ -123,7 +123,7 @@ hooks/opencps-hook/.settings/org.eclipse.jdt.core.prefs
 hooks/opencps-hook/.settings/org.eclipse.wst.common.component
 hooks/opencps-hook/.settings/org.eclipse.wst.common.project.facet.core.prefs.xml
 hooks/opencps-hook/.settings/org.eclipse.wst.common.project.facet.core.xml
-<<<<<<< HEAD
+
 hooks/opencps-hook/docroot/WEB-INF/classes/content/Language.properties
 hooks/opencps-hook/docroot/WEB-INF/classes/content/Language_vi.properties
 
@@ -170,10 +170,15 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/base
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/http
 
 
-=======
 hooks/opencps-hook/docroot/WEB-INF/classes/.gitignore
 
 portlets/opencps-sample-portlet/
->>>>>>> FETCH_HEAD
+
 
 portlets/opencps-portlet/docroot/WEB-INF/tld/.gitignore
+
+README.markdown
+README.md
+build.binhth.properties
+portlets/opencps-portlet/docroot/WEB-INF/tld/c.tld
+CONTRIBUTING.markdown

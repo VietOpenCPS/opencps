@@ -49,10 +49,7 @@
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 %>
 
-<c:if test="<%= ServicePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE) %>">
-	<liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
-</c:if>
-
+<liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 <liferay-util:include page='<%= templatePath + "toolbar.jsp"%>' servletContext="<%=application %>" />
 
 <liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
