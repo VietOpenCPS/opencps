@@ -78,5 +78,7 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String SERVICE_PROCESS_ENTRY = "SERVICE_PROCESS_ENTRY";
 	public static final String PROCESS_STEP_ENTRY = "PROCESS_STEP_ENTRY";
 	public static final String PROCESS_WORKFLOW_ENTRY = "PROCESS_WORKFLOW_ENTRY";
+	
+	public static final String MENU_ACTIVE = "MENU_ACTIVE";
 
 }

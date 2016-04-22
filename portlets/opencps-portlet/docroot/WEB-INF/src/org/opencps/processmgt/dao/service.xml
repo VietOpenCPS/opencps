@@ -83,6 +83,9 @@
 			<finder-column name="serviceProcessId"/>
 		</finder>
 	
+		<finder return-type="Collection" name="ProcessStepIds">
+			<finder-column name="processStepId" arrayable-operator="OR"/>
+		</finder>
 	</entity>
 
 	<entity name="ProcessStepDossierPart" local-service="true" remote-service="true"
@@ -118,6 +121,9 @@
 		<finder return-type="StepAllowance" name="STEP_ROLE">
 			<finder-column name="processStepId"/>
 			<finder-column name="readOnly"/>
+		</finder>
+		<finder return-type="Collection" name="RoleIds">
+			<finder-column name="roleId" arrayable-operator="OR"/>
 		</finder>
 	</entity>
 
@@ -215,6 +221,10 @@
 		<column name="processWorkflowId" type="long"/>
 		<column name="dossierStatus" type="int"/>
 		<column name="errorInfo" type="String"/>
+		
+		<finder return-type="Collection" name="processStepId">
+			<finder-column name="processStepId"/>
+		</finder>
 	</entity>
 
 	<entity name="ActionHistory" local-service="true" remote-service="true"

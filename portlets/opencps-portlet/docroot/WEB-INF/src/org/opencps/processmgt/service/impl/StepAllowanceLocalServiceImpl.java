@@ -31,8 +31,9 @@
 
 package org.opencps.processmgt.service.impl;
 
-import org.opencps.processmgt.service.base.StepAllowanceLocalServiceBaseImpl;
+import java.util.List;
 
+import org.opencps.processmgt.service.base.StepAllowanceLocalServiceBaseImpl;
 import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.service.base.StepAllowanceLocalServiceBaseImpl;
 
@@ -96,4 +97,8 @@ public class StepAllowanceLocalServiceImpl
 		
 	}
 	
+	public List<StepAllowance> findByRoleIds(long[] roleIds) throws SystemException {
+		return stepAllowancePersistence.findByRoleIds(roleIds);
+	    
+    }
 }
