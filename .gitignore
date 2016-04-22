@@ -131,5 +131,4 @@ portlets/opencps-portlet/.settings/org.eclipse.jdt.ui.prefs
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/.gitignore
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/.gitignore
->>>>>>> refs/remotes/upstream/qa-rc-0.1
 
