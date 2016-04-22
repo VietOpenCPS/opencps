@@ -115,8 +115,6 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/pers
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/BusinessDomainPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/BusinessPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/CitizenPersistenceImpl.java
-
-<<<<<<< HEAD
 portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
 
 
@@ -127,7 +125,7 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/.gitignore
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/.gitignore
 portlets/opencps-portlet/docroot/html/portlets/processmgt/
-=======
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/
 
 portlets/opencps-portlet/.settings/org.eclipse.jdt.ui.prefs
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/.gitignore
