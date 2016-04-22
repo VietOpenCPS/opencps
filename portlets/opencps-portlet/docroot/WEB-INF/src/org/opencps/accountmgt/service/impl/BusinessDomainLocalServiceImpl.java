@@ -17,7 +17,12 @@
 
 package org.opencps.accountmgt.service.impl;
 
+import java.util.List;
+
+import org.opencps.accountmgt.model.BusinessDomain;
 import org.opencps.accountmgt.service.base.BusinessDomainLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the business domain local service.
@@ -35,9 +40,9 @@ import org.opencps.accountmgt.service.base.BusinessDomainLocalServiceBaseImpl;
  */
 public class BusinessDomainLocalServiceImpl
 	extends BusinessDomainLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.accountmgt.service.BusinessDomainLocalServiceUtil} to access the business domain local service.
-	 */
+	
+	public List<BusinessDomain> getBusinessDomains(long businessId) 
+					throws SystemException {
+		return businessDomainPersistence.findByBusinessId(businessId);
+	}
 }

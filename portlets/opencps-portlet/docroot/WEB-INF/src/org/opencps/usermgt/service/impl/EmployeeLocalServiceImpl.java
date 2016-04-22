@@ -548,7 +548,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		employee.setTelNo(telNo);
 		employee.setMobile(mobile);
 		employee.setMainJobPosId(mainJobPosId);
-		employeePersistence.addJobPoses(employeeId,
+		employeePersistence.setJobPoses(employeeId,
 				ArrayUtil.toLongArray(distinctJobPosIds));
 
 		if (isAddUser && mappingUser != null) {

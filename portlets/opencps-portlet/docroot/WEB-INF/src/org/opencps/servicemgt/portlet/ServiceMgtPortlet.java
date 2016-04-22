@@ -366,10 +366,14 @@ public class ServiceMgtPortlet extends MVCPortlet {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(
 			        DLFileEntry.class.getName(), uploadPortletRequest);
-
+			
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true); 
+			
 			FileEntry fileEntry = null;
 
 			// Add file entry
+
 
 			fileEntry =
 			    DLAppServiceUtil.addFileEntry(
@@ -435,6 +439,9 @@ public class ServiceMgtPortlet extends MVCPortlet {
 
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
+
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true); 
 
 			if (isRootFolderExist) {
 				Folder rootFolder = null;

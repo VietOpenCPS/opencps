@@ -48,6 +48,14 @@
 			</c:when>
 			
 			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_TEMPLATE) %>">
+<<<<<<< HEAD
+=======
+				<%
+					searchURL.setParameter("mvcPath", templatePath + "servicetemplatefilelist.jsp");
+					searchURL.setParameter("tabs1", ServiceUtil.TOP_TABS_TEMPLATE);
+				%>
+
+>>>>>>> refs/heads/qa-rc-0.1
 				<portlet:renderURL var="editTemplateURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_template.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>

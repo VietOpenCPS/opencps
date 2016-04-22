@@ -26,7 +26,6 @@ import javax.portlet.PortletURL;
 
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.util.AccountMgtUtil;
-import org.opencps.datamgt.search.DictCollectionSearch;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;

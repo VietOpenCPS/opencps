@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.util.PortletConstants"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,9 +29,11 @@
 <%@page import="org.opencps.usermgt.model.WorkingUnit"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletURL"%>
-<%@ include file="../init.jsp"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@ include file="../init.jsp"%>
+
 
 <liferay-util:include page="/html/portlets/usermgt/admin/toptabs.jsp" servletContext="<%=application %>" />
 

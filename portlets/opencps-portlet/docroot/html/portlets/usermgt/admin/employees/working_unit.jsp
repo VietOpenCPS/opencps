@@ -53,6 +53,7 @@
 	if(employee != null){
 		try{
 			jobPoses = JobPosLocalServiceUtil.getEmployeeJobPoses(employee.getEmployeeId());
+			System.out.println(jobPoses.size());
 		}catch(Exception e){
 			// Nothing todo
 		}
@@ -210,6 +211,8 @@
 				jobPos = jobPoses.get(i);
 			}
 			
+			System.out.println(jobPosIndex);
+			
 			long selectedWorkingUnitId = 0;
 			
 			%>
@@ -236,6 +239,7 @@
 										
 										if(workingUnit != null){
 											selectedWorkingUnitId = workingUnit.getWorkingunitId();
+											System.out.println(selectedWorkingUnitId);
 										}
 									}
 									if(mappingWorkingUnitId > 0){

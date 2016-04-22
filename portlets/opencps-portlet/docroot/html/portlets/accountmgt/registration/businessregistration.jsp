@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,11 +16,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessRepresentativeRoleException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessRepresentativeNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessShortNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessEnNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessEmailException"%>
+<%@page import="org.opencps.accountmgt.DuplicateBusinessEmailException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessNameException"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
 <%@page import="org.opencps.accountmgt.model.Business"%>
+<%@page import="org.opencps.accountmgt.FileTypeFailException"%>
+<%@page import="org.opencps.accountmgt.OutOfSizeFileUploadException"%>
+<%@page import="org.opencps.accountmgt.InvalidFileUploadException"%>
+<%@page import="org.opencps.accountmgt.InvalidWardCodeException"%>
+<%@page import="org.opencps.accountmgt.InvalidDistricCodeException"%>
+<%@page import="org.opencps.accountmgt.InvalidCityCodeException"%>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -29,6 +42,71 @@
 
 	long businessId = business!=null ? business.getBusinessId() : 0L;
 %>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessNameException.class %>" 
+	message="<%= OutOfLengthBusinessNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= DuplicateBusinessEmailException.class %>" 
+	message="<%= DuplicateBusinessEmailException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessEmailException.class %>" 
+	message="<%= OutOfLengthBusinessEmailException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= DuplicateBusinessEmailException.class %>" 
+	message="<%= DuplicateBusinessEmailException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessShortNameException.class %>" 
+	message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessRepresentativeNameException.class %>" 
+	message="<%= OutOfLengthBusinessRepresentativeNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessRepresentativeRoleException.class %>" 
+	message="<%= OutOfLengthBusinessRepresentativeRoleException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	key="<%=MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED %>" 
+	message="system.exception.occured" 
+/>
+
+<liferay-ui:error 
+	exception="<%= InvalidCityCodeException.class %>" 
+	message="<%= InvalidCityCodeException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= InvalidDistricCodeException.class %>" 
+	message="<%= InvalidDistricCodeException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= InvalidWardCodeException.class %>" 
+	message="<%= InvalidWardCodeException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= InvalidFileUploadException.class %>" 
+	message="<%= InvalidFileUploadException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= FileTypeFailException.class %>" 
+	message="<%= FileTypeFailException.class.getName() %>" 
+/>
+<liferay-ui:error 
+	exception="<%= OutOfSizeFileUploadException.class %>" 
+	message="<%= OutOfSizeFileUploadException.class.getName() %>" 
+/>
 
 <portlet:renderURL var="switcherCitizenRegisterURL">
 	<portlet:param name="mvcPath" value='<%= templatePath + "citizenregistration.jsp" %>'/>
@@ -45,12 +123,12 @@
 
 <div class="bottom-horizontal-line"></div>
 
-
 <portlet:actionURL var="updateBusinessURL" name="updateBusiness">
 	<portlet:param 
 		name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 
 		value="<%=String.valueOf(businessId) %>"
 	/>	
+	<portlet:param name="currentURL" value="<%=currentURL %>"/>
 </portlet:actionURL>
 
 <aui:form 

@@ -263,5 +263,13 @@
 		<exception>OutOfLengthBusinessShortName</exception>
 		<exception>OutOfLengthBusinessRepresentativeName</exception>
 		<exception>OutOfLengthBusinessRepresentativeRole</exception>
+		
+		<exception>InvalidCityCode</exception>
+		<exception>InvalidDistricCode</exception>
+		<exception>InvalidWardCode</exception>
+		
+		<exception>InvalidFileUpload</exception>
+		<exception>OutOfSizeFileUpload</exception>
+		<exception>FileTypeFail</exception>
 	</exceptions>
 </service-builder>
