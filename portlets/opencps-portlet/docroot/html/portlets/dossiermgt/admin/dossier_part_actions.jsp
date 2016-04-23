@@ -85,6 +85,6 @@
 		</portlet:actionURL>
 		
 		<liferay-ui:icon image="delete" message="delete"
-				url="<%=deleteDossierParttURL.toString()%>" />	
+				url="<%=deleteDossierParttURL.toString()%>" />
 	</c:if>
 </liferay-ui:icon-menu> 

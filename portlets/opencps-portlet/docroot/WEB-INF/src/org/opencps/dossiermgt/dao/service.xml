@@ -4,6 +4,7 @@
 	auto-namespace-tables="false">
 	<author>trungnt</author>
 	<namespace>dossiermgt</namespace>
+	
 	<entity name="DossierTemplate" local-service="true"
 		table="opencps_dossiertemplate">
 
@@ -25,7 +26,7 @@
 		<column name="templateNo" type="String" />
 
 		<finder return-type="Collection" name="TemplateName">
-			<finder-column name="templateName" />
+			<finder-column name="templateName" comparator="LIKE"/>
 		</finder>
 
 		<finder return-type="DossierTemplate" name="TemplateNo">
@@ -92,6 +93,16 @@
 		<finder return-type="DosserPart" name="PartNo">
 			<finder-column name="partNo" />
 		</finder>
+		
+		<finder return-type="Collection" name="T_T">
+			<finder-column name="dossierTemplateId"/>
+			<finder-column name="partType" />
+		</finder>
+		
+		<finder return-type="Collection" name="T_P">
+		  <finder-column name="dossierTemplateId" />
+		  <finder-column name="parentId" />
+		</finder>
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"
@@ -124,6 +135,11 @@
 
 		<finder return-type="Collection" name="DossierTemplateId">
 			<finder-column name="dossierTemplateId" />
+		</finder>
+		
+		<finder return-type="Collection" name="G_M">
+			<finder-column name="groupId" />
+			<finder-column name="serviceMode"/>
 		</finder>
 
 	</entity>
@@ -185,7 +201,7 @@
         
     </entity>
     
-    <entity name="DossierStatus" local-service="true">
+    <entity name="DossierStatus" local-service="true" table="opencps_dossier_status">
     
    		<!-- PK fields -->
    		
@@ -210,7 +226,7 @@
         <column name="syncStatus" type="int"/>
     </entity>
     
-    <entity name="DossierLog" local-service="true">
+    <entity name="DossierLog" local-service="true" table="opencps_dossier_log">
     
    		<!-- PK fields -->
     
@@ -235,7 +251,7 @@
         <column name="level" type="int"/>
     </entity>
     
-    <entity name="FileGroup" local-service="true">
+    <entity name="FileGroup" local-service="true" table="opencps_file_group">
     
     	<!-- PK fields -->
     
@@ -257,7 +273,7 @@
         <column name="syncStatus" type="int"/>
     </entity>
     
-    <entity name="DossierFile" local-service="true">
+    <entity name="DossierFile" local-service="true" table="opencps_dossier_file">
     
     	<!-- PK fields -->
     	

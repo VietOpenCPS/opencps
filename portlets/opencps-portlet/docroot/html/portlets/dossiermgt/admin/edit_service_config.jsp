@@ -64,10 +64,12 @@
 	String dictItemServiceDomainId = "0";
 	
 	String backURL = ParamUtil.getString(request, "backURL"); 
+	
+	String tabs1 = ParamUtil.getString(request, "tabs1");
+	
 	if(!Validator.isNotNull(backURL)) {
 		backURL = backRender.toString();
 	}
-					
 	
 	DictCollection dictCollectionServiceDomain = null;
 	DictItem dictItemServiceDomain = null;
@@ -186,29 +188,41 @@
 	<aui:row>
 		<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOSSIERTEMPLATEID %>">
 			
-					<%
-						for(DossierTemplate dossierTemplate : dossierTemplates) {
-							%>
-								<aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
-									<%=dossierTemplate.getTemplateName() %>
-								</aui:option>
-							<%
-						}
-					%>
+					<c:choose>
+					   <c:when test="<%=! tabs1.equals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) && dossierTemplateId != 0 %>">
+					       <aui:option value="<%= dossierTemplateId %>">
+					           <%= dossierTemplateFromRenderRequest.getTemplateName() %>
+					       </aui:option>
+					   </c:when>
+					   
+					   <c:when test="<%=Validator.isNotNull(tabs1) && tabs1.equals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
+					       <%
+		                        for(DossierTemplate dossierTemplate : dossierTemplates) {
+		                            %>
+		                                <aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
+		                                    <%=dossierTemplate.getTemplateName() %>
+		                                </aui:option>
+		                            <%
+		                        }
+		                    %>
+					   </c:when>
+					   
+					   <c:otherwise>
+					       <%
+		                        for(DossierTemplate dossierTemplate : dossierTemplates) {
+		                            %>
+		                                <aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
+		                                    <%=dossierTemplate.getTemplateName() %>
+		                                </aui:option>
+		                            <%
+		                        }
+		                    %>
+					   </c:otherwise>
+					</c:choose>
 			
 		</aui:select>
 	</aui:row>
 	<div id = "<portlet:namespace />serviceConfigGovNameCode"></div>
-	
-	<%-- <aui:row>
-		<aui:col cssClass="input40">
-			<aui:input name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYNAME %>" />
-		</aui:col>
-		
-		<aui:col cssClass="input40">
-			<aui:input name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>" />
-		</aui:col>
-	</aui:row> --%>
 	
 	<aui:row>
 			<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICEMODE %>">

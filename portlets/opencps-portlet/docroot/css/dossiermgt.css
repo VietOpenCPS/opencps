@@ -1,0 +1,86 @@
+.opencps.dossiermgt.dossier-part-control {
+    float: right;
+    line-height: 26px;
+    width: 100%;
+}
+
+
+.opencps.dossiermgt.dossier-part {
+    display: block;
+    line-height: 28px;
+}
+
+
+.level-0.opencps.dossiermgt.dossier-part {
+    padding-left: 0px;
+}
+
+.level-1.opencps.dossiermgt.dossier-part {
+    padding-left: 15px;
+}
+
+.level-2.opencps.dossiermgt.dossier-part {
+    padding-left: 30px;
+}
+
+.level-3.opencps.dossiermgt.dossier-part {
+    padding-left: 45px;
+}
+
+
+.dossier-file-counter {
+    background-color: green;
+    border: 1px solid green;
+    border-radius: 100%;
+    display: block;
+    height: 12px;
+    text-align: center;
+    width: 12px;
+}
+
+.counter-value {
+    color: white;
+    display: block;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 14px;
+}
+
+.opencps.dossiermgt.part-file-ctr.remove-file {
+    color: red;
+    font-size: 16px;
+}
+
+.opencps.dossiermgt.part-file-ctr.remove-group {
+    color: red;
+    font-size: 16px;
+}
+
+
+.opencps.dossiermgt.dossier-part-tree {
+    display: table;
+    width: 100%;
+}
+
+.opencps.dossiermgt.dossier-part-row {
+    display: table;
+    vertical-align: middle;
+    width: 100%;
+}
+
+
+.opencps.dossiermgt.dossier-part {
+    display: inline-block;
+    float: left;
+    line-height: 28px;
+}
+
+.opencps.dossiermgt.dossier-part-control {
+    float: right;
+    width: 60%;
+}
+
+.opencps.dossiermgt.part-file-ctr.add-private-dossier {
+    padding-left: 6px;
+}
+

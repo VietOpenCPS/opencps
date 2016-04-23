@@ -185,7 +185,6 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				// TODO: Update validator
 
 				// Add ServiceProcess
-
 				ServiceProcessLocalServiceUtil.addProcess(
 				    processNo, processName, description, dossierTemplateId, serviceContext);
 				// Redirect page

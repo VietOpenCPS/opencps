@@ -162,7 +162,28 @@ public class ServiceConfigLocalServiceImpl
 		return serviceConfigPersistence.findByDossierTemplateId(dossierTemplateId);
 	}
 	
+	public List<ServiceConfig> getServiceConFigsByG_M(long groupId, int serviceMode,
+		int start, int end) throws SystemException {
+		return serviceConfigPersistence.filterFindByG_M(groupId, serviceMode, start, end);
+	}
+	
+	public int countServiceConFigsByG_M(long groupId, int serviceMode) 
+					throws SystemException {
+		return serviceConfigPersistence.countByG_M(groupId, serviceMode);
+	}
+	
 	public int countByDossierTemplateId(long dossierTemplateId) throws SystemException {
 		return serviceConfigPersistence.countByDossierTemplateId(dossierTemplateId);
+	}
+	
+	public List<ServiceConfig> searchServiceConfig(long groupId, String keywords, String govAgencyCode,
+		String domainCode, int start, int end) {
+		return serviceConfigFinder.searchServiceConfig(groupId, keywords, govAgencyCode, domainCode, start, end);
+		
+	}
+	
+	public int countServiceConfig(long groupId, String keywords, String govAgencyCode,
+		String domainCode) {
+		return serviceConfigFinder.countServiceConfig(groupId, keywords, govAgencyCode, domainCode);
 	}
 }

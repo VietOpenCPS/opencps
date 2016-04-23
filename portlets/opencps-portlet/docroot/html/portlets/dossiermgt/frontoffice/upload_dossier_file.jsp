@@ -1,0 +1,202 @@
+
+<%
+/**
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+%>
+
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="java.util.Date"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.bean.BeanParamUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
+<%@page import="com.liferay.portal.kernel.json.JSONArray"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
+<%@page import="org.hsqldb.SessionManager"%>
+<%@ include file="../init.jsp"%>
+
+<%
+	boolean success = false;
+
+	try{
+		success = !SessionMessages.isEmpty(renderRequest);
+		
+	}catch(Exception e){
+		
+	}
+
+	DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
+
+	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
+
+	Date defaultDossierFileDate = dossierFile != null && dossierFile.getDossierFileDate() != null ? 
+			dossierFile.getDossierFileDate() : DateTimeUtil.convertStringToDate("01/01/1970");
+			
+	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultDossierFileDate);
+	
+	String tempFolderName = user != null ? user.getScreenName() : StringPool.BLANK;
+	
+	FileEntry fileEntry = (FileEntry)request.getAttribute("DOCUMENT_LIBRARY_FILE_ENTRY");
+
+	long repositoryId = BeanParamUtil.getLong(fileEntry, request, "repositoryId");
+	
+	long folderId = BeanParamUtil.getLong(fileEntry, request, "folderId");
+	
+	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
+
+	if (repositoryId <= 0) {
+
+		// add_asset.jspf only passes in groupId
+
+		repositoryId = BeanParamUtil.getLong(fileEntry, request, "groupId");
+	}
+
+	int index = ParamUtil.getInteger(request, "index");
+	
+	JSONArray responseData = (JSONArray)request.getAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE);
+	
+	
+	
+	
+%>
+
+<portlet:actionURL var="addTempFileURL" name="addTempFile">
+	<portlet:param name="<%=DossierFileDisplayTerms.TEMP_FOLDER_NAME %>" value="<%=tempFolderName%>"/>
+	<portlet:param name="<%=DossierFileDisplayTerms.FOLDE_ID %>" value="<%=String.valueOf(folderId)%>"/>
+</portlet:actionURL>
+
+<liferay-ui:error message="upload-error" key="upload-error"/>
+<aui:form 
+	name="fm" 
+	method="post" 
+	action="<%=addTempFileURL %>" 
+	enctype="multipart/form-data"
+>
+	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
+	<aui:input name="index" type="hidden" value="<%=String.valueOf(index) %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPart != null ? dossierPart.getDossierpartId() : dossierPartId %>"/>
+	<aui:row>
+		<aui:col width="100">
+			<aui:input name="<%= DossierFileDisplayTerms.DISPAY_NAME %>" type="text" cssClass="input97">
+				<aui:validator name="required"/>
+			</aui:input>
+		</aui:col>
+	</aui:row>
+	
+	<aui:row>
+		<aui:col width="70">
+			<aui:input name="<%= DossierFileDisplayTerms.DOSSIER_FILE_NO %>" type="text" cssClass="input90"/>
+		</aui:col>
+		
+		<aui:col width="30">
+			<label class="control-label custom-lebel" for='<portlet:namespace/><%=DossierFileDisplayTerms.DOSSIER_FILE_DATE %>'>
+				<liferay-ui:message key="dossier-file-date"/>
+			</label>
+			<liferay-ui:input-date
+				dayParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_DAY %>"
+				dayValue="<%=spd.getDayOfMoth() %>"
+				disabled="<%= false %>"
+				monthParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_MONTH %>"
+				monthValue="<%=spd.getMonth() %>"
+				name="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE%>"
+				yearParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_YEAR %>"
+				yearValue="<%=spd.getYear() %>"
+				formName="fm"
+				autoFocus="<%=true %>"
+				nullable="<%=dossierFile == null || dossierFile.getDossierFileDate() == null ? true : false %>"
+			/>
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col width="100">
+			<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD %>" type="file"/>
+		</aui:col>
+	</aui:row>
+	
+	<aui:row>
+		<aui:button name="agree" type="submit" value="agree"/>
+		<aui:button name="cancel" type="button" value="cancel"/>
+	</aui:row>
+</aui:form>
+
+<aui:script use="aui-base,aui-io">
+	AUI().ready(function(A){
+		
+		var cancelButton = A.one('#<portlet:namespace/>cancel');
+		
+		var success = '<%=success%>';
+		
+		if(cancelButton){
+			cancelButton.on('click', function(){
+				<portlet:namespace/>closeDialog();
+			});
+		}
+		
+		var responseData = '<%=responseData != null ? responseData.toString() : StringPool.BLANK%>';
+		
+		var jsonData = {};
+		
+		if(success == 'true'){
+			jsonData = JSON.parse(responseData);
+			<portlet:namespace/>responseData(jsonData);
+		}
+		
+	});
+	
+	Liferay.provide(window, '<portlet:namespace/>responseData', function(data) {
+		var Util = Liferay.Util;
+		Util.getOpener().Liferay.fire('getUploadDossierFileData', {responseData:data});
+		<portlet:namespace/>closeDialog();
+	});
+	
+	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
+		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dossierFileId');
+		dialog.destroy(); // You can try toggle/hide whate
+	});
+
+	Liferay.provide(window, '<portlet:namespace />uploadTempFile', function() {
+		var A = AUI();
+		var uri = A.one('#<portlet:namespace/>fm').attr('action');
+		var configs = {
+             method: 'POST',
+             form: {
+                 id: '#<portlet:namespace/>fm',
+                 upload: true
+             },
+             sync: true,
+             on: {
+             	failure: function(event, id, obj) {
+				
+				},
+				success: function(event, id, obj) {
+					var response = this.get('responseData');
+					console.log(response);
+				},
+                complete: function(event, id, obj){
+                   
+                }
+             }
+        };
+	            
+	    A.io.request(uri, configs);    
+		
+	},['aui-io']);
+</aui:script>
