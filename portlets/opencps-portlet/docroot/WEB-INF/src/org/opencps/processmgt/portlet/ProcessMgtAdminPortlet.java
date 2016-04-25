@@ -81,7 +81,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 
 		long referenceDossierPartId =
 		    ParamUtil.getLong(actionRequest, "referenceDossierPartId");
-
+		
 		String externalAppUrl =
 		    ParamUtil.getString(actionRequest, "externalAppUrl");
 
@@ -97,7 +97,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 			    ServiceContextFactory.getInstance(actionRequest);
 			if (processStepId <= 0) {
 				// TODO: Update validator here
-
+				
 				// Add ProcessStep
 
 				ProcessStep step = ProcessStepLocalServiceUtil.addStep(
@@ -170,7 +170,9 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
-
+		
+		long dossierTemplateId = ParamUtil.getLong(actionRequest, "dossierTemplateId");
+		
 		SessionMessages.add(
 		    actionRequest, PortalUtil.getPortletId(actionRequest) +
 		        SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
@@ -183,9 +185,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				// TODO: Update validator
 
 				// Add ServiceProcess
-
 				ServiceProcessLocalServiceUtil.addProcess(
-				    processNo, processName, description, serviceContext);
+				    processNo, processName, description, dossierTemplateId, serviceContext);
 				// Redirect page
 
 				if (Validator.isNotNull(redirectURL)) {
@@ -200,7 +201,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				// Update ServiceProcess
 
 				ServiceProcessLocalServiceUtil.updateProcess(
-				    serviceProcessId, processNo, processName, description);
+				    serviceProcessId, processNo, processName, dossierTemplateId, description);
 
 				// Redirect page
 				if (Validator.isNotNull(redirectURL)) {

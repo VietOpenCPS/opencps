@@ -15,7 +15,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-
 package org.opencps.processmgt.util;
 
 import java.util.ArrayList;
@@ -23,6 +22,8 @@ import java.util.List;
 
 import javax.portlet.RenderRequest;
 
+import org.opencps.dossiermgt.model.DossierTemplate;
+import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
@@ -33,11 +34,39 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 
 /**
  * @author khoavd
  */
 public class ProcessUtils {
+	
+	/**
+	 * Get DossierTemplate by GroupId
+	 * 
+	 * @param renderRequest
+	 * @return
+	 */
+	public static List<DossierTemplate> getDossierTemplate(
+	    RenderRequest renderRequest) {
+
+		List<DossierTemplate> dossierTemplates =
+		    new ArrayList<DossierTemplate>();
+
+		try {
+			ServiceContext context =
+			    ServiceContextFactory.getInstance(renderRequest);
+
+			dossierTemplates = DossierTemplateLocalServiceUtil.getDossierTemplatesByGroupId(context.getScopeGroupId());
+
+		}
+		catch (Exception e) {
+			return dossierTemplates;
+		}
+
+		return dossierTemplates;
+	}
 
 	/**
 	 * @param renderRequest

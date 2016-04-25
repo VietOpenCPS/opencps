@@ -87,7 +87,7 @@ public class ServiceProcessLocalServiceImpl
 	 */
 	public ServiceProcess updateProcess(
 	    long serviceProcessId, String processNo, String processName,
-	    String description)
+	    long dossierTemplateId, String description)
 	    throws PortalException, SystemException {
 
 		ServiceProcess serviceProcess =
@@ -98,6 +98,7 @@ public class ServiceProcessLocalServiceImpl
 			serviceProcess.setProcessNo(processNo);
 			serviceProcess.setProcessName(processName);
 			serviceProcess.setDescription(description);
+			serviceProcess.setDossierTemplateId(dossierTemplateId);
 
 			serviceProcessPersistence.update(serviceProcess);
 		}
@@ -119,7 +120,7 @@ public class ServiceProcessLocalServiceImpl
 	 */
 	public ServiceProcess addProcess(
 	    String processNo, String processName, String description,
-	    ServiceContext context)
+	    long dossierTemplateId, ServiceContext context)
 	    throws PortalException, SystemException {
 
 		long serviceProcessId =
@@ -140,13 +141,14 @@ public class ServiceProcessLocalServiceImpl
 			serviceProcess.setProcessNo(processNo);
 			serviceProcess.setProcessName(processName);
 			serviceProcess.setDescription(description);
-
+			serviceProcess.setDossierTemplateId(dossierTemplateId);
+			
 			serviceProcessPersistence.update(serviceProcess);
 		}
 
 		return serviceProcess;
 	}
-	
+
 	public List<ServiceProcess> getServiceProcesses(long groupId, long dossierTemplateId) 
 					throws SystemException {
 		return serviceProcessPersistence.findByG_T(groupId, dossierTemplateId);

@@ -1,6 +1,7 @@
-
-<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +33,11 @@
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
+<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -39,7 +45,22 @@
 	PortletURL searchURL = renderResponse.createRenderURL();
 	
 	Long dossierTemplateId = (Long) session.getAttribute(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
-
+	DictCollection dictCollectionServiceAdmin = null;
+	List<DictItem> dictItemsServiceAdmin = new ArrayList<DictItem>();
+	try {
+		dictCollectionServiceAdmin = DictCollectionLocalServiceUtil
+	                    .getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
+		if(Validator.isNotNull(dictCollectionServiceAdmin)) {
+			dictItemsServiceAdmin = DictItemLocalServiceUtil
+							.getDictItemsByDictCollectionId(dictCollectionServiceAdmin.getDictCollectionId());
+		}
+		
+	}catch (Exception e) {
+		//no thing to do
+	}
+	
+	DictCollectionLocalServiceUtil
+					.getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
 %>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
@@ -102,6 +123,9 @@
 				<portlet:renderURL var="editServiceConfigURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_service_config.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+					<portlet:param name="tabs1" value="<%= tabs1 %>"/>
+					<portlet:param name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" value="<%=String.valueOf(dossierTemplateId) %>"/>
+				
 				</portlet:renderURL>
 				
 				<aui:row>
@@ -141,7 +165,49 @@
 								</aui:row>
 								
 						</c:when>
-						
+						<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
+							<aui:row>
+									<aui:col width="25">
+										<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>">
+										  
+										  <aui:option value="<%=StringPool.BLANK %>">
+										      <liferay-ui:message key="fill-by-service-admin" />
+										  </aui:option>
+										  
+										  <%
+										    for(DictItem item : dictItemsServiceAdmin) {
+										    	%>
+										    	     <aui:option value="<%=item.getItemCode() %>">
+										    	         <%=item.getItemName(locale, true) %>
+										    	     </aui:option>
+										    	<%
+										    }
+										  %>
+										</aui:select>
+									</aui:col>
+									<aui:col width="25">
+										<datamgt:ddr cssClass="input30"
+											depthLevel="1" 
+											dictCollectionCode="SERVICE_DOMAIN"
+											itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
+											itemsEmptyOption="true"	
+										>
+										</datamgt:ddr>
+
+									</aui:col>
+									<aui:col width="30">
+										<label>
+											<liferay-ui:message key="keywords"/>
+										</label>
+										<liferay-ui:input-search 
+											id="keywords1"
+											name="keywords"
+											title="keywords"
+											placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+										/>
+									</aui:col>
+								</aui:row>
+						</c:when>
 					</c:choose>
 				</div>
 			</aui:form>

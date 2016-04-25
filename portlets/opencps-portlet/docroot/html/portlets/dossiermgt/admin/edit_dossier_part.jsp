@@ -96,6 +96,7 @@
 		value="<%=String.valueOf(dossierPartId)%>"
 	/>
 	
+	<portlet:param name="currentURL" value="<%=currentURL %>"/>
 	<portlet:param name="returnURL" value="<%=partListURL %>"/>
 	<portlet:param name="isAddChilds" value="<%=isAddChilds %>"/>
 </portlet:actionURL>
@@ -209,6 +210,13 @@
 		</aui:row>
 	</div>
 	
+	<aui:row >
+			<aui:input 
+				name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMREPORT %>" 
+				cssClass="input90"
+			/>
+		</aui:row>
+	
 	<aui:row>
 		<aui:input 
 			name="<%=DossierPartDisplayTerms.DOSSIERPART_SAMPLEDATA %>" 
@@ -224,7 +232,6 @@
 	/>
 			
 
-	
 	<aui:row>
 			<aui:button name="submit" value="submit" type="submit"/>
 		
@@ -238,7 +245,7 @@ AUI().ready(function(A) {
 	var partType = A.one('#<portlet:namespace /><%=DossierPartDisplayTerms.DOSSIERPART_PARTTYPE %>');
 	var dispalyFormScript = A.one('#<portlet:namespace/>displayFormScript');
 	
-	if(partType.val() == '0' || partType.val() == '3' || partType.val() == '4') {
+	if(partType.val() == '' || partType.val() == '3' || partType.val() == '4') {
 		dispalyFormScript.hide();
 	}
 	

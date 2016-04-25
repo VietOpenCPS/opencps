@@ -51,14 +51,14 @@ public class PortletPropsKeys {
 	public static final String ACCOUNTMGT_BUSINESS_REPRESENTATIVENAME_LENGTH = "opencps.accountmgt.business.representativename.lengths";
 	public static final String ACCOUNTMGT_BUSINESS_REPRESENTATIVEROLE_LENGTH = "opencps.accountmgt.business.representativerole.lengths";
 	
-	
-	
+
 	// Data Management Master Data
 	public static final String DATAMGT_MASTERDATA_CODE = "opencps.datamgt.masterdata.code";
 	public static final String DATAMGT_MASTERDATA_BUSINESS_DOMAIN= "opencps.datamgt.masterdata.business.domain";
 	public static final String DATAMGT_MASTERDATA_BUSINESS_TYPE= "opencps.datamgt.masterdata.business.type";
 	public static final String DATAMGT_MASTERDATA_SERVICE_DOMAIN = "opencps.datamgt.masterdata.service.domain";
 	public static final String DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION = "opencps.datamgt.masterdata.service.administration";
+	public static final String DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION = "opencps.datamgt.masterdata.administrative.region";
 	// validate file
 	public static final String ACCOUNTMGT_FILE_TYPE = "opencps.accountmgt.file.type";
 	public static final String ACCOUNTMGT_FILE_SIZE ="opencps.accountmgt.file.size";

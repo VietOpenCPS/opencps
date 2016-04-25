@@ -56,7 +56,7 @@
 				name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" 
 				value="<%=String.valueOf(dossierTemplate.getDossierTemplateId()) %>"
 			/>
-			<portlet:param name="CurrentURL" value="<%=currentURL %>"/>
+			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
 		<liferay-ui:icon image="delete" message="delete"
 			url="<%=deleteDossierTemplateURL.toString()%>" 

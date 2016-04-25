@@ -1,5 +1,4 @@
-<%@page import="org.opencps.dossiermgt.permissions.DossierFilePermission"%>
-<%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -25,6 +24,8 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.dossiermgt.permissions.DossierFilePermission"%>
+<%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
 <%@ include file="../init.jsp"%>
 
 <%

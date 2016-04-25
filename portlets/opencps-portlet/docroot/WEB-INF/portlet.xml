@@ -548,7 +548,7 @@
 		<portlet-name>12</portlet-name>
 		<display-name>Dossier Admin Management</display-name>
 		<portlet-class>
-			org.opencps.processmgt.portlet.ProcessMgtAdminPortlet
+			org.opencps.dossiermgt.portlet.DossierMgtAdminPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
@@ -595,6 +595,10 @@
 		<init-param>
 			<name>template-path</name>
 			<value>/html/portlets/dossiermgt/frontoffice/</value>
+		</init-param>
+		<init-param>
+		    <name>copy-request-parameters</name>
+		    <value>true</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -678,7 +682,7 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
-		<resource-bundle>content.Language_19</resource-bundle>
+		<resource-bundle>content.Language_14</resource-bundle>
 		<portlet-info>
 			<title>Dossier FrontOffice Monitoring</title>
 			<short-title>Dossier FrontOffice Monitoring</short-title>

@@ -62,15 +62,12 @@
 	<liferay-ui:search-container-results>
 		<%
 			DossierTemplateSearchTerms searchTerms = (DossierTemplateSearchTerms) searchContainer.getSearchTerms();
-			if(!Validator.isNotNull(searchTerms.getKeywords()) || searchTerms.getKeywords().equals("")) {
 				dossierTemplates = DossierTemplateLocalServiceUtil
-								.getDossierTemplates(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-				totalCount = DossierTemplateLocalServiceUtil.countAll();
-			} else {
-				dossierTemplates = DossierTemplateLocalServiceUtil
-								.getDossierTemplates(searchTerms.getKeywords());
-				totalCount = dossierTemplates.size();
-				}
+								.getDossierTemplates(searchTerms.getKeywords(),
+									searchContainer.getStart(), searchContainer.getEnd(), 
+									searchContainer.getOrderByComparator());
+				totalCount = DossierTemplateLocalServiceUtil
+								.countDossierTemplatesByName(searchTerms.getKeywords());
 			
 			total = totalCount;
 			results = dossierTemplates;

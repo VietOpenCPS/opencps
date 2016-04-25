@@ -4,12 +4,13 @@
 	auto-namespace-tables="false">
 	<author>trungnt</author>
 	<namespace>dossiermgt</namespace>
+	
 	<entity name="DossierTemplate" local-service="true"
 		table="opencps_dossiertemplate">
 
 		<!-- PK fields -->
 		
-		<column name="dossierTemplateId" type="long" primary="true"></column>
+		<column name="dossierTemplateId" type="long" primary="true" />
 		
 		<!-- Audit fields -->
 
@@ -20,16 +21,16 @@
 		<column name="modifiedDate" type="Date" />
 		
 		<!-- Other field -->
-		<column name="templateName" type="String"></column>
-		<column name="description" type="String"></column>
-		<column name="templateNo" type="String"></column>
+		<column name="templateName" type="String" />
+		<column name="description" type="String" />
+		<column name="templateNo" type="String" />
 
 		<finder return-type="Collection" name="TemplateName">
-			<finder-column name="templateName" />
+			<finder-column name="templateName" comparator="LIKE"/>
 		</finder>
 
 		<finder return-type="DossierTemplate" name="TemplateNo">
-			<finder-column name="templateNo"></finder-column>
+			<finder-column name="templateNo" />
 		</finder>
 		
 		<finder return-type="Collection" name="GroupId">
@@ -41,7 +42,7 @@
 		
 		<!-- PK fields -->
 		
-		<column name="dossierpartId" type="long" primary="true"></column>
+		<column name="dossierpartId" type="long" primary="true" />
 		
 		<!-- Audit fields -->
 
@@ -52,18 +53,19 @@
 		<column name="modifiedDate" type="Date" />
 		
 		<!-- Other field -->
-		<column name="dossierTemplateId" type="long"></column>
-		<column name="partNo" type="String"></column>
-		<column name="partName" type="String"></column>
-		<column name="partTip" type="String"></column>
-		<column name="partType" type="int"></column>
-		<column name="parentId" type="long"></column>
-		<column name="sibling" type="double"></column>
-		<column name="treeIndex" type="String"></column>
-		<column name="formScript" type="String"></column>
-		<column name="sampleData" type="String"></column>
-		<column name="required" type="boolean"></column>
-		<column name="templateFileNo" type="String"></column>
+		<column name="dossierTemplateId" type="long" />
+		<column name="partNo" type="String" />
+		<column name="partName" type="String" />
+		<column name="partTip" type="String" />
+		<column name="partType" type="int" />
+		<column name="parentId" type="long" />
+		<column name="sibling" type="double" />
+		<column name="treeIndex" type="String" />
+		<column name="formScript" type="String" />
+		<column name="formReport" type="String" />
+		<column name="sampleData" type="String" />
+		<column name="required" type="boolean" />
+		<column name="templateFileNo" type="String" />
 
 		<!-- order -->
 		<order by="asc">
@@ -77,19 +79,29 @@
 		</finder>
 
 		<finder return-type="Collection" name="DossierTemplateId">
-			<finder-column name="dossierTemplateId"></finder-column>
+			<finder-column name="dossierTemplateId" />
 		</finder>
 
 		<finder return-type="Collection" name="ParentId">
-			<finder-column name="parentId"></finder-column>
+			<finder-column name="parentId" />
 		</finder>
 
 		<finder return-type="DossierPart" name="Sibling">
-			<finder-column name="sibling"></finder-column>
+			<finder-column name="sibling" />
 		</finder>
 
 		<finder return-type="DosserPart" name="PartNo">
-			<finder-column name="partNo"></finder-column>
+			<finder-column name="partNo" />
+		</finder>
+		
+		<finder return-type="Collection" name="T_T">
+			<finder-column name="dossierTemplateId"/>
+			<finder-column name="partType" />
+		</finder>
+		
+		<finder return-type="Collection" name="T_P">
+		  <finder-column name="dossierTemplateId" />
+		  <finder-column name="parentId" />
 		</finder>
 	</entity>
 
@@ -98,7 +110,7 @@
 		
 		<!-- PK fields -->
 		
-		<column name="serviceConfigId" type="long" primary="true"></column>
+		<column name="serviceConfigId" type="long" primary="true" />
 		
 		<!-- Audit fields -->
 
@@ -110,19 +122,24 @@
 		
 		<!-- Other field -->
 		
-		<column name="serviceInfoId" type="long"></column>
-		<column name="serviceDomainIndex" type="String"></column>
-		<column name="serviceAdministrationIndex" type="String"></column>
-		<column name="dossierTemplateId" type="long"></column>
-		<column name="govAgencyCode" type="String"></column>
-		<column name="govAgencyName" type="String"></column>
-		<column name="govAgencyOrganizationId" type="long"></column>
-		<column name="serviceMode" type="int"></column>
-		<column name="serviceProcessId" type="long"></column>
-		<column name="domainCode" type="String"></column>
+		<column name="serviceInfoId" type="long" />
+		<column name="serviceDomainIndex" type="String" />
+		<column name="serviceAdministrationIndex" type="String" />
+		<column name="dossierTemplateId" type="long" />
+		<column name="govAgencyCode" type="String" />
+		<column name="govAgencyName" type="String" />
+		<column name="govAgencyOrganizationId" type="long" />
+		<column name="serviceMode" type="int" />
+		<column name="serviceProcessId" type="long" />
+		<column name="domainCode" type="String" />
 
 		<finder return-type="Collection" name="DossierTemplateId">
-			<finder-column name="dossierTemplateId"></finder-column>
+			<finder-column name="dossierTemplateId" />
+		</finder>
+		
+		<finder return-type="Collection" name="G_M">
+			<finder-column name="groupId" />
+			<finder-column name="serviceMode"/>
 		</finder>
 
 	</entity>
@@ -184,7 +201,7 @@
         
     </entity>
     
-    <entity name="DossierStatus" local-service="true">
+    <entity name="DossierStatus" local-service="true" table="opencps_dossier_status">
     
    		<!-- PK fields -->
    		
@@ -209,7 +226,7 @@
         <column name="syncStatus" type="int"/>
     </entity>
     
-    <entity name="DossierLog" local-service="true">
+    <entity name="DossierLog" local-service="true" table="opencps_dossier_log">
     
    		<!-- PK fields -->
     
@@ -234,7 +251,7 @@
         <column name="level" type="int"/>
     </entity>
     
-    <entity name="FileGroup" local-service="true">
+    <entity name="FileGroup" local-service="true" table="opencps_file_group">
     
     	<!-- PK fields -->
     
@@ -256,7 +273,7 @@
         <column name="syncStatus" type="int"/>
     </entity>
     
-    <entity name="DossierFile" local-service="true">
+    <entity name="DossierFile" local-service="true" table="opencps_dossier_file">
     
     	<!-- PK fields -->
     	

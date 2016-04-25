@@ -18,12 +18,19 @@
 package org.opencps.dossiermgt.util;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Stack;
 
 import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
+import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
+import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
@@ -36,12 +43,20 @@ public class DossierMgtUtil {
 	public static final String TOP_TABS_SERVICE_CONFIG = "top_tabs_service_config";
 	public static final String DOSSIER_PART_TOOLBAR = "dossierPartToolBar";
 	public static final String SERVICE_CONFIG_TOOLBAR = "serviceConfigToolBar";
+	
 	public static final String TOP_TABS_DOSSIER = "dossier";
 	public static final String TOP_TABS_DOSSIER_FILE = "dossier-file";
 	public static final String TOP_TABS_EXTERNAL_DOSSIER = "external-dossier";
-	public static final String[] _DOSSIER_CATEGORY_NAMES = {
-		"dossier-info"
+	
+	public static String[] _DOSSIER_CATEGORY_NAMES = {
+		"update-dossier-info"
 	};
+	
+	/**
+	 * @param orderByCol
+	 * @param orderByType
+	 * @return
+	 */
 	public static OrderByComparator getDossierTemplateOrderByComparator(
 		String orderByCol, String orderByType) {
 		
@@ -65,6 +80,11 @@ public class DossierMgtUtil {
 		return orderByComparator;
 	}
 	
+	/**
+	 * @param partType
+	 * @param locale
+	 * @return
+	 */
 	public static String getNameOfPartType(int partType, Locale locale) {
 		String partTypeName = StringPool.BLANK;
 		switch (partType) {
@@ -91,6 +111,11 @@ public class DossierMgtUtil {
 		return partTypeName;
 	}
 	
+	/**
+	 * @param mode
+	 * @param locale
+	 * @return
+	 */
 	public static String getNameOfServiceConfigMode(int mode, Locale locale) {
 		String modeName = StringPool.BLANK;
 		switch (mode) {
@@ -113,31 +138,43 @@ public class DossierMgtUtil {
 		
 		return modeName;
 	}
-
 	
-	/*public static List<DossierPart> getTreeDossierPart(long dossierpartId, List<DossierPart> dossierParts) throws
-	PortalException, SystemException {
+	/**
+	 * @param dossierpartId
+	 * @return
+	 */
+	public static List<DossierPart> getTreeDossierPart(long dossierpartId){
 		
-		DossierPart dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierpartId);
+		List<DossierPart> dossierPartsResult = new ArrayList<DossierPart>();
 		
-		dossierParts.add(dossierPart);
+		Stack<DossierPart> dossierPartsStack = new Stack<DossierPart>();
 		
-		List<DossierPart> dossierPartsChild = new ArrayList<DossierPart>();
-		dossierPartsChild = DossierPartLocalServiceUtil.getDossierPartsByParentId(dossierPart.getParentId());
-		
-		if(dossierPartsChild.isEmpty()) {
-			return dossierParts;
-		}
-		
-		for(DossierPart child : dossierPartsChild) {
-			return getTreeDossierPart(child.getDossierpartId(), dossierParts);
-		}
-		return dossierParts;
+		try {
+			DossierPart dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierpartId);
 			
-	}*/
+			dossierPartsStack.add(dossierPart);
+			
+			DossierPart dossierPartIndex = null;
+			
+			while(! dossierPartsStack.isEmpty()) {
+				dossierPartIndex = dossierPartsStack.pop();
+				
+				List<DossierPart> dossierPartsChild = new ArrayList<DossierPart>();
+				dossierPartsChild = DossierPartLocalServiceUtil.getDossierPartsByParentId(dossierPartIndex.getDossierpartId());
+				
+				if(!dossierPartsChild.isEmpty()) {
+					dossierPartsStack.addAll(dossierPartsChild);
+				}
+				
+				dossierPartsResult.add(dossierPartIndex);
+			}
+			return dossierPartsResult;
+        }
+        catch (Exception e) {
+	        // nothing to do
+        }
+		
+		return new ArrayList<DossierPart>();
+	}
 }
-
-
-
-	
 

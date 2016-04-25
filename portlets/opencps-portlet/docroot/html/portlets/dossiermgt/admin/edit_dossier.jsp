@@ -87,6 +87,7 @@
 
 <portlet:actionURL name="updateDossier" var="updateDossierURL" >
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
+	<portlet:param name="backURL" value="<%=backURL %>"/>
 </portlet:actionURL>
 
 
