@@ -70,7 +70,7 @@
 		<column name="externalAppUrl" type="String" />
 		
 		<!-- Order -->
-		<order by="desc">
+		<order by="asc">
 			<order-column name="sequenceNo"/>
 		</order>
 		
@@ -84,6 +84,7 @@
 		</finder>
 	
 		<finder return-type="Collection" name="ProcessStepIds">
+			<finder-column name="groupId"/>
 			<finder-column name="processStepId" arrayable-operator="OR"/>
 		</finder>
 	</entity>
@@ -162,6 +163,18 @@
 			<finder-column name="serviceProcessId"/>
 		</finder>
 
+		<finder return-type="Collection" name="F_ProcessWorkflow_Step">
+			<finder-column name="groupId"/>
+			<finder-column name="serviceProcessId"/>
+			<finder-column name="preProcessStepId"/>
+		</finder>
+		
+		<finder return-type="ProcessWorkflow" name="F_ProcessWorkflow" unique="true">
+			<finder-column name="serviceProcessId"/>
+			<finder-column name="preProcessStepId"/>
+			<finder-column name="actionName"/>
+		</finder>
+		
 	</entity>
 
 	<entity name="WorkflowOutput" local-service="true" remote-service="true"
@@ -217,6 +230,7 @@
 		<column name="actionUserId" type="long"/>
 		<column name="actionDatetime" type="Date"/>
 		<column name="actionNote" type="String"/>
+		<column name="actionStepId" type="long"/>
 		<column name="assignToUserId" type="long"/>
 		<column name="processWorkflowId" type="long"/>
 		<column name="dossierStatus" type="int"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom-sql>
 	<sql id="org.opencps.processmgt.service.persistence.ServiceProcessFinder.searchProcess">	
-		<![CDATA[
+		<![CDATA[[$AND_OR_NULL_CHECK$])
 			SELECT
 				opencps_serviceprocess.*
 			FROM
@@ -25,4 +25,50 @@
 		]]>
 	</sql>
 
+	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.countProcessOrder">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_processorder 
+				LEFT JOIN opencps_serviceinfo on opencps_processorder.serviceInfoId = opencps_serviceinfo.serviceinfoId
+				LEFT JOIN dossier on opencps_processorder.dossierId = dossier.dossierId
+				LEFT JOIN opencps_processstep on opencps_processorder.processStepId = opencps_processstep.processStepId
+				LEFT JOIN opencps_processworkflow on opencps_processorder.processStepId = opencps_processworkflow.postProcessStepId 
+						  and opencps_processorder.actionStepId = opencps_processworkflow.preProcessStepId
+			WHERE
+				(opencps_processorder.groupId = ?) 
+			AND	
+				(opencps_processorder.processStepId = ?)
+			AND	
+				(opencps_processorder.assignToUserId = ?)
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.searchProcessOrder">	
+		<![CDATA[
+			SELECT
+				opencps_processorder.*, 
+				opencps_serviceinfo.serviceName as serviceName, 
+				dossier.*, 
+				opencps_processstep.stepName as stepName,
+				opencps_processworkflow.actionName as actionName
+			FROM
+				opencps_processorder 
+				LEFT JOIN opencps_serviceinfo on opencps_processorder.serviceInfoId = opencps_serviceinfo.serviceinfoId
+				LEFT JOIN dossier on opencps_processorder.dossierId = dossier.dossierId
+				LEFT JOIN opencps_processstep on opencps_processorder.processStepId = opencps_processstep.processStepId
+				LEFT JOIN opencps_processworkflow on opencps_processorder.processStepId = opencps_processworkflow.postProcessStepId 
+						  and opencps_processorder.actionStepId = opencps_processworkflow.preProcessStepId
+			WHERE
+				(opencps_processorder.groupId = ?) 
+			AND	
+				(opencps_processorder.processStepId = ?)
+			AND	
+				(opencps_processorder.assignToUserId = ?)
+				
+			ORDER BY 
+				opencps_processorder.modifiedDate DESC
+		]]>
+	</sql>
 </custom-sql>

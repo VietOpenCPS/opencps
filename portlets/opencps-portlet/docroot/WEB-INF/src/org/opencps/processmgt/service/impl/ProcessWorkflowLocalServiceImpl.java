@@ -79,4 +79,14 @@ public class ProcessWorkflowLocalServiceImpl
 
 		return processWorkflowPersistence.countByS_P_ID(serviceProcessId);
 	}
+	
+	public ProcessWorkflow fetchByF_ProcessWorkflow(long serviceProcessId, long preProcessStepId, String actionName) throws SystemException {
+
+		return processWorkflowPersistence.fetchByF_ProcessWorkflow(serviceProcessId, preProcessStepId, actionName);
+    }
+	
+	public List<ProcessWorkflow> findByF_ProcessWorkflow_Step(long groupId, long serviceProcessId, long preProcessStepId) throws SystemException {
+		
+		return processWorkflowPersistence.findByF_ProcessWorkflow_Step(groupId, serviceProcessId, preProcessStepId);
+    }
 }

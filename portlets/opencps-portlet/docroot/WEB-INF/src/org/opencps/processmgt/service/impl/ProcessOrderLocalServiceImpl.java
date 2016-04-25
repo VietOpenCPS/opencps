@@ -31,7 +31,12 @@
 
 package org.opencps.processmgt.service.impl;
 
+import java.util.List;
+
+import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.base.ProcessOrderLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.util.OrderByComparator;
 
 /**
  * The implementation of the process order local service.
@@ -54,4 +59,11 @@ public class ProcessOrderLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.ProcessOrderLocalServiceUtil} to access the process order local service.
 	 */
+	public int countProcessOrder(long groupId, String keywords, String processStepId, String assignToUserId) {
+		return processOrderFinder.countProcessOrder(groupId, keywords, processStepId, assignToUserId);
+    }
+	
+	public List searchProcessOrder(long groupId, String keywords, String processStepId, String assignToUserId, int start, int end, OrderByComparator orderByComparator) {
+		return processOrderFinder.searchProcessOrder(groupId, keywords, processStepId, assignToUserId, start, end, orderByComparator);
+    }
 }

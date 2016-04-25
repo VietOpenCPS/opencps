@@ -1,4 +1,5 @@
-<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="com.liferay.portal.kernel.util.GroupThreadLocal"%>
+<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -24,19 +25,17 @@
 	long[] roleIds = user.getRoleIds();
 	String groupName = "Danh sách bước xử lý";
 	String cssClass = "cssClass";
-	String active = (String)request.getSession().getAttribute("active");
+	String active = (String)request.getSession().getAttribute(WebKeys.MENU_ACTIVE);
 	boolean counter = true;
 %>
 <liferay-portlet:actionURL var="menuActionURL" name="menuAction" >
-	<portlet:param name="mvcPath" value="/html/menu_ds/can_bo.jsp"/>
+	<portlet:param name="mvcPath" value="<%=templatePath + \"processordermenu.jsp\" %>"/>
 </liferay-portlet:actionURL>
 <liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction" >
-	<liferay-portlet:param name="types" value="1,2,3"/>
-	<liferay-portlet:param name="orgId" value="106113"/>
 </liferay-portlet:actionURL>
 <aui:form name="fm" action="#">
-	<aui:input type="hidden" name="active" ></aui:input>
-	<%=ProcessUtils.generateMenuBuocXuLy(roleIds, groupName, cssClass, active, counter, menuActionURL.toString())  %>
+	<aui:input type="hidden" name="<%=WebKeys.MENU_ACTIVE %>" ></aui:input>
+	<%=ProcessOrderUtils.generateMenuBuocXuLy(renderRequest, roleIds, groupName, cssClass, active, counter, menuActionURL.toString())  %>
 </aui:form>
 <aui:script use="io,aui-loading-mask">
 	menu_left_count('<%=menuCounterUrl.toString() %>');
@@ -44,7 +43,7 @@
 <script type="text/javascript">
 function openCPS_menu_submit(url, active) {
 	var A = AUI();
-	A.one('#<portlet:namespace />active').val(active);
+	A.one('#<portlet:namespace /><%=WebKeys.MENU_ACTIVE %>').val(active);
 	document.getElementById('<portlet:namespace />fm').action = url;
 	document.getElementById('<portlet:namespace />fm').submit();
 }

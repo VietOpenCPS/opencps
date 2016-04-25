@@ -181,8 +181,8 @@ public class ProcessStepLocalServiceImpl
 
 	}
 	
-	public List<ProcessStep> findByProcessStepIds(long[] processStepIds) throws SystemException {
-		return processStepPersistence.findByProcessStepIds(processStepIds);
+	public List<ProcessStep> findByProcessStepIds(long groupId, long[] processStepIds) throws SystemException {
+		return processStepPersistence.findByProcessStepIds(groupId, processStepIds);
 	    
     }
 }
