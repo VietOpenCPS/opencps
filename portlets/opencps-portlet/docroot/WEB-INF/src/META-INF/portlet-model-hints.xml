@@ -294,6 +294,7 @@
 		<field name="actionUserId" type="long" />
 		<field name="actionDatetime" type="Date" />
 		<field name="actionNote" type="String" />
+		<field name="actionStepId" type="long" />
 		<field name="assignToUserId" type="long" />
 		<field name="processWorkflowId" type="long" />
 		<field name="dossierStatus" type="int" />
