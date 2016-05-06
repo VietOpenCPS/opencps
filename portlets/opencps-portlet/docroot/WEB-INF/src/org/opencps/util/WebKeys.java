@@ -95,4 +95,7 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String SERVICE_INFO_ENTRY = "SERVICE_INFO_ENTRY";
 
+	public static final String PROCESS_ORDER_PORTLET = "16_WAR_opencpsportlet";
+	
+	public static final String FILE_ID = "dossierFileId";
 }

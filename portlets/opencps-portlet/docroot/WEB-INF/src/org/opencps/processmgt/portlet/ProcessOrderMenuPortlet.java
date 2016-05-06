@@ -48,6 +48,7 @@ import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -101,7 +102,7 @@ public class ProcessOrderMenuPortlet extends MVCPortlet{
 		
 		for (ProcessStep item : list) {
 		
-			counterVal = ProcessOrderLocalServiceUtil.getProcessOrdersCount();
+			counterVal = ProcessOrderLocalServiceUtil.countProcessOrder(themeDisplay.getScopeGroupId(), StringPool.BLANK, String.valueOf(item.getProcessStepId()), user.getUserId()+"");
 			
 			par.put("badge_" + item.getProcessStepId(), String.valueOf(counterVal));
 		

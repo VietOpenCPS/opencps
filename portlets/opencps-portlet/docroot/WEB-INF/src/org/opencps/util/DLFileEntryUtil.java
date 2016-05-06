@@ -22,8 +22,10 @@ import java.io.InputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 
 /**
@@ -77,6 +79,37 @@ public class DLFileEntryUtil {
 		}
 
 		return fileEntry;
+	}
+	
+	public static String getURLById(Long fileId){
+		
+		try {
+		
+			return getURL(DLAppLocalServiceUtil.getFileEntry(fileId));
+		
+		} catch (Exception e) {
+		
+			_log.error(e);
+			return StringPool.BLANK;
+		}
+	}
+	private static String getURL(FileEntry fileEntry){
+		
+		try{
+			String url =	"/documents/"
+					        + fileEntry.getGroupId()
+					        + StringPool.SLASH
+					        + fileEntry.getFolderId()
+					        + StringPool.SLASH
+					        + fileEntry.getTitle()
+					        + "?version="+fileEntry.getVersion();
+			return url;
+		} catch (Exception e) {
+			
+			_log.error(e);
+			return StringPool.BLANK;
+		}
+
 	}
 
 	private static Log _log = LogFactoryUtil

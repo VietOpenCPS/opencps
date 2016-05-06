@@ -28,12 +28,12 @@
 	Dossier dossier = DossierLocalServiceUtil.fetchDossier(processOrder.getDossierId());
 %>
 
-<table style="width: 100%;">
+<table style="width: 100%;" class="info-td">
 	<tr style="background-color: rgb(245, 245, 245); font-weight: bold;">
 		<td style="width: 30%;"><liferay-ui:message key="ho-so-so" /></th>
 		<td><%=(Validator.isNotNull(dossier)?String.valueOf(dossier.getDossierId()):StringPool.BLANK) %></th>
 	</tr>
-	<tr>
+	<tr >
 		<td style="width: 30%;"><liferay-ui:message key="thu-tuc" /></td>
 		<td><%=(Validator.isNotNull(dossier)?String.valueOf(dossier.getServiceInfoId()):StringPool.BLANK) %></td>
 	</tr>
@@ -83,7 +83,7 @@
 	</tr>
 </table>
 <style>
-td{
+.info-td td{
 	border: 1px solid gainsboro;
 	padding: 5px;
 }

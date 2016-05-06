@@ -186,4 +186,9 @@ public class ServiceConfigLocalServiceImpl
 		String domainCode) {
 		return serviceConfigFinder.countServiceConfig(groupId, keywords, govAgencyCode, domainCode);
 	}
+	
+	public ServiceConfig fetchByF_serviceInfoId(long groupId, long serviceInfoId) throws SystemException {
+		return serviceConfigPersistence.fetchByF_serviceInfoId(groupId, serviceInfoId);
+		
+	}
 }
