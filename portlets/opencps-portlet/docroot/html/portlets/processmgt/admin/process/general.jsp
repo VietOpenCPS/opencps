@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%@page import="com.liferay.portal.model.Role"%>
 <%@page import="org.opencps.processmgt.model.ServiceProcess"%>
@@ -24,6 +25,7 @@
 
 <%
 	ServiceProcess serviceProcess = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
+	List<DossierTemplate> dossierTemplates = ProcessUtils.getDossierTemplate(renderRequest);
 %>
 
 <aui:model-context bean="<%= serviceProcess %>" model="<%= ServiceProcess.class %>"/>
@@ -46,5 +48,19 @@
 	<aui:col width="100">
 		<aui:input type="textarea" cssClass="input100" name="description" >
 		</aui:input>
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="100">
+		<aui:select name="dossierTemplateId" showEmptyOption="true">
+			<%
+				for (DossierTemplate dt : dossierTemplates) {
+			%>
+				<aui:option value="<%= Long.toString(dt.getDossierTemplateId()) %>"><%= dt.getTemplateName() %></aui:option>
+			<%
+				}
+			%>
+		</aui:select>
 	</aui:col>
 </aui:row>

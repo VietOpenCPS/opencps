@@ -23,10 +23,8 @@
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@page import="org.opencps.dossiermgt.DuplicateDossierTemplateNumberException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierTemplateNumberException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierTemplateNameException"%>
@@ -87,11 +85,13 @@
 
 <portlet:actionURL name="updateDossier" var="updateDossierURL" >
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
+	<portlet:param name="backURL" value="<%=backURL %>"/>
 </portlet:actionURL>
 
-
 <liferay-util:buffer var="htmlTop">
-	<liferay-ui:icon iconCssClass="icon-home" />
+	<c:if test="<%=dossierTemplate!=null %>">
+		<h4><%=dossierTemplate.getTemplateName() %></h4>
+	</c:if>
 </liferay-util:buffer>
 
 <liferay-util:buffer var="htmlBot">
@@ -158,7 +158,8 @@ Liferay.provide(window, '<portlet:namespace/>sentToolBarSignal', function(tbSign
 				dataType : 'text/html',
 				method : 'GET',
 			    data:{    	
-			    	"<portlet:namespace />tabs1" : tbSignal
+			    	"<portlet:namespace />tabs1" : tbSignal,
+			    	"<portlet:namespace />currURL" : '<%=currentURL %>'
 			    },   
 			    on: {
 			    	success: function(event, id, obj) {

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.opencps.dossiermgt.service.persistence.ServiceConfigFinder.searchServiceConfig">	
+		<![CDATA[
+			SELECT
+				opencps_service_config.*
+			FROM
+				opencps_service_config
+			WHERE
+				groupId = ?
+			AND (
+				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			AND (opencps_service_config.govAgencyCode = ?)
+			AND (opencps_service_config.domainCode = ?)
+		]]>
+	</sql>
+
+	<sql id="org.opencps.dossiermgt.service.persistence.ServiceConfigFinder.countServiceConfig">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_service_config
+			WHERE
+				groupId = ?
+			AND (
+				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			AND (opencps_service_config.govAgencyCode = ?)
+			AND (opencps_service_config.domainCode = ?)
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.countDossier">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			INNER JOIN
+				opencps_service_config
+			ON
+				opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId
+			WHERE
+				(opencps_dossier.groupId = ?)
+			AND
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier.dossierStatus = ?)
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossier">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			INNER JOIN
+				opencps_service_config
+			ON
+				opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId
+			WHERE
+				(opencps_dossier.groupId = ?)
+			AND
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier.dossierStatus = ?)
+		]]>
+	</sql>
+</custom-sql>

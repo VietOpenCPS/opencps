@@ -90,7 +90,11 @@
 
 		<column name="processStepId" type="long" primary="true" />
 		<column name="dossierPartId" type="long" primary="true" />
-
+		
+		<finder return-type="Collection" name="ProcessStepId">
+			<finder-column name="processStepId"/>
+		</finder>
+		
 	</entity>
 
 	<entity name="StepAllowance" local-service="true" remote-service="true"
@@ -165,21 +169,19 @@
 
 		<column name="workflowOutputId" type="long" primary="true" />
 
-		<!-- Audit fields -->
-
-		<column name="companyId" type="long" />
-		<column name="groupId" type="long" />
-		<column name="userId" type="long" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
 
 		<column name="processWorkflowId" type="long" />
 		<column name="dossierPartId" type="long" />
-		<column name="required" type="int"/>
-		<column name="esign" type="int"/>
-		<column name="postback" type="int"/>
+		<column name="required" type="boolean"/>
+		<column name="esign" type="boolean"/>
+		<column name="postback" type="boolean"/>
+		
+		<finder return-type="Collection" name="P_W_ID">
+			<finder-column name="processWorkflowId"/>
+		</finder>
+		
 	</entity>
 
 	<entity name="ProcessOrder" local-service="true" remote-service="true"

@@ -21,7 +21,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 
 /**
- * @author khoavd
+ * @author trungnt
  *
  */
 public class ProcessOrderPortlet extends MVCPortlet{

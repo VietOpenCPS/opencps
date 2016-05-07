@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.permissions.DossierPartPermission"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,7 +21,6 @@
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.dossiermgt.search.DossierPartDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
@@ -85,6 +85,6 @@
 		</portlet:actionURL>
 		
 		<liferay-ui:icon image="delete" message="delete"
-				url="<%=deleteDossierParttURL.toString()%>" />	
+				url="<%=deleteDossierParttURL.toString()%>" />
 	</c:if>
 </liferay-ui:icon-menu> 

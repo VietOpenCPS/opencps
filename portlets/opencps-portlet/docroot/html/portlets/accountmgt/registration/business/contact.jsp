@@ -158,7 +158,7 @@
 	<aui:row>
 		<aui:input type="file" name="attachFile" >
 			<aui:validator name="acceptFiles">
-				<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>
+				'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
 			</aui:validator>
 			<aui:validator name="required" />
 		</aui:input>

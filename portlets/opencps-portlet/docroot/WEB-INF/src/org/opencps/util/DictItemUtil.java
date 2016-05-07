@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author khoavd
+ * @author trungnt
  */
 public class DictItemUtil {
 
@@ -41,21 +42,72 @@ public class DictItemUtil {
 
 		String dictItemName = StringPool.BLANK;
 
-		long dictItemId = GetterUtil.getLong(itemId, 0);
+		long dictItemId = GetterUtil
+		    .getLong(itemId, 0);
 
 		try {
-			DictItem di = DictItemLocalServiceUtil.fetchDictItem(dictItemId);
+			DictItem dictItem = DictItemLocalServiceUtil
+			    .fetchDictItem(dictItemId);
 
-			if (Validator.isNotNull(di)) {
-				dictItemName = di.getItemName();
+			if (Validator
+			    .isNotNull(dictItem)) {
+				dictItemName = dictItem
+				    .getItemName();
 			}
 		}
 		catch (Exception e) {
-			_log.error(e);
+			_log
+			    .error(e);
 		}
 
 		return dictItemName;
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(DictItemUtil.class);
+	public static String getNameDictItem(long itemId) {
+
+		String dictItemName = StringPool.BLANK;
+
+		try {
+			DictItem dictItem = DictItemLocalServiceUtil
+			    .fetchDictItem(itemId);
+
+			if (Validator
+			    .isNotNull(dictItem)) {
+				dictItemName = dictItem
+				    .getItemName();
+			}
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+
+		return dictItemName;
+	}
+	
+	public static String getDictItemCode(long itemId) {
+
+		String dictItemCode = StringPool.BLANK;
+
+		try {
+			DictItem dictItem = DictItemLocalServiceUtil
+			    .fetchDictItem(itemId);
+
+			if (Validator
+			    .isNotNull(dictItem)) {
+				dictItemCode = dictItem
+				    .getItemCode();
+			}
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+
+		return dictItemCode;
+	}
+
+
+	private static Log _log = LogFactoryUtil
+	    .getLog(DictItemUtil.class);
 }

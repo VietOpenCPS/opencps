@@ -246,7 +246,7 @@ public class AccountRegPortlet extends MVCPortlet {
 					    UserLocalServiceUtil.getUser(business.getMappingUserId());
 					MessageBusUtil.sendEmailAddressVerification(
 					    business.getUuid(), mappingUser, email,
-					    PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
+					    PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS,
 					    serviceContext);
 				}
 			}

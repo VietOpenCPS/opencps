@@ -19,6 +19,7 @@ package org.opencps.usermgt.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.search.EmployeeDisplayTerm;
@@ -183,8 +184,15 @@ public class UserMgtUtil {
 		return workingUnits;
 
 	}
-
-
+	
+	public static Stack<Integer> getBinary(long input) {
+		Stack<Integer> binaryStack = new Stack<Integer>();
+		while(input != 0) {
+			binaryStack.push((int)input%2);
+			input = input/2;
+		}
+		return binaryStack;
+	}
 
 	private static Log _log =
 		LogFactoryUtil.getLog(UserMgtUtil.class.getName());

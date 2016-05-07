@@ -118,22 +118,47 @@
 	</aui:row>
 	
 	<aui:row>
-		<aui:col width="100">
-			<aui:input name="changePassWord" type="checkbox"/>
-			<aui:input name="<%= EmployeeDisplayTerm.OLD_PASS_WORD%>" type="password"></aui:input>
-		</aui:col>
+		<aui:input name="changePassWord" type="checkbox" checked="false"/>
 	</aui:row>
 	
-	<aui:row>
-		<aui:col width="50">
-			<aui:input name="<%= EmployeeDisplayTerm.PASS_WORD%>" type="password"></aui:input>
-		</aui:col>
+	<div id = "<portlet:namespace />showOrHidePasswordsField" >
+		<aui:row>
+			<aui:col width="90">
+				<aui:input name="<%= EmployeeDisplayTerm.OLD_PASS_WORD%>" type="password"></aui:input>
+			</aui:col>
+		</aui:row>
 		
-		<aui:col width="50">
-			<aui:input name="<%= EmployeeDisplayTerm.RE_PASS_WORD%>" type="password">
-				<aui:validator name="equalTo">'#<portlet:namespace /><%= EmployeeDisplayTerm.PASS_WORD%>'</aui:validator>
-			</aui:input>
-		</aui:col>
-	</aui:row>
+		<aui:row>
+			<aui:col width="50">
+				<aui:input name="<%= EmployeeDisplayTerm.PASS_WORD%>" type="password"></aui:input>
+			</aui:col>
+			
+			<aui:col width="50">
+				<aui:input name="<%= EmployeeDisplayTerm.RE_PASS_WORD%>" type="password">
+					<aui:validator name="equalTo">'#<portlet:namespace /><%= EmployeeDisplayTerm.PASS_WORD%>'</aui:validator>
+				</aui:input>
+			</aui:col>
+		</aui:row>
+	</div>
+</div>	
 
-</div>
+<aui:script>
+	 AUI().ready(function(A) {
+		
+		var changePassword = A.one('#<portlet:namespace />changePassWordCheckbox');
+		var showOrHidePasswordsField = A.one('#<portlet:namespace />showOrHidePasswordsField');
+		if(changePassword.val() == 'false') {
+			showOrHidePasswordsField.hide();
+		}
+		if(changePassword) {
+			var changePasswordValue = A.one('#<portlet:namespace />changePassWord');
+			changePassword.on('click', function() {
+				if(changePasswordValue.val() == "true") {
+					showOrHidePasswordsField.show();
+				} else {
+					showOrHidePasswordsField.hide();
+				}
+			});
+		}
+	}); 
+</aui:script>

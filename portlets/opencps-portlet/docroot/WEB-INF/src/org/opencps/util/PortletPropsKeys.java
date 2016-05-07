@@ -51,14 +51,15 @@ public class PortletPropsKeys {
 	public static final String ACCOUNTMGT_BUSINESS_REPRESENTATIVENAME_LENGTH = "opencps.accountmgt.business.representativename.lengths";
 	public static final String ACCOUNTMGT_BUSINESS_REPRESENTATIVEROLE_LENGTH = "opencps.accountmgt.business.representativerole.lengths";
 	
-	
-	
+
 	// Data Management Master Data
 	public static final String DATAMGT_MASTERDATA_CODE = "opencps.datamgt.masterdata.code";
 	public static final String DATAMGT_MASTERDATA_BUSINESS_DOMAIN= "opencps.datamgt.masterdata.business.domain";
 	public static final String DATAMGT_MASTERDATA_BUSINESS_TYPE= "opencps.datamgt.masterdata.business.type";
 	public static final String DATAMGT_MASTERDATA_SERVICE_DOMAIN = "opencps.datamgt.masterdata.service.domain";
 	public static final String DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION = "opencps.datamgt.masterdata.service.administration";
+	public static final String DATAMGT_MASTERDATA_ADMINISTRATION_REGION = "opencps.datamgt.masterdata.administration.region";
+	public static final String DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION = "opencps.datamgt.masterdata.administrative.region";
 	// validate file
 	public static final String ACCOUNTMGT_FILE_TYPE = "opencps.accountmgt.file.type";
 	public static final String ACCOUNTMGT_FILE_SIZE ="opencps.accountmgt.file.size";
@@ -92,6 +93,7 @@ public class PortletPropsKeys {
 	
 	public static final String USERMGT_GENDER_VALUES2 = "opencps.usermgt.gender.values";
 	
+	// Dossier management validate
 	public static final String DOSSIERMGT_TEMPLATE_NAME_LENGTH = "opencps.dossiermgt.template.name.length";
 	public static final String DOSSIERMGT_TEMPLATE_NUMBER_LENGTH = "opencps.dossiermgt.template.number.length";
 	
@@ -101,4 +103,12 @@ public class PortletPropsKeys {
 	
 	public static final String DOSSIERMGT_SERVICE_CONFIG_GOVNAME_LENGTH = "opencps.dossiermgt.service.config.govname.length";
 	public static final String DOSSIERMGT_SERVICE_CONFIG_GOVCODE_LENGTH = "opencps.dossiermgt.service.config.govcode.length";
+	
+	public static final String DOSSIERMGT_DOSSIER_SUBJECT_NAME_LENGTH = "opencps.dossiermgt.dossier.subject.name.length";
+	public static final String DOSSIERMGT_DOSSIER_SUBJECT_ID_LENGTH = "opencps.dossiermgt.dossier.subject.id.length";
+	public static final String DOSSIERMGT_DOSSIER_ADDRESS_LENGTH = "opencps.dossiermgt.dossier.address.length";
+	public static final String DOSSIERMGT_DOSSIER_CONTACT_NAME_LENGTH = "opencps.dossiermgt.dossier.contact.name.length";
+	public static final String DOSSIERMGT_DOSSIER_CONTACT_TEL_NO_LENGTH = "opencps.dossiermgt.dossier.contact.tel.no.length";
+	public static final String DOSSIERMGT_DOSSIER_CONTACT_EMAIL_LENGTH = "opencps.dossiermgt.dossier.contact.email.length";
+	public static final String DOSSIERMGT_DOSSIER_NOTE_LENGTH = "opencps.dossiermgt.dossier.note.length";
 }

@@ -24,6 +24,8 @@
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.permissions.ServiceConfigPermission"%>
+
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearch"%>
@@ -32,7 +34,6 @@
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -96,7 +97,7 @@
 			
 			String serviceConfigModeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfServiceConfigMode(serviceConfig.getServiceMode(), themeDisplay.getLocale()));
 		
-			row.addText(String.valueOf(row.getPos()) + 1);
+			row.addText(String.valueOf(row.getPos() + 1));
 			row.addText(serviceInfo.getServiceName());
 			row.addText(serviceConfig.getGovAgencyName());
 			row.addText(serviceConfigModeName);

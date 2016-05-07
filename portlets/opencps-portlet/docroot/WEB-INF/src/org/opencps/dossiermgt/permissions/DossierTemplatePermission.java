@@ -11,7 +11,7 @@
  * not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.dossiermgt.permission;
+package org.opencps.dossiermgt.permissions;
 
 import org.opencps.dossiermgt.model.DossierTemplate;
 

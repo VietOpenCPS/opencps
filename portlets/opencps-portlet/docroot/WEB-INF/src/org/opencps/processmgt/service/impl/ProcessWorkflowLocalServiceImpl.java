@@ -17,13 +17,17 @@
 
 package org.opencps.processmgt.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.opencps.processmgt.model.ProcessWorkflow;
+import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.base.ProcessWorkflowLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.service.ServiceContext;
 
 /**
  * The implementation of the process workflow local service.
@@ -46,7 +50,153 @@ public class ProcessWorkflowLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil} to access the process workflow local service.
 	 */
+	
+	
+	
+	/**
+	 * Update workflow
+	 * 
+	 * @param processWorkflowId
+	 * @param preProcessStepId
+	 * @param postProcessStepId
+	 * @param autoEvent
+	 * @param actionName
+	 * @param assignUser
+	 * @param actionUserId
+	 * @param requestPayment
+	 * @param paymentFee
+	 * @param generateReceptionNo
+	 * @param receptionNoPattern
+	 * @param generateDeadline
+	 * @param deadlinePattern
+	 * @param context
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public ProcessWorkflow updateWorkflow(
+	    long processWorkflowId, long preProcessStepId, long postProcessStepId,
+	    String autoEvent, String actionName, boolean assignUser,
+	    long actionUserId, boolean requestPayment, double paymentFee,
+	    String generateReceptionNo, String receptionNoPattern,
+	    boolean generateDeadline, boolean deadlinePattern,
+	    ServiceContext context)
+	    throws PortalException, SystemException {
 
+		ProcessWorkflow workflow =
+		    processWorkflowPersistence.fetchByPrimaryKey(processWorkflowId);
+
+		if (Validator.isNotNull(workflow)) {
+			// update modified date
+
+			workflow.setModifiedDate(new Date());
+			
+			
+			//update other filed
+			
+			workflow.setPreProcessStepId(preProcessStepId);
+			workflow.setAutoEvent(autoEvent);
+			workflow.setActionName(actionName);
+			workflow.setAssignUser(assignUser);
+			workflow.setActionUserId(actionUserId);
+			workflow.setRequestPayment(requestPayment);
+			workflow.setPaymentFee(paymentFee);
+			workflow.setGenerateReceptionNo(generateReceptionNo);
+			workflow.setReceptionNoPattern(receptionNoPattern);
+			workflow.setGenerateDeadline(generateDeadline);
+			workflow.setDeadlinePattern(deadlinePattern);
+			
+			processWorkflowPersistence.update(workflow);
+		}
+
+		return workflow;
+
+	}
+	
+	/**
+	 * @param processWorkflowId
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public void deleteWorkflow(long processWorkflowId) throws PortalException, SystemException {
+		List<WorkflowOutput> outputs = workflowOutputPersistence.findByP_W_ID(processWorkflowId);
+		
+		for (WorkflowOutput output : outputs) {
+			workflowOutputPersistence.remove(output);
+		}
+		
+		processWorkflowPersistence.remove(processWorkflowId);
+		
+	}
+	
+	/**
+	 * Add Workflow
+	 * 
+	 * @param serviceProcessId
+	 * @param preProcessStepId
+	 * @param postProcessStepId
+	 * @param autoEvent
+	 * @param actionName
+	 * @param assignUser
+	 * @param actionUserId
+	 * @param requestPayment
+	 * @param paymentFee
+	 * @param generateReceptionNo
+	 * @param receptionNoPattern
+	 * @param generateDeadline
+	 * @param deadlinePattern
+	 * @param context
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	
+	public ProcessWorkflow addWorkflow(
+	    long serviceProcessId, long preProcessStepId, long postProcessStepId,
+	    String autoEvent, String actionName, boolean assignUser,
+	    long actionUserId, boolean requestPayment, double paymentFee,
+	    String generateReceptionNo, String receptionNoPattern,
+	    boolean generateDeadline, boolean deadlinePattern,
+	    ServiceContext context)
+	    throws PortalException, SystemException {
+		
+		long processWorkflowId = counterLocalService.increment(ProcessWorkflow.class.getName());
+		
+		ProcessWorkflow workflow = processWorkflowPersistence.create(processWorkflowId);
+		
+		Date now = new Date();
+		
+		if (Validator.isNotNull(workflow)) {
+			
+			// Add AuditField
+			
+			workflow.setCompanyId(context.getCompanyId());
+			workflow.setGroupId(context.getScopeGroupId());
+			workflow.setUserId(context.getUserId());
+			workflow.setCreateDate(now);
+			workflow.setModifiedDate(now);
+			
+			// Add OtherField
+			
+			workflow.setServiceProcessId(serviceProcessId);
+			workflow.setPreProcessStepId(preProcessStepId);
+			workflow.setPostProcessStepId(postProcessStepId);
+			workflow.setAutoEvent(autoEvent);
+			workflow.setActionName(actionName);
+			workflow.setAssignUser(assignUser);
+			workflow.setActionUserId(actionUserId);
+			workflow.setRequestPayment(requestPayment);
+			workflow.setPaymentFee(paymentFee);
+			workflow.setGenerateReceptionNo(generateReceptionNo);
+			workflow.setReceptionNoPattern(receptionNoPattern);
+			workflow.setGenerateDeadline(generateDeadline);
+			workflow.setDeadlinePattern(deadlinePattern);
+			
+			processWorkflowPersistence.update(workflow);
+		}
+		
+		return workflow;
+	}
 	
 	/**
 	 * Search ProcessWorkflow

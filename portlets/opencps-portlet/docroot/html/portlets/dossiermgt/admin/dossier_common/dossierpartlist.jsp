@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,6 +20,7 @@
 <%@page import="javax.portlet.PortletConfig"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+<%@page import="org.opencps.dossiermgt.permissions.DossierPartPermission"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierPartSearchTerms"%>
@@ -29,9 +29,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierTemplatePermission"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@ include file="../../init.jsp"%>
 <%
@@ -61,7 +59,6 @@
 	}
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
-	session.setAttribute("partListURL", currentURL);
 	
  // chua sap xep theo sibling
 					

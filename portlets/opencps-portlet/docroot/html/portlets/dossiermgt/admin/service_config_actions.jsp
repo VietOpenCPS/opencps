@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.permissions.ServiceConfigPermission"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,7 +19,6 @@
 %>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>

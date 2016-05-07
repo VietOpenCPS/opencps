@@ -1,8 +1,23 @@
+/**
+* OpenCPS is the open source Core Public Services software
+* Copyright (C) 2016-present OpenCPS community
+
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>
+*/
 
 package org.opencps.dossiermgt.portlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -35,7 +50,6 @@ import org.opencps.dossiermgt.search.ServiceConfigDisplayTerms;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
-import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
 import org.opencps.util.MessageKeys;
@@ -54,8 +68,10 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+
 /**
- * Portlet implementation class ServiceConfigMgtPortlet
+ * @author dunglt
+ *
  */
 public class DossierMgtAdminPortlet extends MVCPortlet {
 
@@ -111,6 +127,14 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		super.render(renderRequest, renderResponse);
 	}
 
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws SystemException
+	 * @throws NoSuchDossierTemplateException
+	 * @throws IOException
+	 */
 	public void deleteDossierTemplate(
 	    ActionRequest actionRequest, ActionResponse actionResponse)
 	    throws SystemException, NoSuchDossierTemplateException, IOException {
@@ -126,6 +150,9 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 		if (dossierPartCount == 0) {
 			DossierTemplateLocalServiceUtil.deleteDossierTemplateById(dossierTemplateId);
+			if (Validator.isNotNull(currentURL)) {
+				actionResponse.sendRedirect(currentURL);
+			}
 		}
 		else {
 
@@ -137,6 +164,11 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		}
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
 	public void updateDossier(
 	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
 
@@ -157,6 +189,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		        actionRequest,
 		        DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DESCRIPTION);
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
 
 		try {
 			
@@ -175,6 +208,10 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 				    dossierTemplateId, templateNo, templateName, description,
 				    serviceContext.getUserId(),
 				    serviceContext);
+			}
+			
+			if(Validator.isNotNull(backURL)) {
+				actionResponse.sendRedirect(backURL);
 			}
 		}
 		catch (Exception e) {
@@ -196,6 +233,13 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		}
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws NoSuchDossierPartException
+	 * @throws SystemException
+	 * @throws IOException
+	 */
 	public void deleteDossierPart(
 	    ActionRequest actionRequest, ActionResponse actionResponse)
 	    throws NoSuchDossierPartException, SystemException, IOException {
@@ -210,6 +254,9 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 		if (dossierPartParentCount == 0) {
 			DossierPartLocalServiceUtil.deleteDossierPartById(dossierPartId);
+			if (Validator.isNotNull(currentURL)) {
+				actionResponse.sendRedirect(currentURL);
+			}
 		}
 		else {
 			if (Validator.isNotNull(currentURL)) {
@@ -221,6 +268,13 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
 	public void updateDossierPart(
 	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortalException, SystemException {
 
@@ -254,7 +308,14 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		    ParamUtil.getString(
 		        actionRequest,
 		        DossierPartDisplayTerms.DOSSIERPART_TEMPLATEFILENO);
+		String formReport =
+					    ParamUtil.getString(
+					        actionRequest,
+					        DossierPartDisplayTerms.DOSSIERPART_FORMREPORT);
+		
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+		String currentURL = ParamUtil.getString(actionRequest, "currentURL");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
 		
 		String isAddChilds = ParamUtil.getString(actionRequest, "isAddChilds");
 		
@@ -267,21 +328,16 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		boolean required =
 		    ParamUtil.getBoolean(
 		        actionRequest, DossierPartDisplayTerms.DOSSIERPART_REQUIRED);
-		
-		
-		/*for(DossierPart dos : DossierMgtUtil.getTreeDossierPart(dossierPartId, new ArrayList<DossierPart>())) {
-			System.out.println("dos : " + dos.getTreeIndex());
-		}*/
 		try {
 			
 			ServiceContext serviceContext = ServiceContextFactory
 						    .getInstance(actionRequest);
 			
-			dossierPartValidate(dossierPartId, partName, partNo, sibling, templateFileNo);
+			dossierPartValidate(dossierTemplateId,dossierPartId, partName, partNo, sibling, templateFileNo);
 			if (dossierPartId == 0) {
 				DossierPartLocalServiceUtil.addDossierPart(
 				    dossierTemplateId, partNo, partName, partTip, partType,
-				    parentId, sibling, formScript, sampleData, required,
+				    parentId, sibling, formScript,formReport, sampleData, required,
 				    templateFileNo, serviceContext.getUserId(), serviceContext);
 			}
 			else {
@@ -289,17 +345,23 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 				if (Validator.isNotNull(isAddChilds)) {
 					DossierPartLocalServiceUtil.addDossierPart(
 					    dossierTemplateId, partNo, partName, partTip, partType,
-					    parentId, sibling, formScript, sampleData, required,
+					    parentId, sibling, formScript,formReport, sampleData, required,
 					    templateFileNo, serviceContext.getUserId(), serviceContext);
 				}
 				else {
 					DossierPartLocalServiceUtil.updateDossierPart(
 					    dossierPartId, dossierTemplateId, partNo, partName,
-					    partTip, partType, parentId, sibling, formScript,
+					    partTip, partType, parentId, sibling, formScript,formReport,
 					    sampleData, required, templateFileNo, 
 					    serviceContext.getUserId(), serviceContext);
 				}
 
+			}
+			
+			if(Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
+			} else if(Validator.isNotNull(backURL)) {
+				actionResponse.sendRedirect(backURL);
 			}
 		}
 		catch (Exception e) {
@@ -329,13 +391,19 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 				SessionErrors.add(actionRequest, MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
 			}
 			
-			if(Validator.isNotNull(returnURL)) {
-				actionResponse.sendRedirect(returnURL);
+			if(Validator.isNotNull(currentURL)) {
+				actionResponse.sendRedirect(currentURL);
 			}
 		}
 
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
 	public void deleteServiceConfig(ActionRequest actionRequest, ActionResponse actionResponse) 
 					throws PortalException, SystemException {
 		long serviceConfigId = ParamUtil.getLong(actionRequest, 
@@ -371,6 +439,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		        actionRequest,
 		        ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYNAME);
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
 		
 		int serviceMode =
 		    ParamUtil.getInteger(
@@ -400,6 +469,10 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 				    serviceDomainIndex, dossierTemplateId, govAgencyCode,
 				    govAgencyName, serviceMode, String.valueOf(domainCode),
 				    serviceContext.getUserId(), serviceContext);
+			}
+			
+			if(Validator.isNotNull(backURL)) {
+				actionResponse.sendRedirect(backURL);
 			}
 		}
 		catch (Exception e) {
@@ -432,6 +505,20 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 	}
 	
+	/**
+	 * @param serviceConfigId
+	 * @param govAgencyCode
+	 * @param govAgencyName
+	 * @param domainCode
+	 * @param serviceContext
+	 * @param serviceMode
+	 * @throws OutOfLengthServiceConfigGovCodeException
+	 * @throws OutOfLengthServiceConfigGovNameException
+	 * @throws InvalidServiceConfigGovCodeException
+	 * @throws InvalidServiceConfigGovNameException
+	 * @throws InvalidServiceDomainException
+	 * @throws InvalidInWorkingUnitException
+	 */
 	protected void serviceConfigValidate(long serviceConfigId, String govAgencyCode,
 		String govAgencyName, long domainCode, ServiceContext serviceContext, int serviceMode) 
 						throws OutOfLengthServiceConfigGovCodeException,
@@ -477,7 +564,19 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		
 	}
 	
-	protected void dossierPartValidate(long dossierPartId ,String partName, String partNo, double sibling,
+	/**
+	 * @param dossierPartId
+	 * @param partName
+	 * @param partNo
+	 * @param sibling
+	 * @param templateFileNo
+	 * @throws OutOfLengthDossierPartNameException
+	 * @throws OutOfLengthDossierPartNumberException
+	 * @throws OutOfLengthDossierTemplateFileNumberException
+	 * @throws DuplicateDossierPartNumberException
+	 * @throws DuplicateDossierPartSiblingException
+	 */
+	protected void dossierPartValidate(long dossierTemplateId , long dossierPartId ,String partName, String partNo, double sibling,
 		String templateFileNo) throws OutOfLengthDossierPartNameException, 
 		OutOfLengthDossierPartNumberException, OutOfLengthDossierTemplateFileNumberException,
 		DuplicateDossierPartNumberException, DuplicateDossierPartSiblingException {
@@ -487,11 +586,17 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		try {
 	        dossierPartNo = DossierPartLocalServiceUtil
 	        				.getDossierPartByPartNo(partNo);
-	        dossierPartSibling = DossierPartLocalServiceUtil
-	        				.getDossierPartBySibling(sibling);
 		}
         catch (Exception e) {
 	        // nothing to do
+        }
+		
+		try {
+			 dossierPartSibling = DossierPartLocalServiceUtil
+		        				.getDossierPartByT_S(dossierTemplateId, sibling);
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
         }
 		
 		if(partName.length() > PortletPropsValues.DOSSIERMGT_PART_NAME_LENGTH) {
@@ -509,22 +614,30 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		}
 		//update dossier
 		else if(dossierPartId > 0 && Validator.isNotNull(dossierPartNo) 
-						&& Validator.equals(dossierPartNo.getDossierpartId(), dossierPartId)) {
+						&& !Validator.equals(dossierPartNo.getDossierpartId(), dossierPartId)) {
 			throw new DuplicateDossierPartNumberException();
 		}
 		
-		else if(dossierPartId == 0 && Validator.isNotNull(dossierPartSibling)) {
+		else if(dossierPartId == 0 && dossierPartSibling != null) {
 			throw new DuplicateDossierPartSiblingException();
 		}
 		
 		else if (dossierPartId > 0 && Validator.isNotNull(dossierPartSibling) 
-						&& Validator.equals(dossierPartSibling.getDossierpartId(), dossierPartId)) {
+						&& dossierPartSibling.getDossierpartId() != dossierPartId) {
 			throw new DuplicateDossierPartSiblingException();
 		}
 			
 		
 	}
 	
+	/**
+	 * @param dossierTemplateId
+	 * @param templateNo
+	 * @param templateName
+	 * @throws OutOfLengthDossierTemplateNameException
+	 * @throws OutOfLengthDossierTemplateNumberException
+	 * @throws DuplicateDossierTemplateNumberException
+	 */
 	protected void dossierTemplateValidate(
 	    long dossierTemplateId, String templateNo, String templateName)
 	    throws OutOfLengthDossierTemplateNameException,
@@ -555,7 +668,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		// update dossier template
 		else if (dossierTemplateId > 0 &&
 		    dossierTemplate != null &&
-		    Validator.equals(
+		    !Validator.equals(
 		        dossierTemplate.getDossierTemplateId(), dossierTemplateId)) {
 			throw new DuplicateDossierTemplateNumberException();
 		}

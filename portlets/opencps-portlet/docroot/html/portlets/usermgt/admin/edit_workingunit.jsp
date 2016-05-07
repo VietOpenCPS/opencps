@@ -39,16 +39,17 @@
 	long workingUnitId = ParamUtil.getLong(request, 
 		WorkingUnitDisplayTerms.WORKINGUNIT_ID);
 	String [] workingunitSections = null;
-	
-	WorkingUnit workingUnit = null;
-	
+	String isAddChild = StringPool.BLANK;
+	isAddChild	= ParamUtil.getString(request, "isAddChild");
+	WorkingUnit workingUnit = null;	
+
 	try{
 		workingUnit = WorkingUnitLocalServiceUtil.fetchWorkingUnit(workingUnitId);
 	} catch (Exception e) {
 		_log.error(e);
 	}
 	
-	if(workingUnitId == 0) {
+	if(workingUnitId == 0 || isAddChild.equals("isAddChild")) {
 		workingunitSections = new String[2];
 		workingunitSections[0] = "general_workingunit";
 		workingunitSections[1] = "contact_workingunit";
@@ -101,6 +102,7 @@
 <portlet:actionURL var="updateWorkingUnitURL" name="updateWorkingUnit" >
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
 	<portlet:param name="redirectURL" value="<%=redirectURL %>"/>
+	<portlet:param name="isAddChild" value="<%=isAddChild %>"/>
 </portlet:actionURL>
 
 

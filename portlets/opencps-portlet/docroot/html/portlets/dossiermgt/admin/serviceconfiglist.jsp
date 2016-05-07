@@ -1,5 +1,3 @@
-<%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
-<%@page import="org.opencps.processmgt.service.ServiceProcessLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,23 +18,28 @@
 %>
 <%@ include file="../init.jsp"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
+<%@page import="org.opencps.dossiermgt.permissions.ServiceConfigPermission"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearch"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+<%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
+<%@page import="org.opencps.processmgt.service.ServiceProcessLocalServiceUtil"%>
 
 <liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
-
+<c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
+    <liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+</c:if>
 <%
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -65,11 +68,8 @@
 	}
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+	String govAdencyCode = ParamUtil.getString(request, ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE);
 %>
-
-<c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
-	<liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
-</c:if>
 
 <c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
 		<div id="<portlet:namespace/>toolbarResponse"></div>
@@ -82,10 +82,13 @@
 		<%
 			ServiceConfigSearchTerm searchTerm = (ServiceConfigSearchTerm) searchContainer.getSearchTerms();
 			
-			serviceConfigs = ServiceConfigLocalServiceUtil.getAll(
-				searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-									
-			totalCount = ServiceConfigLocalServiceUtil.countAll();
+			serviceConfigs = ServiceConfigLocalServiceUtil.searchServiceConfig(
+				scopeGroupId, searchTerm.getKeywords(), govAdencyCode, 
+				searchTerm.getDomainCode(), searchContainer.getStart(), searchContainer.getEnd());						
+			
+			totalCount = ServiceConfigLocalServiceUtil.countServiceConfig(
+				scopeGroupId, searchTerm.getKeywords(), govAdencyCode, 
+				searchTerm.getDomainCode());
 			
 			total = totalCount;
 			results = serviceConfigs;
@@ -113,7 +116,7 @@
 				process = "<i class=\"opencps-icon removed\"></i>";
 			}
 			
-			row.addText(String.valueOf(row.getPos()) + 1);
+			row.addText(String.valueOf(row.getPos() + 1));
 			row.addText(serviceInfo.getServiceName());
 			row.addText(serviceConfig.getGovAgencyName());
 			row.addText(dossierTemplate.getTemplateName());

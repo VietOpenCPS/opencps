@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<beans
+    default-destroy-method="destroy"
+    default-init-method="afterPropertiesSet"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Listeners -->
+    <bean id="opencps.listener.syncfromfrontoffice" class="org.opencps.backend.sync.SyncFromFrontOffice" />
+    <bean id="opencps.listener.syncfrombackoffice" class="org.opencps.backend.sync.SyncFromBackOffice" />
+
+    <bean id="opencps.listener.backofficeprocessengine" class="org.opencps.backend.engine.BackOfficeProcessEngine" />
+    <bean id="opencps.listener.backofficeprocesscallback" class="org.opencps.backend.engine.BackOfficeProcessCallback" />
+
+    <!-- Destinations -->
+    <bean id="opencps.frontoffice.out.destination" class="com.liferay.portal.kernel.messaging.SerialDestination">
+        <property name="name" value="opencps/frontoffice/out/destination" />
+    </bean>
+
+    <bean id="opencps.backoffice.out.destination" class="com.liferay.portal.kernel.messaging.SerialDestination">
+        <property name="name" value="opencps/backoffice/out/destination" />
+    </bean>
+
+    <bean id="opencps.backoffice.engine.destination" class="com.liferay.portal.kernel.messaging.SerialDestination">
+        <property name="name" value="opencps/backoffice/engine/destination" />
+    </bean>
+
+    <bean id="opencps.backoffice.engine.callback" class="com.liferay.portal.kernel.messaging.SerialDestination">
+        <property name="name" value="opencps/backoffice/engine/callback" />
+    </bean>
+    
+    <!-- Configurator -->
+    <bean id="messagingConfigurator" class="com.liferay.portal.kernel.messaging.config.PluginMessagingConfigurator">
+        <property name="messageListeners">
+            <map key-type="java.lang.String" value-type="java.util.List">
+                <entry key="opencps/frontoffice/out/destination">
+                    <list value-type="com.liferay.portal.kernel.messaging.MessageListener">
+                        <ref bean="opencps.listener.syncfromfrontoffice" />
+                    </list>
+                </entry>
+                <entry key="opencps/backoffice/out/destination">
+                    <list value-type="com.liferay.portal.kernel.messaging.MessageListener">
+                        <ref bean="opencps.listener.syncfrombackoffice" />
+                    </list>
+                </entry>
+                <entry key="opencps/backoffice/engine/destination">
+                    <list value-type="com.liferay.portal.kernel.messaging.MessageListener">
+                        <ref bean="opencps.listener.backofficeprocessengine" />
+                    </list>
+                </entry>
+                <entry key="opencps/backoffice/engine/callback">
+                    <list value-type="com.liferay.portal.kernel.messaging.MessageListener">
+                        <ref bean="opencps.listener.backofficeprocesscallback" />
+                    </list>
+                </entry>
+            </map>
+        </property>
+        <property name="destinations">
+            <list>
+                <ref bean="opencps.frontoffice.out.destination"/>
+                <ref bean="opencps.backoffice.out.destination"/>
+                <ref bean="opencps.backoffice.engine.destination"/>
+                <ref bean="opencps.backoffice.engine.callback"/>
+            </list>
+        </property>
+    </bean>
+</beans>

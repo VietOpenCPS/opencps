@@ -22,6 +22,9 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.search.DictItemDisplayTerms;
+import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.servicemgt.DuplicateFileNameException;
 import org.opencps.servicemgt.DuplicateFileNoException;
 import org.opencps.servicemgt.IOFileUploadException;
@@ -273,6 +276,8 @@ public class ServiceMgtPortlet extends MVCPortlet {
 	    throws PortletException, IOException {
 
 		long serviceinfoId = ParamUtil.getLong(renderRequest, "serviceinfoId");
+		
+		long dictItemId = ParamUtil.getLong(renderRequest, DictItemDisplayTerms.DICTITEM_ID);
 
 		long templatefileId =
 		    ParamUtil.getLong(renderRequest, "templateFileId");
@@ -280,9 +285,16 @@ public class ServiceMgtPortlet extends MVCPortlet {
 		TemplateFile templateFile = null;
 
 		ServiceInfo serviceInfo = null;
+		
+		DictItem dictItem = null;
 
 		try {
-
+			
+			if(dictItemId > 0) {
+				dictItem = DictItemLocalServiceUtil.getDictItem(dictItemId);
+				renderRequest.setAttribute(WebKeys.DICT_ITEM_ENTRY, dictItem);
+			}
+			
 			templateFile =
 			    TemplateFileLocalServiceUtil.fetchTemplateFile(templatefileId);
 

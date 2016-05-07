@@ -1,3 +1,4 @@
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
 <%@page import="org.opencps.processmgt.model.ProcessStep"%>
 <%@page import="org.opencps.processmgt.permissions.ProcessPermission"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
@@ -24,41 +25,28 @@
 
 <%
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	ProcessStep step = (ProcessStep) row.getObject();
+	ProcessWorkflow workflow = (ProcessWorkflow) row.getObject();
+	ServiceProcess serviceProcess  = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
 %> 
 
-<liferay-portlet:renderURL var="editStepURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-	<portlet:param name="mvcPath" value='<%= templatePath + "edit_step.jsp" %>'/>
+<liferay-portlet:renderURL var="editActionURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
+	<portlet:param name="mvcPath" value='<%= templatePath + "edit_action.jsp" %>'/>
+	<portlet:param name="redirectURL" value="<%= currentURL %>"/>
+	<portlet:param name="serviceProcessId" value="<%= Validator.isNotNull(serviceProcess) ? Long.toString(serviceProcess.getServiceProcessId()) : StringPool.BLANK %>"/>
+	<portlet:param name="processWorkflowId" value="<%= Validator.isNotNull(workflow) ? Long.toString(workflow.getProcessWorkflowId()) : StringPool.BLANK %>"/>
 </liferay-portlet:renderURL>
 			
  <liferay-ui:icon-menu>
 	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_PROCESS) %>">
-		<liferay-ui:icon image="edit" onClick="javascript:showDialog():" />
+		<liferay-ui:icon image="edit" url="<%= editActionURL %>" />
  	</c:if>
 
  	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
- 		<portlet:actionURL var="deleteStepURL" name="deleteStep" >
-			<portlet:param name="processStepId" value="<%=String.valueOf(step.getProcessStepId()) %>"/>
+ 		<portlet:actionURL var="deleteActionURL" name="deleteAction" >
+			<portlet:param name="processWorkflowId" value="<%=String.valueOf(workflow.getProcessWorkflowId()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+			<portlet:param name="returnURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteStepURL.toString() %>" />
+		<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteActionURL.toString() %>" />
  	</c:if>
 </liferay-ui:icon-menu> 
-
-<aui:script use="liferay-util-window">
-	Liferay.provide(window, 'showDialog', function(action) {
-		page = '<%=editStepURL%>'
-		Liferay.Util.openWindow({
-			dialog: {
-				cache: false,
-				centered: true,
-				modal: true,
-				resizable: false,
-				width: 1000
-			},
-			id: 'addstep',
-			title: 'adding-process-step',
-			uri: page
-		});
-	});
-</aui:script>

@@ -17,12 +17,15 @@
 
 package org.opencps.processmgt.service.impl;
 
+import java.util.List;
+
 import org.opencps.processmgt.model.ProcessStepDossierPart;
 import org.opencps.processmgt.service.base.ProcessStepDossierPartLocalServiceBaseImpl;
 import org.opencps.processmgt.service.persistence.ProcessStepDossierPartPK;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the process step dossier part local service.
@@ -47,6 +50,31 @@ public class ProcessStepDossierPartLocalServiceImpl
 	 */
 	
 	/**
+	 * @param list
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public void removeStepDossier(List<ProcessStepDossierPart> list)
+	    throws PortalException, SystemException {
+		
+		for (ProcessStepDossierPart processStepDossier : list) {
+			processStepDossierPartPersistence.remove(processStepDossier);
+		}
+	}
+	
+	/**
+	 * @param processStepId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<ProcessStepDossierPart> getByStep(long processStepId)
+	    throws PortalException, SystemException {
+
+		return processStepDossierPartPersistence.findByProcessStepId(processStepId);
+	}
+	
+	/**
 	 * Add ProcessServiceDossierPart
 	 * 
 	 * @param processStepId
@@ -62,8 +90,11 @@ public class ProcessStepDossierPartLocalServiceImpl
 		
 		ProcessStepDossierPartPK pk = new ProcessStepDossierPartPK(processStepId, dossierPartId);
 		
-		psdp = processStepDossierPartPersistence.create(pk);
+		psdp = processStepDossierPartPersistence.fetchByPrimaryKey(pk);
 		
+		if (Validator.isNull(psdp)) {
+			psdp = processStepDossierPartPersistence.create(pk);
+		}
 		
 		processStepDossierPartPersistence.update(psdp);
 		

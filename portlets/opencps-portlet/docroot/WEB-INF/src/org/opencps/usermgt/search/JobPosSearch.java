@@ -39,6 +39,7 @@ public class JobPosSearch extends SearchContainer<JobPos> {
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
+		headerNames.add("row-index");
 		headerNames.add("title");
 		headerNames.add("leader");
 		headerNames.add("action");

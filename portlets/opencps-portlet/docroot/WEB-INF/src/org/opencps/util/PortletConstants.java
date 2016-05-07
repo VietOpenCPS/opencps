@@ -77,4 +77,55 @@ public class PortletConstants {
 		}
 	}
 
+	public static final int DOSSIER_PART_TYPE_SUBMIT = 1;
+	public static final int DOSSIER_PART_TYPE_OTHER = 2;
+	public static final int DOSSIER_PART_TYPE_OPTION = 3;
+	public static final int DOSSIER_PART_TYPE_PRIVATE = 4;
+	public static final int DOSSIER_PART_TYPE_RESULT = 5;
+	
+	public static final int DOSSIER_FILE_SYNC_STATUS_NOSYNC = 0;
+	public static final int DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC = 1;
+	public static final int DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS = 2;
+	public static final int DOSSIER_FILE_SYNC_STATUS_SYNCERROR = 3;
+	
+	public static final int DOSSIER_FILE_TYPE_INPUT = 1;
+	public static final int DOSSIER_FILE_TYPE_OUTPUT = 2;
+	
+	public static final int DOSSIER_FILE_MARK_UNKNOW = 0;
+	public static final int DOSSIER_FILE_MARK_ORIGINAL = 1;
+	public static final int DOSSIER_FILE_MARK_NOTARIZED = 2;
+	public static final int DOSSIER_FILE_MARK_SCAN = 3;
+	
+	public static final int DOSSIER_FILE_ORIGINAL = 0;
+	public static final int DOSSIER_FILE_DOSSIERRESULT = 1;
+	
+	public static final int DOSSIER_FILE_REMOVED = 1;
+	
+	public static final int DOSSIER_STATUS_NEW = 0;
+	public static final int DOSSIER_STATUS_RECEIVING = 1;
+	public static final int DOSSIER_STATUS_WAITING = 2;
+	public static final int DOSSIER_STATUS_PAYING = 3;
+	public static final int DOSSIER_STATUS_DENIED = 4;
+	public static final int DOSSIER_STATUS_RECEIVED = 5;
+	public static final int DOSSIER_STATUS_PROCESSING = 6;
+	public static final int DOSSIER_STATUS_CANCELED = 7;
+	public static final int DOSSIER_STATUS_DONE = 8;
+	public static final int DOSSIER_STATUS_ARCHIVED = 9;
+	public static final int DOSSIER_STATUS_SYSTEM = 10;
+	public static final int DOSSIER_STATUS_ERROR = 11;
+	
+	public static final int DOSSIER_LOG_NORMAL = 0;
+	public static final int DOSSIER_LOG_WARNING = 2;
+	public static final int DOSSIER_LOG_ERROR = 3;
+	
+	public static final int DOSSIER_SOURCE_DIRECT = 0;
+	public static final int DOSSIER_SOURCE_INDIRECT = 1;
+	
+	public static enum AlpacaArguments{
+		data,schema,options,view,render,postRender,error,connector;
+	}
+	
+	public static final String TEMP_RANDOM_SUFFIX = "--tempRandomSuffix--";
+	
+	public static final String UNKNOW_ALPACA_SCHEMA = "{\"schema\": {\"title\":\"No Dynamic Form\",\"description\":\"Can not load alpaca scheme\",\"type\":\"object\"}}";
 }

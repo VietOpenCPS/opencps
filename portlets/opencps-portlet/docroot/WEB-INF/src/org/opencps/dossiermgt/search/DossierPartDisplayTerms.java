@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 
 public class DossierPartDisplayTerms extends DisplayTerms{
-	
+	public static final String DOSSIERPART_FORMREPORT = "formReport";
 	public static final String DOSSIERPART_DOSSIERPARTID = "dossierpartId";
 	public static final String DOSSIERPART_DOSSIERTEMPLATEID = "dossierTemplateId";
 	public static final String DOSSIERPART_PARENTID = "parentId";
@@ -52,6 +52,7 @@ public class DossierPartDisplayTerms extends DisplayTerms{
 	    formScript = ParamUtil.getString(portletRequest, DOSSIERPART_FORMSCRIPT);
 	    sampleData = ParamUtil.getString(portletRequest, DOSSIERPART_SAMPLEDATA);
 	    templateFileNo = ParamUtil.getString(portletRequest, DOSSIERPART_TEMPLATEFILENO);
+	    formReport = ParamUtil.getString(portletRequest, DOSSIERPART_FORMREPORT);
 	    
 	    required = ParamUtil.getBoolean(portletRequest, DOSSIERPART_REQUIRED);
 	    
@@ -188,6 +189,17 @@ public class DossierPartDisplayTerms extends DisplayTerms{
     
     	this.sibling = sibling;
     }
+    
+    public String getFormReport() {
+        
+    	return formReport;
+    }
+
+	
+    public void setFormReport(String formReport) {
+    
+    	this.formReport = formReport;
+    }
 	protected long dossierpartId;
 	protected long dossierTemplateId;
 	protected long parentId;
@@ -200,6 +212,7 @@ public class DossierPartDisplayTerms extends DisplayTerms{
 	protected String formScript;
 	protected String sampleData;
 	protected String templateFileNo;
+	protected String formReport;
 	
 	protected boolean required;
 	

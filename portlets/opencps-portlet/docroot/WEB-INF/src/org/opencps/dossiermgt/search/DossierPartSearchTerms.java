@@ -37,6 +37,7 @@ public class DossierPartSearchTerms extends DossierPartDisplayTerms{
 	    formScript = ParamUtil.getString(portletRequest, DOSSIERPART_FORMSCRIPT);
 	    sampleData = ParamUtil.getString(portletRequest, DOSSIERPART_SAMPLEDATA);
 	    templateFileNo = ParamUtil.getString(portletRequest, DOSSIERPART_TEMPLATEFILENO);
+	    formReport = ParamUtil.getString(portletRequest, DOSSIERPART_FORMREPORT);
 	    
 	    required = ParamUtil.getBoolean(portletRequest, DOSSIERPART_REQUIRED);
 	    
@@ -173,8 +174,16 @@ public class DossierPartSearchTerms extends DossierPartDisplayTerms{
     
     	this.sibling = sibling;
     }
-
-
+	
+    public String getFormReport() {
+    
+    	return formReport;
+    }
+	
+    public void setFormReport(String formReport) {
+    
+    	this.formReport = formReport;
+    }
 
 	protected long dossierpartId;
 	protected long dossierTemplateId;
@@ -187,7 +196,7 @@ public class DossierPartSearchTerms extends DossierPartDisplayTerms{
 	protected String formScript;
 	protected String sampleData;
 	protected String templateFileNo;
-	
+	protected String formReport;
 	protected boolean required;
 	
 	protected int partType;  

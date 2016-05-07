@@ -17,4 +17,22 @@
  */
 %>
 
-service
+<%@ include file="../../init.jsp" %>
+
+<%
+	ServiceProcess serviceProcess = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
+
+%>
+
+<liferay-portlet:renderURL var="editServiceURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
+	<portlet:param name="mvcPath" value='<%= templatePath + "edit_service.jsp" %>'/>
+	<portlet:param name="serviceProcessId" value="<%= Validator.isNotNull(serviceProcess) ? Long.toString(serviceProcess.getServiceProcessId()) : StringPool.BLANK %>"/>
+</liferay-portlet:renderURL>
+
+<aui:button-row>
+	<aui:button name="addAction" href="<%= editServiceURL %>" value="add-service" ></aui:button>
+</aui:button-row>
+
+<portlet:actionURL name="sendMessage" var="sendMessagenURL"/>
+
+

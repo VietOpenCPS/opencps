@@ -18,7 +18,6 @@
 package org.opencps.usermgt.permissions;
 
 import org.opencps.usermgt.model.JobPos;
-import org.opencps.usermgt.model.WorkingUnit;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -50,7 +49,7 @@ public class JobPosPermission {
 		throws PortalException, SystemException {
 
 		return permissionChecker.hasPermission(
-			jobPos.getGroupId(), WorkingUnit.class.getName(),
+			jobPos.getGroupId(), JobPos.class.getName(),
 			jobPos.getPrimaryKey(), actionId);
 	}
 
@@ -58,6 +57,6 @@ public class JobPosPermission {
 		PermissionChecker permissionChecker, long groupId, String actionId) {
 
 		return permissionChecker.hasPermission(
-			groupId, WorkingUnit.class.getName(), groupId, actionId);
+			groupId, JobPos.class.getName(), groupId, actionId);
 	}
 }

@@ -45,7 +45,7 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 	
 	public DossierPart addDossierPart(long dossierTemplateId,String partNo,
 		String partName, String partTip, int partType, long parentId, double sibling,
-		String formScript, String sampleData, boolean required,
+		String formScript,String formReport, String sampleData, boolean required,
 		String templateFileNo, long userId, ServiceContext serviceContext) throws SystemException, NoSuchDossierPartException {
 		
 		long dossierPartId = CounterLocalServiceUtil.increment(DossierPart.class.getName());
@@ -69,6 +69,7 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 		dossierPart.setParentId(parentId);
 		dossierPart.setSibling(sibling);
 		dossierPart.setFormScript(formScript);
+		dossierPart.setFormReport(formReport);
 		dossierPart.setSampleData(sampleData);
 		dossierPart.setRequired(required);
 		dossierPart.setTemplateFileNo(templateFileNo);
@@ -79,10 +80,18 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 	
 	public DossierPart updateDossierPart(long dossierPartId ,long dossierTemplateId,
 		String partNo, String partName, String partTip, int partType, long parentId, double sibling,
-		String formScript, String sampleData, boolean required,
+		String formScript,String formReport, String sampleData, boolean required,
 		String templateFileNo, long userId, ServiceContext serviceContext) throws SystemException {
 		
 		DossierPart dossierPart = dossierPartPersistence.fetchByPrimaryKey(dossierPartId);
+		
+		Date currentDate = new Date();
+		
+		dossierPart.setUserId(userId);
+		dossierPart.setCompanyId(serviceContext.getCompanyId());
+		dossierPart.setGroupId(serviceContext.getScopeGroupId());
+		dossierPart.setCreateDate(currentDate);
+		dossierPart.setModifiedDate(currentDate);
 		
 		dossierPart.setDossierTemplateId(dossierTemplateId);
 		dossierPart.setPartName(partName);
@@ -92,6 +101,7 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 		dossierPart.setParentId(parentId);
 		dossierPart.setSibling(sibling);
 		dossierPart.setFormScript(formScript);
+		dossierPart.setFormReport(formReport);
 		dossierPart.setSampleData(sampleData);
 		dossierPart.setRequired(required);
 		dossierPart.setTemplateFileNo(templateFileNo);
@@ -156,8 +166,17 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 		return dossierPartPersistence.findByPartNo(partNo);
 	}
 	
-	public DossierPart getDossierPartBySibling(Double sibling)
+	public List<DossierPart> getDossierPartsByT_P(long dossierTemplateId,
+		long parentId) throws SystemException {
+		return dossierPartPersistence.findByT_P(dossierTemplateId, parentId);
+	}
+	
+	public DossierPart getDossierPartByT_S(long dossierTemplateId , Double sibling)
 					throws NoSuchDossierPartException, SystemException {
-		return dossierPartPersistence.findBySibling(sibling);
+		return dossierPartPersistence.findByT_S(dossierTemplateId, sibling);
+	}
+	public List<DossierPart> getDossierPartsByT_T( 
+		long dossierTemplateId, int partType) throws SystemException {
+		return dossierPartPersistence.findByT_T(dossierTemplateId, partType);
 	}
 }

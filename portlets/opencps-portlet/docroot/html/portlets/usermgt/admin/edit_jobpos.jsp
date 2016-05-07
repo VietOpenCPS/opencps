@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.usermgt.service.JobPosLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,6 +19,7 @@
 %>
 <%@ include file="../init.jsp"%>
 <%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
+<%@page import="org.opencps.usermgt.service.JobPosLocalServiceUtil"%>
 <%@page import="org.opencps.usermgt.search.JobPosDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.util.MessageKeys"%>

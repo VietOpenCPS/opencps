@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.permissions.DossierTemplatePermission"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -25,7 +26,6 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierTemplatePermission"%>
 <%@page import="org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateSearchTerms"%>
 
@@ -62,15 +62,12 @@
 	<liferay-ui:search-container-results>
 		<%
 			DossierTemplateSearchTerms searchTerms = (DossierTemplateSearchTerms) searchContainer.getSearchTerms();
-			if(!Validator.isNotNull(searchTerms.getKeywords()) || searchTerms.getKeywords().equals("")) {
 				dossierTemplates = DossierTemplateLocalServiceUtil
-								.getDossierTemplates(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-				totalCount = DossierTemplateLocalServiceUtil.countAll();
-			} else {
-				dossierTemplates = DossierTemplateLocalServiceUtil
-								.getDossierTemplates(searchTerms.getKeywords());
-				totalCount = dossierTemplates.size();
-				}
+								.getDossierTemplates(searchTerms.getKeywords(),
+									searchContainer.getStart(), searchContainer.getEnd(), 
+									searchContainer.getOrderByComparator());
+				totalCount = DossierTemplateLocalServiceUtil
+								.countDossierTemplatesByName(searchTerms.getKeywords());
 			
 			total = totalCount;
 			results = dossierTemplates;
