@@ -280,7 +280,7 @@
             <finder-column name="dossierId"></finder-column>
         </finder>
         
-         <finder name="F_Level_Warring_Error" where=" (level == 1 OR level == 2) " return-type="Collection">
+         <finder name="F_Level_Warring_Error" where=" (level = 1 OR level = 2) " return-type="Collection">
          	<finder-column name="groupId"></finder-column>
         </finder>
         <finder name="F_Level_All" return-type="Collection">
