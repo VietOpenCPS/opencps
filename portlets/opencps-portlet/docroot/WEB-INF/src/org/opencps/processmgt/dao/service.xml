@@ -269,6 +269,16 @@
 		<column name="actionUserId" type="long"/>
 		<column name="daysDoing" type="int"/>
 		<column name="daysDelay" type="int"/>
+		
+		<order by="asc">
+			<order-column name="actionHistoryId"/>
+		</order>
+		
+		<finder return-type="Collection" name="F_ProcessOrderId">
+			<finder-column name="groupId"/>
+			<finder-column name="processOrderId"/>
+		</finder>
+		
 	</entity>
 
 	<exceptions>

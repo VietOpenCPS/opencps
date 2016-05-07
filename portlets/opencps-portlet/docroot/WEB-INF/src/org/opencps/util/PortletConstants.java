@@ -128,4 +128,6 @@ public class PortletConstants {
 	public static final String TEMP_RANDOM_SUFFIX = "--tempRandomSuffix--";
 	
 	public static final String UNKNOW_ALPACA_SCHEMA = "{\"schema\": {\"title\":\"No Dynamic Form\",\"description\":\"Can not load alpaca scheme\",\"type\":\"object\"}}";
+
+	public static final int DICTITEM_CO_QUAN_QUAN_LY_TTHC = 101;
 }

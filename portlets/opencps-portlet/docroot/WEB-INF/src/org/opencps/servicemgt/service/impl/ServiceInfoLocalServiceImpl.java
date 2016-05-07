@@ -397,5 +397,10 @@ public class ServiceInfoLocalServiceImpl
 			return 0;
 		}
 	}
+	
+	public List<ServiceInfo> findByGroupId(long groupId) throws SystemException {
+		return serviceInfoPersistence.findByGroupId(groupId);
+	    
+    }
 
 }

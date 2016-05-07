@@ -969,5 +969,31 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierPersistence.fetchByF_ReceptionNo(groupId, receptionNo);
 	    
     }
+	
+	public int countDossierLikeAll(long groupId, String keywords) throws SystemException {
 
+		return dossierFinder
+		    .countDossierLikeAll(groupId, keywords);
+	}
+
+	public List<Dossier> searchDossierLikeAll(
+	    long groupId, String keywords, int start, int end,
+	    OrderByComparator obc) throws SystemException {
+
+		return dossierFinder
+		    .searchDossierLikeAll(groupId, keywords, start, end, obc);
+	}
+	public int countDossierMonitoringNewUpdate(long groupId, String serviceName, String govAgencyCode, String dossierStatus) throws SystemException {
+
+		return dossierFinder
+		    .countDossierMonitoringNewUpdate(groupId, serviceName, govAgencyCode, dossierStatus);
+	}
+
+	public List<Dossier> searchDossierMonitoringNewUpdate(
+	    long groupId, String serviceName, String govAgencyCode, String dossierStatus, int start, int end,
+	    OrderByComparator obc) throws SystemException {
+
+		return dossierFinder
+		    .searchDossierMonitoringNewUpdate(groupId, serviceName, govAgencyCode, dossierStatus, start, end, obc);
+	}
 }

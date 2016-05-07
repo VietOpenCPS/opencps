@@ -17,7 +17,12 @@
 
 package org.opencps.processmgt.service.impl;
 
+import java.util.List;
+
+import org.opencps.processmgt.model.ActionHistory;
 import org.opencps.processmgt.service.base.ActionHistoryLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the action history local service.
@@ -40,4 +45,7 @@ public class ActionHistoryLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.ActionHistoryLocalServiceUtil} to access the action history local service.
 	 */
+	public List<ActionHistory> findByF_ProcessOrderId(long groupId, long processOrderId) throws SystemException {
+		return actionHistoryPersistence.findByF_ProcessOrderId(groupId, processOrderId);
+    }
 }

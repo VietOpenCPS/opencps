@@ -28,6 +28,7 @@ import javax.portlet.PortletURL;
 import org.opencps.datamgt.util.DataMgtUtil;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.util.DateTimeUtil;
+import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
@@ -125,6 +126,58 @@ public class DossierSearch extends SearchContainer<Dossier> {
 		    portletRequest, DEFAULT_DELTA, iteratorURL);
 	}
 
+	public DossierSearch(
+	    PortletRequest portletRequest, int delta, PortletURL iteratorURL, List<String> headerNamesMonitoring, Map<String, String> orderableHeaders) {
+		
+		super(
+		    portletRequest, new DossierDisplayTerms(
+		        portletRequest), new DossierSearchTerms(
+		            portletRequest), DEFAULT_CUR_PARAM, delta, iteratorURL, 
+		            headerNamesMonitoring, EMPTY_RESULTS_MESSAGE);
+
+		DossierDisplayTerms displayTerms =
+		    (DossierDisplayTerms) getDisplayTerms();
+		
+		iteratorURL
+		    .setParameter(DossierDisplayTerms.GOVAGENCY_NAME, displayTerms
+		        .getGovAgencyName());
+		iteratorURL
+		    .setParameter(DossierDisplayTerms.DOSSIER_STATUS, String.valueOf(displayTerms
+		        .getDossierStatus()));
+
+		iteratorURL
+		    .setParameter(DossierDisplayTerms.GROUP_ID, String
+		        .valueOf(displayTerms
+		            .getGroupId()));
+		iteratorURL
+		    .setParameter(DossierDisplayTerms.CREATE_DATE, DateTimeUtil
+		        .convertDateToString(displayTerms
+		            .getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		iteratorURL
+		    .setParameter(DossierDisplayTerms.RECEIVE_DATETIME, DateTimeUtil
+		        .convertDateToString(displayTerms
+		            .getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		
+		try {
+
+			String orderByCol = ParamUtil
+			    .getString(portletRequest, "orderByCol");
+			String orderByType = ParamUtil
+			    .getString(portletRequest, "orderByType");
+
+			OrderByComparator orderByComparator = DataMgtUtil
+			    .getDictCollectionOrderByComparator(orderByCol, orderByType);
+
+			setOrderableHeaders(orderableHeaders);
+			setOrderByCol(orderByCol);
+			setOrderByType(orderByType);
+			setOrderByComparator(orderByComparator);
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+	}
 	private static Log _log = LogFactoryUtil
 	    .getLog(DossierSearch.class);
 
