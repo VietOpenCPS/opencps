@@ -1,7 +1,3 @@
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -27,17 +23,21 @@
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
+<%@page import="org.opencps.dossiermgt.permissions.ServiceConfigPermission"%>
+<%@page import="org.opencps.dossiermgt.permissions.DossierPartPermission"%>
+<%@page import="org.opencps.dossiermgt.permissions.DossierTemplatePermission"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierTemplatePermission"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -47,6 +47,7 @@
 	Long dossierTemplateId = (Long) session.getAttribute(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
 	DictCollection dictCollectionServiceAdmin = null;
 	List<DictItem> dictItemsServiceAdmin = new ArrayList<DictItem>();
+	String currURL = ParamUtil.getString(request, "currURL");
 	try {
 		dictCollectionServiceAdmin = DictCollectionLocalServiceUtil
 	                    .getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
@@ -74,7 +75,7 @@
 				
 				<portlet:renderURL var="editDossierTemplateURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier.jsp" %>'/>
-					<portlet:param name="redirectURL" value="<%=currentURL %>"/> 
+					<portlet:param name="backURL" value="<%=currentURL %>"/> 
 				</portlet:renderURL>
 				
 				<c:if 
@@ -96,7 +97,7 @@
 				%>
 				<portlet:renderURL var="editDossierPartURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier_part.jsp" %>'/>
-					<portlet:param name="redirectURL" value="<%=currentURL %>"/> 
+					<portlet:param name="partListURL" value="<%=currURL %>"/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/> 
 					<portlet:param name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" value="<%=String.valueOf(dossierTemplateId) %>"/>
 				</portlet:renderURL>
@@ -128,7 +129,6 @@
 				
 				</portlet:renderURL>
 				
-				<aui:row>
 					<c:if test="<%= ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
 						<aui:nav-item 
 							id="addServiceConfig" 
@@ -137,7 +137,6 @@
 							href="<%=editServiceConfigURL %>"
 						/>
 					</c:if>
-				</aui:row>
 			</c:when>
 		</c:choose>
 	</aui:nav>
@@ -167,7 +166,8 @@
 						</c:when>
 						<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
 							<aui:row>
-									<aui:col width="25">
+									<aui:col width="30">
+
 										<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>">
 										  
 										  <aui:option value="<%=StringPool.BLANK %>">
@@ -185,7 +185,8 @@
 										  %>
 										</aui:select>
 									</aui:col>
-									<aui:col width="25">
+									<aui:col width="30">
+
 										<datamgt:ddr cssClass="input30"
 											depthLevel="1" 
 											dictCollectionCode="SERVICE_DOMAIN"

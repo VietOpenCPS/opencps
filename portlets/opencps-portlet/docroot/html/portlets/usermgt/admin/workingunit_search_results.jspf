@@ -17,14 +17,21 @@
  */
 %>
 
-<%
-			WorkingUnitSearchTerms searchTerms = (WorkingUnitSearchTerms) searchContainer.getSearchTerms();
-			
-			workingUnits = WorkingUnitLocalServiceUtil.getWorkingUnit(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-			
-			totalCount = WorkingUnitLocalServiceUtil.countAll();
-			total = totalCount;
-			results = workingUnits;
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
+ <%
+            WorkingUnitSearchTerms searchTerms = (WorkingUnitSearchTerms) searchContainer.getSearchTerms();
+            if(Validator.isNotNull(isEmployeeRequest) && !isEmployeeRequest.equals("fillall")) {
+                workingUnits = WorkingUnitLocalServiceUtil
+                                .getWorkingUnit(scopeGroupId, isEmployee, 
+                                    searchContainer.getStart(), searchContainer.getEnd(),
+                                    searchContainer.getOrderByComparator());
+                totalCount = WorkingUnitLocalServiceUtil.countByG_E(scopeGroupId, isEmployee);
+            } else {
+                 workingUnits = WorkingUnitLocalServiceUtil.getWorkingUnit(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+                 totalCount = WorkingUnitLocalServiceUtil.countAll();
+            }
+            total = totalCount;
+            results = workingUnits;
+            pageContext.setAttribute("results", results);
+            pageContext.setAttribute("total", total);
+
+%>

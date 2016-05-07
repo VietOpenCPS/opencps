@@ -1,4 +1,3 @@
-<%@page import="org.opencps.dossiermgt.model.impl.DossierImpl"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,6 +29,8 @@
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="javax.portlet.PortletURL"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
 <%@page import="java.util.List"%>
 <%@ include file="../init.jsp"%>
 
@@ -43,6 +44,7 @@
 	
 	List<Dossier> dossiers =  new ArrayList<Dossier>();
 	
+	int totalCount = 0;
 %>
 
 
@@ -52,12 +54,8 @@
 		<%
 			DossierSearchTerms searchTerms = (DossierSearchTerms)searchContainer.getSearchTerms();
 			
-			String[] itemNames = null;
-			
-			if(Validator.isNotNull(searchTerms.getKeywords())){
-				itemNames = CustomSQLUtil.keywords(searchTerms.getKeywords());
-			}
-			
+			int dossierStatus = searchTerms.getDossierStatus();
+
 			try{
 				
 				%>
@@ -67,7 +65,7 @@
 				_log.error(e);
 			}
 		
-			total = dossiers.size();
+			total = totalCount;
 			results = dossiers;
 			
 			pageContext.setAttribute("results", results);
@@ -86,7 +84,7 @@
 				row.addText(DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
 				row.addText(String.valueOf(dossier.getSubjectId()));
 				row.addText(dossier.getGovAgencyName());
-				row.addText(String.valueOf(dossier.getDossierStatus()));
+				row.addText(PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale));
 				row.addText(DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
 				
 				row.addText(dossier.getReceptionNo());

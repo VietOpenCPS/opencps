@@ -3,4 +3,8 @@ encoding//docroot/WEB-INF/src/content/Language_12_vi.properties=UTF-8
 encoding//docroot/WEB-INF/src/content/Language_5_vi.properties=UTF-8
 encoding//docroot/WEB-INF/src/content/Language_6_vi.properties=UTF-8
 encoding//docroot/WEB-INF/src/content/Language_8_vi.properties=UTF-8
+<<<<<<< HEAD
 encoding//docroot/html/portlets/processmgt/ordermenu/processordermenu.jsp=UTF-8
+=======
+encoding//docroot/html/portlets/dossiermgt/frontoffice/dossier/dossier_part.jsp=UTF-8
+>>>>>>> refs/remotes/origin/feature-all

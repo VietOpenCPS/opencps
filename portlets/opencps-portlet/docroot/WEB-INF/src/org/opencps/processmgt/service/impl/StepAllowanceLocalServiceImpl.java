@@ -1,17 +1,4 @@
 /**
-<<<<<<< HEAD
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
-=======
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
  * 
@@ -26,14 +13,12 @@
  * GNU Affero General Public License for more details.
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
->>>>>>> FETCH_HEAD
  */
 
 package org.opencps.processmgt.service.impl;
 
 import java.util.List;
 
-import org.opencps.processmgt.service.base.StepAllowanceLocalServiceBaseImpl;
 import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.service.base.StepAllowanceLocalServiceBaseImpl;
 
@@ -63,6 +48,54 @@ public class StepAllowanceLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.StepAllowanceLocalServiceUtil} to access the step allowance local service.
 	 */
+	
+	/**
+	 * Remove StepAllowance
+	 * 
+	 * @param removeListStepAllowance
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public void removeProcessStepByProcessId(
+	    List<StepAllowance> removeListStepAllowance)
+	    throws PortalException, SystemException {
+
+		for (StepAllowance step : removeListStepAllowance) {
+			stepAllowancePersistence.remove(step);
+		}
+	}
+	
+	/**
+	 * Remove Step by Process
+	 * 
+	 * @param processStepId
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public void removeProcessStepByProcessId(long processStepId)
+	    throws PortalException, SystemException {
+		
+		List<StepAllowance> stepAllowances = stepAllowancePersistence.findByprocessStepId(processStepId);
+		
+		for (StepAllowance step : stepAllowances) {
+			stepAllowancePersistence.remove(step);
+		}
+
+	}
+	
+	/**
+	 * Get by ProcessStepId
+	 * 
+	 * @param processStepId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<StepAllowance> getByProcessStep(long processStepId)
+	    throws PortalException, SystemException {
+
+		return stepAllowancePersistence.findByprocessStepId(processStepId);
+	}
 	
 	/**
 	 * Add StepAllowance
@@ -97,8 +130,31 @@ public class StepAllowanceLocalServiceImpl
 		
 	}
 	
-	public List<StepAllowance> findByRoleIds(long[] roleIds) throws SystemException {
-		return stepAllowancePersistence.findByRoleIds(roleIds);
-	    
-    }
+	/**
+	 * @param stepAllowanceId
+	 * @param roleId
+	 * @param readOnly
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public StepAllowance updateAllowance(
+	    long stepAllowanceId, long roleId, boolean readOnly)
+	    throws PortalException, SystemException {
+
+		StepAllowance stepAllowance =
+		    stepAllowancePersistence.fetchByPrimaryKey(stepAllowanceId);
+
+		if (Validator.isNotNull(stepAllowance)) {
+
+			stepAllowance.setRoleId(roleId);
+			stepAllowance.setReadOnly(readOnly);
+
+			stepAllowancePersistence.update(stepAllowance);
+		}
+
+		return stepAllowance;
+
+	}
+	
 }

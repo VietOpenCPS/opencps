@@ -24,8 +24,8 @@
 <%
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
+	String backURL = ParamUtil.getString(request, "redirectURL");
 %>
-
 <aui:model-context bean="<%=dossierTemplate%>" model="<%=DossierTemplate.class%>" />
 <aui:input 
 	type="hidden" 
@@ -59,6 +59,5 @@
 		name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DESCRIPTION %>"
 		cssClass="input95"
 	>
-		<aui:validator name="required" />
 	</aui:input>
 </aui:row>

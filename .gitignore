@@ -123,6 +123,8 @@ hooks/opencps-hook/.settings/org.eclipse.wst.common.component
 hooks/opencps-hook/.settings/org.eclipse.wst.common.project.facet.core.prefs.xml
 hooks/opencps-hook/.settings/org.eclipse.wst.common.project.facet.core.xml
 
+portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
+
 hooks/opencps-hook/docroot/WEB-INF/classes/content/Language.properties
 hooks/opencps-hook/docroot/WEB-INF/classes/content/Language_vi.properties
 
@@ -195,6 +197,10 @@ hooks/opencps-hook/docroot/WEB-INF/classes/.gitignore
 
 portlets/opencps-sample-portlet/
 
-
 portlets/opencps-portlet/docroot/WEB-INF/tld/.gitignore
+
+portlets/message-portlet/
+
+portlets/LiferayBulkMailSender-portlet/
+portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
 

@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,11 +24,15 @@
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 
 <%@ include file="../init.jsp"%>
 
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+	PortletURL searchURL = renderResponse.createRenderURL();
 %>
 
 <aui:nav-bar cssClass="custom-toolbar">
@@ -49,7 +54,36 @@
 	
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
-			
+			<aui:form action="<%= searchURL %>" method="post" name="fm">
+				<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
+					<%
+						searchURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
+						searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+					%>
+					<aui:row>
+						<aui:col width="50">
+							<aui:select name="dossierStatus" label="" inlineField="<%=true %>" inlineLabel="left">
+								<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
+								<%
+									for(Integer status : PortletUtil.getDossierStatus()){
+										%>
+											<aui:option value="<%= status%>"><%=PortletUtil.getDossierStatusLabel(status, locale) %></aui:option>
+										<%
+									}
+								%>
+							</aui:select>
+						</aui:col>
+						<aui:col width="50">
+							<liferay-ui:input-search 
+								id="keywords1"
+								name="keywords"
+								title="keywords"
+								placeholder='<%= LanguageUtil.get(locale, "keywords") %>' 
+							/>
+						</aui:col>
+					</aui:row>
+				</c:if>
+			</aui:form>
 		</div>
 	</aui:nav-bar-search>
 </aui:nav-bar>

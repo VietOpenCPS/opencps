@@ -201,7 +201,7 @@ public class WorkingUnitLocalServiceImpl
 
 	public void deleteWorkingUnitByWorkingUnitId(long workingUnitId)
 			throws NoSuchWorkingUnitException, SystemException {
-
+		_log.info("workingUnitId " + workingUnitId);
 		List<Employee> employees = employeePersistence
 				.findByWorkingUnitId(workingUnitId);
 		List<JobPos> jobPos = jobPosPersistence
@@ -211,7 +211,7 @@ public class WorkingUnitLocalServiceImpl
 					.findByPrimaryKey(workingUnitId);
 			try {
 				if (OrganizationLocalServiceUtil
-						.getParentOrganizations(unit.getMappingOrganisationId())
+						.getOrganizations(unit.getCompanyId(), unit.getMappingOrganisationId())
 						.isEmpty()) {
 					OrganizationLocalServiceUtil.deleteOrganization(
 							unit.getMappingOrganisationId());
@@ -252,7 +252,6 @@ public class WorkingUnitLocalServiceImpl
 
 		return workingUnitPersistence.findByG_E_P(groupId, isEmployee,
 				parentWorkingUnitId);
-
 	}
 	public List<WorkingUnit> getWorkingUnit(int start, int end,
 			OrderByComparator odc) throws SystemException {
@@ -264,6 +263,17 @@ public class WorkingUnitLocalServiceImpl
 			throws SystemException {
 
 		return workingUnitPersistence.findByG_E(groupId, isEmployee);
+	}
+	
+	public List<WorkingUnit> getWorkingUnit(long groupId, boolean isEmployee, int start,
+		int end, OrderByComparator orderByComparator)
+					throws SystemException {
+
+				return workingUnitPersistence.findByG_E(groupId, 
+					isEmployee, start, end, orderByComparator);
+			}
+	public int countByG_E(long groupId, boolean isEmployee) throws SystemException {
+		return workingUnitPersistence.countByG_E(groupId, isEmployee);
 	}
 
 	public List<WorkingUnit> getWorkingUnits(long groupId,

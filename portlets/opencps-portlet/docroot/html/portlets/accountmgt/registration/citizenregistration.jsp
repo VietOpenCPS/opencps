@@ -1,3 +1,4 @@
+<%@page import="com.liferay.util.Normalizer"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -124,7 +125,7 @@
 		page="/html/portlets/accountmgt/registration/citizen/general_info.jsp" 
 		servletContext="<%=application %>" 
 	/> 
-	
+
 	<liferay-util:include 
 		page="/html/portlets/accountmgt/registration/citizen/contact.jsp" 
 		servletContext="<%=application %>" 

@@ -1,8 +1,9 @@
-<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
-<%@page import="org.opencps.processmgt.search.ProcessOrderSearch"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
-<%@ include file="../init.jsp"%>
-
+<%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,93 +20,74 @@
  * GNU Affero General Public License for more details.
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
- **/
+ */
 %>
+<%@ include file="../init.jsp"%>
 
-<liferay-util:include page="<%=templatePath + \"toptabs.jsp\" %>" servletContext="<%=application %>" />
+
+<liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
+<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <%
-
-	List<ProcessStep> processSteps = ProcessOrderUtils.getProcessSteps(themeDisplay.getScopeGroupId(), user.getRoleIds());	
-
-	String active = (String)request.getSession().getAttribute(WebKeys.MENU_ACTIVE);
-	String processStepId = active;
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "processordertodolist.jsp");
-
-	List<ProcessOrderUtils.CustomDisPlay> processOrders = new ArrayList<ProcessOrderUtils.CustomDisPlay>();
+	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
+	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+	
+	List<Dossier> dossiers =  new ArrayList<Dossier>();
+	
 	int totalCount = 0;
-	
 %>
-<aui:form name="fm" action="#" method="post">
-<liferay-portlet:actionURL var="menuActionURL" name="menuAction" >
-	<portlet:param name="mvcPath" value="<%=templatePath + \"processordermenu.jsp\" %>"/>
-</liferay-portlet:actionURL>
-<aui:row>
-	<aui:col width="30">
-		<aui:select name="<%=WebKeys.MENU_ACTIVE %>" label="">
-			<aui:option value="" label="xem-toan-bo-ho-so"></aui:option>
-			<%
-				for(ProcessStep ett: processSteps){
-			%>
-			<aui:option selected="<%=Validator.isNotNull(active) && active.equals(String.valueOf(ett.getProcessStepId())) %>" value="<%=ett.getProcessStepId() %>" label="<%=ett.getStepName() %>"></aui:option>
-			<%} %>
-		</aui:select>
-	</aui:col>
-	<aui:col width="70">
-		<input class="btn btn-primary" name="search" value="search" type="button" onclick="openCPS_submit('<%= menuActionURL.toString() %>')" />
-	</aui:col>
-</aui:row>
 
-<liferay-ui:search-container searchContainer="<%= new ProcessOrderSearch(
-	renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+
+<liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+
 	<liferay-ui:search-container-results>
-		
-		<%@ include file="/html/portlets/processmgt/processorder/processorder_search_results.jspf"%>
-
-	</liferay-ui:search-container-results>
-	
-	<liferay-ui:search-container-row 
-		className="org.opencps.processmgt.util.ProcessOrderUtils.CustomDisPlay" 
-		modelVar="processOrder" 
-		keyProperty="id"
-	>
-	<liferay-portlet:renderURL var="detailURL">
-		<liferay-portlet:param name="mvcPath" value="<%=templatePath + \"processordertodo.jsp\" %>"/>
-		<liferay-portlet:param name="<%=ProcessOrderDisplayTerms.PROCESSORDERID %>" value="<%=String.valueOf(processOrder.getId()) %>"/>
-		<liferay-portlet:param name="<%=WebKeys.CURRENT_URL %>" value="<%=currentURL %>"/>
-	</liferay-portlet:renderURL>
 		<%
-			String maTiepNhan = "<a href=\"#\" onclick=\"openCPS_dossierStatus('"+detailURL.toString()+"','"+processOrder.getTrangThaiHoSo()+"')\" >" + processOrder.getMaTiepNhan() + "</a>";
-			String chuHoSo = "<a href=\"#\" onclick=\"openCPS_dossierStatus('"+detailURL.toString()+"','"+processOrder.getTrangThaiHoSo()+"')\" >" + processOrder.getChuHoSo() + "</a>";
-			String thuTuc =  "<a href=\"#\" onclick=\"openCPS_dossierStatus('"+detailURL.toString()+"','"+processOrder.getTrangThaiHoSo()+"')\" >" + processOrder.getThuTuc() + "</a>";
-			String buocXuLy = "<a href=\"#\" onclick=\"openCPS_dossierStatus('"+detailURL.toString()+"','"+processOrder.getTrangThaiHoSo()+"')\" >" + processOrder.getBuocXuLy() + "</a>";
-			String nguoiPhuTrach =  "<a href=\"#\" onclick=\"openCPS_dossierStatus('"+detailURL.toString()+"','"+processOrder.getTrangThaiHoSo()+"')\" >" + processOrder.getNguoiPhuTrach() + "</a>";
-			String hanXuLy = "<a href=\"#\" onclick=\"openCPS_dossierStatus('"+detailURL.toString()+"','"+processOrder.getTrangThaiHoSo()+"')\" >" + processOrder.getHanXuLy() + "</a>";
-			row.addText(maTiepNhan);
-			row.addText(chuHoSo);
-			row.addText(thuTuc);
-			row.addText(buocXuLy);
-			row.addText(nguoiPhuTrach);
-			row.addText(hanXuLy);
+			DossierSearchTerms searchTerms = (DossierSearchTerms)searchContainer.getSearchTerms();
+			
+			int dossierStatus = searchTerms.getDossierStatus();
+
+			try{
+				
+				%>
+					<%@include file="/html/portlets/dossiermgt/frontoffice/dosier_search_results.jspf" %>
+				<%
+			}catch(Exception e){
+				_log.error(e);
+			}
+		
+			total = totalCount;
+			results = dossiers;
+			
+			pageContext.setAttribute("results", results);
+			pageContext.setAttribute("total", total);
 		%>
-	</liferay-ui:search-container-row>
+	</liferay-ui:search-container-results>	
+		<liferay-ui:search-container-row 
+			className="org.opencps.dossiermgt.model.Dossier" 
+			modelVar="dossier" 
+			keyProperty="dossierId"
+		>
+			<%
+
+				//id column
+				row.addText(String.valueOf(dossier.getDossierId()));
+				row.addText(DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+				row.addText(String.valueOf(dossier.getSubjectId()));
+				row.addText(dossier.getGovAgencyName());
+				row.addText(PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale));
+				row.addText(DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+				
+				row.addText(dossier.getReceptionNo());
+				
+				//action column
+				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
+			%>	
+		</liferay-ui:search-container-row> 
 	
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
 
-</aui:form>
-<script type="text/javascript">
-function openCPS_submit(url) {
-	var A = AUI();
-	document.getElementById('<portlet:namespace />fm').action = url;
-	document.getElementById('<portlet:namespace />fm').submit();
-}
-function openCPS_dossierStatus(url,status) {
-	if(status == 'error'){
-		return;
-	}else{
-		window.location = url;
-	}
-}
-</script>
+<%!
+	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.frontofficedossierlist.jsp");
+%>

@@ -26,327 +26,284 @@ import org.opencps.util.DateTimeUtil;
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
 import com.liferay.portal.kernel.util.ParamUtil;
 
-
 /**
- * @author khoavd
- *
+ * @author trungnt
  */
-public class ProcessOrderDisplayTerms extends DisplayTerms{
+public class ProcessOrderDisplayTerms extends DisplayTerms {
 
-	public static final String MA_TIEP_NHAN = "ma-tiep-nhan";
-	public static final String CHU_HO_SO = "chu-ho-so";
-	public static final String THU_TUC = "thu-tuc";
-	public static final String BUOC_XU_LY = "buoc-xu-ly";
-	public static final String NGUOI_PHU_TRACH = "nguoi-phu-trach";
-	public static final String HAN_XU_LY = "han-xu-ly";
-	
-	public static final String PROCESSORDERID = "processOrderId";
-	public static final String COMPANYID = "companyId";
-	public static final String GROUPID = "groupId";
-	public static final String USERID = "userId";
-	public static final String CREATEDATE = "createDate";
-	public static final String MODIFIEDDATE = "modifiedDate";
-	public static final String SERVICEINFOID = "serviceInfoId";
-	public static final String DOSSIERTEMPLATEID = "dossierTemplateId";
-	public static final String GOVAGENCYORGANIZATIONID = "govAgencyOrganizationId";
-	public static final String SERVICEPROCESSID = "serviceProcessId";
-	public static final String DOSSIERID = "dossierId";
-	public static final String FILEGROUPID = "fileGroupId";
-	public static final String PROCESSSTEPID = "processStepId";
-	public static final String ACTIONUSERID = "actionUserId";
-	public static final String ACTIONDATETIME = "actionDatetime";
-	public static final String PROCESSWORKFLOWID = "processWorkflowId";
-	public static final String ASSIGNTOUSERID = "assignToUserId";
-	public static final String DOSSIERSTATUS = "dossierStatus";
-	public static final String ACTIONSTEPID = "actionStepId";
-	public static final String GOVAGENCYCODE = "govAgencyCode";
-	public static final String GOVAGENCYNAME = "govAgencyName";
-	public static final String ACTIONNOTE = "actionNote";
-	public static final String ERRORINFO = "errorInfo";
+	public static String ASSIGN_TO_USER_ID = "assignToUserId";
+	public static String SERVICE_INFO_ID = "serviceInfoId";
+	public static String DOSSIER_TEMPLATE_ID = "dossierTemplateId";
+	public static String GOV_AGENCY_ORGANIZATION_ID = "govAgencyOrganizationId";
+	public static String SERVICE_PROCESS_ID = "serviceProcessId";
+	public static String DOSSIER_ID = "dossierId";
+	public static String FILE_GROUP_ID = "fileGroupId";
+	public static String PROCESS_STEP_ID = "processStepId";
+	public static String ACTION_USER_ID = "actionUserId";
+	public static String ACTION_DATE_TIME = "actionDatetime";
+	public static String ACTION_NOTE = "actionNote";
+	public static String GOV_AGENCY_CODE = "govAgencyCode";
+	public static String GOV_AGENCY_NAME = "govAgencyName";
+	public static String DOSSIER_STATUS = "dossierStatus";
+	public static String RECEPTION_NO = "receptionNo";
+	public static String SERVICE_NAME = "serviceName";
+	public static String GOVAGENCY_NAME = "govagencyName";
+	public static String SUBJECT_NAME = "subjectName";
+	public static String USER_ID = "userId";
 
 	/**
-     * @param portletRequest
-     */
-    public ProcessOrderDisplayTerms(PortletRequest portletRequest) {
+	 * @param request
+	 */
+	public ProcessOrderDisplayTerms(PortletRequest portletRequest) {
 
-	    super(portletRequest);
-	    // TODO Auto-generated constructor stub
-	    processOrderId = ParamUtil.getLong(portletRequest, PROCESSORDERID);
-	    companyId = ParamUtil.getLong(portletRequest, COMPANYID);
-	    groupId = ParamUtil.getLong(portletRequest, GROUPID);
-	    userId = ParamUtil.getLong(portletRequest, USERID);
-	    createDate = ParamUtil.getDate(portletRequest, CREATEDATE, DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-	    modifiedDate = ParamUtil.getDate(portletRequest, MODIFIEDDATE , DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-	    serviceInfoId = ParamUtil.getLong(portletRequest, SERVICEINFOID);
-	    dossierTemplateId = ParamUtil.getLong(portletRequest, DOSSIERTEMPLATEID);
-	    govAgencyCode = ParamUtil.getString(portletRequest, GOVAGENCYCODE);
-	    govAgencyName = ParamUtil.getString(portletRequest, GOVAGENCYNAME);
-	    govAgencyOrganizationId = ParamUtil.getLong(portletRequest, GOVAGENCYORGANIZATIONID);
-	    serviceProcessId = ParamUtil.getLong(portletRequest, SERVICEPROCESSID);
-	    dossierId = ParamUtil.getLong(portletRequest, DOSSIERID);
-	    fileGroupId = ParamUtil.getLong(portletRequest, FILEGROUPID);
-	    processStepId = ParamUtil.getLong(portletRequest, PROCESSSTEPID);
-	    actionUserId = ParamUtil.getLong(portletRequest, ACTIONUSERID);
-	    actionDatetime = ParamUtil.getDate(portletRequest, ACTIONDATETIME, DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-	    actionNote = ParamUtil.getString(portletRequest, ACTIONNOTE);
-	    assignToUserId = ParamUtil.getLong(portletRequest, ASSIGNTOUSERID);
-	    processWorkflowId = ParamUtil.getLong(portletRequest, PROCESSWORKFLOWID);
-	    dossierStatus = ParamUtil.getLong(portletRequest, DOSSIERSTATUS);
-	    errorInfo = ParamUtil.getString(portletRequest, ERRORINFO);
-	    actionStepId = ParamUtil.getLong(portletRequest, ACTIONSTEPID);
-    }
+		super(
+		    portletRequest);
+		assignToUserId = ParamUtil
+		    .getLong(portletRequest, ASSIGN_TO_USER_ID, 0L);
+		serviceInfoId = ParamUtil
+		    .getLong(portletRequest, SERVICE_INFO_ID, 0L);
+		dossierTemplateId = ParamUtil
+		    .getLong(portletRequest, DOSSIER_TEMPLATE_ID, 0L);
+		govAgencyOrganizationId = ParamUtil
+		    .getLong(portletRequest, GOV_AGENCY_ORGANIZATION_ID, 0L);
+		serviceProcessId = ParamUtil
+		    .getLong(portletRequest, SERVICE_PROCESS_ID, 0L);
+		dossierId = ParamUtil
+		    .getLong(portletRequest, DOSSIER_ID, 0L);
+		fileGroupId = ParamUtil
+		    .getLong(portletRequest, FILE_GROUP_ID, 0L);
+		processStepId = ParamUtil
+		    .getLong(portletRequest, PROCESS_STEP_ID, 0L);
+		actionUserId = ParamUtil
+		    .getLong(portletRequest, ACTION_USER_ID, 0L);
+		actionDatetime = ParamUtil
+		    .getDate(portletRequest, ACTION_DATE_TIME, DateTimeUtil
+		        .getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
+		actionNote = ParamUtil
+		    .getString(portletRequest, ACTION_NOTE);
+		govAgencyCode = ParamUtil
+		    .getString(portletRequest, GOV_AGENCY_CODE);
+		govAgencyName = ParamUtil
+		    .getString(portletRequest, GOV_AGENCY_NAME);
+		dossierStatus = ParamUtil
+		    .getInteger(portletRequest, DOSSIER_STATUS);
+		receptionNo = ParamUtil
+		    .getString(portletRequest, RECEPTION_NO);
+		serviceName = ParamUtil
+		    .getString(portletRequest, SERVICE_NAME);
+		govagencyName = ParamUtil
+		    .getString(portletRequest, GOV_AGENCY_NAME);
+		subjectName = ParamUtil
+		    .getString(portletRequest, SUBJECT_NAME);
+	}
+
+	public long getAssignToUserId() {
+
+		return assignToUserId;
+	}
+
+	public void setAssignToUserId(long assignToUserId) {
+
+		this.assignToUserId = assignToUserId;
+	}
+
+	public long getServiceInfoId() {
+
+		return serviceInfoId;
+	}
+
+	public void setServiceInfoId(long serviceInfoId) {
+
+		this.serviceInfoId = serviceInfoId;
+	}
+
+	public long getDossierTemplateId() {
+
+		return dossierTemplateId;
+	}
+
+	public void setDossierTemplateId(long dossierTemplateId) {
+
+		this.dossierTemplateId = dossierTemplateId;
+	}
+
+	public long getGovAgencyOrganizationId() {
+
+		return govAgencyOrganizationId;
+	}
+
+	public void setGovAgencyOrganizationId(long govAgencyOrganizationId) {
+
+		this.govAgencyOrganizationId = govAgencyOrganizationId;
+	}
+
+	public long getServiceProcessId() {
+
+		return serviceProcessId;
+	}
+
+	public void setServiceProcessId(long serviceProcessId) {
+
+		this.serviceProcessId = serviceProcessId;
+	}
+
+	public long getDossierId() {
+
+		return dossierId;
+	}
+
+	public void setDossierId(long dossierId) {
+
+		this.dossierId = dossierId;
+	}
+
+	public long getFileGroupId() {
+
+		return fileGroupId;
+	}
+
+	public void setFileGroupId(long fileGroupId) {
+
+		this.fileGroupId = fileGroupId;
+	}
+
+	public long getProcessStepId() {
+
+		return processStepId;
+	}
+
+	public void setProcessStepId(long processStepId) {
+
+		this.processStepId = processStepId;
+	}
+
+	public long getActionUserId() {
+
+		return actionUserId;
+	}
+
+	public void setActionUserId(long actionUserId) {
+
+		this.actionUserId = actionUserId;
+	}
+
+	public Date getActionDatetime() {
+
+		return actionDatetime;
+	}
+
+	public void setActionDatetime(Date actionDatetime) {
+
+		this.actionDatetime = actionDatetime;
+	}
+
+	public String getActionNote() {
+
+		return actionNote;
+	}
+
+	public void setActionNote(String actionNote) {
+
+		this.actionNote = actionNote;
+	}
+
+	public String getGovAgencyCode() {
+
+		return govAgencyCode;
+	}
+
+	public void setGovAgencyCode(String govAgencyCode) {
+
+		this.govAgencyCode = govAgencyCode;
+	}
+
+	public String getGovAgencyName() {
+
+		return govAgencyName;
+	}
+
+	public void setGovAgencyName(String govAgencyName) {
+
+		this.govAgencyName = govAgencyName;
+	}
+
+	public int getDossierStatus() {
+
+		return dossierStatus;
+	}
+
+	public void setDossierStatus(int dossierStatus) {
+
+		this.dossierStatus = dossierStatus;
+	}
+
+	public String getReceptionNo() {
+
+		return receptionNo;
+	}
+
+	public void setReceptionNo(String receptionNo) {
+
+		this.receptionNo = receptionNo;
+	}
+
+	public String getServiceName() {
+
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+
+		this.serviceName = serviceName;
+	}
+
+	public String getGovagencyName() {
+
+		return govagencyName;
+	}
+
+	public void setGovagencyName(String govagencyName) {
+
+		this.govagencyName = govagencyName;
+	}
+
+	public String getSubjectName() {
+
+		return subjectName;
+	}
+
+	public void setSubjectName(String subjectName) {
+
+		this.subjectName = subjectName;
+	}
 	
-    protected long processOrderId;
-    protected long companyId;
-    protected long groupId;
-    protected long userId;
-    protected Date createDate;
-    protected Date modifiedDate;
-    protected long serviceInfoId;
-    protected long dossierTemplateId;
-    protected String govAgencyCode;
-    protected String govAgencyName;
-    protected long govAgencyOrganizationId;
-    protected long serviceProcessId;
-    protected long dossierId;
-    protected long fileGroupId;
-    protected long processStepId;
-    protected long actionUserId;
-    protected Date actionDatetime;
-    protected String actionNote;
-    protected long assignToUserId;
-    protected long processWorkflowId;
-    protected long dossierStatus;
-    protected String errorInfo;
-    protected long actionStepId;
+	public long getUserId() {
 	
-    public long getProcessOrderId() {
-    
-    	return processOrderId;
-    }
+		return userId;
+	}
 	
-    public void setProcessOrderId(long processOrderId) {
-    
-    	this.processOrderId = processOrderId;
-    }
+	public void setUserId(long userId) {
 	
-    public long getCompanyId() {
-    
-    	return companyId;
-    }
-	
-    public void setCompanyId(long companyId) {
-    
-    	this.companyId = companyId;
-    }
-	
-    public long getGroupId() {
-    
-    	return groupId;
-    }
-	
-    public void setGroupId(long groupId) {
-    
-    	this.groupId = groupId;
-    }
-	
-    public long getUserId() {
-    
-    	return userId;
-    }
-	
-    public void setUserId(long userId) {
-    
-    	this.userId = userId;
-    }
-	
-    public Date getCreateDate() {
-    
-    	return createDate;
-    }
-	
-    public void setCreateDate(Date createDate) {
-    
-    	this.createDate = createDate;
-    }
-	
-    public Date getModifiedDate() {
-    
-    	return modifiedDate;
-    }
-	
-    public void setModifiedDate(Date modifiedDate) {
-    
-    	this.modifiedDate = modifiedDate;
-    }
-	
-    public long getServiceInfoId() {
-    
-    	return serviceInfoId;
-    }
-	
-    public void setServiceInfoId(long serviceInfoId) {
-    
-    	this.serviceInfoId = serviceInfoId;
-    }
-	
-    public long getDossierTemplateId() {
-    
-    	return dossierTemplateId;
-    }
-	
-    public void setDossierTemplateId(long dossierTemplateId) {
-    
-    	this.dossierTemplateId = dossierTemplateId;
-    }
-	
-    public String getGovAgencyCode() {
-    
-    	return govAgencyCode;
-    }
-	
-    public void setGovAgencyCode(String govAgencyCode) {
-    
-    	this.govAgencyCode = govAgencyCode;
-    }
-	
-    public String getGovAgencyName() {
-    
-    	return govAgencyName;
-    }
-	
-    public void setGovAgencyName(String govAgencyName) {
-    
-    	this.govAgencyName = govAgencyName;
-    }
-	
-    public long getGovAgencyOrganizationId() {
-    
-    	return govAgencyOrganizationId;
-    }
-	
-    public void setGovAgencyOrganizationId(long govAgencyOrganizationId) {
-    
-    	this.govAgencyOrganizationId = govAgencyOrganizationId;
-    }
-	
-    public long getServiceProcessId() {
-    
-    	return serviceProcessId;
-    }
-	
-    public void setServiceProcessId(long serviceProcessId) {
-    
-    	this.serviceProcessId = serviceProcessId;
-    }
-	
-    public long getDossierId() {
-    
-    	return dossierId;
-    }
-	
-    public void setDossierId(long dossierId) {
-    
-    	this.dossierId = dossierId;
-    }
-	
-    public long getFileGroupId() {
-    
-    	return fileGroupId;
-    }
-	
-    public void setFileGroupId(long fileGroupId) {
-    
-    	this.fileGroupId = fileGroupId;
-    }
-	
-    public long getProcessStepId() {
-    
-    	return processStepId;
-    }
-	
-    public void setProcessStepId(long processStepId) {
-    
-    	this.processStepId = processStepId;
-    }
-	
-    public long getActionUserId() {
-    
-    	return actionUserId;
-    }
-	
-    public void setActionUserId(long actionUserId) {
-    
-    	this.actionUserId = actionUserId;
-    }
-	
-    public Date getActionDatetime() {
-    
-    	return actionDatetime;
-    }
-	
-    public void setActionDatetime(Date actionDatetime) {
-    
-    	this.actionDatetime = actionDatetime;
-    }
-	
-    public String getActionNote() {
-    
-    	return actionNote;
-    }
-	
-    public void setActionNote(String actionNote) {
-    
-    	this.actionNote = actionNote;
-    }
-	
-    public long getAssignToUserId() {
-    
-    	return assignToUserId;
-    }
-	
-    public void setAssignToUserId(long assignToUserId) {
-    
-    	this.assignToUserId = assignToUserId;
-    }
-	
-    public long getProcessWorkflowId() {
-    
-    	return processWorkflowId;
-    }
-	
-    public void setProcessWorkflowId(long processWorkflowId) {
-    
-    	this.processWorkflowId = processWorkflowId;
-    }
-	
-    public long getDossierStatus() {
-    
-    	return dossierStatus;
-    }
-	
-    public void setDossierStatus(long dossierStatus) {
-    
-    	this.dossierStatus = dossierStatus;
-    }
-	
-    public String getErrorInfo() {
-    
-    	return errorInfo;
-    }
-	
-    public void setErrorInfo(String errorInfo) {
-    
-    	this.errorInfo = errorInfo;
-    }
-	
-    public long getActionStepId() {
-    
-    	return actionStepId;
-    }
-	
-    public void setActionStepId(long actionStepId) {
-    
-    	this.actionStepId = actionStepId;
-    }
+		this.userId = userId;
+	}
+
+	protected long assignToUserId;
+	protected long serviceInfoId;
+	protected long dossierTemplateId;
+	protected long govAgencyOrganizationId;
+	protected long serviceProcessId;
+	protected long dossierId;
+	protected long fileGroupId;
+	protected long processStepId;
+	protected long actionUserId;
+	protected long userId;
+	protected int dossierStatus;
+	protected Date actionDatetime;
+	protected String actionNote;
+	protected String govAgencyCode;
+	protected String govAgencyName;
+	protected String receptionNo;
+	protected String serviceName;
+	protected String govagencyName;
+	protected String subjectName;
 }

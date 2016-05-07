@@ -39,6 +39,7 @@ public class WorkingUnitSearch extends SearchContainer<WorkingUnit> {
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
+		headerNames.add("row-index");
 		headerNames.add("name");
 		headerNames.add("govagencycode");
 		headerNames.add("isEmployer");

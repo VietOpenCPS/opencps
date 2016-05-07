@@ -1,17 +1,4 @@
 /**
-<<<<<<< HEAD
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
-=======
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
  * 
@@ -26,12 +13,18 @@
  * GNU Affero General Public License for more details.
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
->>>>>>> FETCH_HEAD
  */
 
 package org.opencps.processmgt.service.impl;
 
+import java.util.List;
+
+import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.base.WorkflowOutputLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the workflow output local service.
@@ -54,4 +47,80 @@ public class WorkflowOutputLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil} to access the workflow output local service.
 	 */
+	/**
+	 * Update Workflow
+	 * 
+	 * @param workflowOutputId
+	 * @param dossierPartId
+	 * @param required
+	 * @param esign
+	 * @param postback
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public WorkflowOutput updateWorkflowOutput(long workflowOutputId,
+	    long dossierPartId, long processWorkflowId, boolean required, boolean esign, boolean postback)
+	    throws PortalException, SystemException {
+		
+		WorkflowOutput output = null;
+		
+		output = workflowOutputPersistence.fetchByPrimaryKey(workflowOutputId);
+		
+		if (Validator.isNotNull(output)) {
+			output.setDossierPartId(dossierPartId);
+			output.setProcessWorkflowId(processWorkflowId);
+			output.setEsign(esign);
+			output.setPostback(postback);
+			output.setRequired(required);
+			
+			workflowOutputPersistence.update(output);
+		}
+		
+		return output;
+	}
+	
+
+	/**
+	 * @param dossierPartId
+	 * @param required
+	 * @param esign
+	 * @param postback
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public WorkflowOutput addWorkflowOutput(
+	    long dossierPartId, long processWorkflowId, boolean required, boolean esign, boolean postback)
+	    throws PortalException, SystemException {
+		
+		WorkflowOutput output = null;
+		
+		long workflowOutputId = counterLocalService.increment(WorkflowOutput.class.getName());
+		
+		output = workflowOutputPersistence.create(workflowOutputId);
+		
+		if (Validator.isNotNull(output)) {
+			output.setDossierPartId(dossierPartId);
+			output.setProcessWorkflowId(processWorkflowId);
+			output.setEsign(esign);
+			output.setPostback(postback);
+			output.setRequired(required);
+			
+			workflowOutputPersistence.update(output);
+		}
+		
+		return output;
+	}
+	
+	/**
+	 * @param processWorkflowId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<WorkflowOutput> getByProcessWF(long processWorkflowId)
+	    throws PortalException, SystemException {
+		return workflowOutputPersistence.findByP_W_ID(processWorkflowId);
+	}
 }

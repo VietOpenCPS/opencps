@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -28,6 +27,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.usermgt.model.WorkingUnit"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.usermgt.search.WorkingUnitDisplayTerms"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.util.MessageKeys"%>
@@ -45,6 +45,12 @@
 	
 	List<WorkingUnit> workingUnits = new ArrayList<WorkingUnit>();
 	int totalCount = 0;
+	
+	String isEmployeeRequest = ParamUtil.getString(request, WorkingUnitDisplayTerms.WORKINGUNIT_ISEMPLOYER);
+    boolean isEmployee = false;
+	if(Validator.isNotNull(isEmployeeRequest) && isEmployeeRequest.equals("isEmploy")) {
+		isEmployee = true;
+	}
 %>
 
 <liferay-ui:success 
@@ -69,7 +75,6 @@
 	renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 	<liferay-ui:search-container-results>
 		<%@include file="/html/portlets/usermgt/admin/workingunit_search_results.jspf" %>
-	
 	</liferay-ui:search-container-results>
 	
 	<liferay-ui:search-container-row 
@@ -79,6 +84,7 @@
 	>
 	
 		<%
+		    row.addText(String.valueOf(row.getPos() +1 ));
 			row.addText(workingUnit.getName());
 			row.addText(workingUnit.getGovAgencyCode());
 			String isEmployer = "<i class=\"opencps-icon employees\"></i>";

@@ -89,7 +89,7 @@
 	>
 		<%
 			String leaderName = PortletUtil.getLeaderLabel(jobPosSearch.getLeader(), locale);
-		
+		    row.addText(String.valueOf(row.getPos() + 1));
 			row.addText(jobPosSearch.getTitle());
 			row.addText(leaderName);
 			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath +

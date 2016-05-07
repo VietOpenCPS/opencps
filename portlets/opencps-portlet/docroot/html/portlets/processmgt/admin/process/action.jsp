@@ -46,14 +46,14 @@
 				        themeDisplay.getScopeGroupId(), ActionKeys.ADD_PROCESS);
 %>
 
-<liferay-portlet:renderURL var="editActionURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+<liferay-portlet:renderURL var="editActionURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
 	<portlet:param name="mvcPath" value='<%= templatePath + "edit_action.jsp" %>'/>
 	<portlet:param name="serviceProcessId" value="<%= Validator.isNotNull(serviceProcess) ? Long.toString(serviceProcess.getServiceProcessId()) : StringPool.BLANK %>"/>
 	<portlet:param name="processWorkflowId" value="<%= Validator.isNotNull(workflow) ? Long.toString(workflow.getProcessWorkflowId()) : StringPool.BLANK %>"/>
 </liferay-portlet:renderURL>
 
 <aui:button-row>
-	<aui:button name="addAction" onClick="showDialog()" value="add-action" ></aui:button>
+	<aui:button name="addAction" href="<%= editActionURL %>" value="add-action" ></aui:button>
 </aui:button-row>
 
 <liferay-ui:search-container searchContainer="<%= new WorkflowSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
@@ -81,11 +81,12 @@
 			// no column
 			row.addText(String.valueOf(row.getPos() + 1));
 		
-			// workflow name
-			row.addText(processWorkflow.getActionName());
 			
 			// Pre StepName
 			row.addText(ProcessUtils.getProcessStepName(processWorkflow.getPreProcessStepId()));
+
+			// workflow name
+			row.addText(processWorkflow.getActionName());
 
 			// Post StepName
 			row.addText(ProcessUtils.getProcessStepName(processWorkflow.getPostProcessStepId()));
@@ -103,7 +104,7 @@
 </liferay-ui:search-container>
 
 <aui:script use="liferay-util-window">
-	Liferay.provide(window, 'showDialog', function(action) {
+	Liferay.provide(window, 'addAction', function(action) {
 		page = '<%= editActionURL %>'
 		Liferay.Util.openWindow({
 			dialog: {

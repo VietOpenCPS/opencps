@@ -34,29 +34,23 @@ import com.liferay.portal.theme.ThemeDisplay;
 public class DossierDisplayTerms extends DisplayTerms {
 
 	public static final String COMPANY_ID = "companyId";
-
 	public static final String CREATE_DATE = "createDate";
-
 	public static final String GROUP_ID = "groupId";
-
 	public static final String MODIFIED_DATE = "modifiedDate";
-
 	public static final String SERVICE_MODE = "serviceMode";
 	public static final String COUNTER = "counter";
 	public static final String RECEPTION_NO = "receptionNo";
 	public static final String DOSSIER_STATUS = "dossierStatus";
 	public static final String DOSSIER_SOURCE = "dossierSource";
-
 	public static final String DOSSIER_ID = "dossierId";
-
 	public static final String OWNERORGANIZATION_ID = "ownerOrganizationId";
 	public static final String SERVICE_CONFIG_ID = "serviceConfigId";
 	public static final String SERVICE_INFO_ID = "serviceInfoId";
 	public static final String DOSSIER_TEMPLATE_ID = "dossierTemplateId";
+	public static final String TEMPLATE_FILE_NO = "templateFileNo";
 	public static final String GOVAGENCY_ORGANIZATION_ID =
 	    "govAgencyOrganizationId";
 	public static final String SUBJECT_ID = "subjectId";
-
 	public static final String EXTERNALREF_NO = "externalRefNo";
 	public static final String EXTERNALREF_URL = "externalRefUrl";
 	public static final String SERVICE_DOMAIN_INDEX = "serviceDomainIndex";
@@ -85,6 +79,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String FINISH_DATETIME = "finishDatetime";
 	public static final String SERVICE_NAME = "serviceName";
 	public static final String SERVICE_NO = "serviceNo";
+	public static final String ACCOUNT_TYPE = "accountType";
 
 	public static final String USER_ID = "userId";
 

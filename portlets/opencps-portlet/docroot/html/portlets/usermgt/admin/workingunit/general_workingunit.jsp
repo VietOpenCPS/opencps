@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,6 +20,7 @@
 <%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
 <%@page import="org.opencps.usermgt.service.WorkingUnitLocalServiceUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="java.util.ArrayList"%>
@@ -32,9 +32,13 @@
 <%	
 	WorkingUnit workingUnit = (WorkingUnit) request.getAttribute(WebKeys.WORKING_UNIT_ENTRY);
 
+	WorkingUnit workingUnitChild = null;
+
 	long workingUnitId = workingUnit != null ? workingUnit.getWorkingunitId() : 0L;
 	
-	boolean isEmployer = true; 
+	boolean isEmployer = true;
+	
+	String isAddChild = ParamUtil.getString(request, "isAddChild");
 	
 	List<WorkingUnit> workingUnits = new ArrayList<WorkingUnit>();
 	
@@ -50,23 +54,36 @@
 	}
 %>
 
-<aui:model-context bean="<%=workingUnit%>" model="<%=WorkingUnit.class%>" />
-
+<c:choose>
+    <c:when test="<%=Validator.isNotNull(isAddChild) %>">
+        <aui:model-context bean="<%=workingUnitChild%>" model="<%=WorkingUnit.class%>" />
+    </c:when>
+    <c:otherwise>
+        <aui:model-context bean="<%=workingUnit%>" model="<%=WorkingUnit.class%>" />
+    </c:otherwise>
+</c:choose>
 <aui:row>
-	<aui:select name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_PARENTWORKINGUNITID%>">
-		<aui:option value="<%=0%>"><liferay-ui:message key="root"/></aui:option>
-		
-		<%
-			for(WorkingUnit unit : workingUnits) {
-				%>
-					<aui:option value="<%=unit.getWorkingunitId() %>" >
-						<%=unit.getName() %>
-					</aui:option>
-				<%
-			}
-							
-		%>
-		
+    <aui:select name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_PARENTWORKINGUNITID%>">
+		<c:choose>
+		   <c:when test="<%=Validator.isNotNull(isAddChild) %>">
+		       <aui:option value="<%=workingUnitId %>">
+		       	<%= workingUnit.getName() %>
+		       </aui:option>
+		   </c:when>
+		   <c:otherwise>
+		        <aui:option value="<%=0%>"><liferay-ui:message key="root"/></aui:option>
+		        
+		        <%
+		            for(WorkingUnit unit : workingUnits) {
+		                %>
+		                    <aui:option value="<%=unit.getWorkingunitId() %>" >
+		                        <%=unit.getName() %>
+		                    </aui:option>
+		                <%
+		            }
+		        %>
+		   </c:otherwise>
+		</c:choose>
 	</aui:select>
 	
 	<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_NAME%>">
@@ -80,12 +97,21 @@
 	
 	<div id = '<portlet:namespace />showOrHidebyIsEmployeeRequest'>
 		
-		<aui:input 
-			name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ISEMPLOYER%>" 
-			type="checkbox"
-			checked="<%=isEmployer%>"
-		/>
-		
+		<c:choose>
+			<c:when test="<%=Validator.isNotNull(isAddChild) %>">
+				<aui:input 
+					name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ISEMPLOYER%>" 
+					type="checkbox"
+				/>
+			</c:when>
+			<c:otherwise>
+				<aui:input 
+					name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ISEMPLOYER%>" 
+					type="checkbox"
+					checked="<%=isEmployer%>"
+				/>
+			</c:otherwise>
+		</c:choose>
 		<div id="<portlet:namespace/>workingUnitGovAgencyCodeContainer">
 			<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_GOVAGENCYCODE%>"/>
 		</div>
@@ -100,8 +126,6 @@
 		var isEmployerCheckBox = A.one('#<portlet:namespace/>isEmployerCheckbox');
 		
 		var parentWorkingUnitValue = A.one('#<portlet:namespace/>parentWorkingUnitId')
-		
-		
 		
 		var workingUnitGovAgencyCodeContainerGlobal = 
 			A.one('#<portlet:namespace/>workingUnitGovAgencyCodeContainer');

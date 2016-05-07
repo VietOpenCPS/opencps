@@ -159,7 +159,7 @@
 	
 	<aui:row>
 	
-	<datamgt:ddr
+		<datamgt:ddr
 			depthLevel="1" 
 			dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN %>"
 			itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>"

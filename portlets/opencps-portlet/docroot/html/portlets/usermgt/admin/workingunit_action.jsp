@@ -41,15 +41,27 @@
 			name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ID%>"
 			value="<%=String.valueOf(workingUnit.getWorkingunitId())%>" 
 		/>
-		
 		<portlet:param name="redirectURL" value="<%=redirectURL%>" />
-		
 	</portlet:renderURL>
+	
+	<portlet:renderURL var="updateWorkingUnitChirl">
+        <portlet:param name="mvcPath"
+            value="/html/portlets/usermgt/admin/edit_workingunit.jsp" />
+        <portlet:param 
+            name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ID%>"
+            value="<%=String.valueOf(workingUnit.getWorkingunitId())%>" 
+        />
+        <portlet:param name="isAddChild" value="isAddChild"/>
+        <portlet:param name="redirectURL" value="<%=redirectURL%>" />
+    </portlet:renderURL>
+	
 	<c:if test="<%=WorkingUnitPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
 		<liferay-ui:icon image="edit" message="edit"
 		url="<%=updateWorkingUnit.toString()%>" />
+		
+		<liferay-ui:icon image="add" message="add-child"
+        url="<%=updateWorkingUnitChirl.toString()%>" />
 	</c:if>
-	
 
 	<portlet:actionURL var="deleteWorkingUnitURL" name="deleteWorkingUnit">
 		

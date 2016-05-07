@@ -25,8 +25,8 @@ import java.util.Map;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
-import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.util.DataMgtUtil;
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -38,7 +38,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 /**
  * @author trungnt
  */
-public class DossierSearch extends SearchContainer<DictCollection> {
+public class DossierSearch extends SearchContainer<Dossier> {
 
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();

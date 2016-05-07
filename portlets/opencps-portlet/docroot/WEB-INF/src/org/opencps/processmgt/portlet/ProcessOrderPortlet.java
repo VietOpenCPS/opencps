@@ -50,7 +50,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 
 /**
- * @author khoavd
+ * @author trungnt
  *
  */
 public class ProcessOrderPortlet extends MVCPortlet{
@@ -83,8 +83,8 @@ public class ProcessOrderPortlet extends MVCPortlet{
 	    throws PortletException, IOException {
 		
 
-		long processOrderId =
-		    ParamUtil.getLong(renderRequest, ProcessOrderDisplayTerms.PROCESSORDERID);
+		long processOrderId = 0;
+//		    ParamUtil.getLong(renderRequest, ProcessOrderDisplayTerms.PROCESSORDERID);
 
 		ProcessOrder processOrder = null;
 

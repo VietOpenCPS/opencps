@@ -20,7 +20,9 @@
 
 
 <%
-	Dossier dossier = new DossierImpl();
-	dossier.setDossierId(1);
-	dossiers.add(dossier);
+	totalCount = DossierLocalServiceUtil.countDossier(scopeGroupId, 
+			StringPool.BLANK, dossierStatus);
+	dossiers = DossierLocalServiceUtil.getDossier(scopeGroupId, keyword, 
+			dossierStatus, searchContainer.getStart(), searchContainer.getEnd(), 
+			searchContainer.getOrderByComparator());
 %>

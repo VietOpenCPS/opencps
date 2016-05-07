@@ -41,11 +41,11 @@
 
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-	int index = ParamUtil.getInteger(request, "index");
+	int index = ParamUtil.getInteger(request, DossierFileDisplayTerms.INDEX);
 	
-	int size = ParamUtil.getInteger(request, "size");
+	int size = ParamUtil.getInteger(request, DossierFileDisplayTerms.SIZE);
 	
-	String groupNames = ParamUtil.getString(request, "groupNames");
+	String groupNames = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAMES);
 	
 %>
 

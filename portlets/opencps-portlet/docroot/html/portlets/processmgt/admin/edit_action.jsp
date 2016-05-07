@@ -1,3 +1,10 @@
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.impl.WorkflowOutputImpl"%>
+<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
+<%@page import="org.opencps.processmgt.service.StepAllowanceLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
 <%@page import="com.liferay.portal.model.Role"%>
@@ -31,60 +38,77 @@
 <%
 	String redirectURL = ParamUtil.getString(request, "redirectURL");
 	
-	ProcessStep step = (ProcessStep) request.getAttribute(WebKeys.PROCESS_STEP_ENTRY);
+	ProcessWorkflow workflow = (ProcessWorkflow) request.getAttribute(WebKeys.WORKFLOW_ENTRY);
 	
-	ServiceProcess serviceProcess  = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
+	ServiceProcess serviceProcess = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
+	long dossierTemplateId = 0;
+
+	long serviceProcessId = 0;
+	long processWorkflowId = 0;
+	
+	if (Validator.isNotNull(serviceProcess)) {
+		serviceProcessId = serviceProcess.getServiceProcessId();
+		dossierTemplateId = serviceProcess.getDossierTemplateId();
+	}
+	
+	if (Validator.isNotNull(workflow)) {
+		processWorkflowId = workflow.getProcessWorkflowId();
+	}
 	
 
-	List<StepAllowance> stepAllowances = Collections.emptyList();
+	List<DossierPart> dossiersResult = ProcessUtils.getDossierParts(dossierTemplateId, PortletConstants.DOSSIER_PART_TYPE_RESULT);
 
-	int[] stepAllowanceIndexs = null;
+	List<ProcessStep> stepAll = ProcessStepLocalServiceUtil.getStepByProcess(serviceProcessId);
+	
+	List<WorkflowOutput> workflowOutputs = Collections.emptyList();
 
-	String stepAllowancesIndexesParam = ParamUtil.getString(request, "stepAllowanceIndexs");
+	int[] outputIndexs = null;
 
-	if (Validator.isNotNull(stepAllowancesIndexesParam)) {
-		stepAllowances = new ArrayList<StepAllowance>();
+	String outputIndexsParam = ParamUtil.getString(request, "outputIndexs");
 
-		stepAllowanceIndexs = StringUtil.split(stepAllowancesIndexesParam, 0);
+	if (Validator.isNotNull(outputIndexsParam)) {
+		workflowOutputs = new ArrayList<WorkflowOutput>();
 
-		for (int stepAllowancesIndexe : stepAllowanceIndexs) {
-			stepAllowances.add(new StepAllowanceImpl());
+		outputIndexs = StringUtil.split(outputIndexsParam, 0);
+
+		for (int outoutIndex : outputIndexs) {
+			workflowOutputs.add(new WorkflowOutputImpl());
 		}
 	}
 	else {
 
-		if (Validator.isNotNull(step)) {
-			stepAllowances = Collections.emptyList(); 
+		if (Validator.isNotNull(workflow)) {
+			workflowOutputs = WorkflowOutputLocalServiceUtil.getByProcessWF(processWorkflowId);
 
-			stepAllowanceIndexs = new int[stepAllowances.size()];
+			outputIndexs = new int[workflowOutputs.size()];
 
-			for (int i = 0; i < stepAllowances.size() ; i++) {
-				stepAllowanceIndexs[i] = i;
+			for (int i = 0; i < workflowOutputs.size() ; i++) {
+				outputIndexs[i] = i;
 			}
 		}
 
-		if (stepAllowances.isEmpty()) {
-			stepAllowances = new ArrayList<StepAllowance>();
+		if (workflowOutputs.isEmpty()) {
+			workflowOutputs = new ArrayList<WorkflowOutput>();
 
-			stepAllowances.add(new StepAllowanceImpl());
+			workflowOutputs.add(new WorkflowOutputImpl());
 
-			stepAllowanceIndexs = new int[] {0};
+			outputIndexs = new int[] {0};
 		}
 
-		if (stepAllowanceIndexs == null) {
-			stepAllowanceIndexs = new int[0];
+		if (outputIndexs == null) {
+			outputIndexs = new int[0];
 		}
 	}
 	
 %>
 
-<portlet:actionURL name="updateProcessStep" var="updateProcessStepURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString()%>"/>
+<portlet:actionURL name="updateAction" var="updateActionURL"/>
 
-<aui:form name="processStepFm" method="POST" action="#">
+<aui:form name="actionFm" method="POST" action="<%= updateActionURL %>">
 
-	<aui:model-context bean="<%= step %>" model="<%= ProcessStep.class %>" />
+	<aui:model-context bean="<%= workflow %>" model="<%= ProcessWorkflow.class %>" />
 	
-	<aui:input name="redirectURL" type="hidden" value="<%= currentURL %>"/>
+	<aui:input name="redirectURL" type="hidden" value="<%= redirectURL %>"/>
 	<aui:input name="returnURL" type="hidden" value="<%= currentURL %>"/>
 	
 	<aui:input name="<%= ServiceDisplayTerms.GROUP_ID %>" type="hidden" 
@@ -95,154 +119,138 @@
 	<aui:input name="serviceProcessId" type="hidden" 
 		value="<%= Validator.isNotNull(serviceProcess) ? serviceProcess.getPrimaryKey() : StringPool.BLANK %>"/>
 	
-	<aui:input name="processStepId" type="hidden" 
-		value="<%= Validator.isNotNull(step) ? step.getProcessStepId() : StringPool.BLANK %>"/>
+	<aui:input name="processWorkflowId" type="hidden" 
+		value="<%= Validator.isNotNull(workflow) ? workflow.getProcessWorkflowId() : StringPool.BLANK %>"/>
+	
+	
+	<aui:row>
+		<aui:col width="50">
+			<aui:input name="actionName"></aui:input>
+		</aui:col>
+		<aui:col width="50">
+			<aui:select name="autoEvent">
+				<aui:option value=""> <liferay-ui:message key="no-event"/></aui:option>
+				<aui:option value="submit"> <liferay-ui:message key="submit"/></aui:option>
+				<aui:option value="create"> <liferay-ui:message key="create"/></aui:option>
+				<aui:option value="resubmit"> <liferay-ui:message key="resubmit"/></aui:option>
+				<aui:option value="pay"> <liferay-ui:message key="pay"/></aui:option>
+				<aui:option value="cancel-event"> <liferay-ui:message key="cancel"/></aui:option>
+				<aui:option value="delay-mm"> <liferay-ui:message key="delay-mm"/></aui:option>
+				<aui:option value="payok"> <liferay-ui:message key="payok"/></aui:option>
+				<aui:option value="tag-label"> <liferay-ui:message key="tag-label"/></aui:option>
+			</aui:select>
+		</aui:col>	
+	</aui:row>
 
 	<aui:row>
-		<aui:col width="70">
-			<liferay-ui:message key="step-name"/>
-			<aui:input name="stepName" inlineLabel="false" label="" inlineField="false"></aui:input>
-		</aui:col>
-		<aui:col width="30">
-			<aui:input name="sequenceNo" inlineLabel="false"></aui:input>
-		</aui:col>
-	</aui:row>
-	<aui:row>
-		<aui:col width="70">
-			<datamgt:ddr 
-				cssClass="input100"
-				depthLevel="1" 
-				dictCollectionCode="DOSSIER_STATUS"
-				itemNames="dossierStatus"
-				itemsEmptyOption="true"
-				selectedItems="<%= Validator.isNotNull(step) ? step.getDossierStatus() : StringPool.BLANK %>"
-			>
-			</datamgt:ddr>
-		</aui:col>
-		<aui:col width="30">
-			<aui:input name="daysDuration" inlineField="false"></aui:input>
-		</aui:col>
-	</aui:row>
-	<aui:row>
-		<aui:col width="70">
-			<aui:select name="referenceDossierPartId" showEmptyOption="true">
-			
+		<aui:col width="50">
+			<aui:select name="preProcessStepId" showEmptyOption="true">
+				<%
+					for (ProcessStep step : stepAll) {
+				%>
+						<aui:option value="<%= step.getProcessStepId() %>"> <%= step.getStepName() %></aui:option>
+				<%
+					}
+				%>
 			</aui:select>
 		</aui:col>
-		<aui:col width="30">
-			&nbsp;
-		</aui:col>
+		<aui:col width="50">
+			<aui:select name="postProcessStepId" showEmptyOption="true" >
+				<%
+					for (ProcessStep step : stepAll) {
+				%>
+						<aui:option value="<%= step.getProcessStepId() %>"> <%= step.getStepName() %></aui:option>
+				<%
+					}
+				%>
+			</aui:select>	
+		</aui:col>	
 	</aui:row>
-	
-	<div id="step-allowance">
-		<div class="lfr-form-row lfr-form-row-inline">
-			<div class="row-fields">
-				<aui:select id="roleId0" inlineField="<%= true %>" name="roleId0" showEmptyOption="true">
-					<%
-						List<Role> roles = ProcessUtils.getRoles(renderRequest);
-						
-						for(Role role : roles) {
-					%>
-							<aui:option value="<%= role.getPrimaryKey() %>"><%= role.getName() %></aui:option>
-					<%
-						}
-					%>
-				</aui:select>
-				<aui:input fieldParam="readOnly0" id="readOnly0" inlineField="<%= true %>" name="readOnly0" type="checkbox"/>
-			</div>
-		</div>
-	</div>
-		
-	<aui:script use="liferay-auto-fields">
-		new Liferay.AutoFields(
-			{
-				contentBox: '#step-allowance',
-				fieldIndexes: '<portlet:namespace />stepAllowanceIndexs',
-				namespace: '<portlet:namespace />'
-			}
-		).render();
-	</aui:script>
-
-	<div id="dossier-part">
-		<div class="lfr-form-row lfr-form-row-inline">
-			<div class="row-fields">
-				<aui:select id="dossierPart0" inlineField="<%= true %>" name="dossierPart0" showEmptyOption="true">
-
-				</aui:select>
-			</div>
-		</div>
-	</div>
-	
-	<aui:script use="liferay-auto-fields">
-		new Liferay.AutoFields(
-			{
-				contentBox: '#dossier-part',
-				fieldIndexes: '<portlet:namespace />dossierIndexs',
-				namespace: '<portlet:namespace />'
-			}
-		).render();
-	</aui:script>
 
 	<aui:row>
-		<aui:col width="100">
-			<aui:input name="externalAppUrl" cssClass="input100"></aui:input>
+		<aui:col width="50">
+			<aui:input name="assignUser" type="checkbox"></aui:input>
+			
+			<aui:select name="actionUserId" showEmptyOption="true" label="">
+				<%
+					List<User> assignUsers = ProcessUtils.getAssignUsers(0);
+					for (User userSel : assignUsers) {
+				%>	
+					<aui:option value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
+				<%
+					}
+				%>
+			</aui:select>
 		</aui:col>
+		<aui:col width="50">
+			<aui:input name="requestPayment" type="checkbox"></aui:input>
+			
+			<aui:input name="paymentFee" label=""></aui:input>
+		</aui:col>	
 	</aui:row>
 
+	<aui:row>
+		<aui:col width="50">
+			<aui:input name="generateReceptionNo" type="checkbox"></aui:input>
+			
+			<aui:input name="receptionNoPattern" label=""></aui:input>
+		</aui:col>
+		<aui:col width="50">
+			<aui:input name="generateDeadline" type="checkbox"></aui:input>
+			
+			<aui:input name="deadlinePattern" label=""></aui:input>
+		</aui:col>	
+	</aui:row>
+	
+	<label class="bold"><liferay-ui:message key="result-action"/></label>
+	
+	<div id="workflow-output">
+		<%
+			for (int i = 0; i < outputIndexs.length; i++) {
+				int outputIndex = outputIndexs[i];
+				
+				WorkflowOutput output = workflowOutputs.get(i);
+		%>
+			<div class="lfr-form-row lfr-form-row-inline">
+				<div class="row-fields">
+					<aui:input name='<%= "workflowOutputId" + outputIndex %>' type="hidden" value="<%= output.getWorkflowOutputId() %>"/>
+					
+					<aui:select id='<%= "dossierPartId" + outputIndex %>' inlineField="<%= true %>" name='<%= "dossierPartId" + outputIndex %>' label="" showEmptyOption="true">
+						<%							
+							for (DossierPart dossier : dossiersResult) {
+						%>
+								<aui:option selected="<%=  Validator.equals(output.getDossierPartId(), dossier.getDossierpartId()) %>" value="<%= dossier.getDossierpartId() %>"><%= dossier.getPartName() %></aui:option>
+						<%
+							}
+						%>
+					</aui:select>
+
+					<aui:input checked="<%= output.getRequired() %>" fieldParam='<%= "required" + outputIndex %>' id='<%= "required" + outputIndex %>' label="required" inlineField="<%= true %>" name='<%= "required" + outputIndex %>' type="checkbox"/>
+					<aui:input checked="<%= output.getEsign() %>" fieldParam='<%= "esign" + outputIndex %>' id='<%= "esign" + outputIndex %>' label="esign" inlineField="<%= true %>" name='<%= "esign" + outputIndex %>' type="checkbox"/>
+					<aui:input checked="<%= output.getPostback() %>" fieldParam='<%= "postback" + outputIndex %>' id='<%= "postback" + outputIndex %>' label="postback" inlineField="<%= true %>" name='<%= "postback" + outputIndex %>' type="checkbox"/>
+				</div>
+			</div>
+			
+		<%
+			}
+		%>
+	
+	</div>
+
+	<aui:script use="liferay-auto-fields">
+		new Liferay.AutoFields(
+			{
+				contentBox: '#workflow-output',
+				fieldIndexes: '<portlet:namespace />outputIndexs',
+				namespace: '<portlet:namespace />'
+			}
+		).render();
+	</aui:script>
+
 	<aui:button-row>
-		<aui:button name="saveForm" value="<%= Validator.isNotNull(step) ? Constants.ADD : Constants.UPDATE %>"/>
-		<aui:button type="cancel" name="closeDialog" />
+		<aui:button type="submit" value="<%= Validator.isNotNull(workflow) ? Constants.ADD : Constants.UPDATE %>"/>
+		<aui:button type="cancel" name="cencel" />
 	</aui:button-row>
 	
 </aui:form>
 
-<aui:script use="aui-base,aui-io-request">
-
-	Liferay.provide(window,'submitForm', function() {
-		var A = AUI();
-		A.io.request('<%= updateProcessStepURL.toString() %>',
-		{
-			method: 'POST',
-			form: { id: '<portlet:namespace />processStepFm' },
-			on: {
-				success: function() {
-					Liferay.Util.getOpener().refreshPortlet();
-					Liferay.Util.getOpener().closePopup('addstep');
-				}
-			}
-		});
-	});
-
-
-	AUI().ready(function(A){
-		A.one('#<portlet:namespace/>saveForm').on('click', function(event) {
-			var A = AUI();
-			var url = '<%= updateProcessStepURL.toString() %>';
-			A.io.request(
-				url,
-				{
-					method: 'POST',
-					form: {
-						id: '<portlet:namespace/>processStepFm'
-					},
-					on: {
-						success: function() {
-							Liferay.Util.getOpener().refreshPortlet();
-							Liferay.Util.getOpener().closePopup('addstep');
-						},
-						error:function() {
-							alert("update-fail");
-						}
-					}
-				}
-			);
-		});
-	});
-	
-</aui:script>
-
-<aui:script use="aui-base">
-	A.one('#<portlet:namespace/>closeDialog').on('click', function(event) {
-		Liferay.Util.getOpener().closePopup('addstep');
-	});
-</aui:script>

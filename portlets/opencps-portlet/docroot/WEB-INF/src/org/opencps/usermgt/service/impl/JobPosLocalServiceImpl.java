@@ -39,9 +39,9 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.ResourceAction;
 import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
-import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.ResourceActionLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
@@ -113,11 +113,9 @@ public class JobPosLocalServiceImpl extends JobPosLocalServiceBaseImpl {
 				ResourcePermissionLocalServiceUtil.addResourcePermission(
 					serviceContext.getCompanyId(), 
 					className, ResourceConstants.SCOPE_GROUP, 
-					String.valueOf(role.getRoleId()), 
+					String.valueOf(serviceContext.getScopeGroupId()), 
 					role.getRoleId(), resourceAction.getActionId()
-					);	
-				_log.info("rowIds[jndex]  " + rowIds[jndex] +
-					" resourceAction.getActionId() " + resourceAction.getActionId());
+					);
 			}
 		}
 
@@ -139,7 +137,7 @@ public class JobPosLocalServiceImpl extends JobPosLocalServiceBaseImpl {
 
 	public JobPos updateJobPos(long jobPosId, long userId, 
 			String title, String description,
-			long workingUnitId, int leader,
+			long workingUnitId, int leader,long [] rowIds,
 			ServiceContext serviceContext)
 			throws SystemException, PortalException {
 
@@ -148,6 +146,23 @@ public class JobPosLocalServiceImpl extends JobPosLocalServiceBaseImpl {
 		Role role = RoleServiceUtil.getRole(jobPos.getMappingRoleId());
 		WorkingUnit workingUnit = workingUnitPersistence
 				.findByPrimaryKey(workingUnitId);
+		
+		for(int jndex = 0; jndex < rowIds.length; jndex ++) {
+			
+			if(rowIds[jndex] > 0) {
+				
+				ResourceAction resourceAction = ResourceActionLocalServiceUtil
+				.fetchResourceAction(rowIds[jndex]);
+				String className = resourceAction.getName();
+				
+				ResourcePermissionLocalServiceUtil.addResourcePermission(
+					serviceContext.getCompanyId(), 
+					className, ResourceConstants.SCOPE_GROUP, 
+					String.valueOf(serviceContext.getScopeGroupId()), 
+					role.getRoleId(), resourceAction.getActionId()
+					);
+			}
+		}
 
 		long directWorkingUnitId = getDirectWorkingUnitId(workingUnitId)
 				.getWorkingunitId();
@@ -178,10 +193,22 @@ public class JobPosLocalServiceImpl extends JobPosLocalServiceBaseImpl {
 			throws SystemException, PortalException {
 		JobPos jobPos = jobPosPersistence.findByPrimaryKey(jobPosId);
 		List<Employee> employees = new ArrayList<Employee>();
+		List<ResourcePermission> resourcePermissions = new ArrayList<ResourcePermission>();
 		employees =	employeePersistence.findByMainJobPosId(jobPosId);
 		if(employees.isEmpty()) {
 			RoleLocalServiceUtil.deleteRole(jobPos.getMappingRoleId());
+			resourcePermissions = ResourcePermissionLocalServiceUtil
+							.getRoleResourcePermissions(jobPos.getMappingRoleId());
+			
+			if(resourcePermissions.size() > 0) {
+				for(ResourcePermission resourcePermission : resourcePermissions) {
+					ResourcePermissionLocalServiceUtil
+					.deleteResourcePermission(resourcePermission);
+				}
+			}
+			
 			jobPosPersistence.remove(jobPosId);
+			
 		}
 		
 

@@ -85,7 +85,7 @@
 			</c:when>
 			
 			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOMAIN) %>">
-			
+				
 			</c:when>
 			
 			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_SERVICE) %>">
@@ -150,10 +150,24 @@
 						</c:when>
 						
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOMAIN) %>">
+							
+							<portlet:renderURL var="editDomainURL">
+								<portlet:param name="mvcPath" value='<%= templatePath + "edit_domain.jsp" %>'/>
+								<portlet:param name="backURL" value="<%=currentURL %>"/>
+							</portlet:renderURL>
+							
+							<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
+								<aui:nav-item 
+									id="addDomain" 
+									label="add-domain" 
+									iconCssClass="icon-plus"  
+									href="<%=editDomainURL %>"
+								/>
+							</c:if>
 						
 						</c:when>
 						
-						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_SERVICE) %>">
+						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_ADMINISTRATION) %>">
 							
 						</c:when>
 						

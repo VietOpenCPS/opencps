@@ -77,7 +77,7 @@
 										for(int i=0; i<accoutStatuses.length; i++) {
 											%>
 												<aui:option value="<%=accoutStatuses[i] %>">
-													<%=PortletUtil.getAccountStatus(accoutStatuses[i], themeDisplay.getLocale()) %>
+													<liferay-ui:message key="<%=PortletUtil.getAccountStatus(accoutStatuses[i], themeDisplay.getLocale()) %>" />
 												</aui:option>
 											<%
 											
@@ -105,7 +105,7 @@
 										for(int i=0; i<accoutStatuses.length; i++) {
 											%>
 												<aui:option value="<%=accoutStatuses[i] %>">
-												<%=PortletUtil.getAccountStatus(accoutStatuses[i], themeDisplay.getLocale()) %>
+													<liferay-ui:message key="<%=PortletUtil.getAccountStatus(accoutStatuses[i], themeDisplay.getLocale()) %>" />
 												</aui:option>
 											<%
 											

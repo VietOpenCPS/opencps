@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -124,7 +125,7 @@
 		<%
 			String accoutStatus = StringPool.BLANK;
 			
-			accoutStatus = PortletUtil.getAccountStatus(businesS.getAccountStatus(), themeDisplay.getLocale());
+			accoutStatus = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), PortletUtil.getAccountStatus(businesS.getAccountStatus(), themeDisplay.getLocale()));
 			row.addText(businesS.getIdNumber());
 			row.addText(businesS.getName());
 			row.addText(businesS.getBusinessType());
