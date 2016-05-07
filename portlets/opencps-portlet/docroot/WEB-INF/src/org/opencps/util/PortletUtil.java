@@ -616,4 +616,26 @@ public class PortletUtil {
 		}
 		return messageInfo;
 	}
+	
+	public static String getDossierLogLevelLabel(int value, Locale locale) {
+
+		String statusLabel = StringPool.BLANK;
+
+		switch (value) {
+		case 0:
+			statusLabel = LanguageUtil
+			    .get(locale, "normal");
+			break;
+		case 1:
+			statusLabel = LanguageUtil
+			    .get(locale, "warning");
+			break;
+		case 2:
+			statusLabel = LanguageUtil
+			    .get(locale, "error");
+			break;
+		}
+
+		return statusLabel;
+	}
 }

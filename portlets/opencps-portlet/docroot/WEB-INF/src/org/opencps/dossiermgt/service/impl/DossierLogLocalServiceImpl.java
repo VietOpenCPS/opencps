@@ -143,5 +143,16 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		return dossierLogPersistence
 		    .findByDossierId(doosierId);
 	}
+	public List<DossierLog> findByF_Level_All(long groupId)
+				    throws SystemException {
 
+					return dossierLogPersistence
+					    .findByF_Level_All(groupId);
+				}
+	public List<DossierLog> findByF_Level_Warring_Error(long groupId)
+				    throws SystemException {
+
+					return dossierLogPersistence
+					    .findByF_Level_Warring_Error(groupId);
+				}
 }

@@ -279,6 +279,13 @@
         <finder name="DossierId" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
         </finder>
+        
+         <finder name="F_Level_Warring_Error" where=" (level == 1 OR level == 2) " return-type="Collection">
+         	<finder-column name="groupId"></finder-column>
+        </finder>
+        <finder name="F_Level_All" return-type="Collection">
+         	<finder-column name="groupId"></finder-column>
+        </finder>
     </entity>
     
     <entity name="FileGroup" local-service="true" table="opencps_file_group">

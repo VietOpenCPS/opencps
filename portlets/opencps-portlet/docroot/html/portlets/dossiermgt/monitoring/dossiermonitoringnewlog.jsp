@@ -1,3 +1,11 @@
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLogLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierLog"%>
+<%@page import="org.opencps.dossiermgt.search.DossierLogSearchTerms"%>
+<%@page import="org.opencps.dossiermgt.search.DossierLogSearch"%>
+<%@page import="org.opencps.dossiermgt.search.DossierLogDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -35,73 +43,77 @@
 <liferay-util:include page="<%=templatePath + \"toptabs.jsp\" %>" servletContext="<%=application %>" />
 
 <%
+	String tabs1 = ParamUtil.getString(request, "tabs1");
+	boolean levelBoolean = ParamUtil.getBoolean(request, DossierLogDisplayTerms.LEVEL);
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossiermonitoringnewlog.jsp");
 	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	
-	List<Dossier> dossiers =  new ArrayList<Dossier>();
+	List<DossierLog> dossierLogs =  new ArrayList<DossierLog>();
 	
 %>
-
+<liferay-portlet:renderURL var="searchURL">
+	<liferay-portlet:param name="mvcPath" value="<%=templatePath + \"dossiermonitoringnewlog.jsp\" %>"/>
+	<liferay-portlet:param name="tabs1" value="<%=tabs1 %>"/>
+</liferay-portlet:renderURL>
 <aui:row>
 	<aui:col>
-		<aui:input type="checkbox" name="<%=DossierDisplayTerms.RECEPTION_NO %>" inlineField="true"></aui:input>
-		<aui:input type="checkbox" name="<%=DossierDisplayTerms.RECEPTION_NO +\"1\" %>" inlineField="true"></aui:input>
+		<aui:input type="checkbox" onChange="<%= renderResponse.getNamespace() + \"fitterALL()\" %>" name="<%=DossierLogDisplayTerms.LEVEL %>" inlineField="true"></aui:input>
+		<aui:input type="checkbox" name="refresh" inlineField="true"></aui:input>
 	</aui:col>
 </aui:row>
-<liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+<liferay-ui:search-container searchContainer="<%= new DossierLogSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
 	<liferay-ui:search-container-results>
 		<%
-			DossierSearchTerms searchTerms = (DossierSearchTerms)searchContainer.getSearchTerms();
-			
-			String[] itemNames = null;
-			
-			if(Validator.isNotNull(searchTerms.getKeywords())){
-				itemNames = CustomSQLUtil.keywords(searchTerms.getKeywords());
-			}
-			
-			try{
-				
-				Dossier dossier = new DossierImpl();
-	dossier.setDossierId(1);
-	dossiers.add(dossier);
-			}catch(Exception e){
-				_log.error(e);
-			}
 		
-			total = dossiers.size();
-			results = dossiers;
+			DossierLogSearchTerms searchTerms = (DossierLogSearchTerms)searchContainer.getSearchTerms();
+			if(levelBoolean){
+				dossierLogs = DossierLogLocalServiceUtil.findByF_Level_Warring_Error(themeDisplay.getScopeGroupId());
+			}else{
+				dossierLogs = DossierLogLocalServiceUtil.findByF_Level_All(themeDisplay.getScopeGroupId());
+			}
+			
+			total = dossierLogs.size();
+			results = dossierLogs;
 			
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
 		%>
 	</liferay-ui:search-container-results>	
 		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.model.Dossier" 
-			modelVar="dossier" 
-			keyProperty="dossierId"
+			className="org.opencps.dossiermgt.model.DossierLog" 
+			modelVar="dossierLog" 
+			keyProperty="dossierLogId"
 		>
 			<%
 
 				//id column
-				row.addText(String.valueOf(dossier.getDossierId()));
-				row.addText(DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-				row.addText(String.valueOf(dossier.getSubjectId()));
-				row.addText(dossier.getGovAgencyName());
-				row.addText(String.valueOf(dossier.getDossierStatus()));
-				row.addText(DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-				
-				row.addText(dossier.getReceptionNo());
-				
-				//action column
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
+				row.addText(String.valueOf(searchContainer.getDelta()*(searchContainer.getCur()-1) +index + 1));
+				row.addText(DateTimeUtil.convertDateToString(dossierLog.getUpdateDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+				row.addText(String.valueOf(dossierLog.getDossierId()));
+				Dossier ettCurrent = DossierLocalServiceUtil.fetchDossier(dossierLog.getDossierId());
+				row.addText(ettCurrent.getReceptionNo());
+				row.addText(PortletUtil.getDossierStatusLabel(dossierLog.getDossierStatus(), locale));
+				row.addText(dossierLog.getActionInfo());
+				row.addText(dossierLog.getMessageInfo());
+				row.addText(PortletUtil.getDossierLogLevelLabel(dossierLog.getLevel(), locale));
 			%>	
 		</liferay-ui:search-container-row> 
 	
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
-
+<aui:script>
+function <portlet:namespace />fitterALL() {
+    var A = AUI();
+	var url = '<%=searchURL.toString() %>';
+	
+	if(A.one('#<portlet:namespace /><%=DossierLogDisplayTerms.LEVEL %>')) {
+		url += '&<portlet:namespace /><%=DossierLogDisplayTerms.LEVEL %>=' + A.one('#<portlet:namespace /><%=DossierLogDisplayTerms.LEVEL %>').get('value');
+	}
+	location.href = url;
+}
+</aui:script>
 <%!
-	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.frontofficedossierlist.jsp");
+	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.monitoring.dossiermonitoringnewlog.jsp");
 %>
