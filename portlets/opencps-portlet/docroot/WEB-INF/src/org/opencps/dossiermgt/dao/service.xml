@@ -203,6 +203,11 @@
             <order-column name="modifiedDate" order-by="desc"></order-column>
         </order>
         
+        <finder return-type="Dossier" name="F_ReceptionNo" unique="true">
+			<finder-column name="groupId" />
+			<finder-column name="receptionNo"/>
+		</finder>
+        
     </entity>
     
     <entity name="DossierStatus" local-service="true" table="opencps_dossier_status">

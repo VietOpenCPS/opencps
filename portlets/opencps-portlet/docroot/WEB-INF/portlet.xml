@@ -671,12 +671,12 @@
 		<init-param>
 			<name>view-template</name>
 			<value>
-				/html/portlets/dossiermgt/monitoring/view.jsp
+				/html/portlets/dossiermgt/monitoring/dossiermonitoringsearch.jsp
 			</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
-			<value>/html/portlets/dossiermgt/statemenu/</value>
+			<value>/html/portlets/dossiermgt/monitoring/</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

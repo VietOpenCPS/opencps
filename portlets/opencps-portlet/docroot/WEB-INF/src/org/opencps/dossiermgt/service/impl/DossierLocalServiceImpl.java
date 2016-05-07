@@ -20,6 +20,7 @@ package org.opencps.dossiermgt.service.impl;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.base.DossierLocalServiceBaseImpl;
 
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -51,5 +52,10 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		return null;
 	}
+	
+	public Dossier fetchByF_ReceptionNo(long groupId, String receptionNo) throws SystemException {
+		return dossierPersistence.fetchByF_ReceptionNo(groupId, receptionNo);
+	    
+    }
 
 }
