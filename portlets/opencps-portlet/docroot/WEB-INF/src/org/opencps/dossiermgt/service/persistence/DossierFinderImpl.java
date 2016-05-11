@@ -564,7 +564,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				sql = StringUtil.replace(
 					sql, "(opencps_dossier.dossierStatus = ?) AND", "(opencps_dossier.dossierStatus <> ?) AND");
 			}
-	System.out.println("DossierFinderImpl._searchDossierMonitoringNewUpdate()"+sql);
 			SQLQuery q = session.createSQLQuery(sql);
 	
 			q.addEntity("Dossier", DossierImpl.class);

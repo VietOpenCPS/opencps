@@ -99,7 +99,7 @@
 	</aui:row>
 <aui:row>
 	<aui:col>
-	<aui:button type="button" value="search" onClick="<%= renderResponse.getNamespace() + \"fitterALL()\" %>"></aui:button>
+		<aui:button type="button" value="search" onClick="<%= renderResponse.getNamespace() + \"fitterALL()\" %>"></aui:button>
 	</aui:col>
 </aui:row>
 <aui:row>

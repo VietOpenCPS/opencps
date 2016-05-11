@@ -157,4 +157,8 @@ public class StepAllowanceLocalServiceImpl
 
 	}
 	
+	public List<StepAllowance> findByRoleIds(long[] roleId) throws SystemException {
+		return stepAllowancePersistence.findByRoleIds(roleId);
+    }
+	
 }
