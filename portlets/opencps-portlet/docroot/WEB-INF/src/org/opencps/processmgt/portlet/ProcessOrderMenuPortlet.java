@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
+import org.opencps.processmgt.util.ProcessOrderUtils;
 //import org.opencps.processmgt.util.ProcessOrderUtils;
 import org.opencps.util.WebKeys;
 
@@ -96,7 +97,7 @@ public class ProcessOrderMenuPortlet extends MVCPortlet{
         // now read your parameters, e.g. like this:
         // long someParameter = ParamUtil.getLong(request, "someParameter");
         
-		List<ProcessStep> list = null;// ProcessOrderUtils.getProcessSteps(groupId, user.getRoleIds());
+		List<ProcessStep> list = ProcessOrderUtils.getProcessSteps(groupId, user.getRoleIds());
 		
 		long counterVal = 1;
 		
