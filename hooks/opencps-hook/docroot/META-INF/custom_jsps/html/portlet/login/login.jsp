@@ -126,27 +126,50 @@
 				}
 				%>
 
-				<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" cssClass="clearable" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
-					<aui:validator name="required" />
-				</aui:input>
-
-				<aui:input name="password" showRequiredLabel="<%= false %>" type="password" value="<%= password %>">
-					<aui:validator name="required" />
-				</aui:input>
-
-				<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
-
-				<c:if test="<%= company.isAutoLogin() && !PropsValues.SESSION_DISABLED %>">
-					<aui:input checked="<%= rememberMe %>" name="rememberMe" type="checkbox" />
-				</c:if>
+				<aui:row>
+					<aui:col width = "50">
+						<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" cssClass="clearable" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
+							<aui:validator name="required" />
+						</aui:input>
+		
+						<aui:input name="password" showRequiredLabel="<%= false %>" type="password" value="<%= password %>">
+							<aui:validator name="required" />
+						</aui:input>
+		
+						<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
+		<%-- 
+						<c:if test="<%= company.isAutoLogin() && !PropsValues.SESSION_DISABLED %>">
+							<aui:input checked="<%= rememberMe %>" name="rememberMe" type="checkbox" />
+						</c:if> --%>
+					
+						<aui:row>
+							<aui:col width = "50">
+								<liferay-ui:message key = "no-account"/> <a href="#"><liferay-ui:message key = "create-new-account"/></a>
+								<a href='#'><liferay-ui:message key = "forgot-password"/></a>
+								
+							</aui:col>
+							<aui:col width = "50">
+								<aui:button type="submit" value="sign-in" />
+							</aui:col>
+						</aui:row>
+					</aui:col>
+					
+					<aui:col width = "50">
+						<p>
+							<liferay-ui:message key = "conduct"/>
+						</p>
+						
+						<p>
+							<liferay-ui:message key = "conduct-description"/>
+						</p>
+					</aui:col>
+				</aui:row>
 			</aui:fieldset>
-
-			<aui:button-row>
-				<aui:button type="submit" value="sign-in" />
-			</aui:button-row>
+			
 		</aui:form>
-
-		<liferay-util:include page="/html/portlet/login/navigation.jsp" />
+		
+		
+		<!-- <liferay-util:include page="/html/portlet/login/navigation.jsp" /> -->
 
 		<aui:script use="aui-base">
 			var form = A.one(document.<portlet:namespace />fm);
@@ -179,3 +202,9 @@
 		</aui:script>
 	</c:otherwise>
 </c:choose>
+
+<%!
+private String _getSectionJsp(String name) {
+	return TextFormatter.format(name, TextFormatter.N);
+}
+%>

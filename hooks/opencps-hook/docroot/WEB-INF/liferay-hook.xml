@@ -4,5 +4,9 @@
 <hook>
     <language-properties>content/Language.properties</language-properties>
     <language-properties>content/Language_vi.properties</language-properties>
+    <language-properties>
+    	content/Language_vi.properties
+    </language-properties>
     <custom-jsp-dir>/META-INF/custom_jsps</custom-jsp-dir>
+
 </hook>
