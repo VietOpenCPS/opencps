@@ -1,3 +1,4 @@
+<%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -42,7 +43,7 @@
 <%
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "workingunits.jsp");
-	
+	iteratorURL.setParameter("tabs1", UserMgtUtil.TOP_TABS_WORKINGUNIT);
 	List<WorkingUnit> workingUnits = new ArrayList<WorkingUnit>();
 	int totalCount = 0;
 	

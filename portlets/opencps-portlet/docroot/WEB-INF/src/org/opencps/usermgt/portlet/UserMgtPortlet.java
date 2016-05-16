@@ -666,9 +666,6 @@ public class UserMgtPortlet extends MVCPortlet {
 		long[] rowIds = ParamUtil
 		    .getLongValues(actionRequest, "rowIds");
 
-		_log
-		    .info("rowIds " + rowIds.length);
-
 		String[] indexOfRows = rowIndexes
 		    .split(",");
 		String redirectURL = ParamUtil

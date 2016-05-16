@@ -76,7 +76,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 	 * the employee local service.
 	 */
 
-	public Employee addEmployee(long userId, String employeeNo, String fullName,
+	@SuppressWarnings("null")
+    public Employee addEmployee(long userId, String employeeNo, String fullName,
 			int gender, String telNo, String mobile, String email,
 			long workingUnitId, int workingStatus, long mainJobPosId,
 			long[] jobPosIds, boolean isAddUser, String accountEmail,
@@ -87,7 +88,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 		long employeeId = CounterLocalServiceUtil
 				.increment(Employee.class.getName());
-
+		
 		Employee employee = employeePersistence.create(employeeId);
 
 		// Get main JobPos
@@ -146,7 +147,19 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				birthDateYear);
 
 		User user = null;
-
+		
+		long [] listRoles = null;
+		
+		listRoles[0] = (jobPos.getMappingRoleId());
+		
+		if(!roleIds.isEmpty()) {
+			listRoles = new long[roleIds.size()];
+			
+			for(int i = 1; i <= roleIds.size(); i++) {
+				listRoles[i] = roleIds.get(i);
+			}
+		}
+		
 		if (isAddUser) {
 			user = userService.addUserWithWorkflow(
 					serviceContext.getCompanyId(), false, password,
@@ -156,7 +169,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 					0, (gender == 1), birthDateMonth, birthDateDay,
 					birthDateYear,
 					jobPos != null ? jobPos.getTitle() : StringPool.BLANK,
-					groupIds, organizationIds, ArrayUtil.toLongArray(roleIds),
+					groupIds, organizationIds, listRoles,
 					userGroupIds, new ArrayList<Address>(),
 					new ArrayList<EmailAddress>(), new ArrayList<Phone>(),
 					new ArrayList<Website>(),
@@ -402,7 +415,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 	}
 
-	public Employee updateEmployee(long userId, long employeeId,
+	@SuppressWarnings("null")
+    public Employee updateEmployee(long userId, long employeeId,
 			String employeeNo, String fullName, int gender, String telNo,
 			String mobile, String email, long workingUnitId, int workingStatus,
 			long mainJobPosId, long[] jobPosIds, boolean isAddUser,
@@ -471,7 +485,19 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				organizationIds = new long[]{
 						workingUnit.getMappingOrganisationId()};
 			}
-
+			
+			long [] listRoles = null;
+			
+			listRoles[0] = (jobPos.getMappingRoleId());
+			
+			if(!roleIds.isEmpty()) {
+				listRoles = new long[roleIds.size()];
+				
+				for(int i = 1; i <= roleIds.size(); i++) {
+					listRoles[i] = roleIds.get(i);
+				}
+			}
+			
 			mappingUser = userService.addUserWithWorkflow(
 					serviceContext.getCompanyId(), false, password,
 					reTypePassword, false, screenName, accountEmail, 0L,
@@ -480,7 +506,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 					0, (gender == 1), birthDateMonth, birthDateDay,
 					birthDateYear,
 					jobPos != null ? jobPos.getTitle() : StringPool.BLANK,
-					groupIds, organizationIds, ArrayUtil.toLongArray(roleIds),
+					groupIds, organizationIds, listRoles,
 					userGroupIds, new ArrayList<Address>(),
 					new ArrayList<EmailAddress>(), new ArrayList<Phone>(),
 					new ArrayList<Website>(),
