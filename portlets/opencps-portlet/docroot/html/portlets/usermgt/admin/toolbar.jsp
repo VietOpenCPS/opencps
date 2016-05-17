@@ -88,10 +88,21 @@
 	
 		<aui:nav-bar-search cssClass="pull-right">
 			<div class="form-search">
-			   <%
-	                 searchURL.setParameter("mvcPath", templatePath + "employees.jsp");
-	                 searchURL.setParameter("tabs1", UserMgtUtil.TOP_TABS_EMPLOYEE);
-	           %>
+				<c:choose>
+					<c:when test="<%= tabs1.contentEquals(UserMgtUtil.TOP_TABS_EMPLOYEE)%>">
+						<%
+							searchURL.setParameter("mvcPath", templatePath + "employees.jsp");
+							searchURL.setParameter("tabs1", UserMgtUtil.TOP_TABS_EMPLOYEE);
+						%>
+					</c:when>
+					<c:when test="<%=tabs1.contentEquals(UserMgtUtil.TOP_TABS_WORKINGUNIT) %>">
+						<%
+	                        searchURL.setParameter("mvcPath", templatePath + "workingunits.jsp");
+	                        searchURL.setParameter("tabs1", UserMgtUtil.TOP_TABS_WORKINGUNIT);
+	                    %>
+					</c:when>
+				</c:choose>
+			   
 			<aui:form action="<%= searchURL %>" method="post" name="fm">
 			<c:choose>
 			     <c:when test="<%= tabs1.contentEquals(UserMgtUtil.TOP_TABS_EMPLOYEE)%>">
@@ -127,13 +138,11 @@
 			     </c:when>
 			    
 			     <c:when test="<%=tabs1.contentEquals(UserMgtUtil.TOP_TABS_WORKINGUNIT) %>">
-			          <%
-                        searchURL.setParameter("mvcPath", templatePath + "workingunits.jsp");
-                        searchURL.setParameter("tabs1", UserMgtUtil.TOP_TABS_WORKINGUNIT);
-                      %>
                       <aui:row>
                         <aui:col width="20">
-                            <aui:select name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ISEMPLOYER %>" label="<%=StringPool.BLANK %>">
+                            <aui:select name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ISEMPLOYER %>" label="<%=StringPool.BLANK %>"
+                            	onChange='<%=renderResponse.getNamespace() + "searchByIsemployee(this)"%>'
+                            >
 	                             <aui:option value='<%= "fillall" %>'>
                                     <liferay-ui:message key="all" />
                                 </aui:option>
@@ -146,13 +155,25 @@
 	                      </aui:select>
                         </aui:col>
                         </aui:row>
-                        <aui:button type="submit" name="fill" value="fill"/>
+                        <%-- <aui:button type="submit" name="fill" value="fill"/> --%>
 			     </c:when>
 			</c:choose>
 				</aui:form>
 			</div>
 		</aui:nav-bar-search>
 </aui:nav-bar>
+<aui:script use="liferay-util-list-fields,liferay-portlet-url">
+	Liferay.provide(window, '<portlet:namespace/>searchByIsemployee', function(e) {
+		
+		var A = AUI();
+		
+		var instance = A.one(e);
+		
+		var processStepId = instance.attr(instance.val());
+		
+		submitForm(document.<portlet:namespace />fm);
+	});
+</aui:script>
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.usermgt.admin.toolbar.jsp");
 %>
