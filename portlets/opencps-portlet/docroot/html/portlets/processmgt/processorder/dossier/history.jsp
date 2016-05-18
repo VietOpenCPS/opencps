@@ -18,7 +18,4 @@
 %>
 <%@ include file="../../init.jsp"%>
 
-<%
-	
-
-%>
+<h5>Developing...</h5>

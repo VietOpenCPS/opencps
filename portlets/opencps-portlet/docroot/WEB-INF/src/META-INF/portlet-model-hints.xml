@@ -484,6 +484,7 @@
 		</field>
 		<field name="updateDatetime" type="Date" />
 		<field name="level" type="int" />
+		<field name="actor" type="String" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierPart">
 		<field name="dossierpartId" type="long" />

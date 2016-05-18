@@ -272,6 +272,7 @@
         <column name="messageInfo" type="String"/>
         <column name="updateDatetime" type="Date"/>
         <column name="level" type="int"/>
+        <column name="actor" type="String"></column>
         <order by="desc">
             <order-column name="modifiedDate" order-by="desc"></order-column>
         </order>
