@@ -175,4 +175,22 @@
 				opencps_processorder.assignToUserId = ?
 		]]>
 	</sql>
+
+	<sql id="org.opencps.processmgt.service.persistence.ActionHistoryFinder.searchActionHistoryByDossierId">	
+		<![CDATA[
+			SELECT 
+				opencps_actionhistory.*
+			FROM 
+				opencps_actionhistory
+			INNER JOIN
+				opencps_processorder
+			ON
+				opencps_actionhistory.processOrderId=opencps_processorder.processOrderId
+			WHERE
+				(opencps_actionhistory.groupId = ?)
+			AND
+				opencps_processorder.dossierId=?
+		]]>
+	</sql>
+
 </custom-sql>

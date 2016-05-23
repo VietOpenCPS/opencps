@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.paymentmgt">
+	<author>trungdk</author>
+	<namespace>paymentmgt</namespace>
+    <entity name="PaymentFile" remote-service="true" local-service="true" human-name="Payment file" table="opencps_payment_file" uuid="false">
+        <column name="paymentFileId" type="long" primary="true"></column>
+        <column name="companyId" type="long"></column>
+        <column name="groupId" type="long"></column>
+        <column name="userId" type="long"></column>
+        <column name="createDate" type="Date"></column>
+        <column name="modifiedDate" type="Date"></column>
+        <column name="uuid" type="String"></column>
+        <column name="dossierId" type="long"></column>
+        <column name="fileGroupId" type="long"></column>
+        <column name="ownerUserId" type="long"></column>
+        <column name="ownerOrganizationId" type="long"></column>
+        <column name="govAgencyOrganizationId" type="long"></column>
+        <column name="paymentName" type="String"></column>
+        <column name="requestDatetime" type="Date"></column>
+        <column name="amount" type="double"></column>
+        <column name="requestNote" type="String"></column>
+        <column name="keypayUrl" type="String"></column>
+        <column name="keypayTransactionId" type="long"></column>
+        <column name="keypayGoodCode" type="String"></column>
+        <column name="keypayMerchantCode" type="String"></column>
+        <column name="bankInfo" type="String"></column>
+        <column name="placeInfo" type="String"></column>
+        <column name="paymentStatus" type="int"></column>
+        <column name="paymentMethod" type="int"></column>
+        <column name="confirmDatetime" type="Date"></column>
+        <column name="confirmFileEntryId" type="long"></column>
+        <column name="approveDatetime" type="Date"></column>
+        <column name="accountUserName" type="String"></column>
+        <column name="approveNote" type="String"></column>
+        <column name="govAgencyTaxNo" type="String"></column>
+        <column name="invoiceTemplateNo" type="String"></column>
+        <column name="invoiceIssueNo" type="String"></column>
+        <column name="invoiceNo" type="String"></column>
+    </entity>
+    <entity name="PaymentConfig" local-service="true" human-name="Payment configuration" table="opencps_payment_config">
+        <column name="paymentConfigId" type="long" primary="true"></column>
+        <column name="companyId" type="long"></column>
+        <column name="groupId" type="long"></column>
+        <column name="userId" type="long"></column>
+        <column name="createDate" type="Date"></column>
+        <column name="modifiedDate" type="Date"></column>
+        <column name="govAgencyOrganizationId" type="long"></column>
+        <column name="govAgencyName" type="String"></column>
+        <column name="govAgencyTaxNo" type="String"></column>
+        <column name="invoiceTemplateNo" type="String"></column>
+        <column name="invoiceIssueNo" type="String"></column>
+        <column name="invoiceLastNo" type="String"></column>
+        <column name="bankInfo" type="String"></column>
+        <column name="placeInfo" type="String"></column>
+        <column name="keypayDomain" type="String"></column>
+        <column name="keypayVersion" type="String"></column>
+        <column name="keypayMerchantCode" type="String"></column>
+        <column name="keypaySecureKey" type="String"></column>
+    </entity>
+
+</service-builder>
