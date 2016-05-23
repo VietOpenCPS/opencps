@@ -681,18 +681,22 @@
 		<init-param>
 			<name>view-template</name>
 			<value>
-				/html/portlets/dossiermgt/monitoring/view.jsp
+				/html/portlets/dossiermgt/monitoring/dossiermonitoringsearch.jsp
 			</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
-			<value>/html/portlets/dossiermgt/statemenu/</value>
+			<value>/html/portlets/dossiermgt/monitoring/</value>
 		</init-param>
+    	<init-param>
+        	<name>config-template</name>
+        	<value>/html/portlets/dossiermgt/monitoring/configuration.jsp</value>
+    	</init-param>		
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
-		<resource-bundle>content.Language_14</resource-bundle>
+		<resource-bundle>content.Language_19</resource-bundle>
 		<portlet-info>
 			<title>Dossier FrontOffice Monitoring</title>
 			<short-title>Dossier FrontOffice Monitoring</short-title>

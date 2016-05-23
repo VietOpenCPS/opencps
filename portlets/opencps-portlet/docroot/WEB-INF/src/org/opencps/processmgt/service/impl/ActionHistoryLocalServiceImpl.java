@@ -208,4 +208,17 @@ public class ActionHistoryLocalServiceImpl
 		    .findByPOID_PWID(processOrderId, processWorkflowId);
 	}
 
+	
+	/**
+	 * @param groupId
+	 * @param dossierId
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<ActionHistory> searchActionHistoryByDossierId(long groupId, long dossierId) {
+
+		return actionHistoryFinder
+		    .searchActionHistoryByDossierId(groupId, dossierId);
+	}
+	
 }

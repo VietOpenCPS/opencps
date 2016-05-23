@@ -24,6 +24,7 @@ import org.opencps.dossiermgt.model.DossierLog;
 import org.opencps.dossiermgt.service.base.DossierLogLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -147,4 +148,14 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		    .findByDossierId(doosierId);
 	}
 
+	public List<DossierLog> getDossierLogByDossierId(long dossierId, int start, int end, OrderByComparator obc)
+		throws SystemException {
+
+		return dossierLogPersistence
+			.findByDossierId(dossierId, start, end, obc);
+	}
+	
+	public int countDossierLogByDossierId(long dossierId) throws SystemException {
+		return dossierLogPersistence.countByDossierId(dossierId);
+	}
 }

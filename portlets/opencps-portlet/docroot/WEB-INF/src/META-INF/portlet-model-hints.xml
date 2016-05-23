@@ -475,6 +475,8 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="dossierId" type="long" />
 		<field name="fileGroupId" type="long" />
+		<field name="actor" type="int" />
+		<field name="requestCommand" type="int" />
 		<field name="dossierStatus" type="int" />
 		<field name="actionInfo" type="String">
 			<hint name="max-length">255</hint>
@@ -484,6 +486,7 @@
 		</field>
 		<field name="updateDatetime" type="Date" />
 		<field name="level" type="int" />
+		<field name="syncStatus" type="int" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierPart">
 		<field name="dossierpartId" type="long" />
