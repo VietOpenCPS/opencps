@@ -227,8 +227,12 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="serviceNo" type="String" />
-		<field name="serviceName" type="String" />
-		<field name="shortName" type="String" />
+		<field name="serviceName" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="fullName" type="String">
+			<hint name="max-length">255</hint>
+		</field>
 		<field name="serviceProcess" type="String" />
 		<field name="serviceMethod" type="String" />
 		<field name="serviceDossier" type="String" />
@@ -337,7 +341,10 @@
 		<field name="generateReceptionNo" type="String" />
 		<field name="receptionNoPattern" type="String" />
 		<field name="generateDeadline" type="boolean" />
-		<field name="deadlinePattern" type="boolean" />
+		<field name="deadlinePattern" type="String" />
+		<field name="isFinishStep" type="boolean" />
+		<field name="preCondition" type="String" />
+		<field name="isMultipled" type="boolean" />
 	</model>
 	<model name="org.opencps.processmgt.model.ServiceInfoProcess">
 		<field name="serviceProcessId" type="long" />
@@ -449,6 +456,7 @@
 		<field name="groupFileId" type="long" />
 		<field name="ownerUserId" type="long" />
 		<field name="ownerOrganizationId" type="long" />
+		<field name="govAgencyOrganizationId" type="int" />
 		<field name="displayName" type="String">
 			<hint name="max-length">255</hint>
 		</field>
@@ -475,6 +483,8 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="dossierId" type="long" />
 		<field name="fileGroupId" type="long" />
+		<field name="actor" type="int" />
+		<field name="requestCommand" type="int" />
 		<field name="dossierStatus" type="int" />
 		<field name="actionInfo" type="String">
 			<hint name="max-length">255</hint>
@@ -484,6 +494,8 @@
 		</field>
 		<field name="updateDatetime" type="Date" />
 		<field name="level" type="int" />
+		<field name="actor" type="String" />
+		<field name="syncStatus" type="int" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierPart">
 		<field name="dossierpartId" type="long" />
@@ -583,5 +595,66 @@
 		<field name="serviceMode" type="int" />
 		<field name="serviceProcessId" type="long" />
 		<field name="domainCode" type="String" />
+	</model>
+	<model name="org.opencps.paymentmgt.model.PaymentConfig">
+		<field name="paymentConfigId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="govAgencyOrganizationId" type="long" />
+		<field name="govAgencyName" type="String" />
+		<field name="govAgencyTaxNo" type="String" />
+		<field name="invoiceTemplateNo" type="String" />
+		<field name="invoiceIssueNo" type="String" />
+		<field name="invoiceLastNo" type="String">
+			<hint name="max-length">7</hint>
+		</field>
+		<field name="bankInfo" type="String" />
+		<field name="placeInfo" type="String" />
+		<field name="keypayDomain" type="String" />
+		<field name="keypayVersion" type="String" />
+		<field name="keypayMerchantCode" type="String" />
+		<field name="keypaySecureKey" type="String" />
+	</model>
+	<model name="org.opencps.paymentmgt.model.PaymentFile">
+		<field name="paymentFileId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="uuid" type="String" />
+		<field name="dossierId" type="long" />
+		<field name="fileGroupId" type="long" />
+		<field name="ownerUserId" type="long" />
+		<field name="ownerOrganizationId" type="long" />
+		<field name="govAgencyOrganizationId" type="long" />
+		<field name="paymentName" type="String" />
+		<field name="requestDatetime" type="Date" />
+		<field name="amount" type="double" />
+		<field name="requestNote" type="String" />
+		<field name="keypayUrl" type="String" />
+		<field name="keypayTransactionId" type="long">
+			<hint name="max-length">6</hint>
+		</field>
+		<field name="keypayGoodCode" type="String">
+			<hint name="max-length">20</hint>
+		</field>
+		<field name="keypayMerchantCode" type="String" />
+		<field name="bankInfo" type="String" />
+		<field name="placeInfo" type="String" />
+		<field name="paymentStatus" type="int" />
+		<field name="paymentMethod" type="int" />
+		<field name="confirmDatetime" type="Date" />
+		<field name="confirmFileEntryId" type="long" />
+		<field name="approveDatetime" type="Date" />
+		<field name="accountUserName" type="String" />
+		<field name="approveNote" type="String" />
+		<field name="govAgencyTaxNo" type="String" />
+		<field name="invoiceTemplateNo" type="String" />
+		<field name="invoiceIssueNo" type="String" />
+		<field name="invoiceNo" type="String" />
 	</model>
 </model-hints>

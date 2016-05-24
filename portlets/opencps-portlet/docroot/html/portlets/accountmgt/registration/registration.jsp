@@ -22,8 +22,8 @@
 <%@ include file="../init.jsp" %>
 
 <%
-	HttpServletRequest originalServletRequest = PortalUtil.getOriginalServletRequest(request);
-	String type = GetterUtil.getString(originalServletRequest.getParameter("type"), "citizen");
+	//HttpServletRequest originalServletRequest = PortalUtil.getOriginalServletRequest(request);
+	String type = GetterUtil.getString(request.getParameter("type"), "citizen");
 %>
 
 <c:choose>

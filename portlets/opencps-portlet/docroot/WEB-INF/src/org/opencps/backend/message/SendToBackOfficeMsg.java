@@ -1,0 +1,249 @@
+/**
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+
+package org.opencps.backend.message;
+
+import java.util.Date;
+
+
+/**
+ * @author khoavd
+ *
+ */
+public class SendToBackOfficeMsg {
+	
+    /**
+     * @return the processOrderId
+     */
+    public long getProcessOrderId() {
+    
+    	return processOrderId;
+    }
+	
+    /**
+     * @param processOrderId the processOrderId to set
+     */
+    public void setProcessOrderId(long processOrderId) {
+    
+    	this.processOrderId = processOrderId;
+    }
+	
+    /**
+     * @return the dossierId
+     */
+    public long getDossierId() {
+    
+    	return dossierId;
+    }
+	
+    /**
+     * @param dossierId the dossierId to set
+     */
+    public void setDossierId(long dossierId) {
+    
+    	this.dossierId = dossierId;
+    }
+	
+    /**
+     * @return the fileGroupId
+     */
+    public long getFileGroupId() {
+    
+    	return fileGroupId;
+    }
+	
+    /**
+     * @param fileGroupId the fileGroupId to set
+     */
+    public void setFileGroupId(long fileGroupId) {
+    
+    	this.fileGroupId = fileGroupId;
+    }
+	
+    /**
+     * @return the dossierStatus
+     */
+    public String getDossierStatus() {
+    
+    	return dossierStatus;
+    }
+	
+    /**
+     * @param dossierStatus the dossierStatus to set
+     */
+    public void setDossierStatus(String dossierStatus) {
+    
+    	this.dossierStatus = dossierStatus;
+    }
+	
+    /**
+     * @return the actionInfo
+     */
+    public String getActionInfo() {
+    
+    	return actionInfo;
+    }
+	
+    /**
+     * @param actionInfo the actionInfo to set
+     */
+    public void setActionInfo(String actionInfo) {
+    
+    	this.actionInfo = actionInfo;
+    }
+	
+    /**
+     * @return the messageInfo
+     */
+    public String getMessageInfo() {
+    
+    	return messageInfo;
+    }
+	
+    /**
+     * @param messageInfo the messageInfo to set
+     */
+    public void setMessageInfo(String messageInfo) {
+    
+    	this.messageInfo = messageInfo;
+    }
+	
+    /**
+     * @return the sendResult
+     */
+    public int getSendResult() {
+    
+    	return sendResult;
+    }
+	
+    /**
+     * @param sendResult the sendResult to set
+     */
+    public void setSendResult(int sendResult) {
+    
+    	this.sendResult = sendResult;
+    }
+	
+    /**
+     * @return the requestPayment
+     */
+    public int getRequestPayment() {
+    
+    	return requestPayment;
+    }
+	
+    /**
+     * @param requestPayment the requestPayment to set
+     */
+    public void setRequestPayment(int requestPayment) {
+    
+    	this.requestPayment = requestPayment;
+    }
+	
+    /**
+     * @return the updateDatetime
+     */
+    public Date getUpdateDatetime() {
+    
+    	return updateDatetime;
+    }
+	
+    /**
+     * @param updateDatetime the updateDatetime to set
+     */
+    public void setUpdateDatetime(Date updateDatetime) {
+    
+    	this.updateDatetime = updateDatetime;
+    }
+	
+    /**
+     * @return the receptionNo
+     */
+    public String getReceptionNo() {
+    
+    	return receptionNo;
+    }
+	
+    /**
+     * @param receptionNo the receptionNo to set
+     */
+    public void setReceptionNo(String receptionNo) {
+    
+    	this.receptionNo = receptionNo;
+    }
+	
+    /**
+     * @return the receiveDatetime
+     */
+    public Date getReceiveDatetime() {
+    
+    	return receiveDatetime;
+    }
+	
+    /**
+     * @param receiveDatetime the receiveDatetime to set
+     */
+    public void setReceiveDatetime(Date receiveDatetime) {
+    
+    	this.receiveDatetime = receiveDatetime;
+    }
+	
+    /**
+     * @return the estimateDatetime
+     */
+    public Date getEstimateDatetime() {
+    
+    	return estimateDatetime;
+    }
+	
+    /**
+     * @param estimateDatetime the estimateDatetime to set
+     */
+    public void setEstimateDatetime(Date estimateDatetime) {
+    
+    	this.estimateDatetime = estimateDatetime;
+    }
+	
+    /**
+     * @return the finishDatetime
+     */
+    public Date getFinishDatetime() {
+    
+    	return finishDatetime;
+    }
+	
+    /**
+     * @param finishDatetime the finishDatetime to set
+     */
+    public void setFinishDatetime(Date finishDatetime) {
+    
+    	this.finishDatetime = finishDatetime;
+    }
+	protected long processOrderId;
+	protected long dossierId;
+	protected long fileGroupId;
+	protected String dossierStatus;
+	protected String actionInfo;
+	protected String messageInfo;
+	protected int sendResult;
+	protected int requestPayment;
+	protected Date updateDatetime;
+	protected String receptionNo;
+	protected Date receiveDatetime;
+	protected Date estimateDatetime;
+	protected Date finishDatetime;
+}

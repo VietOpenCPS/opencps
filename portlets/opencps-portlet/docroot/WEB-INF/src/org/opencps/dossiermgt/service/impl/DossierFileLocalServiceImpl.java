@@ -26,6 +26,7 @@ import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
 
@@ -49,6 +50,8 @@ public class DossierFileLocalServiceImpl
 	 * {@link org.opencps.dossiermgt.service.DossierFileLocalServiceUtil} to
 	 * access the dossier file local service.
 	 */
+	
+	
 
 	public DossierFile addDossierFile(
 	    long userId, long dossierId, long dossierPartId, String templateFileNo,
@@ -151,7 +154,46 @@ public class DossierFileLocalServiceImpl
 		return dossierFilePersistence
 		    .findByD_F(dossierId, groupFileId);
 	}
+	
+	public DossierFile updateDossierFile(
+	    long dossierFileId, long ownerUserId, long ownerOrganizationId,
+	    long fileEntryId, String displayName)
+	    throws NoSuchDossierFileException, SystemException {
 
+		DossierFile dossierFile = dossierFilePersistence
+		    .findByPrimaryKey(dossierFileId);
+
+		Date now = new Date();
+
+		dossierFile
+		    .setModifiedDate(now);
+
+		dossierFile
+		    .setDisplayName(displayName);
+
+		dossierFile
+		    .setFileEntryId(fileEntryId);
+		dossierFile
+		    .setOwnerUserId(ownerUserId);
+		dossierFile
+		    .setOwnerOrganizationId(ownerOrganizationId);
+		return dossierFilePersistence
+		    .update(dossierFile);
+	}
+
+	public List<DossierFile> searchDossierFile(long groupId, String keyword, long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult, int start, int end, OrderByComparator obc)
+				    throws SystemException {
+		return dossierFileFinder.searchDossierFile(groupId, keyword, dossierTemplateId, fileEntryId, onlyViewFileResult, start, end, obc);
+	}
+
+	public int countDossierFile(long groupId, String keyword, long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult) throws SystemException {
+		return dossierFileFinder.countDossierFile(groupId, keyword, dossierTemplateId, fileEntryId, onlyViewFileResult);
+	}
+	
+	public List<DossierFile> getDossierFileByDossierAndDossierPart(long dossierId, long dossierPartId) throws SystemException {
+		return dossierFilePersistence.findByD_P_C(dossierId, dossierPartId);
+	}
+	
 	public DossierFile updateDossierFile(
 	    long dossierFileId, long userId, long dossierId, long dossierPartId,
 	    String templateFileNo, long groupFileId, long ownerUserId,

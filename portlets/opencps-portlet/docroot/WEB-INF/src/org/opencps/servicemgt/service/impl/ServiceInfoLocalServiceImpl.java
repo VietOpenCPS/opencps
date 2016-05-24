@@ -120,7 +120,7 @@ public class ServiceInfoLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public ServiceInfo addService(
-	    String serviceNo, String serviceName, String shortName,
+	    String serviceNo, String serviceName, String fullName,
 	    String serviceProcess, String serviceMethod, String serviceDossier,
 	    String serviceCondition, String serviceDuration, String serviceActors,
 	    String serviceResults, String serviceRecords, String serviceFee,
@@ -153,7 +153,7 @@ public class ServiceInfoLocalServiceImpl
 
 		service.setServiceNo(serviceNo);
 		service.setServiceName(serviceName);
-		service.setShortName(shortName);
+		service.setFullName(fullName);
 		service.setServiceProcess(serviceProcess);
 		service.setServiceMethod(serviceMethod);
 		service.setServiceDossier(serviceDossier);
@@ -181,7 +181,7 @@ public class ServiceInfoLocalServiceImpl
 		Date expirationDate = null;
 		String mimeType = ContentTypes.TEXT_HTML;
 		String title = serviceName;
-		String description = shortName;
+		String description = fullName;
 		String summary = serviceProcess;
 		String url = null;
 		String layoutUuid = null;
@@ -242,7 +242,7 @@ public class ServiceInfoLocalServiceImpl
 	 */
 	public ServiceInfo updateService(
 	    long serviceInfoId, String serviceNo, String serviceName,
-	    String shortName, String serviceProcess, String serviceMethod,
+	    String fullName, String serviceProcess, String serviceMethod,
 	    String serviceDossier, String serviceCondition, String serviceDuration,
 	    String serviceActors, String serviceResults, String serviceRecords,
 	    String serviceFee, String serviceInstructions,
@@ -271,7 +271,7 @@ public class ServiceInfoLocalServiceImpl
 
 		service.setServiceNo(serviceNo);
 		service.setServiceName(serviceName);
-		service.setShortName(shortName);
+		service.setFullName(fullName);
 		service.setServiceProcess(serviceProcess);
 		service.setServiceMethod(serviceMethod);
 		service.setServiceDossier(serviceDossier);
@@ -298,7 +298,7 @@ public class ServiceInfoLocalServiceImpl
 		Date expirationDate = null;
 		String mimeType = ContentTypes.TEXT_HTML;
 		String title = serviceName;
-		String description = shortName;
+		String description = fullName;
 		String summary = serviceProcess;
 		String url = null;
 		String layoutUuid = null;

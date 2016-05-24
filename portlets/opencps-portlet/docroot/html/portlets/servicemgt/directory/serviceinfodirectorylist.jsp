@@ -1,8 +1,4 @@
-<%@page import="org.opencps.util.DictItemUtil"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.servicemgt.search.ServiceSearch"%>
-<%@page import="org.opencps.servicemgt.search.ServiceSearchTerms"%>
-<%@page import="com.liferay.portal.kernel.log.Log"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,7 +17,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.util.DictItemUtil"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.search.ServiceSearch"%>
+<%@page import="org.opencps.servicemgt.search.ServiceSearchTerms"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@ include file="../init.jsp" %>
 
 
@@ -128,20 +128,22 @@
 			viewURL.setParameter("serviceinfoId", String.valueOf(service.getServiceinfoId()));
 			viewURL.setParameter("backURL", currentURL);
 			
-			// no column
-			row.addText(String.valueOf(row.getPos() + 1), viewURL);
-		
-			// service no
-			row.addText(service.getServiceNo(), viewURL);
+			if(service.getActiveStatus() !=0) {
+				// no column
+				row.addText(String.valueOf(row.getPos() + 1), viewURL);
 			
-			// service name
-			row.addText(service.getServiceName(), viewURL);
-			
-			// service admin
-			row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), viewURL);
-
-			// service domain
-			row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , viewURL);
+				// service no
+				row.addText(service.getServiceNo(), viewURL);
+				
+				// service name
+				row.addText(service.getServiceName(), viewURL);
+				
+				// service domain
+				row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , viewURL);
+				
+				// service admin
+				row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), viewURL);
+			}
 		%>	
 	
 	</liferay-ui:search-container-row>	

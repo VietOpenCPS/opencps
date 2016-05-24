@@ -38,7 +38,7 @@
 		<aui:input name="<%= ServiceDisplayTerms.SERVICE_NO %>"></aui:input>
 	</aui:col>
 	<aui:col width="50">
-		<aui:input name="<%= ServiceDisplayTerms.SERVICE_SHORTNAME %>"></aui:input>
+		<aui:input name="<%= ServiceDisplayTerms.SERVICE_FULLNAME %>"></aui:input>
 	</aui:col>
 </aui:row>
 <aui:row>

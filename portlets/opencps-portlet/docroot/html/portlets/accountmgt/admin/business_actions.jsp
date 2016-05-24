@@ -31,7 +31,7 @@
 <%
 	ResultRow row =	(ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
-	Business business = (Business)row.getObject();
+	business = (Business)row.getObject();
 %>
 
 <%-- <liferay-ui:icon-menu> --%>

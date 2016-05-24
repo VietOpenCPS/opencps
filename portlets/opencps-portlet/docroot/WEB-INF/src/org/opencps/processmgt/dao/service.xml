@@ -161,7 +161,10 @@
 		<column name="generateReceptionNo" type="String"/>
 		<column name="receptionNoPattern" type="String"/>
 		<column name="generateDeadline" type="boolean"/>
-		<column name="deadlinePattern" type="boolean"/>
+		<column name="deadlinePattern" type="String"/>
+		<column name="isFinishStep" type="boolean"/>
+		<column name="preCondition" type="String"/>
+		<column name="isMultipled" type="boolean"/>
 		
 		<finder return-type="Collection" name="S_P_ID">
 			<finder-column name="serviceProcessId"/>

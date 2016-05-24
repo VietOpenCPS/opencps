@@ -32,8 +32,13 @@
 <%@page import="org.opencps.usermgt.OutOfLengthTelNoException"%>
 <%@page import="org.opencps.usermgt.OutOfLengthMobileException"%>
 <%@ include file="../../init.jsp"%>
+
+
 <%
-	Employee employee = (Employee)request.getAttribute(WebKeys.EMPLOYEE_ENTRY);
+	if(request.getAttribute(WebKeys.EMPLOYEE_ENTRY) != null){
+		employee = (Employee)request.getAttribute(WebKeys.EMPLOYEE_ENTRY);
+	}
+	
 
 	boolean userViewProfile = GetterUtil.getBoolean((Boolean)request.getAttribute(WebKeys.USERMGT_VIEW_PROFILE), false);
 

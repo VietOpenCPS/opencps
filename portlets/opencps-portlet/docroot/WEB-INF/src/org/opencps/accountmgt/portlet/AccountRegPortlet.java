@@ -203,6 +203,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		DictItem businessType = null;
 
 		InputStream inputStream = null;
+		
+		boolean registered = false;
 
 		try {
 			ValidateBusiness(
@@ -253,10 +255,14 @@ public class AccountRegPortlet extends MVCPortlet {
 			else {
 
 			}
+			
+			registered = true;
 		}
 
 		catch (Exception e) {
-
+			
+			registered = false;
+			
 			if (e instanceof DuplicateBusinessEmailException) {
 				SessionErrors.add(
 				    actionRequest, DuplicateBusinessEmailException.class);
@@ -319,11 +325,17 @@ public class AccountRegPortlet extends MVCPortlet {
 				SessionErrors.add(
 				    actionRequest,
 				    MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED);
+				_log.error(e);
 			}
-			if (Validator.isNotNull(currentURL)) {
+			
+		}finally {
+			if(registered){
 				actionResponse.sendRedirect(currentURL);
+			}else{
+				actionResponse.setRenderParameter("mvcPath", "/html/portlets/accountmgt/registration/registration.jsp");
+				actionResponse.setRenderParameter("type", "business");
 			}
-
+			
 		}
 
 	}

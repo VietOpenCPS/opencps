@@ -45,10 +45,10 @@ public class SyncFromBackOffice implements MessageListener{
         throws MessageListenerException {
     	
     	doRevice(message);
-    	System.out.println("Back-------");
-	    // TODO Auto-generated method stub
-	    
+
     }
+    
+    
     
     private void doRevice(Message message) {
     	

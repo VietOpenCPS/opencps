@@ -131,15 +131,27 @@
 			<aui:select name="autoEvent">
 				<aui:option value=""> <liferay-ui:message key="no-event"/></aui:option>
 				<aui:option value="submit"> <liferay-ui:message key="submit"/></aui:option>
-				<aui:option value="create"> <liferay-ui:message key="create"/></aui:option>
-				<aui:option value="resubmit"> <liferay-ui:message key="resubmit"/></aui:option>
-				<aui:option value="pay"> <liferay-ui:message key="pay"/></aui:option>
-				<aui:option value="cancel-event"> <liferay-ui:message key="cancel"/></aui:option>
-				<aui:option value="delay-mm"> <liferay-ui:message key="delay-mm"/></aui:option>
-				<aui:option value="payok"> <liferay-ui:message key="payok"/></aui:option>
-				<aui:option value="tag-label"> <liferay-ui:message key="tag-label"/></aui:option>
+				<aui:option value="onegate"> <liferay-ui:message key="onegate"/></aui:option>
+				<aui:option value="repair"> <liferay-ui:message key="repair"/></aui:option>
+				<aui:option value="change"> <liferay-ui:message key="change"/></aui:option>
+				<aui:option value="minutely"> <liferay-ui:message key="minutely"/></aui:option>
+				<aui:option value="5-minutely"> <liferay-ui:message key="5-minutely"/></aui:option>
+				<aui:option value="hourly"> <liferay-ui:message key="hourly"/></aui:option>
+				<aui:option value="daily"> <liferay-ui:message key="daily"/></aui:option>
 			</aui:select>
 		</aui:col>	
+	</aui:row>
+	<aui:row>
+		<aui:col width="50">
+			<aui:input name="preCondition" ></aui:input>
+		</aui:col>
+		<aui:col width="25">
+			<aui:input name="isMultipled"></aui:input>
+		</aui:col>
+		
+		<aui:col width="25">
+				<aui:input name="isFinishStep"></aui:input>
+		</aui:col>
 	</aui:row>
 
 	<aui:row>
@@ -201,6 +213,7 @@
 			<aui:input name="deadlinePattern" label=""></aui:input>
 		</aui:col>	
 	</aui:row>
+	
 	
 	<label class="bold"><liferay-ui:message key="result-action"/></label>
 	

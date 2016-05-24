@@ -61,6 +61,8 @@
 	
 	long serviceConfigId = serviceConfig != null ? serviceConfig.getServiceConfigId() : 0L;
 	
+	long serviceInfoId = serviceConfig != null ? serviceConfig.getServiceInfoId() : 0L;
+	
 	String dictItemServiceDomainId = "0";
 	
 	String backURL = ParamUtil.getString(request, "backURL"); 
@@ -141,6 +143,13 @@
 	<portlet:param name="mvcPath" value='<%=templatePath + "ajax/dictitem_service_administration.jsp" %>'/>
 </portlet:renderURL>
 
+<portlet:renderURL 
+	var="renderToServiceInfo" 
+	windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>" 
+>
+	<portlet:param name="mvcPath" value='<%=templatePath + "ajax/service_info_ajax.jsp" %>'/>
+</portlet:renderURL>
+
 <portlet:actionURL var="updateServiceConfigURL" name="updateServiceConfig">
 	<portlet:param 
 		name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICECONFIGID %>" 
@@ -167,24 +176,8 @@
 			selectedItems="<%=dictItemServiceDomainId%>"
 		/>	
 	</aui:row>
+	<div id = "<portlet:namespace />responseServiceConfig"></div>
 	
-	<aui:row>
-		<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICEINFOID %>" required="true">
-			<aui:option value="<%=StringPool.BLANK %>">
-				<liferay-ui:message key="root" />
-			</aui:option>
-			<%
-				for(ServiceInfo serviceInfo : serviceInfos ) {
-					%>
-						<aui:option value="<%= serviceInfo.getServiceinfoId() %>">
-							<%= serviceInfo.getServiceName() %>
-						</aui:option>
-					<%
-				}
-			%>
-		</aui:select>
-	</aui:row>
-
 	<aui:row>
 		<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOSSIERTEMPLATEID %>">
 			
@@ -222,7 +215,10 @@
 			
 		</aui:select>
 	</aui:row>
-	<div id = "<portlet:namespace />serviceConfigGovNameCode"></div>
+	
+	<div id = "<portlet:namespace />serviceConfigGovNameCode">
+		
+	</div>
 	
 	<aui:row>
 			<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICEMODE %>">
@@ -250,20 +246,68 @@
 	</aui:row>
 </aui:form>
 
-<aui:script>
+<aui:script use = "aui-base">
 	
 AUI().ready(function(A) {
-	
-		var selectServiceInfo = A.one("#<portlet:namespace/>serviceInfoId");
 		
-		if(selectServiceInfo){
-			<portlet:namespace />sentServiceInfoId(selectServiceInfo.val());
-			selectServiceInfo.on('change', function() {
-				<portlet:namespace />sentServiceInfoId(selectServiceInfo.val());
+		var selectDomainCode = A.one("#<portlet:namespace/>domainCode") ;
+		
+		var serviceInfoId = "<%= serviceInfoId %>";
+		
+		if(selectDomainCode){
+			<portlet:namespace />sentServiceInfoId(serviceInfoId);
+			<portlet:namespace />sentDomainCode(selectDomainCode.val());
+			selectDomainCode.on('change', function() {
+				<portlet:namespace />sentDomainCode(selectDomainCode.val());
 			});
 		}
-	});
+		
+	}); 
 	
+	Liferay.provide(window, '<portlet:namespace />sentDomainCode', function(domainCode){
+		
+		var A = AUI();
+		
+		A.io.request(
+				'<%= renderToServiceInfo.toString() %>',
+				{
+					dataType : 'text/html',
+					method : 'GET',
+				    data:{    	
+				    	"<portlet:namespace />domainCode" : domainCode,
+				    	"<portlet:namespace />serviceConfigId" : '<%=serviceConfigId%>'
+				    },   
+				    on: {
+				    	success: function(event, id, obj) {
+				    		
+							var instance = this;
+							var res = instance.get('responseData');
+							
+							var responseServiceConfig = A.one("#<portlet:namespace/>responseServiceConfig");
+							
+							if(responseServiceConfig){
+								
+								responseServiceConfig.empty();
+								responseServiceConfig.html(res);
+							}
+								
+						},
+				    	error: function(){}
+					}
+				}
+			);
+	},['aui-base','aui-io']);
+	
+		
+</aui:script>
+
+<aui:script use = "aui-base">
+	Liferay.provide(window, '<portlet:namespace/>getval', function(e) {	
+		var A = AUI();		
+		var instance = A.one(e);
+		var selectServiceInfo = instance.val();
+			<portlet:namespace />sentServiceInfoId(selectServiceInfo);
+	});
 	Liferay.provide(window, '<portlet:namespace />sentServiceInfoId', function(serviceInfoId){
 		
 		var A = AUI();
@@ -294,7 +338,6 @@ AUI().ready(function(A) {
 				}
 			);
 	},['aui-base','aui-io']);
-		
 </aui:script>
 
 <%!

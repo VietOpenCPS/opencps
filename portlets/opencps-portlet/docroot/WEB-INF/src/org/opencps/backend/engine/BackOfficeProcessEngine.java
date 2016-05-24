@@ -16,6 +16,7 @@ package org.opencps.backend.engine;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.backend.util.DossierNoGenerator;
 import org.opencps.dossiermgt.model.Dossier;
@@ -56,6 +57,51 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		//doReceive(message);
 		activeEngine(message);
+	}
+	
+	private void _doRecevie(Message message) {
+
+		SendToEngineMsg toEngineMsg =
+		    (SendToEngineMsg) message.get("msgToEngine");
+		
+		long curStepId = 0;
+		
+		
+		long processOrderId = toEngineMsg.getProcessOrderId();
+		
+		try {
+			if (Validator.isNull(processOrderId)) {
+				
+				ProcessOrder processOrder =
+				    ProcessOrderLocalServiceUtil.getProcessOrder(
+				        toEngineMsg.getDossierId(),
+				        toEngineMsg.getFileGroupId());
+				
+				if (Validator.isNotNull(processOrder)) {
+					//Contains process order
+					processOrderId = processOrder.getProcessOrderId();
+					
+					
+					
+				} else {
+					//Not contains process order
+					//Create process order
+				}
+				
+			} else {
+				//Find process order by processOrderId
+				ProcessOrder processOrder =
+				    ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+				
+				
+			}
+	        
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
+		
+
 	}
 
 	private void activeEngine(Message message) {

@@ -139,6 +139,29 @@
 			</tr>
 			<tr>
 				<td class="col-left">
+					<liferay-ui:message key="status"/>
+				</td>
+				<td class="col-right">
+					<%
+						int status = serviceInfo.getActiveStatus(); 
+					%>
+					<c:choose>
+						<c:when test="<%=status == 0 %>">
+							<liferay-ui:message key="service-private"/>
+						</c:when>
+						
+						<c:when test="<%=status == 1 %>">
+							<liferay-ui:message key="service-public"/>
+						</c:when>
+						<c:when test="<%=status == 2 %>">
+							<liferay-ui:message key="service-outdate"/>
+						</c:when>
+					</c:choose>
+					
+				</td>
+			</tr>
+			<tr>
+				<td class="col-left">
 					<liferay-ui:message key="template_info"/>
 				</td>
 				<td class="col-right">
@@ -160,6 +183,18 @@
 						%>
 					</ul>
 					
+				</td>
+			</tr>
+			<tr>
+				<td class="col-left">
+					<liferay-ui:message key="online-url"/>
+				</td>
+				<td class="col-right">
+					<ul>
+						<li>
+							<a href="<%= serviceInfo.getOnlineUrl()%>"><span style="color:blue"><%= serviceInfo.getOnlineUrl()%></span> </a>
+						</li>
+					</ul>
 				</td>
 			</tr>
 		</table>

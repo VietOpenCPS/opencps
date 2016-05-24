@@ -39,7 +39,9 @@
 
 <%
 
-	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
+	if(request.getAttribute(WebKeys.CITIZEN_ENTRY) != null){
+		citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);	
+	}
 
 	DictCollection dictCollection = null;
 	

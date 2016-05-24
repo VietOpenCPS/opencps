@@ -27,6 +27,7 @@
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util"%>
 <%@ taglib uri="http://opencps.org/datamgt" prefix="datamgt"%>
 <%@ taglib uri="http://opencps.org/dl-upload" prefix="dl-upload"%>
+<%@ taglib uri="http://opencps.org/accountmgt" prefix="accountmgt"%>
 
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 <%@page import="com.liferay.portlet.PortletPreferencesFactoryUtil"%>
@@ -42,6 +43,8 @@
 <portlet:defineObjects />
 
 <liferay-theme:defineObjects />
+
+<accountmgt:defineObjects/>
 
 <%
 	String currentURL = PortalUtil.getCurrentURL(liferayPortletRequest);

@@ -64,11 +64,11 @@
 				count(*) AS COUNT_VALUE
 			FROM
 				opencps_dossier
-			INNER JOIN
+			LEFT JOIN
 				opencps_serviceinfo
 			ON
 				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
-			INNER JOIN
+			LEFT JOIN
 				opencps_service_config
 			ON
 				opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId
@@ -78,6 +78,10 @@
 				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
 				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR
+				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR
+				(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier.dossierStatus = ?)
 		]]>
@@ -89,11 +93,11 @@
 				*
 			FROM
 				opencps_dossier
-			INNER JOIN
+			LEFT JOIN
 				opencps_serviceinfo
 			ON
 				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
-			INNER JOIN
+			LEFT JOIN
 				opencps_service_config
 			ON
 				opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId
@@ -103,8 +107,104 @@
 				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
 				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR
+				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR
+				(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier.dossierStatus = ?)
+			ORDER BY opencps_dossier.modifiedDate DESC
 		]]>
 	</sql>
+
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.countDossierByKeywordDomainAndStatus">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			WHERE
+				(opencps_dossier.groupId = ?)
+			AND
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier.dossierStatus = ?)
+			AND (opencps_serviceinfo.domainCode = ?)
+		]]>
+	</sql>	
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossierByKeywordDomainAndStatus">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			WHERE
+				(opencps_dossier.groupId = ?)
+			AND
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier.dossierStatus = ?)
+			AND (opencps_serviceinfo.domainCode = ?)
+		]]>
+	</sql>	
+
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.countDossierFile">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier_file
+			WHERE
+				(opencps_dossier_file.groupId = ?)
+			AND
+				(lower(opencps_dossier_file.templateFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier_file.fileEntryId IS NOT NULL AND opencps_dossier_file.fileEntryId = ?)
+			AND 
+				(opencps_dossier_file.fileEntryId IS NULL)
+			AND
+				(opencps_dossier_file.dossierFileType = ?)
+		]]>
+	</sql>	
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFile">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier_file
+			WHERE
+				(opencps_dossier_file.groupId = ?)
+			AND
+				(lower(opencps_dossier_file.templateFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier_file.fileEntryId IS NOT NULL AND opencps_dossier_file.fileEntryId = ?)
+			AND 
+				(opencps_dossier_file.fileEntryId IS NULL)
+			AND
+				(opencps_dossier_file.dossierFileType = ?)
+		]]>
+	</sql>	
+
 </custom-sql>

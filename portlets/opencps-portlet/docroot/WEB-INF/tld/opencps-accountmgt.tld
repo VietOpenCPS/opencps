@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<taglib>
+	<tlib-version>1.0</tlib-version>
+	<jsp-version>1.1</jsp-version>
+	<short-name>theme</short-name>
+	<uri>http://opencps.org/accountmgt</uri>
+	<tag>
+		<description><![CDATA[Provides the ACCOUNTMGT component tags, prefixed with <code>accountmgt:</code>.]]></description>
+		<name>defineObjects</name>
+		<tag-class>org.opencps.taglib.accountmgt.DefineObjectsTag</tag-class>
+		<tei-class>org.opencps.taglib.accountmgt.DefineObjectsTei</tei-class>
+		<body-content>empty</body-content>
+	</tag>
+</taglib>

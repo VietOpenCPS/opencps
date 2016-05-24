@@ -44,17 +44,13 @@
 <%@page import="org.opencps.dossiermgt.InvalidDossierObjectException"%>
 <%@ include file="../../init.jsp"%>
 
-
 <%
+	
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 
 	ServiceConfig serviceConfig = (ServiceConfig) request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 	
 	ServiceInfo serviceInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
-	
-	Citizen citizen = (Citizen)request.getAttribute(WebKeys.CITIZEN_ENTRY);
-	
-	Business business = (Business)request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	
 	String itemSelected = GetterUtil.getString(request.getAttribute(WebKeys.DICT_ITEM_SELECTED), StringPool.BLANK);
 	

@@ -35,6 +35,7 @@
 	headerNames.add("service-name");
 	headerNames.add("service-domain");
 	headerNames.add("service-administrator");
+	headerNames.add("status");
 
 	boolean isPermission =
 				    ServicePermission.contains(
@@ -100,6 +101,20 @@
 
 			// service domain
 			row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , editURL);
+			
+			//service status
+			
+			int status = service.getActiveStatus();
+			String statusMess = StringPool.BLANK;
+			if(status == 0) {
+				statusMess = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-private");
+			} else if(status == 1) {
+				statusMess = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-public");
+			} else if(status == 2) {
+				statusMess = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-outdate");
+			}
+			
+			row.addText(statusMess , editURL);
 
 			if(isPermission) {
 				//action column

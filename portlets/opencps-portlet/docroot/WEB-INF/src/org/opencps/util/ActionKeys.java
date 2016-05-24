@@ -47,5 +47,6 @@ public class ActionKeys
 	public static final String ADD_PROCESS_ORDER = "ADD_PROCESS_ORDER";
 	public static final String ASSIGN_PROCESS_ORDER = "ASSIGN_PROCESS_ORDER";
 
+	public static final String MANAGE_PAYMENT_CONFIG = "MANAGE_PAYMENT_CONFIG";
 }
 

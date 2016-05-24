@@ -89,7 +89,7 @@ public class ProcessWorkflowLocalServiceImpl
 	    String autoEvent, String actionName, boolean assignUser,
 	    long actionUserId, boolean requestPayment, double paymentFee,
 	    String generateReceptionNo, String receptionNoPattern,
-	    boolean generateDeadline, boolean deadlinePattern,
+	    boolean generateDeadline, String deadlinePattern, boolean isFinishStep, String preCondition, boolean isMultipled,
 	    ServiceContext context)
 	    throws PortalException, SystemException {
 
@@ -115,6 +115,9 @@ public class ProcessWorkflowLocalServiceImpl
 			workflow.setReceptionNoPattern(receptionNoPattern);
 			workflow.setGenerateDeadline(generateDeadline);
 			workflow.setDeadlinePattern(deadlinePattern);
+			workflow.setIsFinishStep(isFinishStep);
+			workflow.setIsMultipled(isMultipled);
+			workflow.setPreCondition(preCondition);
 			
 			processWorkflowPersistence.update(workflow);
 		}
@@ -166,8 +169,8 @@ public class ProcessWorkflowLocalServiceImpl
 	    String autoEvent, String actionName, boolean assignUser,
 	    long actionUserId, boolean requestPayment, double paymentFee,
 	    String generateReceptionNo, String receptionNoPattern,
-	    boolean generateDeadline, boolean deadlinePattern,
-	    ServiceContext context)
+	    boolean generateDeadline, String deadlinePattern, boolean isFinishStep,
+	    String preCondition, boolean isMultipled, ServiceContext context)
 	    throws PortalException, SystemException {
 		
 		long processWorkflowId = counterLocalService.increment(ProcessWorkflow.class.getName());
@@ -201,6 +204,9 @@ public class ProcessWorkflowLocalServiceImpl
 			workflow.setReceptionNoPattern(receptionNoPattern);
 			workflow.setGenerateDeadline(generateDeadline);
 			workflow.setDeadlinePattern(deadlinePattern);
+			workflow.setIsFinishStep(isFinishStep);
+			workflow.setPreCondition(preCondition);
+			workflow.setIsMultipled(isMultipled);
 			
 			processWorkflowPersistence.update(workflow);
 		}

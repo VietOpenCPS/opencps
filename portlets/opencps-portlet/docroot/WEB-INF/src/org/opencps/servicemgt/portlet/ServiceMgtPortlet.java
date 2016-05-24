@@ -216,7 +216,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 
 				ServiceInfoLocalServiceUtil.addService(
 				    displayTerms.getServiceNo(), displayTerms.getServiceName(),
-				    displayTerms.getShortName(),
+				    displayTerms.getFullName(),
 				    displayTerms.getServiceProcess(),
 				    displayTerms.getServiceMethod(),
 				    displayTerms.getServiceDossier(),
@@ -248,7 +248,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 				// Update ServiceInfo
 				ServiceInfoLocalServiceUtil.updateService(
 				    serviceInfoId, displayTerms.getServiceNo(),
-				    displayTerms.getServiceName(), displayTerms.getShortName(),
+				    displayTerms.getServiceName(), displayTerms.getFullName(),
 				    displayTerms.getServiceProcess(),
 				    displayTerms.getServiceMethod(),
 				    displayTerms.getServiceDossier(),

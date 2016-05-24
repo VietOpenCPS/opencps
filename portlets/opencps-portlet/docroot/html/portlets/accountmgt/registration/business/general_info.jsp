@@ -37,7 +37,9 @@
 <%@ include file="../../init.jsp" %>
 
 <%
-	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+	if(request.getAttribute(WebKeys.BUSINESS_ENTRY) != null){
+		business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+	}
 
 	long businessId = business!=null ? business.getBusinessId() : 0L;
 	

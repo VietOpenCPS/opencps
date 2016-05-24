@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,7 +29,7 @@
 <%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.accountmgt.InvalidCityCodeException"%>
-
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.accountmgt.OutOfLengthBusinessNameException"%>
 <%@page import="org.opencps.accountmgt.OutOfLengthBusinessRepresentativeRoleException"%>
@@ -125,8 +124,7 @@
 	String [] ProfileSections = null;
 	String [][] categorySections = null;
 	String path = StringPool.BLANK;
-	Citizen citizen = null;
-	Business business = null;
+	
 	String backURL = ParamUtil.getString(request, "backURL");
 	if(citizenId > 0 ) {
 		ProfileSections = new String[2];

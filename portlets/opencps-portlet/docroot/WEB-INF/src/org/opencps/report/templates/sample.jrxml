@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.1.final using JasperReports Library version 6.2.1  -->
+<!-- 2016-05-18T10:56:38 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="JsonCustomersReport" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="50" bottomMargin="50" uuid="3d161085-4deb-4318-8478-7eb5e90834f1">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JsonDataSource"/>
+	<property name="net.sf.jasperreports.json.date.pattern" value="yyyy-MM-dd"/>
+	<property name="net.sf.jasperreports.json.number.pattern" value="#,##0.##"/>
+	<style name="Sans_Normal" isDefault="true" fontName="DejaVu Sans" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="Sans_Bold" fontName="DejaVu Sans" fontSize="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="Sans_Italic" fontName="DejaVu Sans" fontSize="12" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false"/>
+	<queryString language="json">
+		<![CDATA[opencps]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[opencps.name]]></fieldDescription>
+	</field>
+	<field name="job" class="java.lang.String">
+		<fieldDescription><![CDATA[opencps.job]]></fieldDescription>
+	</field>
+	<title>
+		<band height="50">
+			<line>
+				<reportElement x="0" y="0" width="515" height="1" uuid="448eff4b-d08e-4fbd-aeb8-0d225fa73f91"/>
+			</line>
+			<staticText>
+				<reportElement style="Sans_Normal" x="0" y="10" width="515" height="30" uuid="fad9572f-f69c-4de3-8183-95209c022c24"/>
+				<textElement textAlignment="Center">
+					<font size="22"/>
+				</textElement>
+				<text><![CDATA[ĐĂNG KÝ KINH DOANH]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="21">
+			<staticText>
+				<reportElement style="Sans_Bold" mode="Opaque" x="0" y="5" width="515" height="15" forecolor="#FFFFFF" backcolor="#333333" uuid="ea267ce8-2f74-42e2-a231-ac2634326a7d"/>
+				<text><![CDATA[Customer Info]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="50">
+			<textField>
+				<reportElement style="Sans_Bold" x="5" y="5" width="100" height="15" isPrintWhenDetailOverflows="true" uuid="63eaebaa-cd58-43a5-ab48-13ed0e56baf5"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Sans_Bold" isPrintRepeatedValues="false" x="404" y="5" width="100" height="15" isPrintWhenDetailOverflows="true" uuid="925692b6-0609-467a-ac7b-ed502ebf8584"/>
+				<text><![CDATA[(continued)]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="20" width="515" height="1" isPrintWhenDetailOverflows="true" uuid="f007e095-f6f9-4a8a-9313-b3205b7f63ca"/>
+			</line>
+			<subreport>
+				<reportElement isPrintRepeatedValues="false" x="5" y="25" width="507" height="20" isRemoveLineWhenBlank="true" backcolor="#FFCC99" uuid="225967d5-ce00-496a-a284-06b86d41b5be"/>
+				<subreportParameter name="net.sf.jasperreports.json.date.pattern">
+					<subreportParameterExpression><![CDATA[$P{net.sf.jasperreports.json.date.pattern}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="net.sf.jasperreports.json.number.pattern">
+					<subreportParameterExpression><![CDATA[$P{net.sf.jasperreports.json.number.pattern}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="JSON_LOCALE">
+					<subreportParameterExpression><![CDATA[$P{JSON_LOCALE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="name">
+					<subreportParameterExpression><![CDATA[$F{name}]]></subreportParameterExpression>
+				</subreportParameter>
+			</subreport>
+			<textField>
+				<reportElement style="Sans_Italic" x="109" y="5" width="291" height="15" isPrintWhenDetailOverflows="true" uuid="fbc32da6-8966-4e45-ab0b-31d485722205"/>
+				<textFieldExpression><![CDATA[$F{job}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="40">
+			<line>
+				<reportElement x="0" y="10" width="515" height="1" uuid="896e1189-7382-4e5c-9ab6-4cde2339e922"/>
+			</line>
+			<textField>
+				<reportElement x="200" y="20" width="80" height="15" uuid="bc9cd7fe-fc31-4105-89db-9b7b87d27e08"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + String.valueOf($V{PAGE_NUMBER}) + " of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="280" y="20" width="75" height="15" uuid="31e9e6e8-7b66-4387-80da-bd3d90996468"/>
+				<textFieldExpression><![CDATA[" " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

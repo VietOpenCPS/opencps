@@ -17,6 +17,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="org.opencps.util.AccountUtil"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
@@ -43,152 +47,152 @@
 <%@page import="java.util.List"%>
 <%@ include file="../init.jsp"%>
 
-
 <%
 	
 	Dossier dossier = (Dossier)request.getAttribute(WebKeys.DOSSIER_ENTRY);
-
+	
 	ServiceConfig serviceConfig = (ServiceConfig)request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 	
 	DossierPart dossierPart = (DossierPart)request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
-	
-	Citizen citizen = (Citizen)request.getAttribute(WebKeys.CITIZEN_ENTRY);
-	
-	Business business = (Business)request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 	String cmd = ParamUtil.getString(request, Constants.CMD, Constants.UPDATE);
 	
-	String[] dossierSections = new String[]{"dossier_info", "dossier_part", "result", "history"};
+	String[] dossierSections = dossier != null ? 
+		new String[]{"dossier_info", "dossier_part", "result", "history"} : 
+		new String[]{"dossier_info"};
 	
 	String[][] categorySections = {dossierSections};
-	
+
 %>
-
-<liferay-ui:header
-	backURL="<%= backURL %>"
-	title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
-/>
-
-<portlet:actionURL var="updateDossierURL" name="updateDossier"/>
-
-<liferay-util:buffer var="htmlTop">
-	<c:if test="<%= dossier != null %>">
-		<div class="form-navigator-topper dossier-info">
-			<div class="form-navigator-container">
-				<i aria-hidden="true" class="fa fa-suitcase"></i>
-				<span class="form-navigator-topper-name"><%= Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : StringPool.BLANK %></span>
-			</div>
-		</div>
-	</c:if> 
-</liferay-util:buffer>
-
-<liferay-util:buffer var="htmlBottom">
-
-</liferay-util:buffer>
-
-<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
-
-	<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
+<c:choose>
+	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&
+				(accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
+				accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) %>">
+		<liferay-ui:header
+			backURL="<%= backURL %>"
+			title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
+		/>
+		
+		<portlet:actionURL var="updateDossierURL" name="updateDossier"/>
+		
+		<liferay-util:buffer var="htmlTop">
+			<c:if test="<%= dossier != null %>">
+				<div class="form-navigator-topper dossier-info">
+					<div class="form-navigator-container">
+						<i aria-hidden="true" class="fa fa-suitcase"></i>
+						<span class="form-navigator-topper-name"><%= Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : StringPool.BLANK %></span>
+					</div>
+				</div>
+			</c:if> 
+		</liferay-util:buffer>
+		
+		<liferay-util:buffer var="htmlBottom">
+		
+		</liferay-util:buffer>
+		
+		<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
+		
+			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
+			
+			<aui:input 
+				name="redirectURL" 
+				type="hidden" 
+				value="<%= backURL%>"
+			/>
+			
+			<aui:input 
+				name="<%=WebKeys.ACCOUNT_TYPE %>" 
+				type="hidden" 
+				value="<%= accountType%>"
+			/>
+			
+			<aui:input 
+				name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
+				type="hidden" 
+				value="<%= dossier != null ? dossier.getDossierId() : 0%>"
+			/>
+			<aui:input 
+				name="<%=DossierDisplayTerms.DOSSIER_TEMPLATE_ID %>" 
+				type="hidden" 
+				value="<%= serviceConfig != null ? serviceConfig.getDossierTemplateId() : 0%>"
+			/>
+			<aui:input 
+				name="<%=DossierDisplayTerms.SERVICE_INFO_ID %>" 
+				type="hidden" 
+				value="<%= serviceConfig != null ? serviceConfig.getServiceInfoId() : 0%>"
+			/>
+			<aui:input 
+				name="<%=DossierDisplayTerms.SERVICE_CONFIG_ID %>" 
+				type="hidden" 
+				value="<%= serviceConfig != null ? serviceConfig.getServiceConfigId() : 0%>"
+			/>
+			<aui:input 
+				name="<%=DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID %>" 
+				type="hidden" 
+				value="<%= serviceConfig != null ? serviceConfig.getGovAgencyOrganizationId() : 0%>"
+			/>
+			<aui:input 
+				name="<%=DossierDisplayTerms.SERVICE_DOMAIN_INDEX %>" 
+				type="hidden" 
+				value="<%= serviceConfig != null ? serviceConfig.getServiceDomainIndex() : StringPool.BLANK%>"
+			/>
+			<aui:input 
+				name="<%=DossierDisplayTerms.SERVICE_ADMINISTRATION_INDEX %>" 
+				type="hidden" 
+				value="<%= serviceConfig != null ? serviceConfig.getServiceConfigId() : StringPool.BLANK%>"
+			/>
+			<aui:input 
+				name="<%=DossierDisplayTerms.GOVAGENCY_CODE %>" 
+				type="hidden" 
+				value="<%= serviceConfig != null ? serviceConfig.getGovAgencyCode() : StringPool.BLANK%>"
+			/>
+			<aui:input 
+				name="<%=DossierDisplayTerms.GOVAGENCY_NAME %>" 
+				type="hidden" 
+				value="<%= serviceConfig != null ? serviceConfig.getGovAgencyName() : StringPool.BLANK%>"
+			/>
+			<aui:input 
+				name="<%=DossierDisplayTerms.SERVICE_MODE %>" 
+				type="hidden" 
+				value="<%= serviceConfig != null ? serviceConfig.getServiceMode() : 0%>"
+			/>
+			
+			<aui:input 
+				name="<%=DossierDisplayTerms.TEMPLATE_FILE_NO %>" 
+				type="hidden" 
+				value="<%= dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK%>"
+			/>
+			
+			<aui:input 
+				name="<%=DossierDisplayTerms.GROUP_ID %>" 
+				type="hidden" 
+				value="<%= scopeGroupId%>"
+			/>
+			<aui:input 
+				name="<%=DossierDisplayTerms.COMPANY_ID %>" 
+				type="hidden" 
+				value="<%= company.getCompanyId()%>"
+			/>
+		
+			<liferay-ui:form-navigator
+				backURL="<%= backURL %>"
+				categoryNames="<%= DossierMgtUtil._DOSSIER_CATEGORY_NAMES %>"
+				categorySections="<%= categorySections %>"
+				htmlBottom="<%= htmlBottom %>"
+				htmlTop="<%= htmlTop %>"
+				jspPath='<%=templatePath + "dossier/" %>'
+				showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && dossier.getDossierStatus()  != PortletConstants.DOSSIER_STATUS_NEW)) ? false : true %>"
+			/>
+		</aui:form>
+	</c:when>
 	
-	<aui:input 
-		name="redirectURL" 
-		type="hidden" 
-		value="<%= backURL%>"
-	/>
-	<aui:input 
-		name="returnURL" 
-		type="hidden" 
-		value="<%= currentURL%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
-		type="hidden" 
-		value="<%= dossier != null ? dossier.getDossierId() : 0%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.DOSSIER_TEMPLATE_ID %>" 
-		type="hidden" 
-		value="<%= serviceConfig != null ? serviceConfig.getDossierTemplateId() : 0%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.SERVICE_INFO_ID %>" 
-		type="hidden" 
-		value="<%= serviceConfig != null ? serviceConfig.getServiceInfoId() : 0%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.SERVICE_CONFIG_ID %>" 
-		type="hidden" 
-		value="<%= serviceConfig != null ? serviceConfig.getServiceConfigId() : 0%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID %>" 
-		type="hidden" 
-		value="<%= serviceConfig != null ? serviceConfig.getGovAgencyOrganizationId() : 0%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.SERVICE_DOMAIN_INDEX %>" 
-		type="hidden" 
-		value="<%= serviceConfig != null ? serviceConfig.getServiceDomainIndex() : StringPool.BLANK%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.SERVICE_ADMINISTRATION_INDEX %>" 
-		type="hidden" 
-		value="<%= serviceConfig != null ? serviceConfig.getServiceConfigId() : StringPool.BLANK%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.GOVAGENCY_CODE %>" 
-		type="hidden" 
-		value="<%= serviceConfig != null ? serviceConfig.getGovAgencyCode() : StringPool.BLANK%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.GOVAGENCY_NAME %>" 
-		type="hidden" 
-		value="<%= serviceConfig != null ? serviceConfig.getGovAgencyName() : StringPool.BLANK%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.SERVICE_MODE %>" 
-		type="hidden" 
-		value="<%= serviceConfig != null ? serviceConfig.getServiceMode() : 0%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.ACCOUNT_TYPE %>" 
-		type="hidden" 
-		value="<%= citizen != null ? PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN : business != null ? PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS : PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.TEMPLATE_FILE_NO %>" 
-		type="hidden" 
-		value="<%= dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK%>"
-	/>
-	<aui:input 
-		name="<%=BusinessDisplayTerms.BUSINESS_MAPPINGORGANIZATIONID%>" 
-		type="hidden" 
-		value="<%= business != null ? business.getMappingOrganizationId() : 0L%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.GROUP_ID %>" 
-		type="hidden" 
-		value="<%= scopeGroupId%>"
-	/>
-	<aui:input 
-		name="<%=DossierDisplayTerms.COMPANY_ID %>" 
-		type="hidden" 
-		value="<%= company.getCompanyId()%>"
-	/>
-
-	<liferay-ui:form-navigator
-		backURL="<%= backURL %>"
-		categoryNames="<%= DossierMgtUtil._DOSSIER_CATEGORY_NAMES %>"
-		categorySections="<%= categorySections %>"
-		htmlBottom="<%= htmlBottom %>"
-		htmlTop="<%= htmlTop %>"
-		jspPath='<%=templatePath + "dossier/" %>'
-		showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && dossier.getDossierStatus()  != PortletConstants.DOSSIER_STATUS_NEW)) ? false : true %>"
-	/>
-</aui:form>
-
+	<c:otherwise>
+		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-nauthorized-update-dossier"/></div>
+	</c:otherwise>
+ 
+</c:choose>
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.edit_dossier.jsp");
 %>

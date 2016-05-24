@@ -29,7 +29,7 @@ public class ServiceDisplayTerms extends DisplayTerms {
 	public static final String SERVICE_ID = "serviceinfoId";
 	public static final String SERVICE_NO = "serviceNo";
 	public static final String SERVICE_NAME = "serviceName";
-	public static final String SERVICE_SHORTNAME = "shortName";
+	public static final String SERVICE_FULLNAME = "fullName";
 	public static final String SERVICE_PROCESS = "serviceProcess";
 	public static final String SERVICE_METHOD = "serviceMethod";
 	public static final String SERVICE_DOSSIER = "serviceDossier";
@@ -65,7 +65,7 @@ public class ServiceDisplayTerms extends DisplayTerms {
 
 		serviceName = ParamUtil.getString(request, SERVICE_NAME);
 
-		shortName = ParamUtil.getString(request, SERVICE_SHORTNAME);
+		fullName = ParamUtil.getString(request, SERVICE_FULLNAME);
 
 		serviceProcess = ParamUtil.getString(request, SERVICE_PROCESS);
 
@@ -143,20 +143,20 @@ public class ServiceDisplayTerms extends DisplayTerms {
 	}
 
 	/**
-	 * @return the shortName
+	 * @return the fullName
 	 */
-	public String getShortName() {
+	public String getFullName() {
 
-		return shortName;
+		return fullName;
 	}
 
 	/**
 	 * @param shortName
 	 *            the shortName to set
 	 */
-	public void setShortName(String shortName) {
+	public void setFullName(String fullName) {
 
-		this.shortName = shortName;
+		this.fullName = fullName;
 	}
 
 	/**
@@ -495,7 +495,7 @@ public class ServiceDisplayTerms extends DisplayTerms {
 	protected long serviceId;
 	protected String serviceNo;
 	protected String serviceName;
-	protected String shortName;
+	protected String fullName;
 	protected String serviceProcess;
 	protected String serviceMethod;
 	protected String serviceDossier;

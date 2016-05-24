@@ -42,15 +42,23 @@ public class DLFolderUtil {
 
 		DLFolder dlFolder = null;
 		try {
-			dlFolder = DLFolderLocalServiceUtil
-			    .addFolder(
-			        userId, groupId, repositoryId, mountPoint, parentFolderId,
-			        name, description, hidden, serviceContext);
-		}
+			if(hasFolder(groupId, parentFolderId, name)){
+				dlFolder =  DLFolderLocalServiceUtil
+							    .getFolder(groupId, parentFolderId, name);
+			}else{
+				
+					dlFolder = DLFolderLocalServiceUtil
+					    .addFolder(
+					        userId, groupId, repositoryId, mountPoint, parentFolderId,
+					        name, description, hidden, serviceContext);
+				}
+				
+			}
 		catch (Exception e) {
 			_log
 			    .info(e);
 		}
+		
 		return dlFolder;
 	}
 

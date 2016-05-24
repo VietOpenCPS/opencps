@@ -18,11 +18,12 @@
 package org.opencps.backend.util;
 
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
-import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
@@ -38,6 +39,45 @@ import com.liferay.portal.kernel.util.Validator;
  *
  */
 public class BackendUtils {
+	
+	public static long getGovAgencyOrgId(long dossierId) {
+		
+		long govAgencyOrgId = 0;
+		
+		try {
+	        Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+	        
+	        long serviceConfigId = dossier.getServiceConfigId();
+	        
+	        ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil.fetchServiceConfig(serviceConfigId);
+	        
+	        if (Validator.isNotNull(serviceConfig)) {
+	        	govAgencyOrgId = serviceConfig.getGovAgencyOrganizationId();
+	        }
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
+		
+		return govAgencyOrgId;
+	}
+	
+	public static int getDossierStatus(long dossierId, long fileGroupId) {
+		int status = 0;
+		
+		try {
+	        Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
+	        
+	        if (Validator.isNotNull(dossier)) {
+	        	status = dossier.getDossierStatus();
+	        }
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
+		
+		return status;
+	}
 	
 	public static int getDossierStatus(long stepId) {
 		

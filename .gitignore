@@ -205,3 +205,8 @@ portlets/opencps-portlet/.externalToolBuilders/
 portlets/message-portlet/
 
 portlets/LiferayBulkMailSender-portlet/
+
+portlets/opencps-portlet/.settings/org.eclipse.wst.validation.prefs
+
+portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
+

@@ -17,6 +17,8 @@
 
 package org.opencps.dossiermgt.service.persistence;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -110,6 +112,18 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				        sql,
 				        "OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
 				        StringPool.BLANK);
+				
+				sql = StringUtil
+							    .replace(
+							        sql,
+							        "OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])",
+							        StringPool.BLANK);
+
+				sql = StringUtil
+							    .replace(
+							        sql,
+							        "OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+							        StringPool.BLANK);			
 			}
 
 			if (dossierStatus < 0) {
@@ -119,11 +133,11 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				        StringPool.BLANK);
 			}
 
-			SQLQuery q = session
-			    .createSQLQuery(sql);
-			
 			sql = CustomSQLUtil
 						    .replaceAndOperator(sql, andOperator);
+
+			SQLQuery q = session
+			    .createSQLQuery(sql);
 
 			q
 			    .addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
@@ -139,6 +153,10 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				    .add(keywords, 2);
 				qPos
 				    .add(keywords, 2);
+				qPos
+					.add(keywords, 2);
+				qPos
+			    	.add(keywords, 2);
 			}
 
 			if (dossierStatus >= 0) {
@@ -239,6 +257,18 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				        sql,
 				        "OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
 				        StringPool.BLANK);
+				
+				sql = StringUtil
+							    .replace(
+							        sql,
+							        "OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])",
+							        StringPool.BLANK);
+
+				sql = StringUtil
+							    .replace(
+							        sql,
+							        "OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+							        StringPool.BLANK);			
 			}
 
 			if (dossierStatus < 0) {
@@ -268,6 +298,10 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				    .add(keywords, 2);
 				qPos
 				    .add(keywords, 2);
+				qPos
+					.add(keywords, 2);
+				qPos
+			    	.add(keywords, 2);
 			}
 
 			if (dossierStatus >= 0) {
@@ -289,6 +323,261 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 		return null;
 	}
 
+	public int countDossierByKeywordDomainAndStatus(long groupId, String keyword, String domainCode, int dossierStatus) {
+
+		String[] keywords = null;
+
+		if (Validator
+		    .isNotNull(keyword)) {
+			keywords = CustomSQLUtil
+			    .keywords(keyword);
+		}
+
+		return countDossierByKeywordDomainAndStatus(groupId, keywords, domainCode, dossierStatus);
+	}
+
+	private int countDossierByKeywordDomainAndStatus(
+	    long groupId, String[] keywords, String domainCode, int dossierStatus
+		) {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+			    .get(COUNT_DOSSIER_BY_KEYWORDDOMAINANDSTATUS);
+
+			if (keywords != null && keywords.length > 0) {
+				sql = CustomSQLUtil
+				    .replaceKeywords(
+				        sql, "lower(opencps_serviceinfo.serviceName)",
+				        StringPool.LIKE, true, keywords);
+
+				sql = CustomSQLUtil
+				    .replaceKeywords(
+				        sql, "lower(opencps_service_config.govAgencyName)",
+				        StringPool.LIKE, true, keywords);
+			}
+
+			
+
+			if (keywords == null || keywords.length == 0) {
+				sql = StringUtil
+				    .replace(
+				        sql,
+				        "INNER JOIN opencps_service_config ON opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId",
+				        StringPool.BLANK);
+
+				sql = StringUtil
+				    .replace(
+				        sql,
+				        "AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])",
+				        StringPool.BLANK);
+
+				sql = StringUtil
+				    .replace(
+				        sql,
+				        "OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
+				        StringPool.BLANK);
+			}
+
+			if ("".equals(domainCode)) {
+				sql = StringUtil.replace(sql, "AND (opencps_serviceinfo.domainCode = ?)", StringPool.BLANK);
+			}
+			else {
+			}
+			if (dossierStatus <= 0) {
+				sql = StringUtil
+				    .replace(
+				        sql, "AND (opencps_dossier.dossierStatus = ?)",
+				        StringPool.BLANK);
+			}
+
+			sql = CustomSQLUtil
+						    .replaceAndOperator(sql, false);
+
+			SQLQuery q = session
+			    .createSQLQuery(sql);
+			
+			q
+			    .addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
+
+			QueryPos qPos = QueryPos
+			    .getInstance(q);
+
+			
+			qPos
+			    .add(groupId);
+
+			if (keywords != null && keywords.length > 0) {
+				qPos
+				    .add(keywords, 2);
+				qPos
+				    .add(keywords, 2);
+			}
+							
+			if (dossierStatus > 0) {
+				qPos
+				    .add(dossierStatus);
+			}
+			if (!"".equals(domainCode)) {
+				qPos.add(domainCode);
+			}
+			else {
+				
+			}
+
+			Iterator<Integer> itr = q
+			    .iterate();
+
+			if (itr
+			    .hasNext()) {
+				Integer count = itr
+				    .next();
+
+				if (count != null) {
+					return count
+					    .intValue();
+				}
+			}
+
+			return 0;
+
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return 0;
+	}
+
+	public List<Dossier> searchDossierByKeywordDomainAndStatus(
+	    long groupId, String keyword, String domainCode, int dossierStatus, int start, int end,
+	    OrderByComparator obc) {
+
+		String[] keywords = null;
+		if (Validator
+		    .isNotNull(keyword)) {
+			keywords = CustomSQLUtil
+			    .keywords(keyword);
+		}
+		return searchDossierByKeywordDomainAndStatus(
+		    groupId, keywords, domainCode, dossierStatus, start, end, obc);
+	}
+
+	private List<Dossier> searchDossierByKeywordDomainAndStatus(
+	    long groupId, String[] keywords, String domainCode, int dossierStatus,
+	    int start, int end, OrderByComparator obc) {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+			    .get(SEARCH_DOSSIER_BY_KEYWORDDOMAINANDSTATUS);
+			if (keywords != null && keywords.length > 0) {
+				sql = CustomSQLUtil
+				    .replaceKeywords(
+				        sql, "lower(opencps_serviceinfo.serviceName)",
+				        StringPool.LIKE, true, keywords);
+
+				sql = CustomSQLUtil
+				    .replaceKeywords(
+				        sql, "lower(opencps_service_config.govAgencyName)",
+				        StringPool.LIKE, true, keywords);
+			}
+			if (keywords == null || keywords.length == 0) {
+				sql = StringUtil
+				    .replace(
+				        sql,
+				        "INNER JOIN opencps_service_config ON opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId",
+				        StringPool.BLANK);
+
+				sql = StringUtil
+				    .replace(
+				        sql,
+				        "AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])",
+				        StringPool.BLANK);
+
+				sql = StringUtil
+				    .replace(
+				        sql,
+				        "OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
+				        StringPool.BLANK);
+			}
+			if ("".equals(domainCode)) {
+				sql = StringUtil.replace(sql, "AND (opencps_serviceinfo.domainCode = ?)", StringPool.BLANK);
+			}
+			else {
+			}
+			if (dossierStatus <= 0) {
+				sql = StringUtil
+				    .replace(
+				        sql, "AND (opencps_dossier.dossierStatus = ?)",
+				        StringPool.BLANK);
+			}
+			sql = CustomSQLUtil
+						    .replaceAndOperator(sql, false);
+			SQLQuery q = session
+			    .createSQLQuery(sql);
+			
+			q
+			    .addEntity("Dossier", DossierImpl.class);
+
+			QueryPos qPos = QueryPos
+			    .getInstance(q);
+
+			qPos
+			    .add(groupId);
+
+			if (keywords != null && keywords.length > 0) {
+				qPos
+				    .add(keywords, 2);
+				qPos
+				    .add(keywords, 2);
+			}
+			
+			if (dossierStatus > 0) {
+				qPos
+				    .add(dossierStatus);
+			}
+
+			if (!"".equals(domainCode)) {
+				qPos.add(domainCode);
+			}
+			else {
+				
+			}
+			
+			List<Dossier> results = (List<Dossier>) QueryUtil
+		    .list(q, getDialect(), start, end);
+			List<Dossier> clones = new ArrayList<Dossier>(results);
+			Collections.sort(clones, obc);
+			
+			return clones;
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return null;
+	}
+
+	public static final String SEARCH_DOSSIER_BY_KEYWORDDOMAINANDSTATUS = DossierFinder.class
+				    .getName() + ".searchDossierByKeywordDomainAndStatus";
+	public static final String COUNT_DOSSIER_BY_KEYWORDDOMAINANDSTATUS = DossierFinder.class
+				    .getName() + ".countDossierByKeywordDomainAndStatus";
+	
 	public static final String SEARCH_DOSSIER = DossierFinder.class
 	    .getName() + ".searchDossier";
 	public static final String COUNT_DOSSIER = DossierFinder.class

@@ -19,12 +19,17 @@ package org.opencps.backend.util;
 
 import java.util.Random;
 
+import com.liferay.portal.kernel.util.StringPool;
+
 
 /**
  * @author khoavd
  *
  */
 public class DossierNoGenerator {
+	
+
+	
 	/**
 	 * @return
 	 */

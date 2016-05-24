@@ -1,4 +1,4 @@
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -35,13 +35,17 @@
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@ include file="../init.jsp" %>
 
 
 <liferay-util:include page="/html/portlets/accountmgt/admin/toptabs.jsp" servletContext="<%=application %>" />
 
 <%
-	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
+	if(request.getAttribute(WebKeys.CITIZEN_ENTRY) != null){
+		citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);	
+	}
+
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	

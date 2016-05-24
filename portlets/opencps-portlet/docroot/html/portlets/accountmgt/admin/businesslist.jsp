@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -37,6 +36,7 @@
 <%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 <%@page import="org.opencps.accountmgt.search.BusinessSearch"%>
 <%@page import="com.liferay.portal.kernel.upgrade.RenameUpgradePortletPreferences"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 
 <%@ include file="../init.jsp" %>
 
@@ -45,7 +45,10 @@
 
 
 <%
-	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+	if(request.getAttribute(WebKeys.BUSINESS_ENTRY) != null){
+		business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+	}
+
 	long businessId = business != null ? business.getBusinessId() : 0L;
 	
 	int accountStatus = ParamUtil.getInteger(request, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);

@@ -114,7 +114,7 @@
 			<portlet:param name="returnURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
 		<%
-			String accountType = GetterUtil.getString((String) request.getAttribute(WebKeys.ACCOUNT_TYPE), StringPool.BLANK);
+
 			String path = StringPool.BLANK;
 			
 			String [] profileSections = null;
@@ -180,7 +180,7 @@
 					
 					String [][] categorySections = {profileSections};
 					
-					Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+					//Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
 				%>
 				
 				<aui:input 
@@ -207,7 +207,7 @@
 					profileSections[2] = "password";
 					path = "/html/portlets/accountmgt/registration/citizen/";
 					String [][] categorySections = {profileSections};
-					Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
+					//Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
 				%>
 				<aui:input 
 					name="<%=CitizenDisplayTerms.CITIZEN_ID %>" 

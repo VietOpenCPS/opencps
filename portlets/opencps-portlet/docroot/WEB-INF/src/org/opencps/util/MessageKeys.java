@@ -61,5 +61,5 @@ public class MessageKeys {
 	public static final String DOSSIER_PART_DELETE_ERROR = "dossier.part.childs.has.existed";
 	public static final String DOSSIER_SYSTEM_EXCEPTION_OCCURRED = "dossier.system.exception.occurred";
 	public static final String DOSSIER_UPDATE_SUCCESS = "dossiermgt.update.sucess";
-
+	public static final String DOSSIER_FILE_DUPLICATE_NAME = "dossiermgt.file.duplicate.name";
 }

@@ -23,7 +23,7 @@
 
 		<column name="serviceNo" type="String" />
 		<column name="serviceName" type="String"/>
-		<column name="shortName" type="String" />
+		<column name="fullName" type="String" />
 		<column name="serviceProcess" type="String"/>
 		<column name="serviceMethod" type="String" />
 		<column name="serviceDossier" type="String" />

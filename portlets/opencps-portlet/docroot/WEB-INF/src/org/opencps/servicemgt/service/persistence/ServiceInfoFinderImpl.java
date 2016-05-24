@@ -125,7 +125,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 
 			sql =
 			    CustomSQLUtil.replaceKeywords(
-			        sql, "lower(opencps_serviceinfo.shortName)",
+			        sql, "lower(opencps_serviceinfo.fullName)",
 			        StringPool.LIKE, true, keywords);
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
@@ -213,7 +213,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 
 			sql =
 			    CustomSQLUtil.replaceKeywords(
-			        sql, "lower(opencps_serviceinfo.shortName)",
+			        sql, "lower(opencps_serviceinfo.fullName)",
 			        StringPool.LIKE, true, keywords);
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
