@@ -292,7 +292,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		        .getUserId());
 		business
 		    .setModifiedDate(now);
-
+		business.setName(fullName);
 		business
 		    .setRepresentativeName(representativeName);
 		business
@@ -511,7 +511,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		    .setCreateDate(now);
 		business
 		    .setDistrictCode(districtCode);
-
+		business.setName(fullName);
 		business
 		    .setEnName(enName);
 		business

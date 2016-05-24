@@ -3,6 +3,14 @@
 	<classpathentry kind="src" path="docroot/WEB-INF/src"/>
 	<classpathentry kind="src" path="docroot/WEB-INF/service"/>
 	<classpathentry kind="src" path="docroot/WEB-INF/util-taglib"/>
+<<<<<<< HEAD
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider/Liferay v6.2 CE (Tomcat 7)">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.web"/>
+		</attributes>
+	</classpathentry>
+=======
+>>>>>>> 27f4fb36f56762447d5146ff5dd1adb813e81d01
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="com.liferay.ide.eclipse.server.plugin.container/portlet">
@@ -16,10 +24,13 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+<<<<<<< HEAD
+=======
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider/Liferay v6.2 CE (Tomcat 7)">
 		<attributes>
 			<attribute name="owner.project.facets" value="jst.web"/>
 		</attributes>
 	</classpathentry>
+>>>>>>> 27f4fb36f56762447d5146ff5dd1adb813e81d01
 	<classpathentry kind="output" path="docroot/WEB-INF/classes"/>
 </classpath>
