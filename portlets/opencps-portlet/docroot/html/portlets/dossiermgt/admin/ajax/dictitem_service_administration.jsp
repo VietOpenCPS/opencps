@@ -44,7 +44,6 @@
 		
 	} catch (Exception e) {
 	}
-	
 %>
 
 <%--cap thu tuc hanh chinh , required --%>

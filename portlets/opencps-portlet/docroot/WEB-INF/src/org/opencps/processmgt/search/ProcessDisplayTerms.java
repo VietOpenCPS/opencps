@@ -27,7 +27,10 @@ import com.liferay.portal.kernel.dao.search.DisplayTerms;
  *
  */
 public class ProcessDisplayTerms extends DisplayTerms{
-
+	public static final String PROCESS_ADMINISTRATIONCODE = "administrationCode";
+	public static final String PROCESS_DOMAINCODE = "domainCode";
+	public static final String PROCESS_DOSSIERSTATUS = "dossierStatus";
+	public static final String PROCESS_DOSSIERTEMPLATE_ID = "dossierTemplateId";
 	/**
      * @param request
      */

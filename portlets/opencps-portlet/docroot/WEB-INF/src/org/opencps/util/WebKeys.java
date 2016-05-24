@@ -109,6 +109,7 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String FILE_GROUP_ENTRY = "FILE_GROUP_ENTRY";
 
+	public static final String PAYMENT_CONFIG_ENTRY = "PAYMENT_CONFIG_ENTRY";
 	
 	public static final String FILE_ID = "dossierFileId";
 	
