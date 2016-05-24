@@ -31,8 +31,7 @@
 	ResultRow row =	(ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
 	citizen = (Citizen)row.getObject();
-	
-	System.out.println(citizen.getAccountStatus());
+
 %>
 
 <%-- <liferay-ui:icon-menu> --%>

@@ -114,6 +114,9 @@ public class DefineObjectsTag extends IncludeTag {
 		        .isNull(accountType)) {
 			String dossierDestinationFolder = StringPool.BLANK;
 			try {
+				
+				AccountUtil.destroy(request, false);
+				
 				List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
 				User user = themeDisplay

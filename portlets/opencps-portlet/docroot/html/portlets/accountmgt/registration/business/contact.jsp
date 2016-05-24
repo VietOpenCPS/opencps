@@ -102,13 +102,6 @@
 <aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
 
 <aui:row>
-	<aui:input name="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>">
-		<aui:validator name="required" />
-		<aui:validator name="maxLength">500</aui:validator>
-	</aui:input>
-</aui:row>
-
-<aui:row>
 	<aui:col width="100">
 		<datamgt:ddr 
 			cssClass="input100"
@@ -122,8 +115,9 @@
 </aui:row>
 
 <aui:row>
-	<aui:col width="50">
+	<aui:col width="30">
 		<aui:input 
+			cssClass="input100"
 			name="<%=BusinessDisplayTerms.BUSINESS_EMAIL %>"
 			disabled="<%=isViewProfile || isAdminViewProfile %>"
 		>
@@ -133,37 +127,33 @@
 		</aui:input>
 	</aui:col>
 	
-	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_TELNO %>">
-			<aui:validator name="required" />
+	<aui:col width="30">
+		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_TELNO %>" cssClass="input100">
 			<aui:validator name="maxLength">20</aui:validator>
 		</aui:input>
 	</aui:col>
 </aui:row>
 
 <aui:row>
-	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVENAME %>">
-			<aui:validator name="required" />
-			<aui:validator name="maxLength">255</aui:validator>
-		</aui:input>
+	<aui:col width="30">
+			<aui:input name="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVENAME %>" cssClass="input100">
+				<aui:validator name="maxLength">255</aui:validator>
+			</aui:input>
 	</aui:col> 
 	
-	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE %>">
-			<aui:validator name="required" />
-			<aui:validator name="maxLength">100</aui:validator>
-		</aui:input>
+	<aui:col width="30">
+			<aui:input name="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE %>" cssClass="input100">
+				<aui:validator name="maxLength">100</aui:validator>
+			</aui:input>
 	</aui:col>
 </aui:row>
 
 <c:if test="<%= !isViewProfile && !isAdminViewProfile %>">
 	<aui:row>
-		<aui:input type="file" name="attachFile" >
+		<aui:input type="file" name="businessAttachFile" >
 			<aui:validator name="acceptFiles">
 				'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
 			</aui:validator>
-			<aui:validator name="required" />
 		</aui:input>
 	</aui:row>
 </c:if>

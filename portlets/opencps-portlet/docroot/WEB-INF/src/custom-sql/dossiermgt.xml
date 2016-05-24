@@ -206,5 +206,22 @@
 				(opencps_dossier_file.dossierFileType = ?)
 		]]>
 	</sql>	
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier_log
+			WHERE
+				opencps_dossier_log.dossierId = ?
+			AND 
+				opencps_dossier_log.actor IN(?)
+			AND 
+				opencps_dossier_log.requestCommand IN(?)
+			ORDER BY 
+				opencps_dossier.updateDatetime DESC
+		]]>
+	</sql>
 
 </custom-sql>

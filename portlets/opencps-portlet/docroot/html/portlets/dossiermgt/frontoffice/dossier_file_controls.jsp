@@ -72,7 +72,6 @@
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT%>">
 					<td width="40%" align="right">
 						<aui:a
-						
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
@@ -92,6 +91,7 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
@@ -115,7 +115,9 @@
 					<td width="10%" align="right">
 						<aui:a
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
+							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
 							href="javascript:void(0);" 
@@ -152,6 +154,7 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
@@ -209,6 +212,7 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
@@ -236,7 +240,9 @@
 					<td width="10%" align="right">
 						<aui:a 
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
-							dossier-part="<%=String.valueOf(dossierPartId) %>"	
+							dossier="<%=String.valueOf(dossierId) %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"	
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
 							href="javascript:void(0);" 
@@ -316,6 +322,7 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
@@ -352,7 +359,9 @@
 					<td width="10%" align="right">
 						<aui:a 
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
+							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
 							href="javascript:void(0);" 

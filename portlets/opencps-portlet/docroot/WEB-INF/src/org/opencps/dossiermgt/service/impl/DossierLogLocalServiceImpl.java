@@ -69,9 +69,9 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 
 		dossierLog
 		    .setUserId(userId);
-		
+
 		dossierLog
-	    	.setCreateDate(now);
+		    .setCreateDate(now);
 
 		dossierLog
 		    .setModifiedDate(now);
@@ -142,24 +142,38 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 
 	}
 
+	public int countDossierLogByDossierId(long dossierId)
+	    throws SystemException {
+
+		return dossierLogPersistence
+		    .countByDossierId(dossierId);
+	}
+
+	public List<DossierLog> findRequiredProcessDossier(
+	    long dossierId, String[] actors, String[] requestCommands)
+	    throws SystemException {
+
+		return dossierLogFinder
+		    .findRequiredProcessDossier(dossierId, actors, requestCommands);
+
+	}
+
 	public List<DossierLog> getDossierLogByDossierId(long doosierId)
 	    throws SystemException {
 
 		return dossierLogPersistence
 		    .findByDossierId(doosierId);
 	}
-	
-	public List<DossierLog> getDossierLogByDossierId(long dossierId, int start, int end) 
-					throws SystemException {
-		
+
+	public List<DossierLog> getDossierLogByDossierId(
+	    long dossierId, int start, int end)
+	    throws SystemException {
+
 		boolean orderByAsc = true;
-		DossierLogUpdateDatetimeComparator orderByComparator = 
-						new DossierLogUpdateDatetimeComparator(orderByAsc);
-		return dossierLogPersistence.findByDossierId(dossierId, start, end, orderByComparator);
-	}
-	
-	public int countDossierLogByDossierId(long dossierId) throws SystemException {
-		return dossierLogPersistence.countByDossierId(dossierId);
+		DossierLogUpdateDatetimeComparator orderByComparator =
+		    new DossierLogUpdateDatetimeComparator(orderByAsc);
+		return dossierLogPersistence
+		    .findByDossierId(dossierId, start, end, orderByComparator);
 	}
 
 	public List<DossierLog> getDossierLogByDossierId(long dossierId, int start, int end, OrderByComparator obc)
@@ -168,8 +182,5 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		return dossierLogPersistence
 			.findByDossierId(dossierId, start, end, obc);
 	}
-	
-	public int countDossierLogByDossierId(long dossierId) throws SystemException {
-		return dossierLogPersistence.countByDossierId(dossierId);
-	}
+
 }

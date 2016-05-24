@@ -43,19 +43,11 @@
 <c:choose>
 	<c:when test="<%=themeDisplay.isSignedIn() %>">
 		<%
-			Employee employee = null;
-		
+			
 			WorkingUnit workingUnit = null;
 			
 			JobPos jobPos = null;
-			
-			try{
-				long mappingUserId = user.getUserId();
-				employee = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(scopeGroupId, mappingUserId);
-			}catch(Exception e){
-				
-			}
-			
+
 			PasswordPolicy passwordPolicy = null;
 
 			if (user == null) {

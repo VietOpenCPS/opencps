@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +33,8 @@
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="com.liferay.portlet.documentlibrary.DuplicateFileException"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -47,7 +50,7 @@
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 
 	DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
-
+	
 	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
 
 	Date defaultDossierFileDate = dossierFile != null && dossierFile.getDossierFileDate() != null ? 
@@ -95,17 +98,22 @@
 	<portlet:param name="<%=DossierFileDisplayTerms.FOLDE_ID %>" value="<%=String.valueOf(folderId)%>"/>
 </portlet:actionURL>
 
-<portlet:actionURL var="updateDossierFileURL" name="updateDossierFile">
+<portlet:actionURL var="addAttachmentFileURL" name="addAttachmentFile">
 	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0L)%>"/>
 	<portlet:param name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" value="<%=String.valueOf(dossierFileId)%>"/>
 </portlet:actionURL>
 
 <liferay-ui:error message="upload-error" key="upload-error"/>
 
+<liferay-ui:error 
+	exception="<%= DuplicateFileException.class %>" 
+	message="<%= MessageKeys.DOSSIER_FILE_DUPLICATE_NAME %>"
+/>
+
 <aui:form 
 	name="fm" 
 	method="post" 
-	action="<%=addTempFileURL%>" 
+	action="<%=addAttachmentFileURL%>" 
 	enctype="multipart/form-data"
 >
 	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
@@ -119,18 +127,19 @@
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPart != null ? dossierPart.getDossierpartId() : dossierPartId %>"/>
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" cssClass="input100">
+			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text">
 				<aui:validator name="required"/>
 			</aui:input>
 		</aui:col>
 	</aui:row>
 	
 	<aui:row>
-		<aui:col width="70">
-			<aui:input name="<%= DossierFileDisplayTerms.DOSSIER_FILE_NO %>" type="text" cssClass="input100"/>
+		<aui:col width="100">
+			<aui:input name="<%= DossierFileDisplayTerms.DOSSIER_FILE_NO %>" type="text"/>
 		</aui:col>
-		
-		<aui:col width="30">
+	</aui:row>
+	<aui:row>
+		<aui:col width="100">
 			<label class="control-label custom-lebel" for='<portlet:namespace/><%=DossierFileDisplayTerms.DOSSIER_FILE_DATE %>'>
 				<liferay-ui:message key="dossier-file-date"/>
 			</label>
@@ -180,51 +189,16 @@
 		
 		if(success == 'true'){
 			
-			if(responseData != ''){
-				jsonData = JSON.parse(responseData);
-			}
-			
-			<portlet:namespace/>responseData(jsonData);
+			<portlet:namespace/>closeDialog();
 		}
 		
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>responseData', function(schema) {
-		var Util = Liferay.Util;
-		Util.getOpener().Liferay.fire('getUploadDataSchema', {responseData:schema});
-		<portlet:namespace/>closeDialog();
-	});
 	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_');
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dossierFileId');
 		dialog.destroy(); // You can try toggle/hide whate
 	});
 
-	Liferay.provide(window, '<portlet:namespace />uploadTempFile', function() {
-		var A = AUI();
-		var uri = A.one('#<portlet:namespace/>fm').attr('action');
-		var configs = {
-             method: 'POST',
-             form: {
-                 id: '#<portlet:namespace/>fm',
-                 upload: true
-             },
-             sync: true,
-             on: {
-             	failure: function(event, id, obj) {
-				
-				},
-				success: function(event, id, obj) {
-					var response = this.get('responseData');
-					
-				},
-                complete: function(event, id, obj){
-                   
-                }
-             }
-        };
-	            
-	    A.io.request(uri, configs);    
-		
-	},['aui-io']);
 </aui:script>

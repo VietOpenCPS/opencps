@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -110,14 +111,19 @@
 									level = StringUtil.count(treeIndex, StringPool.PERIOD);
 								}
 								
+								
 								DossierFile dossierFile = null;
 								
 								if(dossier != null){
 									try{
 										dossierFile = DossierFileLocalServiceUtil.getDossierFileByD_P(dossier.getDossierId(), 
 												dossierPart.getDossierpartId());
-									}catch(Exception e){}
+										
+									}catch(Exception e){
+										
+									}
 								}
+								
 								
 								%>
 									<div 
@@ -271,7 +277,7 @@
 												<span class="row-icon">
 													<i 
 														id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-														class="fa fa-square-o" 
+														class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>'
 														aria-hidden="true">
 													</i>
 												</span>
@@ -436,30 +442,14 @@
 			
 			var instance = A.one(e);
 			
-			var dossierPartId = instance.attr('dossier-part');
+			var dossierFileId = instance.attr('dossier-file');
 			
-			var index = instance.attr('index');
-
-			var rowcheck = A.one('#rowcheck' + dossierPartId + '-' + index);
-			
-			var dossierFileData = A.one('#<portlet:namespace/>dossierFileData' + dossierPartId + '-' + index);
-			
-			var fileUpload = A.one('#<portlet:namespace/>fileUpload' + dossierPartId + '-' + index);
-			
-			var dossierFileId = parseInt(A.one('#<portlet:namespace/>dossierFile' + dossierPartId + '-' + index).val());
-			
-			if(fileUpload && parseInt(fileUpload.val()) > 0){
+			if(parseInt(dossierFileId) > 0){
 				var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
-				
-				if(dossierFileId > 0){
-					portletURL.setParameter("javax.portlet.action", "deleteDossierFile");
-					portletURL.setParameter("dossierFileId", dossierFileId);
-				}else{
-					portletURL.setParameter("javax.portlet.action", "deleteTempFile");
-				}
-				
+
+				portletURL.setParameter("javax.portlet.action", "deleteAttachmentFile");
+				portletURL.setParameter("dossierFileId", dossierFileId);
 				portletURL.setPortletMode("view");
-				portletURL.setParameter("fileEntryId", fileUpload.val());
 				portletURL.setWindowState('<%=WindowState.NORMAL%>');
 				
 				A.io.request(
@@ -472,22 +462,13 @@
 									response = JSON.parse(response);
 									
 									if(response.deleted == true){
-										
-										fileUpload.val('');
+										var data = {};
 
-										if(dossierFileData){
-											dossierFileData.val('');
-										}
 										
-										if(rowcheck){
-											rowcheck.replaceClass('fa-check-square-o', 'fa-square-o');
-										}
-										
-										var counterLabel = A.one('.alias-' + dossierPartId + '-' + index);
-										 
-										if(counterLabel){
-											counterLabel.text(0);
-										}
+										data['_<%=WebKeys.DOSSIER_MGT_PORTLET  %>_tab'] = '_<%= WebKeys.DOSSIER_MGT_PORTLET %>_dossier_part';
+
+										//Liferay.Portlet.refresh(curPortletBoundaryId, data);
+										Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_', data);
 									}else{
 										alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-remove-this-file") %>');
 									}
@@ -537,7 +518,11 @@
 		
 		var instance = A.one(e);
 		
+		var dossierId = instance.attr('dossier');
+		
 		var dossierPartId = instance.attr('dossier-part');
+		
+		var dossierFileId = instance.attr('dossier-file');
 		
 		var index = instance.attr('index');
 		
@@ -553,8 +538,6 @@
 		
 		var fileUpload = A.one('#<portlet:namespace/>fileUpload' + dossierPartId + '-' + index);
 		
-		var dossierFileId = parseInt(A.one('#<portlet:namespace/>dossierFile' + dossierPartId + '-' + index).val());
-		
 		if(fileUpload && parseInt(fileUpload.val()) > 0){
 			alert('<%=UnicodeLanguageUtil.get(pageContext, "remove-old-file-before-upload")%>');
 			return;
@@ -564,6 +547,7 @@
 		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
+		portletURL.setParameter("dossierId", dossierId);
 		portletURL.setParameter("dossierPartId", dossierPartId);
 		portletURL.setParameter("index", index);
 		portletURL.setParameter("level", level);

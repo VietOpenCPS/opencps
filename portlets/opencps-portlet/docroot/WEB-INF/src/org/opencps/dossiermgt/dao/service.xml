@@ -274,7 +274,6 @@
 		
         <column name="dossierId" type="long"/>
         <column name="fileGroupId" type="long"/>
-        <column name="actor" type="int"></column>
         <column name="requestCommand" type="int"></column>
         <column name="dossierStatus" type="int"/>
         <column name="actionInfo" type="String"/>

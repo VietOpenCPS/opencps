@@ -29,7 +29,7 @@
  
 <%
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	Employee employee = (Employee) row.getObject();
+	employee = (Employee) row.getObject();
 %> 
 
 			

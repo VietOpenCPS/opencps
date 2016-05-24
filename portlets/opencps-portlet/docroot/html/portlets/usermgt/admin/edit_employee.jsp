@@ -34,7 +34,9 @@
 
 
 <%
-	Employee employee = (Employee)request.getAttribute(WebKeys.EMPLOYEE_ENTRY);
+	if(request.getAttribute(WebKeys.EMPLOYEE_ENTRY) != null){
+		employee = (Employee)request.getAttribute(WebKeys.EMPLOYEE_ENTRY);
+	}
 
 	User mappingUser = (User)request.getAttribute(WebKeys.USER_MAPPING_ENTRY);
 	

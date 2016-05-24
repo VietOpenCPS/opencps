@@ -34,7 +34,9 @@
 <%@ include file="../../init.jsp"%>
 <%
 
-	Employee employee = (Employee)request.getAttribute(WebKeys.EMPLOYEE_ENTRY);
+	if(request.getAttribute(WebKeys.EMPLOYEE_ENTRY) != null){
+		employee = (Employee)request.getAttribute(WebKeys.EMPLOYEE_ENTRY);
+	}
 
 	WorkingUnit mappingWorkingUnit = (WorkingUnit)request.getAttribute(WebKeys.WORKING_UNIT_MAPPING_ENTRY);
 	
@@ -53,7 +55,7 @@
 	if(employee != null){
 		try{
 			jobPoses = JobPosLocalServiceUtil.getEmployeeJobPoses(employee.getEmployeeId());
-			System.out.println(jobPoses.size());
+			
 		}catch(Exception e){
 			// Nothing todo
 		}
@@ -211,8 +213,7 @@
 				jobPos = jobPoses.get(i);
 			}
 			
-			System.out.println(jobPosIndex);
-			
+		
 			long selectedWorkingUnitId = 0;
 			
 			%>
@@ -239,7 +240,7 @@
 										
 										if(workingUnit != null){
 											selectedWorkingUnitId = workingUnit.getWorkingunitId();
-											System.out.println(selectedWorkingUnitId);
+											
 										}
 									}
 									if(mappingWorkingUnitId > 0){

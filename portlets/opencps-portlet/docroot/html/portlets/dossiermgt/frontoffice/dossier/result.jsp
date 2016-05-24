@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,9 +17,81 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLogLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierLog"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@ include file="../../init.jsp"%>
 
-<div class="portlet-msg-info">
-	<liferay-ui:message key="this-module-is-in-development-stage"/>
-</div>
+<%
+	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
+%>
+
+<c:choose>
+	<c:when test="<%=dossier != null && dossier.getDossierStatus() != PortletConstants.DOSSIER_STATUS_NEW %>">
+		<%
+			int[] actors = new int[]{PortletConstants};
+			List<DossierLog> dossierLogs = DossierLogLocalServiceUtil.findRequiredProcessDossier(dossier.getDossierId(), actors, requestCommands);
+		%>
+		<aui:row>
+			<aui:col width="25">
+				<liferay-ui:message key="dossier-create-date"/>
+			</aui:col>
+			<aui:col width="25">
+				<%=DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
+			</aui:col>
+			<aui:col width="25">
+				<liferay-ui:message key="dossier-submit-date"/>
+			</aui:col>
+			<aui:col width="25">
+				<%=DateTimeUtil.convertDateToString(dossier.getSubmitDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col width="25">
+				<liferay-ui:message key="dossier-receive-date"/>
+			</aui:col>
+			<aui:col width="25">
+				<%=DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
+			</aui:col>
+			<aui:col width="25">
+				<liferay-ui:message key="dossier-reception-no"/>
+			</aui:col>
+			<aui:col width="25">
+				<%=dossier.getReceptionNo() %>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col width="25">
+				<liferay-ui:message key="dossier-estimate-date"/>
+			</aui:col>
+			<aui:col width="25">
+				<%=DateTimeUtil.convertDateToString(dossier.getEstimateDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
+			</aui:col>
+			<aui:col width="25">
+				<liferay-ui:message key="dossier-finish-date"/>
+			</aui:col>
+			<aui:col width="25">
+				<%=DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col width="25">
+				<liferay-ui:message key="dossier-update-date"/>
+			</aui:col>
+			<aui:col width="25"></aui:col>
+			<aui:col width="25">
+				<liferay-ui:message key="dossier-status"/>
+			</aui:col>
+			<aui:col width="25"></aui:col>
+		</aui:row>
+	</c:when>
+	<c:otherwise>
+		<div class="portlet-msg-info">
+			<liferay-ui:message key="no-dossier-result-info"/>
+		</div>
+	</c:otherwise>
+</c:choose>

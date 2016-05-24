@@ -54,7 +54,7 @@
 					<aui:nav-item 
 						id="addService" 
 						label="add-service" 
-						iconCssClass="icon-plus"  
+						iconCssClass="icon-plus icon-config"  
 						href="<%=editServiceURL %>"
 					/>
 				</c:if>

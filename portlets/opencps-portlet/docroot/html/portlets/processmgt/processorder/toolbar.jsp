@@ -47,16 +47,17 @@
 %>
 
 <aui:nav-bar cssClass="custom-toolbar">
-	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
+	<aui:nav id="toolbarContainer" cssClass="nav-button-container  nav-display-style-buttons pull-left" >
 		<c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)%>">
 			<portlet:renderURL var="processDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
 				<portlet:param name="mvcPath" value="/html/portlets/processmgt/processorder/processordertodolist.jsp"/>
 				<portlet:param name="backURL" value="<%=currentURL %>"/>
 			</portlet:renderURL>
 			<aui:nav-item 
+				cssClass="item-config"
 				id="processDossier" 
 				label="process-dossier" 
-				iconCssClass="icon-plus"  
+				iconCssClass="icon-plus icon-config"  
 				href='<%="javascript:" + renderResponse.getNamespace() + "processMultipleDossier()" %>'
 			/>
 		</c:if>

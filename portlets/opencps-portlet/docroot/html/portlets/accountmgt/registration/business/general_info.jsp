@@ -109,75 +109,91 @@
 
 <aui:row>
 	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_NAME %>" >
+		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_NAME %>" cssClass="input100" >
 			<aui:validator name="required" />
 			<aui:validator name="maxLength">255</aui:validator>
 		</aui:input>
 	</aui:col>
 	
 	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_IDNUMBER %>"	
-	>
-			<aui:validator name="required" />
-			<aui:validator name="maxLength">100</aui:validator>
-		</aui:input>
+		<div class="span6">
+			<aui:input name="<%=BusinessDisplayTerms.BUSINESS_IDNUMBER %>" cssClass="input100"	
+				>
+				<aui:validator name="required" />
+				<aui:validator name="maxLength">100</aui:validator>
+			</aui:input>
+		</div>
 	</aui:col>
 </aui:row>
 
 <aui:row>
 	<aui:col width="50">
-		<aui:input name="<%= BusinessDisplayTerms.BUSINESS_ENNAME %>">
-			<aui:validator name="required" />
+		<aui:input name="<%= BusinessDisplayTerms.BUSINESS_ENNAME %>" cssClass="input100">
 			<aui:validator name="maxLength">255</aui:validator>
 		</aui:input>
 	</aui:col>
 	
 	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_SHORTNAME %>">
-			<aui:validator name="maxLength">100</aui:validator>
-		</aui:input>
+		<div class="span6">
+			<aui:input name="<%=BusinessDisplayTerms.BUSINESS_SHORTNAME %>" cssClass="input100">
+				<aui:validator name="maxLength">100</aui:validator>
+			</aui:input>
+		</div>
 	</aui:col>
 </aui:row>
-
 <aui:row>
-	<datamgt:ddr
-		depthLevel="1" 
-		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
-		itemNames="businessType"
-		itemsEmptyOption="true"	
-		selectedItems="<%=String.valueOf(dictItemTypeId)%>"
-	/>	
-</aui:row>
-<c:if test="<%= !dictItemDomains.isEmpty() %>">
-	<aui:row>
-		<div class="">
-		<%
-			for(DictItem dictItemDomain : dictItemDomains) {
-					if(businessDomains != null) {
-						for(BusinessDomain businessDomainChecked : businessDomains) {
-							if(dictItemDomain.getItemCode().equals(businessDomainChecked.getBusinessDomainId())) {
-								isCheckItemDomain = true;
-								break;
+	<aui:col width="50">
+		<aui:row>
+			<aui:col width="50">
+				<datamgt:ddr
+					cssClass="input100"
+					depthLevel="1" 
+					dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
+					itemNames="businessType"
+					itemsEmptyOption="true"	
+					selectedItems="<%=String.valueOf(dictItemTypeId)%>"
+				/>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+				<aui:input name="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>" cssClass="input100">
+					<aui:validator name="maxLength">500</aui:validator>
+				</aui:input>
+		</aui:row>
+	</aui:col>
+	<aui:col width="50">
+		<c:if test="<%= !dictItemDomains.isEmpty() %>">
+			<aui:row>
+				<label><liferay-ui:message key ="businessDomain" /></label>
+				<div class="fake_textarea">
+				<%
+					for(DictItem dictItemDomain : dictItemDomains) {
+							if(businessDomains != null) {
+								for(BusinessDomain businessDomainChecked : businessDomains) {
+									if(dictItemDomain.getItemCode().equals(businessDomainChecked.getBusinessDomainId())) {
+										isCheckItemDomain = true;
+										break;
+									}
+								}
 							}
-						}
+						%>
+							<aui:input
+								name="businessDomain"
+								id='<%= "businessDomain" + dictItemDomain.getDictItemId()%>'
+								value="<%=dictItemDomain.getItemCode() %>"
+								type="checkbox" 
+							    label="<%=dictItemDomain.getItemName(locale, true)%>"
+							    checked="<%= isCheckItemDomain %>"
+							/>		
+						<%
+						isCheckItemDomain = false;
 					}
 				%>
-					<aui:input 
-						id='<%= "businessDomain" + dictItemDomain.getDictItemId()%>'
-						name="businessDomain"
-						value="<%=dictItemDomain.getItemCode() %>"
-						type="checkbox" 
-					    label="<%=dictItemDomain.getItemName(locale, true)%>"
-					    checked="<%= isCheckItemDomain %>"
-					/>		
-				<%
-				isCheckItemDomain = false;
-			}
-		%>
-		</div>
-	</aui:row>
-</c:if>
-
+				</div>
+			</aui:row>
+		</c:if>
+	</aui:col>
+</aui:row>
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration.registration_business.business_register.jsp");
 %>
