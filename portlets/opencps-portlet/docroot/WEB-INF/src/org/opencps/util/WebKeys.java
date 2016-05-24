@@ -35,7 +35,7 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 
 	public static final String WORKING_UNIT_ENTRY = "WORKING_UNIT_ENTRY";
 
-	public static final String EMPLOYEE_ENTRY = "EMPLOYEE_ENTRY";
+	public static final String EMPLOYEE_ENTRY = "employee";
 
 	public static final String TURN_BACK_EMPLOYEE_ENTRY = "TURN_BACK_EMPLOYEE_ENTRY";
 
@@ -59,17 +59,17 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String SERVICE_ENTRY = "SERVICE_ENTRY";
 	
-	public static final String CITIZEN_ENTRY = "CITIZEN_ENTRY";
+	public static final String CITIZEN_ENTRY = "citizen";
 	
 	public static final String MAPPING_USERID = "MAPPING_USERID";
 	
-	public static final String BUSINESS_ENTRY = "BUSINESS_ENTRY";
+	public static final String BUSINESS_ENTRY = "business";
 	
 	public static final String ACCOUNTMGT_ADMIN_PROFILE = "ACCOUNTMGT_ADMIN_PROFILE";
 	
 	public static final String ACCOUNTMGT_VIEW_PROFILE = "ACCOUNTMGT_VIEW_PROFILE";
 	
-	public static final String ACCOUNT_TYPE = "ACCOUNT_TYPE";
+	public static final String ACCOUNT_TYPE = "accountType";
 
 	public static final String SERVICE_TEMPLATE_ENTRY = "SERVICE_TEMPLATE_ENTRY";
 	
@@ -109,9 +109,31 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String FILE_GROUP_ENTRY = "FILE_GROUP_ENTRY";
 
-	
 	public static final String FILE_ID = "dossierFileId";
 	
 	public static final int DOSSIER_MONITORING_LIST = 1;
+	
 	public static final int DOSSIER_MONITORING_UPDATE = 2;
+	
+	public static final String ACTION_SUBMIT_VALUE = "submit";
+	
+	public static final String ACTION_RESUBMIT_VALUE = "resubmit";
+	
+	public static final String ACTION_CHANGE_VALUE = "change";
+	
+	public static final String ACTION_PAY_VALUE = "pay";
+	
+	public static final String ACTION_CANCEL_VALUE = "cancel";
+	
+	public static final String ACTION_CLOSE_VALUE = "close";
+	
+	public static final String ACCOUNT_FOLDER = "accountFolder";
+	
+	public static final String ACCOUNT_ROLES = "accountRoles";
+	
+	public static final String ACCOUNT_ORGANIZATION = "accountOrgs";
+	
+	public static final String ACCOUNT_OWNERUSERID = "ownerUserId";
+	
+	public static final String ACCOUNT_OWNERORGANIZATIONID = "ownerOrganizationId";
 }

@@ -34,7 +34,7 @@
 			WHERE
 				groupId = ?
 			AND (
-				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_serviceinfo.shortName) LIKE ? [$AND_OR_NULL_CHECK$])
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_serviceinfo.fullName) LIKE ? [$AND_OR_NULL_CHECK$])
 			 )
 			AND (opencps_serviceinfo.administrationCode = ?)
 			AND (opencps_serviceinfo.domainCode = ?)
@@ -50,7 +50,7 @@
 			WHERE
 				groupId = ?
 			AND (
-				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_serviceinfo.shortName) LIKE ? [$AND_OR_NULL_CHECK$])
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_serviceinfo.fullName) LIKE ? [$AND_OR_NULL_CHECK$])
 			 )
 			AND (opencps_serviceinfo.administrationCode = ?)
 			AND (opencps_serviceinfo.domainCode = ?)

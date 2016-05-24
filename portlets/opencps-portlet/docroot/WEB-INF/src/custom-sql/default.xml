@@ -5,4 +5,5 @@
 	<sql file="custom-sql/servicemgt.xml" />
 	<sql file="custom-sql/processmgt.xml" />
 	<sql file="custom-sql/dossiermgt.xml" />
+	<sql file="custom-sql/paymentmgt.xml" />
 </custom-sql>

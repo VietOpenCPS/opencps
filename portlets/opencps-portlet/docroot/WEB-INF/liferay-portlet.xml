@@ -135,6 +135,7 @@
 		<portlet-name>18</portlet-name>
 		<icon>/icon.png</icon>
 		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-css>/css/processmgt.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
@@ -172,11 +173,33 @@
 	<portlet>
 		<portlet-name>19</portlet-name>
 		<icon>/icon.png</icon>
+		<configuration-action-class>org.opencps.dossiermgt.action.ConfigurationActionImpl</configuration-action-class>		
+		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
 		<css-class-wrapper>19-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>21</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>true</instanceable>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>21-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>22</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>true</instanceable>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>22-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

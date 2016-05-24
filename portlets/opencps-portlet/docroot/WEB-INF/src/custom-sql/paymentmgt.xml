@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.opencps.paymentmgt.service.persistence.PaymentFileFinder.countPaymentFile">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+	    	FROM
+	    		opencps_payment_file
+	    	WHERE
+	    		(opencps_payment_file.groupId = ?)
+	    	AND
+	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	OR
+	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	AND
+				(opencps_payment_file.paymentStatus = ?)
+		]]>
+	</sql>	
+	
+	<sql id="org.opencps.paymentmgt.service.persistence.PaymentFileFinder.searchPaymentFile">	
+		<![CDATA[
+	    	SELECT 
+	    		*
+	    	FROM
+	    		opencps_payment_file
+	    	WHERE
+	    		(opencps_payment_file.groupId = ?)
+	    	AND
+	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	OR
+	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	AND
+				(opencps_payment_file.paymentStatus = ?)
+		]]>
+	</sql>
+</custom-sql>

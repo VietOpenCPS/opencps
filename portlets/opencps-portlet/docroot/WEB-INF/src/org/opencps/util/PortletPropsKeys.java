@@ -111,4 +111,14 @@ public class PortletPropsKeys {
 	public static final String DOSSIERMGT_DOSSIER_CONTACT_TEL_NO_LENGTH = "opencps.dossiermgt.dossier.contact.tel.no.length";
 	public static final String DOSSIERMGT_DOSSIER_CONTACT_EMAIL_LENGTH = "opencps.dossiermgt.dossier.contact.email.length";
 	public static final String DOSSIERMGT_DOSSIER_NOTE_LENGTH = "opencps.dossiermgt.dossier.note.length";
+	
+	//System directory
+	
+	public static final String OPENCPS_FILE_SYSTEM_DIR = "opencps.file.system.dir";
+	public static final String OPENCPS_FILE_SYSTEM_TEMP_DIR = "opencps.file.system.temp.dir";
+	public static final String OPENCPS_SERVER_DIR = "opencps.server.dir";
+	
+	//Servlet url
+	
+	public static final String OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL = "opencps.servlet.preview.dossier.form.url";
 }

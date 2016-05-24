@@ -18,6 +18,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
+<<<<<<< HEAD
+%>
+=======
 %>
 
 <%@ include file="../init.jsp" %>
@@ -111,3 +114,4 @@ function menu_left_count(url) {
 	left: 34px !important;
 }
 </style>
+>>>>>>> center_repo/master

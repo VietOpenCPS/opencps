@@ -51,6 +51,14 @@ public class DossierMgtUtil {
 	public static final String TOP_TABS_DOSSIER_FILE = "dossier-file";
 	public static final String TOP_TABS_EXTERNAL_DOSSIER = "external-dossier";
 
+	public static final int DOSSIERFILETYPE_INPUT = 1;
+	public static final int DOSSIERFILETYPE_OUTPUT = 2;
+	public static final int DOSSIERFILETYPE_ALL = 0;
+
+	public static final String TOP_TABS_DOSSIER_MONITORING_SEARCH = "dossier-monitoring-search";
+	public static final String TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST = "dossier-monitoring-dossier-file-list";
+	public static final String TOP_TABS_DOSSIER_MONITORING_SERVICE = "dossier-monitoring-service";
+	
 	public static String[] _DOSSIER_CATEGORY_NAMES = {
 	    "update-dossier-info"
 	};

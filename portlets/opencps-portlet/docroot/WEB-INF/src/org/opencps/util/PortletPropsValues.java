@@ -264,4 +264,20 @@ public class PortletPropsValues {
 	public static final int DOSSIERMGT_DOSSIER_NOTE_LENGTH = GetterUtil
 				    .getInteger(PortletProps
 				        .get(PortletPropsKeys.DOSSIERMGT_DOSSIER_NOTE_LENGTH));
+
+	//System directory
+	
+	public static final String OPENCPS_FILE_SYSTEM_DIR = PortletProps
+	    .get(PortletPropsKeys.OPENCPS_FILE_SYSTEM_DIR);
+	public static final String OPENCPS_FILE_SYSTEM_TEMP_DIR = PortletProps
+	    .get(PortletPropsKeys.OPENCPS_FILE_SYSTEM_TEMP_DIR);
+	public static final String OPENCPS_SERVER_DIR = System
+	    .getProperty(PortletPropsKeys.OPENCPS_SERVER_DIR);
+	
+	
+	// Servlet url
+
+	public static final String OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL =
+	    PortletProps
+	        .get(PortletPropsKeys.OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL);
 }
