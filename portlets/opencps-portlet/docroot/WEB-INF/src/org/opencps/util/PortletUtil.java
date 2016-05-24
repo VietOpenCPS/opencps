@@ -668,4 +668,13 @@ public class PortletUtil {
 
 		return statusLabel;
 	}
+	
+	public static String getEmployeeDestinationFolder(
+	    long groupId, long userId) {
+
+		return String
+		    .valueOf(groupId) + StringPool.SLASH +
+		    "opencps/processmgtfiles/employee" + StringPool.SLASH + String
+		        .valueOf(userId);
+	}
 }

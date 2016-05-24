@@ -16,7 +16,10 @@
 */
 package org.opencps.jasperreport.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -50,14 +53,18 @@ public class JRReportUtil {
 		try {
 			JasperReport reportTemplate = JRReportTemplate
 			    .getJasperReport(jrxmlTemplate);
-			JRJSONDataSource dataSource = JRJSONDataSource
-			    .getInstance(jsonData);
+			JRJSONDataSource dataSource = null;//JRJSONDataSource
+//			    .getInstance(jsonData);
+			InputStream stream = new ByteArrayInputStream(jsonData
+			    .getBytes(StandardCharsets.UTF_8));
+			dataSource = new JRJSONDataSource(stream);
+			
 			JasperPrint jasperPrint =
 			    getJasperPrint(reportTemplate, parameters, dataSource);
 
 			return exportPdfFile(jasperPrint, sourceFileName);
 		}
-		catch (Exception e) {
+		catch (JRException e) {
 			_log
 			    .error(e);
 

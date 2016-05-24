@@ -27,13 +27,6 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import org.opencps.dossiermgt.bean.AccountBean;
-import org.opencps.dossiermgt.model.Dossier;
-import org.opencps.dossiermgt.model.DossierFile;
-import org.opencps.dossiermgt.model.DossierPart;
-import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
-import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
-import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
-import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
@@ -52,11 +45,9 @@ import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -64,7 +55,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -94,6 +84,7 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 	}
 	/**
 	 * @param actionRequest
+	 * 
 	 * @param actionResponse
 	 * @throws IOException
 	 */
@@ -130,30 +121,41 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 				PaymentFile paymentFile = PaymentFileLocalServiceUtil.fetchPaymentFile(paymentFileId);
 				long govAgencyOrganizationId = -1;
 				long userId = themeDisplay.getUserId();
-				Employee employee = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(themeDisplay.getScopeGroupId(), userId);
-				WorkingUnit workingUnit = WorkingUnitLocalServiceUtil.fetchWorkingUnit(employee.getWorkingUnitId());
-				govAgencyOrganizationId = workingUnit.getMappingOrganisationId();
+//				Employee employee = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(themeDisplay.getScopeGroupId(), userId);
+//				WorkingUnit workingUnit = WorkingUnitLocalServiceUtil.fetchWorkingUnit(employee.getWorkingUnitId());
+//				govAgencyOrganizationId = workingUnit.getMappingOrganisationId();
+				govAgencyOrganizationId = 24787;
 				PaymentConfig paymentConfig = PaymentConfigLocalServiceUtil.getPaymentConfigByGovAgency(themeDisplay.getScopeGroupId(), govAgencyOrganizationId);
 				// Get account folder
-				DLFolder accountForlder = accountBean
-				    .getAccountFolder();
+				String dossierDestinationFolder = PortletUtil
+							    .getEmployeeDestinationFolder(themeDisplay.getScopeGroupId()
+							    			, userId);
+				DLFolder accountForlder = DLFolderUtil
+							    .getTargetFolder(themeDisplay
+							        .getUserId(), themeDisplay
+							            .getScopeGroupId(),
+							        themeDisplay
+							            .getScopeGroupId(),
+							        false, 0, dossierDestinationFolder,
+							        StringPool.BLANK, false, serviceContext);;
 
 				// Get dossier folder
 				DLFolder paymentFolder = DLFolderUtil.addFolder(themeDisplay
-				        .getUserId(), themeDisplay.getScopeGroupId(),themeDisplay.getScopeGroupId(),false, accountForlder
-			            .getFolderId(),String.valueOf(paymentConfig.getPaymentConfigId()),
+				        .getUserId(), themeDisplay.getScopeGroupId(),themeDisplay.getScopeGroupId(),false, accountForlder.getFolderId(),
+			           String.valueOf(paymentConfig.getPaymentConfigId()),
 			            StringPool.BLANK, false, serviceContext);
 
 				//TODO
 				String formData = StringPool.BLANK;
 				JSONObject payloadJSON = JSONFactoryUtil.createJSONObject();
+				JSONObject resultJSON = JSONFactoryUtil.createJSONObject();
 				payloadJSON.put("paymentFileId", paymentFile.getPaymentFileId());
 				payloadJSON.put("dossierId", paymentFile.getDossierId());
 		        payloadJSON.put("fileGroupId", paymentFile.getFileGroupId());
 		        payloadJSON.put("ownerUserId", paymentFile.getOwnerUserId());
 		        payloadJSON.put("ownerOrganizationId", paymentFile.getOwnerOrganizationId());
 		        //TODO
-		        workingUnit = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getOwnerOrganizationId());
+		        WorkingUnit workingUnit = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getOwnerOrganizationId());
 		        payloadJSON.put("ownerOrganizationName", workingUnit.getName());
 		        payloadJSON.put("ownerOrganizationAddress", workingUnit.getAddress());
 		        
@@ -199,13 +201,13 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		        payloadJSON.put("cf_keypayVersion", paymentConfig.getKeypayVersion());
 		        payloadJSON.put("cf_keypayMerchantCode", paymentConfig.getKeypayMerchantCode());
 		        payloadJSON.put("cf_keypaySecureKey", paymentConfig.getKeypaySecureKey());
-		        
-		        System.out.println("PaymentMgtBackOfficePortlet.createReport()"+payloadJSON.toString());
+		        resultJSON.put("opencps", payloadJSON.toString());
+		        System.out.println("PaymentMgtBackOfficePortlet.createReport()"+resultJSON.toString());
 				
 				String jrxmlTemplate = paymentConfig.getReportTemplate();
 
 				// Validate json string
-
+				formData = resultJSON.toString();
 				JSONFactoryUtil
 				    .createJSONObject(formData);
 
