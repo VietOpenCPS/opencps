@@ -1,21 +1,16 @@
-
-/*******************************************************************************
- * OpenCPS is the open source Core Public Services software
- * Copyright (C) 2016-present OpenCPS community
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *******************************************************************************/
-
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package org.opencps.paymentmgt.service.base;
 
@@ -225,6 +220,34 @@ public abstract class PaymentFileLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the Payment file with the matching UUID and company.
+	 *
+	 * @param uuid the Payment file's UUID
+	 * @param  companyId the primary key of the company
+	 * @return the matching Payment file, or <code>null</code> if a matching Payment file could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentFile fetchPaymentFileByUuidAndCompanyId(String uuid,
+		long companyId) throws SystemException {
+		return paymentFilePersistence.fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the Payment file matching the UUID and group.
+	 *
+	 * @param uuid the Payment file's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching Payment file, or <code>null</code> if a matching Payment file could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentFile fetchPaymentFileByUuidAndGroupId(String uuid,
+		long groupId) throws SystemException {
+		return paymentFilePersistence.fetchByUUID_G(uuid, groupId);
+	}
+
+	/**
 	 * Returns the Payment file with the primary key.
 	 *
 	 * @param paymentFileId the primary key of the Payment file
@@ -242,6 +265,36 @@ public abstract class PaymentFileLocalServiceBaseImpl
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException, SystemException {
 		return paymentFilePersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
+	/**
+	 * Returns the Payment file with the matching UUID and company.
+	 *
+	 * @param uuid the Payment file's UUID
+	 * @param  companyId the primary key of the company
+	 * @return the matching Payment file
+	 * @throws PortalException if a matching Payment file could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentFile getPaymentFileByUuidAndCompanyId(String uuid,
+		long companyId) throws PortalException, SystemException {
+		return paymentFilePersistence.findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the Payment file matching the UUID and group.
+	 *
+	 * @param uuid the Payment file's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching Payment file
+	 * @throws PortalException if a matching Payment file could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentFile getPaymentFileByUuidAndGroupId(String uuid, long groupId)
+		throws PortalException, SystemException {
+		return paymentFilePersistence.findByUUID_G(uuid, groupId);
 	}
 
 	/**

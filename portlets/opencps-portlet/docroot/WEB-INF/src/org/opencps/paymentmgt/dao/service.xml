@@ -3,14 +3,13 @@
 <service-builder package-path="org.opencps.paymentmgt">
 	<author>trungdk</author>
 	<namespace>paymentmgt</namespace>
-    <entity name="PaymentFile" remote-service="true" local-service="true" human-name="Payment file" table="opencps_payment_file" uuid="false">
+    <entity name="PaymentFile" remote-service="true" local-service="true" human-name="Payment file" table="opencps_payment_file" uuid="true">
         <column name="paymentFileId" type="long" primary="true"></column>
         <column name="companyId" type="long"></column>
         <column name="groupId" type="long"></column>
         <column name="userId" type="long"></column>
         <column name="createDate" type="Date"></column>
         <column name="modifiedDate" type="Date"></column>
-        <column name="uuid" type="String"></column>
         <column name="dossierId" type="long"></column>
         <column name="fileGroupId" type="long"></column>
         <column name="ownerUserId" type="long"></column>

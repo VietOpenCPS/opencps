@@ -1,27 +1,23 @@
-
-/*******************************************************************************
- * OpenCPS is the open source Core Public Services software
- * Copyright (C) 2016-present OpenCPS community
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *******************************************************************************/
-
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package org.opencps.paymentmgt.model.impl;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -71,13 +67,13 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	 */
 	public static final String TABLE_NAME = "opencps_payment_file";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "uuid_", Types.VARCHAR },
 			{ "paymentFileId", Types.BIGINT },
 			{ "companyId", Types.BIGINT },
 			{ "groupId", Types.BIGINT },
 			{ "userId", Types.BIGINT },
 			{ "createDate", Types.TIMESTAMP },
 			{ "modifiedDate", Types.TIMESTAMP },
-			{ "uuid_", Types.VARCHAR },
 			{ "dossierId", Types.BIGINT },
 			{ "fileGroupId", Types.BIGINT },
 			{ "ownerUserId", Types.BIGINT },
@@ -105,7 +101,7 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 			{ "invoiceIssueNo", Types.VARCHAR },
 			{ "invoiceNo", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table opencps_payment_file (paymentFileId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,uuid_ VARCHAR(75) null,dossierId LONG,fileGroupId LONG,ownerUserId LONG,ownerOrganizationId LONG,govAgencyOrganizationId LONG,paymentName VARCHAR(75) null,requestDatetime DATE null,amount DOUBLE,requestNote VARCHAR(75) null,keypayUrl VARCHAR(75) null,keypayTransactionId LONG,keypayGoodCode VARCHAR(20) null,keypayMerchantCode VARCHAR(75) null,bankInfo VARCHAR(75) null,placeInfo VARCHAR(75) null,paymentStatus INTEGER,paymentMethod INTEGER,confirmDatetime DATE null,confirmFileEntryId LONG,approveDatetime DATE null,accountUserName VARCHAR(75) null,approveNote VARCHAR(75) null,govAgencyTaxNo VARCHAR(75) null,invoiceTemplateNo VARCHAR(75) null,invoiceIssueNo VARCHAR(75) null,invoiceNo VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table opencps_payment_file (uuid_ VARCHAR(75) null,paymentFileId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,dossierId LONG,fileGroupId LONG,ownerUserId LONG,ownerOrganizationId LONG,govAgencyOrganizationId LONG,paymentName VARCHAR(75) null,requestDatetime DATE null,amount DOUBLE,requestNote VARCHAR(75) null,keypayUrl VARCHAR(75) null,keypayTransactionId LONG,keypayGoodCode VARCHAR(20) null,keypayMerchantCode VARCHAR(75) null,bankInfo VARCHAR(75) null,placeInfo VARCHAR(75) null,paymentStatus INTEGER,paymentMethod INTEGER,confirmDatetime DATE null,confirmFileEntryId LONG,approveDatetime DATE null,accountUserName VARCHAR(75) null,approveNote VARCHAR(75) null,govAgencyTaxNo VARCHAR(75) null,invoiceTemplateNo VARCHAR(75) null,invoiceIssueNo VARCHAR(75) null,invoiceNo VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table opencps_payment_file";
 	public static final String ORDER_BY_JPQL = " ORDER BY paymentFile.paymentFileId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY opencps_payment_file.paymentFileId ASC";
@@ -118,7 +114,13 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.org.opencps.paymentmgt.model.PaymentFile"),
 			true);
-	public static final boolean COLUMN_BITMASK_ENABLED = false;
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.org.opencps.paymentmgt.model.PaymentFile"),
+			true);
+	public static long COMPANYID_COLUMN_BITMASK = 1L;
+	public static long GROUPID_COLUMN_BITMASK = 2L;
+	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long PAYMENTFILEID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -133,13 +135,13 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 		PaymentFile model = new PaymentFileImpl();
 
+		model.setUuid(soapModel.getUuid());
 		model.setPaymentFileId(soapModel.getPaymentFileId());
 		model.setCompanyId(soapModel.getCompanyId());
 		model.setGroupId(soapModel.getGroupId());
 		model.setUserId(soapModel.getUserId());
 		model.setCreateDate(soapModel.getCreateDate());
 		model.setModifiedDate(soapModel.getModifiedDate());
-		model.setUuid(soapModel.getUuid());
 		model.setDossierId(soapModel.getDossierId());
 		model.setFileGroupId(soapModel.getFileGroupId());
 		model.setOwnerUserId(soapModel.getOwnerUserId());
@@ -230,13 +232,13 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("uuid", getUuid());
 		attributes.put("paymentFileId", getPaymentFileId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("userId", getUserId());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
-		attributes.put("uuid", getUuid());
 		attributes.put("dossierId", getDossierId());
 		attributes.put("fileGroupId", getFileGroupId());
 		attributes.put("ownerUserId", getOwnerUserId());
@@ -269,6 +271,12 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
 		Long paymentFileId = (Long)attributes.get("paymentFileId");
 
 		if (paymentFileId != null) {
@@ -303,12 +311,6 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 		if (modifiedDate != null) {
 			setModifiedDate(modifiedDate);
-		}
-
-		String uuid = (String)attributes.get("uuid");
-
-		if (uuid != null) {
-			setUuid(uuid);
 		}
 
 		Long dossierId = (Long)attributes.get("dossierId");
@@ -471,6 +473,30 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@JSON
 	@Override
+	public String getUuid() {
+		if (_uuid == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _uuid;
+		}
+	}
+
+	@Override
+	public void setUuid(String uuid) {
+		if (_originalUuid == null) {
+			_originalUuid = _uuid;
+		}
+
+		_uuid = uuid;
+	}
+
+	public String getOriginalUuid() {
+		return GetterUtil.getString(_originalUuid);
+	}
+
+	@JSON
+	@Override
 	public long getPaymentFileId() {
 		return _paymentFileId;
 	}
@@ -488,7 +514,19 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@Override
 	public void setCompanyId(long companyId) {
+		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
+
+		if (!_setOriginalCompanyId) {
+			_setOriginalCompanyId = true;
+
+			_originalCompanyId = _companyId;
+		}
+
 		_companyId = companyId;
+	}
+
+	public long getOriginalCompanyId() {
+		return _originalCompanyId;
 	}
 
 	@JSON
@@ -499,7 +537,19 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@Override
 	public void setGroupId(long groupId) {
+		_columnBitmask |= GROUPID_COLUMN_BITMASK;
+
+		if (!_setOriginalGroupId) {
+			_setOriginalGroupId = true;
+
+			_originalGroupId = _groupId;
+		}
+
 		_groupId = groupId;
+	}
+
+	public long getOriginalGroupId() {
+		return _originalGroupId;
 	}
 
 	@JSON
@@ -543,22 +593,6 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
-	}
-
-	@JSON
-	@Override
-	public String getUuid() {
-		if (_uuid == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _uuid;
-		}
-	}
-
-	@Override
-	public void setUuid(String uuid) {
-		_uuid = uuid;
 	}
 
 	@JSON
@@ -923,6 +957,16 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	}
 
 	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				PaymentFile.class.getName()));
+	}
+
+	public long getColumnBitmask() {
+		return _columnBitmask;
+	}
+
+	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
 			PaymentFile.class.getName(), getPrimaryKey());
@@ -949,13 +993,13 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	public Object clone() {
 		PaymentFileImpl paymentFileImpl = new PaymentFileImpl();
 
+		paymentFileImpl.setUuid(getUuid());
 		paymentFileImpl.setPaymentFileId(getPaymentFileId());
 		paymentFileImpl.setCompanyId(getCompanyId());
 		paymentFileImpl.setGroupId(getGroupId());
 		paymentFileImpl.setUserId(getUserId());
 		paymentFileImpl.setCreateDate(getCreateDate());
 		paymentFileImpl.setModifiedDate(getModifiedDate());
-		paymentFileImpl.setUuid(getUuid());
 		paymentFileImpl.setDossierId(getDossierId());
 		paymentFileImpl.setFileGroupId(getFileGroupId());
 		paymentFileImpl.setOwnerUserId(getOwnerUserId());
@@ -1032,11 +1076,32 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@Override
 	public void resetOriginalValues() {
+		PaymentFileModelImpl paymentFileModelImpl = this;
+
+		paymentFileModelImpl._originalUuid = paymentFileModelImpl._uuid;
+
+		paymentFileModelImpl._originalCompanyId = paymentFileModelImpl._companyId;
+
+		paymentFileModelImpl._setOriginalCompanyId = false;
+
+		paymentFileModelImpl._originalGroupId = paymentFileModelImpl._groupId;
+
+		paymentFileModelImpl._setOriginalGroupId = false;
+
+		paymentFileModelImpl._columnBitmask = 0;
 	}
 
 	@Override
 	public CacheModel<PaymentFile> toCacheModel() {
 		PaymentFileCacheModel paymentFileCacheModel = new PaymentFileCacheModel();
+
+		paymentFileCacheModel.uuid = getUuid();
+
+		String uuid = paymentFileCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			paymentFileCacheModel.uuid = null;
+		}
 
 		paymentFileCacheModel.paymentFileId = getPaymentFileId();
 
@@ -1062,14 +1127,6 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 		}
 		else {
 			paymentFileCacheModel.modifiedDate = Long.MIN_VALUE;
-		}
-
-		paymentFileCacheModel.uuid = getUuid();
-
-		String uuid = paymentFileCacheModel.uuid;
-
-		if ((uuid != null) && (uuid.length() == 0)) {
-			paymentFileCacheModel.uuid = null;
 		}
 
 		paymentFileCacheModel.dossierId = getDossierId();
@@ -1230,7 +1287,9 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	public String toString() {
 		StringBundler sb = new StringBundler(67);
 
-		sb.append("{paymentFileId=");
+		sb.append("{uuid=");
+		sb.append(getUuid());
+		sb.append(", paymentFileId=");
 		sb.append(getPaymentFileId());
 		sb.append(", companyId=");
 		sb.append(getCompanyId());
@@ -1242,8 +1301,6 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 		sb.append(getCreateDate());
 		sb.append(", modifiedDate=");
 		sb.append(getModifiedDate());
-		sb.append(", uuid=");
-		sb.append(getUuid());
 		sb.append(", dossierId=");
 		sb.append(getDossierId());
 		sb.append(", fileGroupId=");
@@ -1310,6 +1367,10 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 		sb.append("</model-name>");
 
 		sb.append(
+			"<column><column-name>uuid</column-name><column-value><![CDATA[");
+		sb.append(getUuid());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>paymentFileId</column-name><column-value><![CDATA[");
 		sb.append(getPaymentFileId());
 		sb.append("]]></column-value></column>");
@@ -1332,10 +1393,6 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 		sb.append(
 			"<column><column-name>modifiedDate</column-name><column-value><![CDATA[");
 		sb.append(getModifiedDate());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>uuid</column-name><column-value><![CDATA[");
-		sb.append(getUuid());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>dossierId</column-name><column-value><![CDATA[");
@@ -1451,14 +1508,19 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			PaymentFile.class
 		};
+	private String _uuid;
+	private String _originalUuid;
 	private long _paymentFileId;
 	private long _companyId;
+	private long _originalCompanyId;
+	private boolean _setOriginalCompanyId;
 	private long _groupId;
+	private long _originalGroupId;
+	private boolean _setOriginalGroupId;
 	private long _userId;
 	private String _userUuid;
 	private Date _createDate;
 	private Date _modifiedDate;
-	private String _uuid;
 	private long _dossierId;
 	private long _fileGroupId;
 	private long _ownerUserId;
@@ -1486,5 +1548,6 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	private String _invoiceTemplateNo;
 	private String _invoiceIssueNo;
 	private String _invoiceNo;
+	private long _columnBitmask;
 	private PaymentFile _escapedModel;
 }

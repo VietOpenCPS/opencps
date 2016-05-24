@@ -201,15 +201,15 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		        payloadJSON.put("cf_keypayVersion", paymentConfig.getKeypayVersion());
 		        payloadJSON.put("cf_keypayMerchantCode", paymentConfig.getKeypayMerchantCode());
 		        payloadJSON.put("cf_keypaySecureKey", paymentConfig.getKeypaySecureKey());
-		        resultJSON.put("opencps", payloadJSON.toString());
+		        resultJSON.put("opencps", payloadJSON);
 		        System.out.println("PaymentMgtBackOfficePortlet.createReport()"+resultJSON.toString());
 				
 				String jrxmlTemplate = paymentConfig.getReportTemplate();
 
 				// Validate json string
 				formData = resultJSON.toString();
-				JSONFactoryUtil
-				    .createJSONObject(formData);
+//				JSONFactoryUtil
+//				    .createJSONObject(formData);
 
 				String outputDestination =
 				    PortletPropsValues.OPENCPS_FILE_SYSTEM_TEMP_DIR;
@@ -245,6 +245,7 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 						        StringPool.BLANK, StringPool.BLANK, inputStream,
 						        file.length(),
 						        serviceContext);
+						fileExportDir = getURL(fileEntry);
 					}
 				}
 			}
@@ -260,6 +261,22 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 			file.delete();
 		}
 	}
+	private String getURL(FileEntry fileEntry){
+		try{
+			String url =    "/documents/"
+					        + fileEntry.getGroupId()
+					        + StringPool.SLASH
+					        + fileEntry.getFolderId()
+					        + StringPool.SLASH
+					        + fileEntry.getTitle()
+					        + "?version="+fileEntry.getVersion();
+			return url;
+		} catch (Exception e) {
+			_log.error(e);
+		}
 
+
+	return "";
+	}
 	
 }

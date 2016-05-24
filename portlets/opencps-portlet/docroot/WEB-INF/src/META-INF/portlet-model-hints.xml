@@ -619,13 +619,13 @@
 		<field name="reportTemplate" type="String" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentFile">
+		<field name="uuid" type="String" />
 		<field name="paymentFileId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="userId" type="long" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="uuid" type="String" />
 		<field name="dossierId" type="long" />
 		<field name="fileGroupId" type="long" />
 		<field name="ownerUserId" type="long" />

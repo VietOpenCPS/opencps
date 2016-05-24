@@ -14,7 +14,15 @@
 
 package org.opencps.paymentmgt.service.impl;
 
+import java.util.Date;
+
+import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.base.PaymentFileLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+import com.liferay.portal.service.ServiceContext;
 
 /**
  * The implementation of the Payment file local service.
@@ -36,4 +44,51 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil} to access the Payment file local service.
 	 */
+	public PaymentFile addPaymentFile(long userId,
+		long dossierId, long fileGroupId,long ownerUserId, long ownerOrganizationId,long govAgencyOrganizationId, String paymentName,
+		Date requestDatetime,Double amount, String requestNote, String placeInfo, 
+	    ServiceContext serviceContext)
+	    throws SystemException {
+
+		long paymentFileId = counterLocalService
+		    .increment(PaymentFile.class
+		        .getName());
+		PaymentFile paymentFile = paymentFilePersistence
+		    .create(paymentFileId);
+
+		Date now = new Date();
+
+		paymentFile.setUserId(userId);
+		
+		paymentFile.setGroupId(serviceContext.getScopeGroupId());
+		
+		paymentFile.setCompanyId(serviceContext.getCompanyId());
+		
+		paymentFile.setCreateDate(now);
+		
+		paymentFile.setModifiedDate(now);
+//		paymentFile
+//		    .setUuid(PortalUUIDUtil
+//		        .generate());
+		
+		paymentFile.setDossierId(dossierId);
+		paymentFile.setFileGroupId(fileGroupId);
+		paymentFile.setOwnerUserId(ownerUserId);
+		paymentFile.setOwnerOrganizationId(ownerOrganizationId);
+		paymentFile.setPaymentName(paymentName);
+		paymentFile.setRequestDatetime(requestDatetime);
+		paymentFile.setAmount(amount);
+		paymentFile.setRequestNote(requestNote);
+		paymentFile.setPlaceInfo(placeInfo);
+		paymentFile.setPaymentStatus(0);
+		
+		//govAgencyOrganizationId > 0 insert
+//		paymentFile.setGovAgencyTaxNo(govAgencyTaxNo);
+//		paymentFile.setInvoiceTemplateNo(invoiceTemplateNo);
+//		paymentFile.setInvoiceIssueNo(invoiceIssueNo);
+//		paymentFile.setInvoiceNo(invoiceNo);
+        
+
+		return paymentFilePersistence.update(paymentFile);
+	}
 }

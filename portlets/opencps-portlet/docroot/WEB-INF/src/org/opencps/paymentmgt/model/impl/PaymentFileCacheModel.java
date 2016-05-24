@@ -1,21 +1,16 @@
-
-/*******************************************************************************
- * OpenCPS is the open source Core Public Services software
- * Copyright (C) 2016-present OpenCPS community
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *******************************************************************************/
-
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package org.opencps.paymentmgt.model.impl;
 
@@ -45,7 +40,9 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 	public String toString() {
 		StringBundler sb = new StringBundler(67);
 
-		sb.append("{paymentFileId=");
+		sb.append("{uuid=");
+		sb.append(uuid);
+		sb.append(", paymentFileId=");
 		sb.append(paymentFileId);
 		sb.append(", companyId=");
 		sb.append(companyId);
@@ -57,8 +54,6 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
-		sb.append(", uuid=");
-		sb.append(uuid);
 		sb.append(", dossierId=");
 		sb.append(dossierId);
 		sb.append(", fileGroupId=");
@@ -120,6 +115,13 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 	public PaymentFile toEntityModel() {
 		PaymentFileImpl paymentFileImpl = new PaymentFileImpl();
 
+		if (uuid == null) {
+			paymentFileImpl.setUuid(StringPool.BLANK);
+		}
+		else {
+			paymentFileImpl.setUuid(uuid);
+		}
+
 		paymentFileImpl.setPaymentFileId(paymentFileId);
 		paymentFileImpl.setCompanyId(companyId);
 		paymentFileImpl.setGroupId(groupId);
@@ -137,13 +139,6 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 		}
 		else {
 			paymentFileImpl.setModifiedDate(new Date(modifiedDate));
-		}
-
-		if (uuid == null) {
-			paymentFileImpl.setUuid(StringPool.BLANK);
-		}
-		else {
-			paymentFileImpl.setUuid(uuid);
 		}
 
 		paymentFileImpl.setDossierId(dossierId);
@@ -280,13 +275,13 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		uuid = objectInput.readUTF();
 		paymentFileId = objectInput.readLong();
 		companyId = objectInput.readLong();
 		groupId = objectInput.readLong();
 		userId = objectInput.readLong();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
-		uuid = objectInput.readUTF();
 		dossierId = objectInput.readLong();
 		fileGroupId = objectInput.readLong();
 		ownerUserId = objectInput.readLong();
@@ -318,13 +313,6 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
-		objectOutput.writeLong(paymentFileId);
-		objectOutput.writeLong(companyId);
-		objectOutput.writeLong(groupId);
-		objectOutput.writeLong(userId);
-		objectOutput.writeLong(createDate);
-		objectOutput.writeLong(modifiedDate);
-
 		if (uuid == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -332,6 +320,12 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 			objectOutput.writeUTF(uuid);
 		}
 
+		objectOutput.writeLong(paymentFileId);
+		objectOutput.writeLong(companyId);
+		objectOutput.writeLong(groupId);
+		objectOutput.writeLong(userId);
+		objectOutput.writeLong(createDate);
+		objectOutput.writeLong(modifiedDate);
 		objectOutput.writeLong(dossierId);
 		objectOutput.writeLong(fileGroupId);
 		objectOutput.writeLong(ownerUserId);
@@ -441,13 +435,13 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 		}
 	}
 
+	public String uuid;
 	public long paymentFileId;
 	public long companyId;
 	public long groupId;
 	public long userId;
 	public long createDate;
 	public long modifiedDate;
-	public String uuid;
 	public long dossierId;
 	public long fileGroupId;
 	public long ownerUserId;
