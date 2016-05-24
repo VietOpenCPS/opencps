@@ -18,3 +18,7 @@
 %>
 <%@ include file="../init.jsp"%>
 <liferay-util:include page="/html/portlets/paymentmgt/backoffice/toolbar.jsp" servletContext="<%=application %>" />
+
+<aui:form action="" name="fm">
+	<aui:button name="printBill" value="In Bien Lai"></aui:button>
+</aui:form>

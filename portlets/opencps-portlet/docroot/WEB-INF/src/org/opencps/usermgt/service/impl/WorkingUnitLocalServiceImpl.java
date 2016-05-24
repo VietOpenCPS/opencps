@@ -312,5 +312,10 @@ public class WorkingUnitLocalServiceImpl
 		return workingUnitPersistence.findByEmail(email);
 	}
 
+	public WorkingUnit fetchByMappingOrganisationId(long groupId, long mappingOrganisationId)
+					throws NoSuchWorkingUnitException, SystemException {
+		return workingUnitPersistence.fetchByMappingOrganisationId(groupId, mappingOrganisationId);
+	}
+	
 	private Log _log = LogFactoryUtil.getLog(WorkingUnitLocalServiceImpl.class);
 }

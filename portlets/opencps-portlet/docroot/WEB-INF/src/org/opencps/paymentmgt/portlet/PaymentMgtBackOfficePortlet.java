@@ -16,8 +16,57 @@
 */
 package org.opencps.paymentmgt.portlet;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+
+import org.opencps.dossiermgt.bean.AccountBean;
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.model.DossierPart;
+import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
+import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
+import org.opencps.jasperreport.util.JRReportUtil;
+import org.opencps.paymentmgt.model.PaymentConfig;
+import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
+import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
+import org.opencps.usermgt.model.Employee;
+import org.opencps.usermgt.model.WorkingUnit;
+import org.opencps.usermgt.service.EmployeeLocalServiceUtil;
+import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
+import org.opencps.util.AccountUtil;
+import org.opencps.util.DLFolderUtil;
+import org.opencps.util.DateTimeUtil;
+import org.opencps.util.PortletPropsValues;
+import org.opencps.util.PortletUtil;
+import org.opencps.util.WebKeys;
+
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
+import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -27,5 +76,188 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 	private Log _log = LogFactoryUtil
 				    .getLog(PaymentMgtBackOfficePortlet.class
 				        .getName());
+	/**
+	 * @param jrxmlTemplate
+	 * @param formData
+	 * @param map
+	 * @param outputDestination
+	 * @param fileName
+	 * @return
+	 */
+	protected String exportToPDFFile(
+	    String jrxmlTemplate, String formData, Map<String, Object> map,
+	    String outputDestination, String fileName) {
 
+		return JRReportUtil
+		    .createReportPDFfFile(
+		        jrxmlTemplate, formData, map, outputDestination, fileName);
+	}
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void createReport(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
+		    .getAttribute(WebKeys.THEME_DISPLAY);
+
+		long paymentFileId = ParamUtil
+		    .getLong(actionRequest, "paymentFileId");
+		
+		AccountBean accountBean = AccountUtil
+					    .getAccountBean();
+		File file = null;
+
+		InputStream inputStream = null;
+
+		JSONObject responseJSON = JSONFactoryUtil
+		    .createJSONObject();
+
+		String fileExportDir = StringPool.BLANK;
+
+		try {
+			if (paymentFileId > 0 ) {
+				ServiceContext serviceContext = ServiceContextFactory
+				    .getInstance(actionRequest);
+				serviceContext
+				    .setAddGroupPermissions(true);
+				serviceContext
+				    .setAddGuestPermissions(true);
+				// Get PaymentFile
+				PaymentFile paymentFile = PaymentFileLocalServiceUtil.fetchPaymentFile(paymentFileId);
+				long govAgencyOrganizationId = -1;
+				long userId = themeDisplay.getUserId();
+				Employee employee = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(themeDisplay.getScopeGroupId(), userId);
+				WorkingUnit workingUnit = WorkingUnitLocalServiceUtil.fetchWorkingUnit(employee.getWorkingUnitId());
+				govAgencyOrganizationId = workingUnit.getMappingOrganisationId();
+				PaymentConfig paymentConfig = PaymentConfigLocalServiceUtil.getPaymentConfigByGovAgency(themeDisplay.getScopeGroupId(), govAgencyOrganizationId);
+				// Get account folder
+				DLFolder accountForlder = accountBean
+				    .getAccountFolder();
+
+				// Get dossier folder
+				DLFolder paymentFolder = DLFolderUtil.addFolder(themeDisplay
+				        .getUserId(), themeDisplay.getScopeGroupId(),themeDisplay.getScopeGroupId(),false, accountForlder
+			            .getFolderId(),String.valueOf(paymentConfig.getPaymentConfigId()),
+			            StringPool.BLANK, false, serviceContext);
+
+				//TODO
+				String formData = StringPool.BLANK;
+				JSONObject payloadJSON = JSONFactoryUtil.createJSONObject();
+				payloadJSON.put("paymentFileId", paymentFile.getPaymentFileId());
+				payloadJSON.put("dossierId", paymentFile.getDossierId());
+		        payloadJSON.put("fileGroupId", paymentFile.getFileGroupId());
+		        payloadJSON.put("ownerUserId", paymentFile.getOwnerUserId());
+		        payloadJSON.put("ownerOrganizationId", paymentFile.getOwnerOrganizationId());
+		        //TODO
+		        workingUnit = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getOwnerOrganizationId());
+		        payloadJSON.put("ownerOrganizationName", workingUnit.getName());
+		        payloadJSON.put("ownerOrganizationAddress", workingUnit.getAddress());
+		        
+		        payloadJSON.put("govAgencyOrganizationId", paymentFile.getGovAgencyOrganizationId());
+		        payloadJSON.put("paymentName", paymentFile.getPaymentName());
+		        payloadJSON.put("requestDatetime", DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		        payloadJSON.put("amount", paymentFile.getAmount());
+		        //TODO
+		        payloadJSON.put("amountNumber", paymentFile.getAmount());
+		        payloadJSON.put("amountString", paymentFile.getAmount());
+		        
+		        payloadJSON.put("requestNote", paymentFile.getRequestNote());
+		        payloadJSON.put("keypayUrl", paymentFile.getKeypayUrl());
+		        payloadJSON.put("keypayTransactionId", paymentFile.getKeypayTransactionId());
+		        payloadJSON.put("keypayGoodCode", paymentFile.getKeypayGoodCode());
+		        payloadJSON.put("keypayMerchantCode", paymentFile.getKeypayMerchantCode());
+		        payloadJSON.put("bankInfo", paymentFile.getBankInfo());
+		        payloadJSON.put("placeInfo", paymentFile.getPlaceInfo());
+		        payloadJSON.put("paymentStatus", paymentFile.getPaymentStatus());
+		        payloadJSON.put("paymentMethod", PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), Locale.getDefault()));
+		        //TODO
+		        
+		        payloadJSON.put("confirmDatetime", DateTimeUtil.convertDateToString(paymentFile.getConfirmDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		        payloadJSON.put("confirmFileEntryId", paymentFile.getConfirmFileEntryId());
+		        payloadJSON.put("approveDatetime", DateTimeUtil.convertDateToString(paymentFile.getApproveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		        payloadJSON.put("accountUserName", paymentFile.getAccountUserName());
+		        payloadJSON.put("approveNote", paymentFile.getApproveNote());
+		        payloadJSON.put("govAgencyTaxNo", paymentFile.getGovAgencyTaxNo());
+		        payloadJSON.put("invoiceTemplateNo", paymentFile.getInvoiceTemplateNo());
+		        payloadJSON.put("invoiceIssueNo", paymentFile.getInvoiceIssueNo());
+		        payloadJSON.put("invoiceNo", paymentFile.getInvoiceNo());
+		        
+		        payloadJSON.put("cf_paymentConfigId", paymentConfig.getPaymentConfigId());
+		        payloadJSON.put("cf_govAgencyOrganizationId", paymentConfig.getGovAgencyOrganizationId());
+		        payloadJSON.put("cf_govAgencyName", paymentConfig.getGovAgencyName());
+		        payloadJSON.put("cf_govAgencyTaxNo", paymentConfig.getGovAgencyTaxNo());
+		        payloadJSON.put("cf_invoiceTemplateNo", paymentConfig.getInvoiceTemplateNo());
+		        payloadJSON.put("cf_invoiceIssueNo", paymentConfig.getInvoiceIssueNo());
+		        payloadJSON.put("cf_invoiceLastNo", paymentConfig.getInvoiceLastNo());
+		        payloadJSON.put("cf_bankInfo", paymentConfig.getBankInfo());
+		        payloadJSON.put("cf_placeInfo", paymentConfig.getPlaceInfo());
+		        payloadJSON.put("cf_keypayDomain", paymentConfig.getKeypayDomain());
+		        payloadJSON.put("cf_keypayVersion", paymentConfig.getKeypayVersion());
+		        payloadJSON.put("cf_keypayMerchantCode", paymentConfig.getKeypayMerchantCode());
+		        payloadJSON.put("cf_keypaySecureKey", paymentConfig.getKeypaySecureKey());
+		        
+		        System.out.println("PaymentMgtBackOfficePortlet.createReport()"+payloadJSON.toString());
+				
+				String jrxmlTemplate = paymentConfig.getReportTemplate();
+
+				// Validate json string
+
+				JSONFactoryUtil
+				    .createJSONObject(formData);
+
+				String outputDestination =
+				    PortletPropsValues.OPENCPS_FILE_SYSTEM_TEMP_DIR;
+				String fileName = System.currentTimeMillis() + StringPool.DASH + paymentConfig.getPaymentConfigId() +
+				    StringPool.DASH + paymentFile.getPaymentFileId() + ".pdf";
+
+				fileExportDir = exportToPDFFile(
+				    jrxmlTemplate, formData, null, outputDestination, fileName);
+
+				if (Validator
+				    .isNotNull(fileExportDir)) {
+
+					file = new File(fileExportDir);
+					inputStream = new FileInputStream(file);
+					if (inputStream != null) {
+						String sourceFileName = fileExportDir
+						    .substring(fileExportDir
+						        .lastIndexOf(StringPool.SLASH) + 1, fileExportDir
+						            .length());
+						System.out
+						    .println(sourceFileName);
+						
+						System.out
+					    	.println(file.getName());
+						
+						String mimeType = MimeTypesUtil
+						    .getContentType(file);
+
+						FileEntry fileEntry = DLAppServiceUtil
+						    .addFileEntry(serviceContext
+						        .getScopeGroupId(), paymentFolder.getFolderId(),
+						        sourceFileName, mimeType, fileName,
+						        StringPool.BLANK, StringPool.BLANK, inputStream,
+						        file.length(),
+						        serviceContext);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+		finally {
+			responseJSON.put("fileExportDir", fileExportDir);
+			PortletUtil.writeJSON(actionRequest, actionResponse, responseJSON);
+			inputStream.close();
+			file.delete();
+		}
+	}
+
+	
 }

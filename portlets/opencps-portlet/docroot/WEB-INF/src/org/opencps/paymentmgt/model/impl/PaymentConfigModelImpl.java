@@ -83,9 +83,10 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 			{ "keypayDomain", Types.VARCHAR },
 			{ "keypayVersion", Types.VARCHAR },
 			{ "keypayMerchantCode", Types.VARCHAR },
-			{ "keypaySecureKey", Types.VARCHAR }
+			{ "keypaySecureKey", Types.VARCHAR },
+			{ "reportTemplate", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table opencps_payment_config (paymentConfigId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,govAgencyOrganizationId LONG,govAgencyName VARCHAR(75) null,govAgencyTaxNo VARCHAR(75) null,invoiceTemplateNo VARCHAR(75) null,invoiceIssueNo VARCHAR(75) null,invoiceLastNo VARCHAR(7) null,bankInfo VARCHAR(75) null,placeInfo VARCHAR(75) null,keypayDomain VARCHAR(75) null,keypayVersion VARCHAR(75) null,keypayMerchantCode VARCHAR(75) null,keypaySecureKey VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table opencps_payment_config (paymentConfigId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,govAgencyOrganizationId LONG,govAgencyName VARCHAR(75) null,govAgencyTaxNo VARCHAR(75) null,invoiceTemplateNo VARCHAR(75) null,invoiceIssueNo VARCHAR(75) null,invoiceLastNo VARCHAR(7) null,bankInfo VARCHAR(75) null,placeInfo VARCHAR(75) null,keypayDomain VARCHAR(75) null,keypayVersion VARCHAR(75) null,keypayMerchantCode VARCHAR(75) null,keypaySecureKey VARCHAR(75) null,reportTemplate VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table opencps_payment_config";
 	public static final String ORDER_BY_JPQL = " ORDER BY paymentConfig.paymentConfigId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY opencps_payment_config.paymentConfigId ASC";
@@ -136,6 +137,7 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 		model.setKeypayVersion(soapModel.getKeypayVersion());
 		model.setKeypayMerchantCode(soapModel.getKeypayMerchantCode());
 		model.setKeypaySecureKey(soapModel.getKeypaySecureKey());
+		model.setReportTemplate(soapModel.getReportTemplate());
 
 		return model;
 	}
@@ -218,6 +220,7 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 		attributes.put("keypayVersion", getKeypayVersion());
 		attributes.put("keypayMerchantCode", getKeypayMerchantCode());
 		attributes.put("keypaySecureKey", getKeypaySecureKey());
+		attributes.put("reportTemplate", getReportTemplate());
 
 		return attributes;
 	}
@@ -331,6 +334,12 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 
 		if (keypaySecureKey != null) {
 			setKeypaySecureKey(keypaySecureKey);
+		}
+
+		String reportTemplate = (String)attributes.get("reportTemplate");
+
+		if (reportTemplate != null) {
+			setReportTemplate(reportTemplate);
 		}
 	}
 
@@ -621,6 +630,22 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 		_keypaySecureKey = keypaySecureKey;
 	}
 
+	@JSON
+	@Override
+	public String getReportTemplate() {
+		if (_reportTemplate == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _reportTemplate;
+		}
+	}
+
+	@Override
+	public void setReportTemplate(String reportTemplate) {
+		_reportTemplate = reportTemplate;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -670,6 +695,7 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 		paymentConfigImpl.setKeypayVersion(getKeypayVersion());
 		paymentConfigImpl.setKeypayMerchantCode(getKeypayMerchantCode());
 		paymentConfigImpl.setKeypaySecureKey(getKeypaySecureKey());
+		paymentConfigImpl.setReportTemplate(getReportTemplate());
 
 		paymentConfigImpl.resetOriginalValues();
 
@@ -853,12 +879,20 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 			paymentConfigCacheModel.keypaySecureKey = null;
 		}
 
+		paymentConfigCacheModel.reportTemplate = getReportTemplate();
+
+		String reportTemplate = paymentConfigCacheModel.reportTemplate;
+
+		if ((reportTemplate != null) && (reportTemplate.length() == 0)) {
+			paymentConfigCacheModel.reportTemplate = null;
+		}
+
 		return paymentConfigCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(39);
 
 		sb.append("{paymentConfigId=");
 		sb.append(getPaymentConfigId());
@@ -896,6 +930,8 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 		sb.append(getKeypayMerchantCode());
 		sb.append(", keypaySecureKey=");
 		sb.append(getKeypaySecureKey());
+		sb.append(", reportTemplate=");
+		sb.append(getReportTemplate());
 		sb.append("}");
 
 		return sb.toString();
@@ -903,7 +939,7 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(58);
+		StringBundler sb = new StringBundler(61);
 
 		sb.append("<model><model-name>");
 		sb.append("org.opencps.paymentmgt.model.PaymentConfig");
@@ -981,6 +1017,10 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 			"<column><column-name>keypaySecureKey</column-name><column-value><![CDATA[");
 		sb.append(getKeypaySecureKey());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>reportTemplate</column-name><column-value><![CDATA[");
+		sb.append(getReportTemplate());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -1014,6 +1054,7 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 	private String _keypayVersion;
 	private String _keypayMerchantCode;
 	private String _keypaySecureKey;
+	private String _reportTemplate;
 	private long _columnBitmask;
 	private PaymentConfig _escapedModel;
 }

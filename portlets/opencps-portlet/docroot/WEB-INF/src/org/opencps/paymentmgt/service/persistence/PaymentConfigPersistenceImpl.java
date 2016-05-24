@@ -655,6 +655,7 @@ public class PaymentConfigPersistenceImpl extends BasePersistenceImpl<PaymentCon
 		paymentConfigImpl.setKeypayVersion(paymentConfig.getKeypayVersion());
 		paymentConfigImpl.setKeypayMerchantCode(paymentConfig.getKeypayMerchantCode());
 		paymentConfigImpl.setKeypaySecureKey(paymentConfig.getKeypaySecureKey());
+		paymentConfigImpl.setReportTemplate(paymentConfig.getReportTemplate());
 
 		return paymentConfigImpl;
 	}

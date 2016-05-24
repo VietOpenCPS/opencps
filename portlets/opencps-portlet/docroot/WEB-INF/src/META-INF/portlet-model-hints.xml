@@ -617,6 +617,7 @@
 		<field name="keypayVersion" type="String" />
 		<field name="keypayMerchantCode" type="String" />
 		<field name="keypaySecureKey" type="String" />
+		<field name="reportTemplate" type="String" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentFile">
 		<field name="paymentFileId" type="long" />

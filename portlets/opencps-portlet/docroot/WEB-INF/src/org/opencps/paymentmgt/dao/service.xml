@@ -57,10 +57,13 @@
         <column name="keypayVersion" type="String"></column>
         <column name="keypayMerchantCode" type="String"></column>
         <column name="keypaySecureKey" type="String"></column>
+        <column name="reportTemplate" type="String"></column>
+        
         <finder name="GovAgency" return-type="PaymentConfig">
             <finder-column name="groupId"></finder-column>
             <finder-column name="govAgencyOrganizationId"></finder-column>
         </finder>
+        
     </entity>
 
 </service-builder>

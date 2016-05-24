@@ -74,6 +74,10 @@
         <finder name="GroupId" return-type="Collection">
             <finder-column name="groupId"></finder-column>
         </finder>
+        <finder return-type="WorkingUnit" name="MappingOrganisationId" unique="true">
+       		<finder-column name="groupId"></finder-column>
+			<finder-column name="mappingOrganisationId"></finder-column>
+		</finder>
 	</entity>
 
 	<entity name="JobPos" local-service="true" remote-service="true"

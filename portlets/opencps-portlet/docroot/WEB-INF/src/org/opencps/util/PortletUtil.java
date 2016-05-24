@@ -642,4 +642,30 @@ public class PortletUtil {
 		    .flushBuffer();
 
 	}
+	
+	public static String getPaymentMethodLabel(int value, Locale locale) {
+
+		String statusLabel = StringPool.BLANK;
+
+		switch (value) {
+		case 1:
+			statusLabel = LanguageUtil
+			    .get(locale, "cash");
+			break;
+		case 2:
+			statusLabel = LanguageUtil
+			    .get(locale, "keypay");
+			break;
+		case 4:
+			statusLabel = LanguageUtil
+			    .get(locale, "chuyen-khoan");
+			break;
+		default:
+			statusLabel = LanguageUtil
+			    .get(locale, "cash");
+			break;
+		}
+
+		return statusLabel;
+	}
 }

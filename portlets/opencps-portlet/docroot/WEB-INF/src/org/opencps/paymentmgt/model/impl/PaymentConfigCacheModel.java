@@ -38,7 +38,7 @@ public class PaymentConfigCacheModel implements CacheModel<PaymentConfig>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(39);
 
 		sb.append("{paymentConfigId=");
 		sb.append(paymentConfigId);
@@ -76,6 +76,8 @@ public class PaymentConfigCacheModel implements CacheModel<PaymentConfig>,
 		sb.append(keypayMerchantCode);
 		sb.append(", keypaySecureKey=");
 		sb.append(keypaySecureKey);
+		sb.append(", reportTemplate=");
+		sb.append(reportTemplate);
 		sb.append("}");
 
 		return sb.toString();
@@ -183,6 +185,13 @@ public class PaymentConfigCacheModel implements CacheModel<PaymentConfig>,
 			paymentConfigImpl.setKeypaySecureKey(keypaySecureKey);
 		}
 
+		if (reportTemplate == null) {
+			paymentConfigImpl.setReportTemplate(StringPool.BLANK);
+		}
+		else {
+			paymentConfigImpl.setReportTemplate(reportTemplate);
+		}
+
 		paymentConfigImpl.resetOriginalValues();
 
 		return paymentConfigImpl;
@@ -208,6 +217,7 @@ public class PaymentConfigCacheModel implements CacheModel<PaymentConfig>,
 		keypayVersion = objectInput.readUTF();
 		keypayMerchantCode = objectInput.readUTF();
 		keypaySecureKey = objectInput.readUTF();
+		reportTemplate = objectInput.readUTF();
 	}
 
 	@Override
@@ -297,6 +307,13 @@ public class PaymentConfigCacheModel implements CacheModel<PaymentConfig>,
 		else {
 			objectOutput.writeUTF(keypaySecureKey);
 		}
+
+		if (reportTemplate == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(reportTemplate);
+		}
 	}
 
 	public long paymentConfigId;
@@ -317,4 +334,5 @@ public class PaymentConfigCacheModel implements CacheModel<PaymentConfig>,
 	public String keypayVersion;
 	public String keypayMerchantCode;
 	public String keypaySecureKey;
+	public String reportTemplate;
 }
