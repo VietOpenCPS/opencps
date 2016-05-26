@@ -234,3 +234,6 @@ portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
 
 /opencps/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/persistence/PaymentConfigPersistenceImpl.java
 /opencps/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/persistence/PaymentFilePersistenceImpl.java
+
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/persistence/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/.gitignore
