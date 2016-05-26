@@ -52,6 +52,12 @@
 		coQuanQuanLyHoaDon = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getGovAgencyOrganizationId()).getName();
 	}
 %>
+<liferay-ui:header
+	backURL="<%= backRedirect %>"
+	title="payment-detail"
+	backLabel="back"
+/>
+<p></p>
 <div class="lookup-result">
 	<table>
 		<tr>

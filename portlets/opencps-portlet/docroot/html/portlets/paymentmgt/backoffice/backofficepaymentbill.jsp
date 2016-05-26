@@ -21,6 +21,12 @@
 <%
 	String backRedirect = ParamUtil.getString(request, "redirect");
 %>
+<liferay-ui:header
+	backURL="<%= backRedirect %>"
+	title="payment-report"
+	backLabel="back"
+/>
+<p></p>
 <portlet:actionURL name="createReport" var="createReportURL" />
 <aui:form name="payForm" action="#">
 <div id="<portlet:namespace />wrapPDF" align="center">

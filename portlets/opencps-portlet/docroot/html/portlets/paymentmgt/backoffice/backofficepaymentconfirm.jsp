@@ -52,6 +52,12 @@
 		coQuanQuanLyHoaDon = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getGovAgencyOrganizationId()).getName();
 	}
 %>
+<liferay-ui:header
+	backURL="<%= backRedirect %>"
+	title="payment-confirm"
+	backLabel="back"
+/>
+<p></p>
 <aui:form name="payForm" action="">
 <div class="lookup-result">
 	<table>
