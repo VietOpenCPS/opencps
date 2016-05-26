@@ -26,11 +26,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import org.opencps.datamgt.util.DataMgtUtil;
-import org.opencps.dossiermgt.search.DossierDisplayTerms;
-import org.opencps.dossiermgt.search.DossierSearch;
-import org.opencps.dossiermgt.search.DossierSearchTerms;
 import org.opencps.paymentmgt.model.PaymentFile;
-import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
@@ -53,10 +49,6 @@ public class PaymentFileSearch extends SearchContainer<PaymentFile> {
 		headerNames.add("payment-status");
 		headerNames.add("payment-method");
 		headerNames.add("action");
-
-		orderableHeaders
-		    .put("payment-name", PaymentFileDisplayTerms.PAYMENT_NAME);
-		
 	}
 	public static final String EMPTY_RESULTS_MESSAGE =
 	    "no-payment-file-were-found";
@@ -72,7 +64,6 @@ public class PaymentFileSearch extends SearchContainer<PaymentFile> {
 
 		PaymentFileDisplayTerms displayTerms =
 		    (PaymentFileDisplayTerms) getDisplayTerms();
-				
 		try {
 
 			String orderByCol = ParamUtil

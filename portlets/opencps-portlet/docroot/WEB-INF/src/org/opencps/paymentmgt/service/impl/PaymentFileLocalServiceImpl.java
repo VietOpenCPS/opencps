@@ -15,6 +15,7 @@
 package org.opencps.paymentmgt.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.paymentmgt.model.PaymentFile;
@@ -91,4 +92,11 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 
 		return paymentFilePersistence.update(paymentFile);
 	}
+	
+	public List<PaymentFile> searchPaymentFiles(long groupId, String paymentStatus, String keywords, int start, int end) {
+		return paymentFileFinder.searchPaymentFiles(groupId, paymentStatus, keywords, start, end);
+    }
+	public int countPaymentFiles(long groupId, String paymentStatus, String keywords) {
+		return paymentFileFinder.countPaymentFiles(groupId, paymentStatus, keywords);
+    }
 }

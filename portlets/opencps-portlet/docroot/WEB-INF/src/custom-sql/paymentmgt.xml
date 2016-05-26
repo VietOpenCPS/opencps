@@ -6,12 +6,16 @@
 				count(*) AS COUNT_VALUE
 	    	FROM
 	    		opencps_payment_file
+	    		LEFT JOIN opencps_dossier
+				ON opencps_payment_file.dossierId = opencps_dossier.dossierId
+				LEFT JOIN opencps_acc_citizen 
+				ON opencps_payment_file.ownerUserId = opencps_acc_citizen.mappingUserId
+				LEFT JOIN opencps_acc_business
+				ON opencps_payment_file.ownerOrganizationId = opencps_acc_business.mappingOrganizationId
 	    	WHERE
 	    		(opencps_payment_file.groupId = ?)
 	    	AND
-	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	OR
-	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    		((lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
 	    	AND
 				(opencps_payment_file.paymentStatus = ?)
 		]]>
@@ -23,12 +27,16 @@
 	    		*
 	    	FROM
 	    		opencps_payment_file
+	    		LEFT JOIN opencps_dossier
+				ON opencps_payment_file.dossierId = opencps_dossier.dossierId
+				LEFT JOIN opencps_acc_citizen 
+				ON opencps_payment_file.ownerUserId = opencps_acc_citizen.mappingUserId
+				LEFT JOIN opencps_acc_business
+				ON opencps_payment_file.ownerOrganizationId = opencps_acc_business.mappingOrganizationId
 	    	WHERE
 	    		(opencps_payment_file.groupId = ?)
 	    	AND
-	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	OR
-	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    		((lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
 	    	AND
 				(opencps_payment_file.paymentStatus = ?)
 		]]>

@@ -677,4 +677,34 @@ public class PortletUtil {
 		    "opencps/processmgtfiles/employee" + StringPool.SLASH + String
 		        .valueOf(userId);
 	}
+	
+	public static String getPaymentStatusLabel(int value, Locale locale) {
+
+		String statusLabel = StringPool.BLANK;
+
+		switch (value) {
+		case 0:
+			statusLabel = LanguageUtil
+			    .get(locale, "cho-nop");
+			break;
+		case 1:
+			statusLabel = LanguageUtil
+			    .get(locale, "da-bao-nop");
+			break;
+		case 2:
+			statusLabel = LanguageUtil
+			    .get(locale, "hoan-thanh");
+			break;
+		case 3:
+			statusLabel = LanguageUtil
+			    .get(locale, "khong-hop-le");
+			break;
+		default:
+			statusLabel = LanguageUtil
+			    .get(locale, "cho-nop");
+			break;
+		}
+
+		return statusLabel;
+	}
 }

@@ -194,7 +194,6 @@
 	<portlet>
 		<portlet-name>22</portlet-name>
 		<icon>/icon.png</icon>
-		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js

@@ -182,7 +182,9 @@
         <finder name="UUID" return-type="Business">
             <finder-column name="uuid"></finder-column>
         </finder>
-		
+		 <finder name="mappingOrganizationId" return-type="Business">
+            <finder-column name="mappingOrganizationId"></finder-column>
+        </finder>
 		<reference package-path="com.liferay.portal" entity="Organization" />
 		<reference package-path="com.liferay.portal" entity="User" />
 	</entity>

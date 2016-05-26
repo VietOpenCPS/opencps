@@ -25,6 +25,9 @@ import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.WindowStateException;
 
 import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.jasperreport.util.JRReportUtil;
@@ -47,6 +50,8 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.LiferayPortletMode;
+import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -55,6 +60,8 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -108,7 +115,7 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		    .createJSONObject();
 
 		String fileExportDir = StringPool.BLANK;
-
+		String urlFileDowLoad = StringPool.BLANK;
 		try {
 			if (paymentFileId > 0 ) {
 				ServiceContext serviceContext = ServiceContextFactory
@@ -174,7 +181,7 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		        payloadJSON.put("keypayMerchantCode", paymentFile.getKeypayMerchantCode());
 		        payloadJSON.put("bankInfo", paymentFile.getBankInfo());
 		        payloadJSON.put("placeInfo", paymentFile.getPlaceInfo());
-		        payloadJSON.put("paymentStatus", paymentFile.getPaymentStatus());
+		        payloadJSON.put("paymentStatus", PortletUtil.getPaymentStatusLabel(paymentFile.getPaymentStatus(), Locale.getDefault()));
 		        payloadJSON.put("paymentMethod", PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), Locale.getDefault()));
 		        //TODO
 		        
@@ -246,6 +253,14 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 						        file.length(),
 						        serviceContext);
 						fileExportDir = getURL(fileEntry);
+						String tenFileExport = "defaultPDF.pdfs";
+						if(fileExportDir.contains(".pdfs")){
+							urlFileDowLoad = fileExportDir.replace(".pdfs", ".pdf") + "#view=FitH&scrollbar=0&page=1&toolbar=0&statusbar=0&messages=0&navpanes=0";
+						} else if(fileExportDir.contains(".doc")){
+							urlFileDowLoad="https://docs.google.com/viewer?url="+PortalUtil.getPortalURL(actionRequest)+fileExportDir+"&embedded=true";
+						} else{
+							urlFileDowLoad = fileExportDir + "#view=FitH&scrollbar=0&page=1&toolbar=0&statusbar=0&messages=0&navpanes=0";
+						}
 					}
 				}
 			}
@@ -255,10 +270,13 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 			    .error(e);
 		}
 		finally {
-			responseJSON.put("fileExportDir", fileExportDir);
-			PortletUtil.writeJSON(actionRequest, actionResponse, responseJSON);
+			responseJSON
+		    .put("fileExportDir", urlFileDowLoad);
+			PortletUtil
+		    .writeJSON(actionRequest, actionResponse, responseJSON);
 			inputStream.close();
 			file.delete();
+			
 		}
 	}
 	private String getURL(FileEntry fileEntry){

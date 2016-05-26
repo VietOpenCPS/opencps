@@ -635,6 +635,11 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 			.countByG_S(groupId, accountStatus);
 	}
 
+	public Citizen getByMappingUserId(long mappingUserId) throws SystemException {
+
+	    return citizenPersistence.fetchByMappingUserId(mappingUserId);
+    }
+	
 	private Log _log = LogFactoryUtil
 	    .getLog(CitizenLocalServiceImpl.class
 	        .getName());
