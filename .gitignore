@@ -210,3 +210,27 @@ portlets/opencps-portlet/.settings/org.eclipse.wst.validation.prefs
 
 portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
 
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/impl/PaymentConfigBaseImpl.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/impl/PaymentConfigCacheModel.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/impl/PaymentConfigImpl.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/impl/PaymentConfigModelImpl.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/impl/PaymentFileBaseImpl.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/impl/PaymentFileCacheModel.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/impl/PaymentFileImpl.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/impl/PaymentFileModelImpl.java
+
+
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/base/PaymentConfigLocalServiceBaseImpl.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/base/PaymentConfigLocalServiceClpInvoker.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/base/PaymentConfigServiceBaseImpl.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/base/PaymentConfigServiceClpInvoker.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/base/PaymentFileLocalServiceBaseImpl.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/base/PaymentFileLocalServiceClpInvoker.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/base/PaymentFileServiceBaseImpl.java
+/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/base/PaymentFileServiceClpInvoker.java
+
+/opencps/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/http/PaymentConfigServiceSoap.java
+/opencps/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/http/PaymentFileServiceSoap.java
+
+/opencps/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/persistence/PaymentConfigPersistenceImpl.java
+/opencps/portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/persistence/PaymentFilePersistenceImpl.java
