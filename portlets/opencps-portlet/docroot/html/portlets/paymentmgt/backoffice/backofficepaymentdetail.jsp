@@ -164,4 +164,6 @@
 		</tr>			
 	</table>
 </div>
+<aui:button-row>
 <aui:button name="back" value="back" href="<%=backRedirect.toString() %>" />
+</aui:button-row>

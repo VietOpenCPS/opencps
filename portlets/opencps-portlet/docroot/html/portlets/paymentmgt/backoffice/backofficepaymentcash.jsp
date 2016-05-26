@@ -102,28 +102,41 @@
 			
 	</table>
 </div>
-<aui:input type="checkbox" name="confirmSubmit" onClick="confirmSubmitFunction();" label="ban-da-thu-thu-so-tien-cua-nguoi-lam-thu-tuc" />
-<aui:button-row>
-	<a id="<portlet:namespace/>xacNhan" class="btn" disabled onclick="" ><liferay-ui:message key="dong-y"/></a>
-	<a id="<portlet:namespace/>xacNhan2" class="btn" onclick="" ><liferay-ui:message key="dong-y"/></a>
-	<aui:button name="back" value="back" href="<%=backRedirect.toString() %>" />
-</aui:button-row>
+	<aui:button-row>
+	<aui:input 
+			name="termsOfUse"
+			type="checkbox" 
+			label="ban-da-thu-thu-so-tien-cua-nguoi-lam-thu-tuc"
+		/>
+		<aui:button name="register" type="button" value="dong-y" disabled="true" />
+		<aui:button name="back" value="back" href="<%=backRedirect.toString() %>" />
+	</aui:button-row>
 
 </aui:form>
+<aui:script>
+	AUI().ready(function(A) {
+		var termsOfUseCheckbox = A.one('#<portlet:namespace />termsOfUseCheckbox');
+		if(termsOfUseCheckbox) {
+			termsOfUseCheckbox.on('click',function() {
+				
+				var termsOfUse = A.one('#<portlet:namespace />termsOfUse');
+				
+				var register = A.one('#<portlet:namespace />register');
+				
+				if(termsOfUse.val() == 'true'){
+					register.removeClass('disabled');
+					register.removeAttribute('disabled');
+					register.setAttribute('onClick' , 'paymentFormSubmit();');
+				}else{
+					register.addClass('disabled');
+					register.setAttribute('disabled' , 'true');
+					register.removeAttribute('onClick');
+				}
+			});
+		}
+	});
+</aui:script>
 <script type="text/javascript">
-	var A = AUI();
-	function confirmSubmitFunction() {
-		
-		if(A.one("#<portlet:namespace/>confirmSubmit").val()){
-			alert(A.one("#<portlet:namespace/>xacNhan"));
-			A.one("#<portlet:namespace/>xacNhan").removeAttribute('disabled').attr('onclick', "paymentFormSubmit();");
-		}
-		if(!A.one("#<portlet:namespace/>confirmSubmit").val()){
-			alert(A.one("#<portlet:namespace/>xacNhan"));
-			A.one("#<portlet:namespace/>xacNhan2").attr("disabled", true);
-			A.one("#<portlet:namespace/>xacNhan").attr("disabled", true);
-		}
-	}
 	function paymentFormSubmit() {
 		document.getElementById('<portlet:namespace />payForm').submit();
 	}
