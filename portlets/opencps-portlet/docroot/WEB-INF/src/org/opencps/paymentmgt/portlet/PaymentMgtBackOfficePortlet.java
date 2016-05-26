@@ -128,10 +128,10 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 				PaymentFile paymentFile = PaymentFileLocalServiceUtil.fetchPaymentFile(paymentFileId);
 				long govAgencyOrganizationId = -1;
 				long userId = themeDisplay.getUserId();
-//				Employee employee = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(themeDisplay.getScopeGroupId(), userId);
-//				WorkingUnit workingUnit = WorkingUnitLocalServiceUtil.fetchWorkingUnit(employee.getWorkingUnitId());
-//				govAgencyOrganizationId = workingUnit.getMappingOrganisationId();
-				govAgencyOrganizationId = 24787;
+				Employee employee = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(themeDisplay.getScopeGroupId(), userId);
+				WorkingUnit workingUnit = WorkingUnitLocalServiceUtil.fetchWorkingUnit(employee.getWorkingUnitId());
+				govAgencyOrganizationId = workingUnit.getMappingOrganisationId();
+//				govAgencyOrganizationId = 24787;
 				PaymentConfig paymentConfig = PaymentConfigLocalServiceUtil.getPaymentConfigByGovAgency(themeDisplay.getScopeGroupId(), govAgencyOrganizationId);
 				// Get account folder
 				String dossierDestinationFolder = PortletUtil
