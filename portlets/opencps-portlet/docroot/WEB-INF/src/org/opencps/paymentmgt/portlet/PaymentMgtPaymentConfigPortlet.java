@@ -90,6 +90,7 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 			jsonObject.put(PaymentConfigDisplayTerms.INVOICE_TEMPLATE_NO, pc.getInvoiceTemplateNo());
 			jsonObject.put(PaymentConfigDisplayTerms.INVOICE_ISSUE_NO, pc.getInvoiceIssueNo());
 			jsonObject.put(PaymentConfigDisplayTerms.INVOICE_LAST_NO, pc.getInvoiceLastNo());
+			jsonObject.put(PaymentConfigDisplayTerms.REPORT_TEMPLATE, pc.getReportTemplate());
 		}
 		paymentConfigsJsonArray.put(jsonObject);
 		
@@ -128,6 +129,7 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 		String keypayVersion = ParamUtil.getString(actionRequest, PaymentConfigDisplayTerms.KEYPAY_VERSION);
 		String keypayMerchantCode = ParamUtil.getString(actionRequest, PaymentConfigDisplayTerms.KEYPAY_MERCHANT_CODE);
 		String keypaySecureKey = ParamUtil.getString(actionRequest, PaymentConfigDisplayTerms.KEYPAY_SECURE_KEY);
+		String reportTemplate = ParamUtil.getString(actionRequest, PaymentConfigDisplayTerms.REPORT_TEMPLATE);
 		
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 		String currentURL = ParamUtil.getString(actionRequest, "currentURL");
@@ -138,11 +140,11 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
 			if (paymentConfigId == 0) {
-				 PaymentConfig c = PaymentConfigLocalServiceUtil.addPaymentConfig(govAgencyOrganizationId, govAgencyName, govAgencyTaxNo, invoiceTemplateNo, invoiceIssueNo, invoiceLastNo, bankInfo, placeInfo, keypayDomain, keypayVersion, keypayMerchantCode, keypaySecureKey, serviceContext.getUserId(), serviceContext);
+				 PaymentConfig c = PaymentConfigLocalServiceUtil.addPaymentConfig(govAgencyOrganizationId, govAgencyName, govAgencyTaxNo, invoiceTemplateNo, invoiceIssueNo, invoiceLastNo, bankInfo, placeInfo, keypayDomain, keypayVersion, keypayMerchantCode, keypaySecureKey, reportTemplate, serviceContext.getUserId(), serviceContext);
 				 paymentConfigId = c.getPaymentConfigId();
 			}
 			else {
-				PaymentConfigLocalServiceUtil.updatePaymentConfig(paymentConfigId, govAgencyOrganizationId, govAgencyName, govAgencyTaxNo, invoiceTemplateNo, invoiceIssueNo, invoiceLastNo, bankInfo, placeInfo, keypayDomain, keypayVersion, keypayMerchantCode, keypaySecureKey, serviceContext.getUserId(), serviceContext);
+				PaymentConfigLocalServiceUtil.updatePaymentConfig(paymentConfigId, govAgencyOrganizationId, govAgencyName, govAgencyTaxNo, invoiceTemplateNo, invoiceIssueNo, invoiceLastNo, bankInfo, placeInfo, keypayDomain, keypayVersion, keypayMerchantCode, keypaySecureKey, reportTemplate, serviceContext.getUserId(), serviceContext);
 			}
 
 			addProcessActionSuccessMessage = false;

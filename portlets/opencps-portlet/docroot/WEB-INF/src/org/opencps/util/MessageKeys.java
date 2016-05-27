@@ -62,4 +62,6 @@ public class MessageKeys {
 	public static final String DOSSIER_SYSTEM_EXCEPTION_OCCURRED = "dossier.system.exception.occurred";
 	public static final String DOSSIER_UPDATE_SUCCESS = "dossiermgt.update.sucess";
 	public static final String DOSSIER_FILE_DUPLICATE_NAME = "dossiermgt.file.duplicate.name";
+	
+	public static final String PAYMENT_FILE_CONFIRM_BANK_SUCESS = "payment.file.confirm.bank.success";
 }

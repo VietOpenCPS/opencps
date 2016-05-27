@@ -101,38 +101,8 @@
 				row.addText(Validator.isNotNull(dossier) ? dossier.getReceptionNo() : "");
 				
 				//gov agency name column
-				/*
-				Organization org = null;
-				
-				try {
-					org = OrganizationLocalServiceUtil.getOrganization(paymentFile.getGovAgencyOrganizationId());
-				}
-				catch (NoSuchOrganizationException e) {
-					
-				}
-				
-				row.addText(Validator.isNotNull(org) ? org.getName() : "");
-				*/
-				DictCollection collection = null;
-				try {
-					collection = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, "SERVICE_ADMINISTRATION");
-				}
-				catch (NoSuchDictCollectionException e) {
-					
-				}
-				DictItem administrationItem = null;
-				
-				if (collection != null && serviceInfo != null) {
-					try {
-						administrationItem = DictItemLocalServiceUtil.getDictItemInuseByItemCode(collection.getDictCollectionId(), serviceInfo.getAdministrationCode());	
-					}
-					catch (NoSuchDictItemException e) {
-						
-					}
-				}
-				
-				row.addText(administrationItem != null ? administrationItem.getItemName() : "");
-				
+				row.addText(dossier != null ? dossier.getGovAgencyName() : "");
+							
 				//payment name column
 				row.addText(paymentFile.getPaymentName());
 				

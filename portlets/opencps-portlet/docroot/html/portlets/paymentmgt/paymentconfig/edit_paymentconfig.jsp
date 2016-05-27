@@ -101,6 +101,10 @@
 			                 			A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.INVOICE_LAST_NO %>').set('value', obj.<%= PaymentConfigDisplayTerms.INVOICE_LAST_NO %>);
 		                 			else
 		                 				A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.INVOICE_LAST_NO %>').set('value', '');
+		                 			if (obj.<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>)
+			                 			A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>').set('value', obj.<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>);
+		                 			else
+		                 				A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>').set('value', '');
 		                 		}
 		                 	});
 		             	 }
@@ -230,6 +234,12 @@
 				<aui:validator name="maxLength"
 	            	errorMessage="no-more-than-7-characters">7</aui:validator>
 			</aui:input>	
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col>
+			<aui:input id="<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>" type="textarea" style="width: 98%" name="<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>">
+			</aui:input>
 		</aui:col>
 	</aui:row>
 	<aui:row>

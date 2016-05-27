@@ -1,3 +1,4 @@
+<%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.NoSuchFileEntryException"%>
 <%@page import="com.liferay.portlet.documentlibrary.NoSuchFileException"%>
 <%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
@@ -99,7 +100,7 @@
 			</tr>
 			<tr>
 				<td class="col-left"><liferay-ui:message key="service-name"></liferay-ui:message></td>
-				<td class="col-right"><%= serviceInfo != null ? serviceInfo.getShortName() : "" %></td>
+				<td class="col-right"><%= serviceInfo != null ? serviceInfo.getServiceName() : "" %></td>
 			</tr>
 			<tr>
 				<td class="col-left"><liferay-ui:message key="payment-name"></liferay-ui:message></td>
@@ -108,27 +109,8 @@
 			<tr>
 				<td class="col-left"><liferay-ui:message key="administration-name"></liferay-ui:message></td>
 				<td class="col-right">
-					<%
-						DictCollection collection = null;
-						try {
-							collection = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, "SERVICE_ADMINISTRATION");
-						}
-						catch (NoSuchDictCollectionException e) {
-							
-						}
-						DictItem administrationItem = null;
-						
-						if (collection != null && serviceInfo != null) {
-							try {
-								administrationItem = DictItemLocalServiceUtil.getDictItemInuseByItemCode(collection.getDictCollectionId(), serviceInfo.getAdministrationCode());	
-							}
-							catch (NoSuchDictItemException e) {
-								
-							}
-						}
-					%>
-					<c:if test="<%= administrationItem != null %>">
-						<%= administrationItem.getItemName() %>
+					<c:if test="<%= dossier != null %>">
+						<%= dossier.getGovAgencyName() %>
 					</c:if>
 				</td>
 			</tr>
@@ -182,16 +164,19 @@
 			<tr>
 				<td class="col-left"><liferay-ui:message key="payment-status-detail"></liferay-ui:message></td>
 				<td class="col-right">
-					<c:if test="<%= paymentFile.getPaymentStatus() == 0 %>">
+					<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING %>">
 						<liferay-ui:message key="on-processing"></liferay-ui:message>
 					</c:if>
-					<c:if test="<%= paymentFile.getPaymentStatus() == 1 %>">
+					<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED %>">
 						<liferay-ui:message key="requested"></liferay-ui:message>
 					</c:if>
-					<c:if test="<%= paymentFile.getPaymentStatus() == 2 %>">
+					<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED %>">
+						<liferay-ui:message key="confirmed"></liferay-ui:message>
+					</c:if>
+					<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
 						<liferay-ui:message key="approved"></liferay-ui:message>
 					</c:if>
-					<c:if test="<%= paymentFile.getPaymentStatus() == 3 %>">
+					<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED %>">
 						<liferay-ui:message key="rejected"></liferay-ui:message>
 					</c:if>
 				</td>
@@ -240,7 +225,7 @@
 						}
 					%>
 					<c:if test="<%= dlURL != null %>">
-						<a href=""><liferay-ui:message key="view-confirm-file-entry"></liferay-ui:message></a>
+						<a href="<%= dlURL %>"><liferay-ui:message key="view-confirm-file-entry"></liferay-ui:message></a>
 					</c:if>
 				</td>
 			</tr>			

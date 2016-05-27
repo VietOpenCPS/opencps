@@ -55,7 +55,7 @@
 	<portlet:param name="<%= PaymentFileDisplayTerms.PAYMENT_FILE_ID %>"
 		value="<%=String.valueOf(paymentFile.getPaymentFileId()) %>" />
 	<portlet:param name="mvcPath"
-		value="/html/portlets/paymentmgt/frontoffice/frontofficebank.jsp" />
+		value="/html/portlets/paymentmgt/frontoffice/frontofficeconfirmbank.jsp" />
 	<portlet:param name="redirectURL" value="<%= currentURL %>" />
 	<portlet:param name="backURL" value="<%=currentURL %>"/>
 	
@@ -64,8 +64,8 @@
 <liferay-ui:icon image="view" cssClass="view" message="view"
 	url="<%=viewPaymentDetail.toString()%>" />
 
-<liferay-ui:icon image="portlet" cssClass="view" message="keypay-transaction"
+<liferay-ui:icon image="key" cssClass="view" message="keypay-transaction"
 	url="<%=keypayTransaction.toString()%>" />
 
-<liferay-ui:icon image="portlet" cssClass="view" message="bank-transaction"
+<liferay-ui:icon image="post" cssClass="view" message="bank-transaction"
 	url="<%=bankTransaction.toString()%>" />	

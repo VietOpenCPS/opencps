@@ -69,6 +69,7 @@ public class PaymentConfigLocalServiceImpl
 	    String keypayVersion,
 	    String keypayMerchantCode,
 	    String keypaySecureKey,
+	    String reportTemplate,
 	    long userId,
 	    ServiceContext serviceContext)
 	    throws PortalException, SystemException {
@@ -119,6 +120,8 @@ public class PaymentConfigLocalServiceImpl
 			.setKeypayMerchantCode(keypayMerchantCode);
 		paymentConfig
 			.setKeypaySecureKey(keypaySecureKey);
+		paymentConfig
+			.setReportTemplate(reportTemplate);
 		return paymentConfigPersistence
 		    .update(paymentConfig);
 
@@ -137,7 +140,8 @@ public class PaymentConfigLocalServiceImpl
 	    String keypayDomain,
 	    String keypayVersion,
 	    String keypayMerchantCode,
-	    String keypaySecureKey,	    
+	    String keypaySecureKey,	 
+	    String reportTemplate,
 	    long userId,
 	    ServiceContext serviceContext)
 	    throws PortalException, SystemException {
@@ -184,6 +188,8 @@ public class PaymentConfigLocalServiceImpl
 			.setKeypayMerchantCode(keypayMerchantCode);
 		paymentConfig
 			.setKeypaySecureKey(keypaySecureKey);
+		paymentConfig
+			.setReportTemplate(reportTemplate);
 		
 		return paymentConfigPersistence
 		    .update(paymentConfig);

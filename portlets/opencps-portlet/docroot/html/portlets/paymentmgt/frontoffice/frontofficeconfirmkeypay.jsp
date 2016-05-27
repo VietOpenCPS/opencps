@@ -105,33 +105,13 @@
 				</tr>
 				<tr>
 					<td class="col-left"><liferay-ui:message key="service-name"></liferay-ui:message></td>
-					<td class="col-right"><%= serviceInfo != null ? serviceInfo.getShortName() : "" %></td>
+					<td class="col-right"><%= serviceInfo != null ? serviceInfo.getServiceName() : "" %></td>
 				</tr>
 				<tr>
 					<td class="col-left"><liferay-ui:message key="administration-name"></liferay-ui:message></td>
 					<td class="col-right">
-						<%
-							DictCollection collection = null;
-							try {
-								collection = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, "SERVICE_ADMINISTRATION");
-							}
-							catch (NoSuchDictCollectionException e) {
-								
-							}
-							DictItem administrationItem = null;
-							
-							if (collection != null && serviceInfo != null) {
-								try {
-									administrationItem = DictItemLocalServiceUtil.getDictItemInuseByItemCode(collection.getDictCollectionId(), serviceInfo.getAdministrationCode());	
-								}
-								catch (NoSuchDictItemException e) {
-									
-								}
-							}
-							
-						%>
-						<c:if test="<%= administrationItem != null %>">
-							<%= administrationItem.getItemName() %>
+						<c:if test="<%= dossier != null %>">
+							<%= dossier.getGovAgencyName() %>
 						</c:if>
 					</td>
 				</tr>

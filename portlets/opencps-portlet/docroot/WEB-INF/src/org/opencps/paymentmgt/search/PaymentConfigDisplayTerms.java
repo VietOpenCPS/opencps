@@ -42,6 +42,7 @@ public class PaymentConfigDisplayTerms extends DisplayTerms {
 	public static final String KEYPAY_VERSION = "keypayVersion";
 	public static final String KEYPAY_MERCHANT_CODE = "keypayMerchantCode";
 	public static final String KEYPAY_SECURE_KEY = "keypaySecureKey";
+	public static final String REPORT_TEMPLATE = "reportTemplate";
 	
 	public PaymentConfigDisplayTerms(PortletRequest portletRequest) {
 
@@ -79,9 +80,17 @@ public class PaymentConfigDisplayTerms extends DisplayTerms {
 	protected String keypayVersion;
 	protected String keypayMerchantCode;
 	protected String keypaySecureKey;
-
+	protected String reportTemplate;
 	
-    public long getUserId() {
+    public String getReportTemplate() {
+		return reportTemplate;
+	}
+
+	public void setReportTemplate(String reportTemplate) {
+		this.reportTemplate = reportTemplate;
+	}
+
+	public long getUserId() {
     
     	return userId;
     }
