@@ -789,6 +789,12 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 
 		return businessPersistence.fetchBymappingOrganizationId(mappingOrganizationId);
     }
+	
+	public Business getByMappingUserId(long mappingUserId) throws SystemException {
+
+		return businessPersistence.fetchByMappingUserId(mappingUserId);
+    }
+	
 	private Log _log = LogFactoryUtil
 	    .getLog(BusinessLocalServiceImpl.class
 	        .getName());

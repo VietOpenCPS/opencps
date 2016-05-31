@@ -27,6 +27,8 @@ import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactory;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
 
@@ -238,5 +240,11 @@ public class DossierFileLocalServiceImpl
 		    .setOwnerOrganizationId(ownerOrganizationId);
 		return dossierFilePersistence
 		    .update(dossierFile);
+	}
+	
+	public DossierFile fetchByTemplateFileNoDossierId_Last(long dossierId, String templateFileNo) throws SystemException {
+		OrderByComparatorFactory orderByComparatorFactory = OrderByComparatorFactoryUtil.getOrderByComparatorFactory();
+		OrderByComparator comparator = orderByComparatorFactory.create("DossierFile", "modifiedDate", true);
+		return dossierFilePersistence.fetchByTemplateFileNoDossierId_Last(dossierId, templateFileNo, comparator);
 	}
 }

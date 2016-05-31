@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+#parse ($init)
+
+<html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
+
+<head>
+	<title>$the_title - $company_name</title>
+
+	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
+
+	$theme.include($top_head_include)
+	
+	<link rel="shortcut icon" type="image/png" href="$images_folder/custom/favicon.png"/>
+	
+</head>
+
+<body class="$css_class opencps-theme">
+
+$theme.include($body_top_include)
+
+#if ($is_signed_in && $permissionChecker.isOmniadmin())
+	#dockbar()
+#end
+<header id="banner" role="banner">
+	<div id="heading" class="header ">
+		<h1 class="site-title">
+			<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
+				<img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width" />
+			</a>
+
+		</h1>
+		
+		#*
+		<div class="title">
+			<span>#language("site-slogan1")</span>
+			<br>
+			#language("site-slogan2")
+		</div>
+		*#
+		#if ($is_signed_in)
+			<div class="options">
+				<div class="opt MR30 count">	
+					<a href="$my_places_portlet_url" rel="nofollow" title="#language("account-info")">
+						<i class="fa fa-inbox"></i>
+						#language("account-info")
+					</a>
+					## <span>3</span>
+				</div>
+				<div class="opt">
+					<a href="$sign_out_url" rel="nofollow" title="#language("logout")">
+						<i class="fa fa-power-off"></i>
+						#language("logout")
+					</a>
+				</div>
+			</div>
+		#else
+			<div class="options">
+				<div>
+					<a href="">
+						<i class="fa fa-envelope"></i>
+						Gửi Email
+					</a>
+				</div>
+				<div>
+					<a href="">
+						<i class="fa fa-phone"></i>
+						Hỗ trợ 1900-636-759
+					</a>
+				</div>
+			</div>
+		#end
+	</div>
+
+	#if ($has_navigation || $is_signed_in)
+		#parse ("$full_templates_path/navigation.vm")
+	#end
+</header>
+<div class="container-fluid" id="wrapper">
+	
+	<div id="content">
+		#*<nav id="breadcrumbs">#breadcrumbs()</nav>*#
+
+		#if ($selectable)
+			$theme.include($content_include)
+		#else
+			$portletDisplay.recycle()
+
+			$portletDisplay.setTitle($the_title)
+
+			$theme.wrapPortlet("portlet.vm", $content_include)
+		#end
+	</div>
+</div>
+	<footer>
+		<p>Copyright <i aria-hidden="true" class="fa fa-copyright"></i> 2016 - Powered by <span>OpenCPS v1.0.2</span></p>
+		<p>
+			Phần mềm lõi dịch vụ công nguồn mở 
+			<img src="/opencps-theme/images/custom/icon_footer.png" class="ML10">
+		</p>
+	</footer>
+
+
+$theme.include($body_bottom_include)
+
+$theme.include($bottom_include)
+
+</body>
+
+</html>

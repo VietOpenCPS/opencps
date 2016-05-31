@@ -1,4 +1,12 @@
 
+<%@page import="com.liferay.portal.service.OrganizationLocalServiceUtil"%>
+<%@page import="com.liferay.portal.service.OrganizationLocalService"%>
+<%@page import="com.liferay.portal.model.Organization"%>
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.Citizen"%>
+<%@page import="org.opencps.accountmgt.model.Business"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -60,10 +68,11 @@
 	}
 	
 	DossierPart dossierPart = null;
-	
+	String sampleData = StringPool.BLANK;
 	if(dossierPartId > 0){
 		try{
 			dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+			sampleData = dossierPart.getSampleData();
 		}catch(Exception e){
 			
 		}
@@ -89,6 +98,10 @@
 		}
 	}
 
+	//TODO
+		Citizen ownerCitizen = CitizenLocalServiceUtil.getByMappingUserId(themeDisplay.getUserId());
+		Business ownerBusiness = BusinessLocalServiceUtil.getByMappingUserId(themeDisplay.getUserId());
+		formData = PortletUtil.dataBinding(sampleData,ownerCitizen, ownerBusiness);
 %>
 
 <portlet:actionURL var="updateDynamicFormDataURL" name="updateDynamicFormData"/>
@@ -115,34 +128,19 @@
 			<aui:button type="button" value="create-file" name="create-file"/>
 		</c:if>
 	</aui:fieldset>
+	
+	<aui:input name="textForm" type="hidden" value="<%=Validator.isNotNull(alpacaSchema) ? alpacaSchema : PortletConstants.UNKNOW_ALPACA_SCHEMA%>" ></aui:input>
+	
 </aui:form>
 
 <aui:script>
-	var alpacaSchema = <%=Validator.isNotNull(alpacaSchema) ? alpacaSchema : PortletConstants.UNKNOW_ALPACA_SCHEMA%>;
+// 	var alpacaSchema = <%=Validator.isNotNull(alpacaSchema) ? alpacaSchema : PortletConstants.UNKNOW_ALPACA_SCHEMA%>;
 	var formData = '<%=formData%>';
 	var dossierFileId = '<%=dossierFileId%>';
 	
 	AUI().ready(function(A){
 		
-		if(alpacaSchema.options != 'undefined' && alpacaSchema.schema != 'undefined'){
-			
-			if(formData != ''){
-				alpacaSchema.data = JSON.parse(formData);
-			}
-			
-			//Overwrite function
-			alpacaSchema.postRender = function(control){
-				$(".saveForm").click(function(e) {
-					var formData = control.getValue();
-					$("#<portlet:namespace />formData" ).val(JSON.stringify(formData));
-					$("#<portlet:namespace />fm" ).submit();
-			    });
-			};
-		
-		}
-		var el = $("#<portlet:namespace/>dynamicForm");
-		
-		Alpaca(el, alpacaSchema);
+		initForm();
 		
 		var createReportBtn = A.one('#<portlet:namespace/>create-file');
 		if(createReportBtn){
@@ -258,3 +256,55 @@
 	    A.io.request(uri, configs); 
 	},['aui-io']);
 </aui:script>
+<aui:script>
+function initForm(){
+	var el = $("#<portlet:namespace/>dynamicForm");
+	var textForm = $("#<portlet:namespace/>textForm").val();
+	var objSchema = eval('(' + textForm + ')');
+	if(objSchema.options != 'undefined' && objSchema.schema != 'undefined'){
+				
+		if(formData != ''){
+			objSchema.data = JSON.parse(formData);
+		}
+		
+		//Overwrite function
+		objSchema.postRender = function(control){
+			$(".saveForm").click(function(e) {
+				var formData = control.getValue();
+				$("#<portlet:namespace />formData" ).val(JSON.stringify(formData));
+				$("#<portlet:namespace />fm" ).submit();
+		    });
+		};
+	}
+	Alpaca(el, objSchema);
+}
+
+</aui:script>
+<script type="text/javascript">
+function openCPSSelectedTextValue(id) {
+	var listbox = document.getElementById(id);
+	var selIndex = listbox.selectedIndex;
+	var selText = listbox.options[selIndex].text; 
+    return selText;
+}
+
+function openCPSSelectedbildDataSource(controlId,dictCollectionId, parentItemId) {
+	Liferay.Service(
+			  '/opencps-portlet.dictitem/get-dictitems-inuse-by-dictcollectionId_parentItemId_datasource',
+			  {
+			    dictCollectionId: dictCollectionId,
+			    parentItemId: parentItemId
+			  },
+			  function(obj) {
+				var comboTarget = document.getElementById(controlId); 
+			    for(j in obj){
+                    var sub_key = j;
+                    var sub_val = obj[j];
+                    var newOpt = comboTarget.appendChild(document.createElement('option'));
+					newOpt.value = sub_key;
+					newOpt.text = sub_val;
+                }
+			  }
+			);
+}
+</script>
