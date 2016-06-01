@@ -111,7 +111,9 @@ public class DossierFileLocalServiceImpl
 		dossierFile
 		    .setUuid(PortalUUIDUtil
 		        .generate());
-
+		dossierFile
+	    .setTemplateFileNo(templateFileNo);
+		
 		return dossierFilePersistence
 		    .update(dossierFile);
 	}
@@ -238,6 +240,9 @@ public class DossierFileLocalServiceImpl
 		    .setOriginal(original);
 		dossierFile
 		    .setOwnerOrganizationId(ownerOrganizationId);
+		dossierFile
+	    .setTemplateFileNo(templateFileNo);
+		
 		return dossierFilePersistence
 		    .update(dossierFile);
 	}
