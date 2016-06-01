@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.backend.util.AutoFillFormData"%>
 <%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
@@ -81,7 +82,7 @@
 	//TODO
 	Citizen ownerCitizen = CitizenLocalServiceUtil.getByMappingUserId(themeDisplay.getUserId());
 	Business ownerBusiness = BusinessLocalServiceUtil.getByMappingUserId(themeDisplay.getUserId());
-	formData = BackendUtils.dataBinding(sampleData,ownerCitizen, ownerBusiness,0);
+	formData = AutoFillFormData.dataBinding(sampleData,ownerCitizen, ownerBusiness,0);
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
 			dossierPart.getFormScript() : StringPool.BLANK;
 	
