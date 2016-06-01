@@ -373,6 +373,11 @@
             <finder-column name="dossierPartId"></finder-column>
         </finder>
 
+ 		<finder name="TemplateFileNoDossierId" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="templateFileNo"></finder-column>
+        </finder>
+        
          <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
     </entity>
 
