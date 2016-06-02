@@ -459,6 +459,8 @@ for (String analyticsType : analyticsTypes) {
 <script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/datamgt_services.js"></script>
 <script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/datepicker.js"></script>
 <script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/jquery.min.js"></script>
+<script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/bootstrap-datetimepicker.min.js"></script>
 <!-- bootstrap -->
 <!-- <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
 <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->

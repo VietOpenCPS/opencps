@@ -386,16 +386,18 @@
 				
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_RESULT %>">
 					<td width="40%" align="right">
-						<%-- <aui:a 
-							id="<%=String.valueOf(dossierPartId) %>"
-							process-order="<%=String.valueOf(processOrderId) %>"
-							dossier-file="<%=String.valueOf(dossierFileId) %>"
-							dossier-part="<%=String.valueOf(dossierPartId) %>"
-							href="javascript:void(0);" 
-							label="declaration-online" 
-							cssClass="opencps dossiermgt part-file-ctr declaration-online"
-							onClick='<%=renderResponse.getNamespace() + "declarationOnline(this)" %>'
-						/> --%>
+						<c:if test="<%=dossierPart != null && Validator.isNotNull(dossierPart.getFormReport()) && Validator.isNotNull(dossierPart.getFormScript()) %>">
+							 <aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								process-order="<%=String.valueOf(processOrderId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								dossier-part="<%=String.valueOf(dossierPartId) %>"
+								href="javascript:void(0);" 
+								label="declaration-online" 
+								cssClass="label opencps dossiermgt part-file-ctr declaration-online"
+								onClick='<%=renderResponse.getNamespace() + "declarationOnline(this)" %>'
+							/>
+						</c:if>
 					</td>
 					
 					<td width="40%" align="right">

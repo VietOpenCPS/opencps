@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-06-01T19:32:28 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TPHS500" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="baf31a95-fd6b-4e6f-8fb3-8a45aea80664">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="288"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="net.sf.jasperreports.json.date.pattern" value="yyyy-MM-dd"/>
+	<property name="net.sf.jasperreports.json.number.pattern" value="#,##0.##"/>
+	<property name="ireport.background.image.properties" value="false,true,0.25,0,0,0,0,0,0"/>
+	<style name="Sans_Normal" isDefault="true" fontName="DejaVu Sans" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="Sans_Bold" fontName="DejaVu Sans" fontSize="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="Sans_Italic" fontName="DejaVu Sans" fontSize="12" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false"/>
+	<queryString language="json">
+		<![CDATA[opencps]]>
+	</queryString>
+	<field name="kinhGuiLabel" class="java.lang.String">
+		<fieldDescription><![CDATA[kinhGuiLabel]]></fieldDescription>
+	</field>
+	<field name="_subjectName" class="java.lang.String">
+		<fieldDescription><![CDATA[_subjectName]]></fieldDescription>
+	</field>
+	<field name="lyDo" class="java.lang.String">
+		<fieldDescription><![CDATA[lyDo]]></fieldDescription>
+	</field>
+	<field name="diaDiem" class="java.lang.String">
+		<fieldDescription><![CDATA[diaDiem]]></fieldDescription>
+	</field>
+	<field name="cityCodeLabel" class="java.lang.String">
+		<fieldDescription><![CDATA[cityCodeLabel]]></fieldDescription>
+	</field>
+	<field name="_ngayNopDon" class="java.lang.String">
+		<fieldDescription><![CDATA[_ngayNopDon]]></fieldDescription>
+	</field>
+	<title>
+		<band height="802" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="227" y="7" width="296" height="19" uuid="8981c4dc-60c1-44a9-b6a9-e7be9bc31fb4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="287" y="24" width="186" height="19" uuid="210aea4f-8eb2-4ff9-8642-6945dc367481"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font fontName="DejaVu Sans" size="12" isBold="true" isUnderline="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Độc lập - Tự do -  Hạnh phúc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="81" width="556" height="33" uuid="94fa92ca-b9ff-446f-8e96-1aa3617e9132"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ĐỀ NGHỊ CẤP LẠI CHỨNG CHỈ AN TOÀN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="37" y="151" width="481" height="32" isPrintWhenDetailOverflows="true" uuid="d4b340bd-d867-4f30-a12e-1d6847741bde"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="12"/>
+					<paragraph firstLineIndent="40"/>
+				</textElement>
+				<text><![CDATA[Căn cứ thông tư số 30/2014/TT-BGTVT ngày 31 tháng 7 năm 2014 của bộ trưởng Bộ Giao thông vận tải quy định về cấp Chứng chỉ an toàn đối với doanh nghiệp kinh doanh đường sắt;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="36" y="203" width="482" height="60" isPrintWhenDetailOverflows="true" uuid="1dc55d60-c016-44d8-bd00-1458e61321fe"/>
+				<textElement verticalAlignment="Top" markup="html">
+					<font fontName="DejaVu Sans" size="12" isBold="false"/>
+					<paragraph firstLineIndent="40"/>
+				</textElement>
+				<text><![CDATA[Hiện nay, Doanh nghiệp chúng tôi đã khắc phụ được nguyên nhân tai nạn, bổ sung đầy đủ các biện pháp an toàn tiếp theo và đã có đủ các điều kiện theo quy định/được cấp lại giấy chứng nhận đăng ký kinh doanh đường sắt/được cơ quan có thẩm quyền cho phép khôi phục lại hoạt động kinh doanh đường sắt.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="36" y="263" width="482" height="32" isPrintWhenDetailOverflows="true" uuid="41a34373-8ba1-4e81-a83a-92bd65aaaadc"/>
+				<textElement verticalAlignment="Top" markup="html">
+					<font fontName="DejaVu Sans" size="12" isBold="false"/>
+					<paragraph firstLineIndent="40"/>
+				</textElement>
+				<text><![CDATA[Đề nghị Cục Đường sắt Việt Nam cấp lại Chứng chỉ an toàn cho doanh nghiệp (tên doanh nghiệp).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="266" y="392" width="218" height="21" uuid="4e14c101-c8a3-4ed4-b77a-3865914a697f"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="html">
+					<font fontName="DejaVu Sans" size="10"/>
+				</textElement>
+				<text><![CDATA[(Ký tên và đóng dấu)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="36" y="299" width="481" height="33" isPrintWhenDetailOverflows="true" uuid="78e63c3b-30af-47de-a693-f06b0b383ff5"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="12"/>
+					<paragraph firstLineIndent="40"/>
+				</textElement>
+				<text><![CDATA[Chúng tôi xin cam đoan về tính xác thực của các tài liệu gửi kèm theo và chịu hoàn toàn trách nhiệm trước pháp luật.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="36" y="332" width="481" height="38" isPrintWhenDetailOverflows="true" uuid="248965b9-5198-43d2-ab47-53f2acb8241e"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="12" isItalic="true"/>
+					<paragraph firstLineIndent="40"/>
+				</textElement>
+				<text><![CDATA[(Gửi kèm theo các báo cáo chứng minh các điều kiện đã được bổ sung đầy đủ theo quy định).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="266" y="370" width="218" height="22" uuid="d7425f1a-4eb1-4b8a-87f5-bc0f535c46e9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font fontName="DejaVu Sans" size="12"/>
+				</textElement>
+				<text><![CDATA[THỦ TRƯỞNG DOANH NGHIỆP]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="17" y="7" width="186" height="19" isPrintWhenDetailOverflows="true" uuid="fdcbe29c-9f51-4659-bb30-dc612b08305d"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="DejaVu Sans" size="12" isBold="true" isUnderline="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{_subjectName}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="37" y="57" width="463" height="20" isPrintWhenDetailOverflows="true" uuid="174d0995-2ddf-4fe5-bd45-8c118851270a"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cityCodeLabel} + ", " + $F{_ngayNopDon}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="-1" y="112" width="555" height="27" isPrintWhenDetailOverflows="true" uuid="bdcd4db1-4f99-45df-929c-7157171d4ecf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Kính gửi: " + $F{kinhGuiLabel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="36" y="183" width="482" height="20" isPrintWhenDetailOverflows="true" uuid="9ee7fdfd-39a5-4052-be24-ea3444ffa6f0"/>
+				<textElement verticalAlignment="Top" markup="html">
+					<font fontName="DejaVu Sans" size="12" isBold="false"/>
+					<paragraph firstLineIndent="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Doanh Nghiệp " + $F{_subjectName} + " " + $F{lyDo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

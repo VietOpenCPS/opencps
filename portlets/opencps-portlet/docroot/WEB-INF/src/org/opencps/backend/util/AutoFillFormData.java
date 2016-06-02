@@ -159,7 +159,7 @@ public class AutoFillFormData {
 						String variable = stringSplit[0];
 						String paper = stringSplit[1];
 						try {
-							DossierFile dossierFile = DossierFileLocalServiceUtil.fetchByTemplateFileNoDossierId_Last(dossierId, paper);
+							DossierFile dossierFile = DossierFileLocalServiceUtil.fetchByTemplateFileNoDossierId_First(dossierId, paper);
 							if(Validator.isNotNull(dossierFile) && Validator.isNotNull(dossierFile.getFormData())){
 								JSONObject jsonOtherData = new JSONObject(dossierFile.getFormData());
 								Map<String, Object> jsonOtherMap = jsonToMap(jsonOtherData);
@@ -206,9 +206,9 @@ public class AutoFillFormData {
 				
 				int year = calendar.get(Calendar.YEAR);
 			
-				return  LanguageUtil.get(Locale.getDefault(), "sDay-cps") + " " + sDay + " " +
-						LanguageUtil.get(Locale.getDefault(), "sMonth-cps") + " " + sMonth + " "+ 
-						LanguageUtil.get(Locale.getDefault(), "year-cps") + " " + year;
+				return  "Ng\u00E0y" + " " + sDay + " " +
+						"th\u00E1ng" + " " + sMonth + " "+ 
+						"n\u0103m" + " " + year;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

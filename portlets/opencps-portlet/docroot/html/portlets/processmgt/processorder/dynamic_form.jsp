@@ -1,4 +1,11 @@
 
+<%@page import="org.opencps.backend.util.AutoFillFormData"%>
+<%@page import="org.opencps.backend.util.BackendUtils"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.Business"%>
+<%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,33 +25,26 @@
  */
 %>
 
-<%@page import="net.sf.jasperreports.engine.JasperReport"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
-<%@page import="org.opencps.report.datasource.adapter.JRJSONDataSource"%>
-<%@page import="net.sf.jasperreports.engine.JRDataSource"%>
-<%@page import="net.sf.jasperreports.engine.JREmptyDataSource"%>
-<%@page import="net.sf.jasperreports.engine.JasperExportManager"%>
-<%@page import="net.sf.jasperreports.engine.JasperFillManager"%>
-<%@page import="net.sf.jasperreports.engine.JasperPrint"%>
-<%@page import="java.nio.charset.StandardCharsets"%>
-<%@page import="java.io.ByteArrayInputStream"%>
-<%@page import="net.sf.jasperreports.engine.JasperCompileManager"%>
-<%@page import="java.io.InputStream"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@ include file="../init.jsp"%>
 
 <%
 	boolean success = false;
-	
+
 	try{
 		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
 		
@@ -52,17 +52,24 @@
 		
 	}
 	
+	long primaryKey = ParamUtil.getLong(request, "primaryKey");
+	
+	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
+	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
 	long dossierFileId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_FILE_ID);
-
-	int index = ParamUtil.getInteger(request, DossierFileDisplayTerms.INDEX);
-
-	DossierPart dossierPart = null;
+	 DossierFile dossierFile = DossierFileLocalServiceUtil.getDossierFileByD_P(dossierId, dossierPartId);
+	if(Validator.isNotNull(dossierFile)){
+		dossierFileId = dossierFile.getDossierFileId();
+	}
 	
+	DossierPart dossierPart = null;
+	String sampleData = StringPool.BLANK;
 	if(dossierPartId > 0){
 		try{
 			dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+			sampleData = dossierPart.getSampleData();
 		}catch(Exception e){
 			
 		}
@@ -70,108 +77,135 @@
 	
 	String formData = StringPool.BLANK;
 	
-	//String formData = GetterUtil.getString((String)request.getAttribute(WebKeys.FORM_DATA + String.valueOf(dossierPartId) + StringPool.DASH + String.valueOf(index)), StringPool.BLANK);
-	
+	//TODO
+	Citizen ownerCitizen = CitizenLocalServiceUtil.getByMappingUserId(themeDisplay.getUserId());
+	Business ownerBusiness = BusinessLocalServiceUtil.getByMappingUserId(themeDisplay.getUserId());
+	formData = AutoFillFormData.dataBinding(sampleData,ownerCitizen, ownerBusiness,dossierId);
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
-			dossierPart.getFormScript() : PortletConstants.UNKNOW_ALPACA_SCHEMA;
-	try{
-		formData = session.getAttribute(WebKeys.FORM_DATA + String.valueOf(dossierPartId) + StringPool.DASH + String.valueOf(index)).toString();
-	}catch(Exception e){
-		
-	}
+			dossierPart.getFormScript() : StringPool.BLANK;
 	
-	DossierFile dossierFile = null;
-	
-	if(dossierFileId > 0){
-		try{
-			dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
-		}catch(Exception e){
-			//nothing todo
-		}
-		
-		if(dossierFile != null && Validator.isNotNull(dossierFile.getFormData())){
-			formData = dossierFile.getFormData();
-		}
-	}
-	
-	if(dossierFile != null && Validator.isNotNull(dossierFile.getFormData())){
-		InputStream template = new ByteArrayInputStream(dossierPart.getFormReport().getBytes(StandardCharsets.UTF_8));
-		JasperReport jasperReport = JasperCompileManager.compileReport(template);
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<String, Object>() , JRJSONDataSource.getDataSource(dossierFile.getFormData())); 
-		
-		JasperExportManager.exportReportToPdfFile(jasperPrint, "/home/trungnt/test.pdf");
-	} 
-	
-	
+
 %>
+<portlet:actionURL var="updateDynamicFormDataURL" name="updateDynamicFormData"/>
 
-<portlet:actionURL var="updateTempDynamicFormDataURL" name="updateTempDynamicFormData"/>
-
+<%-- onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveDynamicFormData();" %>' --%>
 <aui:form 
-	name="fm" action="<%=updateTempDynamicFormDataURL.toString() %>" 
+	name="fm" action="<%=updateDynamicFormDataURL.toString() %>" 
 	method="post"
-	onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveDynamicFormData();" %>'
 >
 	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.INDEX %>" type="hidden" value="<%=index %>"/>
+	<aui:input name="<%=DossierDisplayTerms.DOSSIER_ID %>" type="hidden" value="<%=dossierId %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFile != null ? dossierFile.getDossierFileId() : 0 %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPartId %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.FORM_DATA %>" type="hidden" value=""/>
 	<aui:fieldset id="dynamicForm"></aui:fieldset>
+	<aui:input name="textForm" type="hidden" value="<%=Validator.isNotNull(alpacaSchema) ? alpacaSchema : PortletConstants.UNKNOW_ALPACA_SCHEMA%>" cssClass="with100"></aui:input>
 	<aui:fieldset>
-		<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
+		<c:if test="<%=Validator.isNotNull(alpacaSchema) %>">
+			<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
+			<aui:button type="button" value="preview" name="preview"/>
+		</c:if>
+			
+		<c:if test="<%=dossierFileId > 0%>">
+			<aui:button type="button" value="create-file" name="create-file"/>
+		</c:if>
 	</aui:fieldset>
 </aui:form>
 
 <aui:script>
-	var success = '<%=success%>';
-	var alpacaSchema = <%=alpacaSchema%>;
-	var index = '<%=index%>';
-	var dossierPartId = '<%=dossierPartId%>';
 	var formData = '<%=formData%>';
+	var dossierFileId = '<%=dossierFileId%>';
 	
 	AUI().ready(function(A){
+		
+		initForm();
+		
+		var createReportBtn = A.one('#<portlet:namespace/>create-file');
+		if(createReportBtn){
+			createReportBtn.on('click', function(){
+				<portlet:namespace/>createReport(dossierFileId);
+			});
+		}
+		
+		var previewFormBtn = A.one('#<portlet:namespace/>preview');
+		if(previewFormBtn){
+			previewFormBtn.on('click', function(){
+				<portlet:namespace/>previewForm(dossierFileId);
+			});
+		}
+		
+		var success = '<%=success%>';
+		
 		if(success == 'true'){
-			if(formData != ''){
-				jsonData = JSON.parse(formData);
-			}
-			var responseData = new Object();
-			responseData.index = index;
-			responseData.dossierPartId = dossierPartId;
-			responseData.formData = JSON.parse(formData);
-			<portlet:namespace/>responseData(responseData);
+			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_');
 		}
-		
-		if(alpacaSchema.options != 'undefined' && alpacaSchema.schema != 'undefined'){
-			
-			if(formData != ''){
-				alpacaSchema.data = JSON.parse(formData);
-			}
-			
-			//Overwrite function
-			alpacaSchema.postRender = function(control){
-				$(".saveForm").click(function(e) {
-					var formData = control.getValue();
-					$("#<portlet:namespace />formData" ).val(JSON.stringify(formData));
-					$("#<portlet:namespace />fm" ).submit();
-					
-			    });
-			};
-		
-		}
-		var el = $("#<portlet:namespace/>dynamicForm");
-		
-		Alpaca(el, alpacaSchema);
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>responseData', function(schema) {
-		var Util = Liferay.Util;
-		Util.getOpener().Liferay.fire('getDynamicFormDataSchema', {responseData:schema});
-		//<portlet:namespace/>closeDialog();
-	});
+	Liferay.provide(window, '<portlet:namespace/>createReport', function(dossierFileId) {
+		var A = AUI();
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+		portletURL.setParameter("javax.portlet.action", "createReport");
+		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		var loadingMask = new A.LoadingMask(
+			{
+				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "exporting-file") %>',
+				target: A.one('#<portlet:namespace/>fm')
+			}
+		);
+		
+		loadingMask.show();
+		
+		A.io.request(
+			portletURL.toString(),
+			{
+			    dataType : 'json',
+			    data:{    	
+			    	<portlet:namespace/>dossierFileId : dossierFileId,
+			    },   
+			    on: {
+			        success: function(event, id, obj) {
+						var instance = this;
+						var res = instance.get('responseData');
+						
+						var fileExportDir = res.fileExportDir;
+						
+						loadingMask.hide();
+						if(fileExportDir == ''){
+							alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-export-file") %>');
+						}else{
+							<portlet:namespace/>closeDialog();
+						}
+					},
+			    	error: function(){
+			    		loadingMask.hide();
+			    	}
+				}
+			}
+		);
+	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
+	
+	Liferay.provide(window, '<portlet:namespace/>previewForm', function(dossierFileId) {
+		var A = AUI();
+		var uri = '<%=PortletPropsValues.OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL%>' + dossierFileId;
+		var loadingMask = new A.LoadingMask(
+			{
+				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "loading-form") %>',
+				target: A.one('#<portlet:namespace/>fm')
+			}
+		);
+		
+		loadingMask.show();
+		
+		openDialog(uri, '<portlet:namespace />previewDynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "preview") %>');
+		
+		loadingMask.hide();
+		
+	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
 	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dynamicForm');
 		dialog.destroy(); // You can try toggle/hide whate
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_');
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>saveDynamicFormData', function() {
@@ -200,3 +234,55 @@
 	    A.io.request(uri, configs); 
 	},['aui-io']);
 </aui:script>
+<aui:script>
+	function initForm(){
+		var el = $("#<portlet:namespace/>dynamicForm");
+		var textForm = $("#<portlet:namespace/>textForm").val();
+		var objSchema = eval('(' + textForm + ')');
+		if(objSchema.options != 'undefined' && objSchema.schema != 'undefined'){
+					
+			if(formData != ''){
+				objSchema.data = JSON.parse(formData);
+			}
+			
+			//Overwrite function
+			objSchema.postRender = function(control){
+				$(".saveForm").click(function(e) {
+					var formData = control.getValue();
+					$("#<portlet:namespace />formData" ).val(JSON.stringify(formData));
+					$("#<portlet:namespace />fm" ).submit();
+			    });
+			};
+		}
+		Alpaca(el, objSchema);
+	}
+  
+</aui:script>
+<script type="text/javascript">
+function openCPSSelectedTextValue(id) {
+	var listbox = document.getElementById(id);
+	var selIndex = listbox.selectedIndex;
+	var selText = listbox.options[selIndex].text; 
+    return selText;
+}
+
+function openCPSSelectedbildDataSource(controlId,dictCollectionId, parentItemId) {
+	Liferay.Service(
+			  '/opencps-portlet.dictitem/get-dictitems-inuse-by-dictcollectionId_parentItemId_datasource',
+			  {
+			    dictCollectionId: dictCollectionId,
+			    parentItemId: parentItemId
+			  },
+			  function(obj) {
+				var comboTarget = document.getElementById(controlId); 
+			    for(j in obj){
+                    var sub_key = j;
+                    var sub_val = obj[j];
+                    var newOpt = comboTarget.appendChild(document.createElement('option'));
+					newOpt.value = sub_key;
+					newOpt.text = sub_val;
+                }
+			  }
+			);
+}
+</script>

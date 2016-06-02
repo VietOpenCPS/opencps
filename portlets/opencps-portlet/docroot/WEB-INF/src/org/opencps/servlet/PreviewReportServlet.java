@@ -53,6 +53,8 @@ public class PreviewReportServlet extends HttpServlet {
 
 		long dossierFileId = ParamUtil
 		    .getLong(request, "dossierFileId");
+		response.setCharacterEncoding("utf-8");
+	    
 		PrintWriter writer = response
 		    .getWriter();
 
@@ -87,7 +89,7 @@ public class PreviewReportServlet extends HttpServlet {
 
 		}
 		catch (Exception e) {
-			writer.write("<div class=\"portlet-msg-alert\">" + LanguageUtil.get(request.getLocale(), "error-while-preview-report") + "</div>");
+			writer.write("<div class=\"portlet-msg-alert\">" + LanguageUtil.get(request.getLocale(), "error-while-preview-report-jasper") + "</div>");
 		}finally {
 			if(writer != null){
 				writer.println();

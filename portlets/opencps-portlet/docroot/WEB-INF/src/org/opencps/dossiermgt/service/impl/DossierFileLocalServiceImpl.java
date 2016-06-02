@@ -141,7 +141,7 @@ public class DossierFileLocalServiceImpl
 	    throws NoSuchDossierFileException, SystemException {
 
 		return dossierFilePersistence
-		    .findByD_P(dossierId, dossierPartId);
+		    .fetchByD_P(dossierId, dossierPartId);
 	}
 
 	public List<DossierFile> getDossierFileByDossierId(long dossierId)
@@ -247,9 +247,9 @@ public class DossierFileLocalServiceImpl
 		    .update(dossierFile);
 	}
 	
-	public DossierFile fetchByTemplateFileNoDossierId_Last(long dossierId, String templateFileNo) throws SystemException {
+	public DossierFile fetchByTemplateFileNoDossierId_First(long dossierId, String templateFileNo) throws SystemException {
 		OrderByComparatorFactory orderByComparatorFactory = OrderByComparatorFactoryUtil.getOrderByComparatorFactory();
 		OrderByComparator comparator = orderByComparatorFactory.create("DossierFile", "modifiedDate", true);
-		return dossierFilePersistence.fetchByTemplateFileNoDossierId_Last(dossierId, templateFileNo, comparator);
+		return dossierFilePersistence.fetchByTemplateFileNoDossierId_First(dossierId, templateFileNo, comparator);
 	}
 }

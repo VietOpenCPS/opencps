@@ -53,7 +53,7 @@ public class JRReportUtil {
 			JRJSONDataSource dataSource = JRJSONDataSource
 			    .getInstance(jsonData);
 			
-			JasperPrint jasperPrint =
+			JasperPrint jasperPrint = 
 			    getJasperPrint(reportTemplate, parameters, dataSource);
 
 			return exportPdfFile(jasperPrint, sourceFileName);

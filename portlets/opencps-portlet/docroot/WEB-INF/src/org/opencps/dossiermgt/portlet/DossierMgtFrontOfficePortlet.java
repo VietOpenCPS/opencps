@@ -547,7 +547,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				// Get account folder
 				DLFolder accountForlder = accountBean
 					.getAccountFolder();
-
+				_log.info(accountBean.getOwnerUserId()+"trungnt ERRORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 				// Get dossier folder
 				DLFolder dosserFolder = DLFolderUtil
 					.addFolder(themeDisplay
@@ -632,11 +632,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			if(inputStream != null){
 				inputStream
 				.close();
-			}
-			
-			if(file.exists()){
-				file
-				.delete();
+				if(file.exists()){
+					file
+					.delete();
+				}
 			}
 		}
 	}

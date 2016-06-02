@@ -17,11 +17,14 @@
 
 package org.opencps.processmgt.portlet;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -36,10 +39,12 @@ import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.backend.message.SendToEngineMsg;
+import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.DossierTemplate;
+import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
@@ -47,7 +52,9 @@ import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
+import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -59,6 +66,7 @@ import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
+import org.opencps.util.AccountUtil;
 import org.opencps.util.DLFileEntryUtil;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
@@ -76,6 +84,7 @@ import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -87,6 +96,7 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
+import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -567,7 +577,308 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		        "jspPage",
 		        "/html/portlets/processmgt/processorder/assign_to_user.jsp");
 	}
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void updateDynamicFormData(
+		ActionRequest actionRequest, ActionResponse actionResponse)
+		throws IOException {
 
+		HttpServletRequest request = PortalUtil
+			.getHttpServletRequest(actionRequest);
+		HttpSession session = request
+			.getSession();
+
+		DossierFile dossierFile = null;
+
+		long dossierId = ParamUtil
+			.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierPartId = ParamUtil
+			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+		long dossierFileId = ParamUtil
+			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		long groupFileId = ParamUtil
+			.getLong(actionRequest, DossierDisplayTerms.FILE_GROUP_ID);
+
+		long ownerUserId = GetterUtil
+			.getLong(session
+				.getAttribute(WebKeys.ACCOUNT_OWNERUSERID));
+		long ownerOrganizationId = GetterUtil
+			.getLong(session
+				.getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));
+		long fileEntryId = 0;
+
+		// Default value
+		int dossierFileMark = PortletConstants.DOSSIER_FILE_MARK_UNKNOW;
+		int dossierFileType = PortletConstants.DOSSIER_FILE_TYPE_INPUT;
+		int syncStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC;
+		int original = PortletConstants.DOSSIER_FILE_ORIGINAL;
+
+		String formData = ParamUtil
+			.getString(actionRequest, DossierFileDisplayTerms.FORM_DATA);
+
+		// Default value
+		String dossierFileNo = StringPool.BLANK;
+		String templateFileNo = StringPool.BLANK;
+		String displayName = StringPool.BLANK;
+		String groupName = StringPool.BLANK;
+
+		Date dossierFileDate = null;
+
+		try {
+			ServiceContext serviceContext = ServiceContextFactory
+				.getInstance(actionRequest);
+
+			DossierPart dossierPart = DossierPartLocalServiceUtil
+				.getDossierPart(dossierPartId);
+
+			if (Validator
+				.isNotNull(dossierPart
+					.getTemplateFileNo())) {
+				templateFileNo = dossierPart
+					.getTemplateFileNo();
+			}
+
+			if (Validator
+				.isNotNull(dossierPart
+					.getPartName())) {
+				displayName = dossierPart
+					.getPartName();
+			}
+
+			FileGroup fileGroup = null;
+
+			if (groupFileId == 0 && Validator
+				.isNotNull(groupName)) {
+				// Add group file
+				fileGroup = FileGroupLocalServiceUtil
+					.addFileGroup(serviceContext
+						.getUserId(), dossierId, dossierPartId, groupName,
+						syncStatus, serviceContext);
+			}
+
+			if (dossierFileId == 0) {
+				dossierFile = DossierFileLocalServiceUtil
+					.addDossierFile(serviceContext
+						.getUserId(), dossierId, dossierPartId, templateFileNo,
+						fileGroup != null ? fileGroup
+							.getFileGroupId() : 0,
+						ownerUserId, ownerOrganizationId, displayName, formData,
+						fileEntryId, dossierFileMark, dossierFileType,
+						dossierFileNo, dossierFileDate, original, syncStatus,
+						serviceContext);
+			}
+			else {
+				dossierFile = DossierFileLocalServiceUtil
+					.getDossierFile(dossierFileId);
+				dossierFileMark = dossierFile
+					.getDossierFileMark();
+				dossierFileType = dossierFile
+					.getDossierFileType();
+				syncStatus = dossierFile
+					.getSyncStatus();
+				original = dossierFile
+					.getOriginal();
+
+				dossierFileNo = Validator
+					.isNotNull(dossierFile
+						.getDossierFileNo()) ? dossierFile
+							.getDossierFileNo() : StringPool.BLANK;
+				templateFileNo = Validator
+					.isNotNull(dossierFile
+						.getTemplateFileNo()) ? dossierFile
+							.getTemplateFileNo() : StringPool.BLANK;
+				displayName = Validator
+					.isNotNull(dossierFile
+						.getDisplayName()) ? dossierFile
+							.getDisplayName() : StringPool.BLANK;
+
+				dossierFile = DossierFileLocalServiceUtil
+					.updateDossierFile(dossierFileId, serviceContext
+						.getUserId(), dossierId, dossierPartId, templateFileNo,
+						groupFileId, ownerUserId, ownerOrganizationId,
+						displayName, formData, fileEntryId, dossierFileMark,
+						dossierFileType, dossierFileNo, dossierFileDate,
+						original, syncStatus, serviceContext);
+
+			}
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			actionResponse
+				.setRenderParameter("dossierId", String
+					.valueOf(dossierId));
+			actionResponse
+			.setRenderParameter("dossierPartId", String
+				.valueOf(dossierPartId));
+			actionResponse
+				.setRenderParameter("mvcPath",
+					"/html/portlets/processmgt/processorder/dynamic_form.jsp");
+		}
+	}
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void createReport(
+		ActionRequest actionRequest, ActionResponse actionResponse)
+		throws IOException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
+			.getAttribute(WebKeys.THEME_DISPLAY);
+
+		long dossierFileId = ParamUtil
+			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+
+
+		File file = null;
+
+		InputStream inputStream = null;
+
+		JSONObject responseJSON = JSONFactoryUtil
+			.createJSONObject();
+
+		String fileExportDir = StringPool.BLANK;
+
+		try {
+			if (dossierFileId > 0) {
+				ServiceContext serviceContext = ServiceContextFactory
+					.getInstance(actionRequest);
+				serviceContext
+					.setAddGroupPermissions(true);
+				serviceContext
+					.setAddGuestPermissions(true);
+				
+				AccountBean accountBean = AccountUtil.getAccountBean(themeDisplay.getUserId(), themeDisplay.getScopeGroupId(), serviceContext);
+				// Get dossier file
+				DossierFile dossierFile = DossierFileLocalServiceUtil
+					.getDossierFile(dossierFileId);
+
+				// Get dossier part
+				DossierPart dossierPart = DossierPartLocalServiceUtil
+					.getDossierPart(dossierFile
+						.getDossierPartId());
+
+				Dossier dossier = DossierLocalServiceUtil
+					.getDossier(dossierFile
+						.getDossierId());
+				// Get account folder
+				DLFolder accountForlder = accountBean
+					.getAccountFolder();
+				_log.info(accountBean.getOwnerUserId()+"trungnt ERRORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+				// Get dossier folder
+				DLFolder dosserFolder = DLFolderUtil
+					.addFolder(themeDisplay
+						.getUserId(), themeDisplay
+							.getScopeGroupId(),
+						themeDisplay
+							.getScopeGroupId(),
+						false, accountForlder
+							.getFolderId(),
+						String
+							.valueOf(dossier
+								.getCounter()),
+						StringPool.BLANK, false, serviceContext);
+
+				String formData = dossierFile
+					.getFormData();
+				String jrxmlTemplate = dossierPart
+					.getFormReport();
+
+				// Validate json string
+
+				JSONFactoryUtil
+					.createJSONObject(formData);
+
+				String outputDestination =
+					PortletPropsValues.OPENCPS_FILE_SYSTEM_TEMP_DIR;
+				String fileName = System
+					.currentTimeMillis() + StringPool.DASH + dossierFileId +
+					StringPool.DASH + dossierPart
+						.getDossierpartId() +
+					".pdf";
+
+				fileExportDir = exportToPDFFile(jrxmlTemplate, formData, null,
+					outputDestination, fileName);
+
+				if (Validator
+					.isNotNull(fileExportDir)) {
+
+					file = new File(fileExportDir);
+					inputStream = new FileInputStream(file);
+					if (inputStream != null) {
+						String sourceFileName = fileExportDir
+							.substring(fileExportDir
+								.lastIndexOf(StringPool.SLASH) + 1,
+								fileExportDir
+									.length());
+						String mimeType = MimeTypesUtil
+							.getContentType(file);
+
+						FileEntry fileEntry = DLAppServiceUtil
+							.addFileEntry(serviceContext
+								.getScopeGroupId(), dosserFolder
+									.getFolderId(),
+								sourceFileName, mimeType, dossierPart
+									.getPartName(),
+								StringPool.BLANK, StringPool.BLANK, inputStream,
+								file
+									.length(),
+								serviceContext);
+						DossierFileLocalServiceUtil
+							.updateDossierFile(dossierFileId, accountBean
+								.getOwnerUserId(), accountBean
+									.getOwnerOrganizationId(),
+								fileEntry
+									.getFileEntryId(),
+								dossierPart
+									.getPartName());
+					}
+				}
+			}
+
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			responseJSON
+				.put("fileExportDir", fileExportDir);
+			PortletUtil
+				.writeJSON(actionRequest, actionResponse, responseJSON);
+			if(inputStream != null){
+				inputStream
+				.close();
+				if(file.exists()){
+					file
+					.delete();
+				}
+			}
+		}
+	}
+	/**
+	 * @param jrxmlTemplate
+	 * @param formData
+	 * @param map
+	 * @param outputDestination
+	 * @param fileName
+	 * @return
+	 */
+	protected String exportToPDFFile(
+		String jrxmlTemplate, String formData, Map<String, Object> map,
+		String outputDestination, String fileName) {
+
+		return JRReportUtil
+			.createReportPDFfFile(jrxmlTemplate, formData, map,
+				outputDestination, fileName);
+	}
 	private Log _log = LogFactoryUtil
 	    .getLog(ProcessOrderPortlet.class
 	        .getName());

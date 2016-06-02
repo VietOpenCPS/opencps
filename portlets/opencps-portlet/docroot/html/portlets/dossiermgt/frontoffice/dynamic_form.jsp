@@ -60,8 +60,6 @@
 
 	long dossierFileId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 	
-	System.out.println(dossierFileId);
-	
 	if(primaryKey > 0){
 		dossierFileId = primaryKey;
 	}
@@ -159,6 +157,7 @@
 	
 	Liferay.provide(window, '<portlet:namespace/>createReport', function(dossierFileId) {
 		var A = AUI();
+		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
 		portletURL.setParameter("javax.portlet.action", "createReport");
 		portletURL.setWindowState('<%=WindowState.NORMAL%>');

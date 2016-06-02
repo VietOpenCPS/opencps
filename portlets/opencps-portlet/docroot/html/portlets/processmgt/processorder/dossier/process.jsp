@@ -139,6 +139,7 @@
   </tr>
 </table>
 
+<hr class="canbo-xuly-hoso">
 
 <%-- <aui:row cssClass="process-workflow-info-row">
 	<aui:col width="20">
@@ -268,6 +269,9 @@
 											</span>
 										
 											<span class="opencps dossiermgt dossier-part-control">
+											<%
+											dossierFile = DossierFileLocalServiceUtil.getDossierFileByD_P(processOrder.getDossierId(), dossierPart.getDossierpartId());
+											%>
 												<liferay-util:include 
 													page="/html/common/dossiers/controls.jsp" 
 													servletContext="<%=application %>"
@@ -479,13 +483,16 @@
 		var processOrderId = instance.attr('process-order');
 		
 		var dossierFileId = instance.attr('dossier-file');
-
+		var dossierId = A.one('#<portlet:namespace/>dossierId').val();
+		var dossierPartId = instance.attr('dossier-part');
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/dynamic_form.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("processOrderId", processOrderId);
 		portletURL.setParameter("dossierFileId", dossierFileId);
+		portletURL.setParameter("dossierId", dossierId);
+		portletURL.setParameter("dossierPartId", dossierPartId);
 		
 		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "declaration-online") %>');
 	});
