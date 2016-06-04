@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
@@ -54,7 +55,7 @@
 	headerNames.add("subjectname");
 	headerNames.add("serviceinfo-name");
 	headerNames.add("finish-datetime");
-	headerNames.add("dossier-status");
+	headerNames.add("process-status");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
@@ -124,6 +125,7 @@
 			}
 			
 			// dossierstatus column
+			/*
 			String dossierStatusText = "";
 			switch (dossier.getDossierStatus()) {
 			case PortletConstants.DOSSIER_STATUS_NEW:
@@ -154,7 +156,32 @@
 				dossierStatusText = "";
 				break;
 			}
-			row.addText(String.valueOf(dossierStatusText));			
+			row.addText(String.valueOf(dossierStatusText));	
+			*/
+			String statusText = "";
+			if (Validator.isNotNull(dossier.getFinishDatetime()) && Validator.isNotNull(dossier.getEstimateDatetime())) {
+				if (dossier.getFinishDatetime().after(dossier.getEstimateDatetime())) {
+					statusText = LanguageUtil.get(pageContext, "status-late");
+				}
+				else if (dossier.getFinishDatetime().before(dossier.getEstimateDatetime())) {
+					statusText = LanguageUtil.get(pageContext, "status-soon");
+				}
+				else if (dossier.getFinishDatetime().equals(dossier.getEstimateDatetime())) {
+					statusText = LanguageUtil.get(pageContext, "status-ontime");
+				}
+			}
+			else {
+				Date now = new Date();
+				
+				if (Validator.isNotNull(dossier.getEstimateDatetime())) {
+					if (dossier.getEstimateDatetime().before(now)) {
+						statusText = LanguageUtil.get(pageContext, "status-toosoon");
+					}
+					else if (dossier.getEstimateDatetime().after(now)) {
+						statusText = LanguageUtil.get(pageContext, "status-toolate");
+					}
+				}
+			}			
 		%>	
 	
 	</liferay-ui:search-container-row>	

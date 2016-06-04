@@ -63,6 +63,7 @@
 				<liferay-ui:message key="action-note"/>
 			</th>
 			<th class="table-last-header">
+				<liferay-ui:message key="estimatedate-status"/>
 			</th>
 		</tr>
 	</thead>
@@ -93,6 +94,9 @@
 					<%= histories.get(i).getActionNote() %>
 				</td>
 				<td>
+					<%
+						
+					%>
 				</td>
 			</tr>
 		<%

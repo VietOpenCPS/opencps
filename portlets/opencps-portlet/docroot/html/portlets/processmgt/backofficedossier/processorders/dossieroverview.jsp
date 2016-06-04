@@ -49,7 +49,7 @@
 						<liferay-ui:message key="uuid"/>
 					</td>
 					<td class="col-right">
-						<%= dossier.getUuid() %>
+						<%= dossier.getDossierId() %>
 					</td>
 				</tr>		
 				<tr>
