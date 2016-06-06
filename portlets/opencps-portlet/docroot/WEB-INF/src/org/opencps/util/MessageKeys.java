@@ -64,4 +64,13 @@ public class MessageKeys {
 	public static final String DOSSIER_FILE_DUPLICATE_NAME = "dossiermgt.file.duplicate.name";
 	
 	public static final String PAYMENT_FILE_CONFIRM_BANK_SUCESS = "payment.file.confirm.bank.success";
+	
+	public static final String ACCOUNTMGT_NO_ACCOUNT_INFO = "accountmgt.no.account.info";
+	public static final String ACCOUNTMGT_NO_ACCOUNT_FOLDER = "accountmgt.no.account.folder";
+	public static final String ACCOUNTMGT_NO_ACCOUNT_TYPE = "accountmgt.no.account.type";
+	public static final String ACCOUNTMGT_NO_ACCOUNT_OWNERUSERID = "accountmgt.no.account.owneruserid";
+	public static final String ACCOUNTMGT_NO_ACCOUNT_OWNERORGANIZATIONID = "accountmgt.no.account.ownerorganizationid";
+	public static final String PAYMENT_FILE_CONFIRM_BANK_SUCCESS = "payment.file.confirm.bank.success";
+	public static final String PAYMENT_FILE_CONFIRM_CASH_SUCCESS = "payment.file.confirm.cash.success";
+	public static final String PAYMENT_FILE_CONFIRM_CASH_ERROR = "payment.file.confirm.cash.error";
 }

@@ -1,3 +1,5 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.NoSuchFileEntryException"%>
 <%@page import="com.liferay.portlet.documentlibrary.NoSuchFileException"%>
@@ -120,7 +122,7 @@
 			</tr>
 			<tr>
 				<td class="col-left"><liferay-ui:message key="amount"></liferay-ui:message></td>
-				<td class="col-right"><%= paymentFile.getAmount() %></td>
+				<td class="col-right"><%= NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount()) %></td>
 			</tr>
 			<tr>
 				<td class="col-left"><liferay-ui:message key="request-note"></liferay-ui:message></td>
@@ -225,7 +227,7 @@
 						}
 					%>
 					<c:if test="<%= dlURL != null %>">
-						<a href="<%= dlURL %>"><liferay-ui:message key="view-confirm-file-entry"></liferay-ui:message></a>
+						<a target="_blank" href="<%= dlURL %>"><liferay-ui:message key="view-confirm-file-entry"></liferay-ui:message></a>
 					</c:if>
 				</td>
 			</tr>			

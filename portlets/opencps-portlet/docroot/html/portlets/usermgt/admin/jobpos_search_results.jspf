@@ -21,8 +21,7 @@
 	
 	jobPos = JobPosLocalServiceUtil.getJobPossG_W(
 		scopeGroupId, workingUnitId, searchContainer.getStart(), searchContainer.getEnd() 
-		,searchContainer.getOrderByComparator()); 
-	
+		,searchContainer.getOrderByComparator()); 	
 	totalCount = JobPosLocalServiceUtil.countAll();
 	total = totalCount;
 	results = jobPos;

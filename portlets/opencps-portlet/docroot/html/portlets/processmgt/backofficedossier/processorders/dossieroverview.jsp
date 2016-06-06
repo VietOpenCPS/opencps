@@ -1,3 +1,5 @@
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.servicemgt.NoSuchServiceInfoException"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="java.text.Format"%>
@@ -56,9 +58,15 @@
 					</td>
 					<td class="col-right">
 						<%
-							ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
+							ServiceInfo serviceInfo = null;
+							try {
+								serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
+							}
+							catch (NoSuchServiceInfoException e) {
+								
+							}
 						%>
-						<%= serviceInfo.getServiceName() %>
+						<%= serviceInfo != null ? serviceInfo.getServiceName() : "" %>
 					</td>
 				</tr>		
 				<tr>
@@ -106,7 +114,7 @@
 						<liferay-ui:message key="receive-datetime"/>
 					</td>
 					<td class="col-right">
-						<%= dateFormatDate.format(dossier.getReceiveDatetime()) %>
+						<%= Validator.isNotNull(dossier.getReceiveDatetime()) ? dateFormatDate.format(dossier.getReceiveDatetime()) : "" %>
 					</td>
 				</tr>		
 				<tr>
@@ -122,7 +130,7 @@
 						<liferay-ui:message key="estimate-datetime"/>
 					</td>
 					<td class="col-right">
-						<%= dateFormatDate.format(dossier.getEstimateDatetime()) %>
+						<%= Validator.isNotNull(dossier.getEstimateDatetime()) ? dateFormatDate.format(dossier.getEstimateDatetime()) : "" %>
 					</td>
 				</tr>	
 				<tr>
@@ -130,7 +138,7 @@
 						<liferay-ui:message key="finish-datetime"/>
 					</td>
 					<td class="col-right">
-						<%= dateFormatDate.format(dossier.getFinishDatetime()) %>
+						<%= Validator.isNotNull(dossier.getFinishDatetime()) ? dateFormatDate.format(dossier.getFinishDatetime()) : "" %>
 					</td>
 				</tr>	
 				<tr>
@@ -139,9 +147,38 @@
 					</td>
 					<td class="col-right">
 						<% 
-							DictItem item = DictItemLocalServiceUtil.getDictItem(dossier.getDossierStatus());
+							String dossierStatusText = "";
+							switch (dossier.getDossierStatus()) {
+							case PortletConstants.DOSSIER_STATUS_NEW:
+								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-new");
+								break;
+							case PortletConstants.DOSSIER_STATUS_RECEIVING:
+								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-receiving");
+								break;
+							case PortletConstants.DOSSIER_STATUS_WAITING:
+								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-waiting");
+								break;
+							case PortletConstants.DOSSIER_STATUS_PAYING:
+								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-paying");
+								break;
+							case PortletConstants.DOSSIER_STATUS_PROCESSING:
+								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-processing");
+								break;
+							case PortletConstants.DOSSIER_STATUS_DONE:
+								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-done");
+								break;
+							case PortletConstants.DOSSIER_STATUS_SYSTEM:
+								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-system");
+								break;
+							case PortletConstants.DOSSIER_STATUS_ERROR:
+								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-error");
+								break;
+							default:
+								dossierStatusText = "";
+								break;
+							}						
 						%>
-						<%= item.getItemName() %>
+						<%= dossierStatusText %>
 					</td>
 				</tr>	
 				<tr>
@@ -149,7 +186,7 @@
 						<liferay-ui:message key="modified-datetime"/>
 					</td>
 					<td class="col-right">
-						<%= dateFormatDate.format(dossier.getModifiedDate()) %>
+						<%= Validator.isNotNull(dossier.getModifiedDate()) ? dateFormatDate.format(dossier.getModifiedDate()) : "" %>
 					</td>
 				</tr>	
 				<tr>

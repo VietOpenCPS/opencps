@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,35 +33,18 @@
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.usermgt.permissions.JobPosPermission"%>
-<%@ include file="../init.jsp"%>
+<%@ include file="../../init.jsp"%>
 
 <%
-	long workingUnitId = ParamUtil.getLong(request, "workingUnitId");
+	long workingUnitId = ParamUtil.getLong(request, "workingunitId");
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "jobpos.jsp");
+	iteratorURL.setParameter("mvcPath", templatePath + "workingunit/jobpos.jsp");
 	List<JobPos> jobPos = new ArrayList<JobPos>();
+	
 	int totalCount = 0;
 %>
 
-<liferay-ui:error 
-	key="<%=MessageKeys.USERMGT_JOBPOS_DELETE_ERROR %>" 
-	message="<%=LanguageUtil.get(pageContext, 
-		MessageKeys.USERMGT_JOBPOS_DELETE_ERROR) %>"
-/>
-
-<liferay-ui:success 
-	key="<%=MessageKeys.USERMGT_JOBPOS_DELETE_SUCCESS %>"
-	message="<%=LanguageUtil.get(pageContext, 
-		MessageKeys.USERMGT_JOBPOS_DELETE_SUCCESS) %>"
-/>
-
-<liferay-ui:success 
-	key="<%=MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS %>"
-	message="<%=LanguageUtil.get(pageContext, 
-		MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS) %>"
-/>
-
-<portlet:renderURL var="updateJobPosURL">
+<portlet:renderURL var="updateJobPosURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
 	<portlet:param name="mvcPath" value='<%=templatePath + "edit_jobpos.jsp" %>'/>
 	<portlet:param name="workingUnitId" value="<%=String.valueOf(workingUnitId) %>"/>
 	<portlet:param name="redirectURL" value="<%=currentURL %>"/>
@@ -70,11 +54,9 @@
 	<aui:button 
 	name="add-jobpos"
 	value="add-jobpos"
-	onClick ="<%=updateJobPosURL.toString() %>"	
+	onClick="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + updateJobPosURL +\"');\" %>"
 />
 </c:if>
-
-		
 
 <liferay-ui:search-container searchContainer="<%= new JobPosSearch(renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 	
@@ -98,3 +80,32 @@
 	</liferay-ui:search-container-row>
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
+
+
+<aui:script>
+	Liferay.provide(window, '<portlet:namespace />showPopup', function(url){
+		Liferay.Util.openWindow({
+			dialog : {
+				centered : true,
+				height : 800,
+				modal : true,
+				width : 11000
+			},
+			id : '<portlet:namespace/>dialog',
+			title : '',
+			uri : url
+		});
+	});
+</aui:script>
+
+<aui:script>
+	Liferay.provide(window, '<portlet:namespace/>closePopup', function(
+			dialogId) {
+		var A = AUI();
+		// Closing the dialog
+		var dialog = Liferay.Util.Window.getById(dialogId);
+		dialog.destroy();
+		
+		window.location.reload();
+	}, [ 'liferay-util-window','aui-dialog','aui-dialog-iframe' ]);
+</aui:script>

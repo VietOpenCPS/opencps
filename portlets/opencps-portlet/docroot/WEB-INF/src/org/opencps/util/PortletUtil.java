@@ -32,6 +32,7 @@ import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.paymentmgt.util.PaymentMgtUtil;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
@@ -683,25 +684,28 @@ public class PortletUtil {
 		String statusLabel = StringPool.BLANK;
 
 		switch (value) {
-		case 0:
+		case PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING:
 			statusLabel = LanguageUtil
-			    .get(locale, "cho-nop");
+			    .get(locale, "on-processing");
 			break;
-		case 1:
+		case PaymentMgtUtil.PAYMENT_STATUS_REQUESTED:
 			statusLabel = LanguageUtil
-			    .get(locale, "da-bao-nop");
+			    .get(locale, "requested");
 			break;
-		case 2:
+		case PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED:
 			statusLabel = LanguageUtil
-			    .get(locale, "hoan-thanh");
+			    .get(locale, "confirmed");
 			break;
-		case 3:
+		case PaymentMgtUtil.PAYMENT_STATUS_APPROVED:
 			statusLabel = LanguageUtil
-			    .get(locale, "khong-hop-le");
+			    .get(locale, "approved");
 			break;
+		case PaymentMgtUtil.PAYMENT_STATUS_REJECTED:
+			statusLabel = LanguageUtil
+		    .get(locale, "rejected");			
 		default:
 			statusLabel = LanguageUtil
-			    .get(locale, "cho-nop");
+			    .get(locale, "on-processing");
 			break;
 		}
 

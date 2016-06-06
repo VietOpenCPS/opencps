@@ -1,3 +1,4 @@
+<%@page import="org.opencps.usermgt.service.EmployeeLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -34,10 +35,13 @@
 
 
 <%
-	if(request.getAttribute(WebKeys.EMPLOYEE_ENTRY) != null){
-		employee = (Employee)request.getAttribute(WebKeys.EMPLOYEE_ENTRY);
+	long employeeId = ParamUtil.getLong(request, EmployeeDisplayTerm.EMPLOYEE_ID);
+	try {
+		employee = EmployeeLocalServiceUtil.getEmployee(employeeId);
+	} catch(Exception e) {
+		
 	}
-
+	
 	User mappingUser = (User)request.getAttribute(WebKeys.USER_MAPPING_ENTRY);
 	
 	String backURL = ParamUtil.getString(request, "backURL");
@@ -54,7 +58,6 @@
 	String[] employeeSections = new String[]{"general_info", "working_unit", "account_info"};
 	
 	String[][] categorySections = {employeeSections};
-
 %>
 
 <liferay-ui:header

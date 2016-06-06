@@ -58,7 +58,7 @@ public class JRReportUtil {
 
 			return exportPdfFile(jasperPrint, sourceFileName);
 		}
-		catch (JRException e) {
+		catch (Exception e) {
 			_log
 			    .error(e);
 

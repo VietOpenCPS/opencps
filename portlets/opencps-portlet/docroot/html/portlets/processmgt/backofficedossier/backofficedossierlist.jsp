@@ -1,3 +1,8 @@
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.dossiermgt.util.PortletKeys"%>
+<%@page import="org.opencps.dossiermgt.search.DossierBackOfficeSearch"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
@@ -34,11 +39,12 @@
 	User mappingUser = (User)request.getAttribute(WebKeys.USER_MAPPING_ENTRY);
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "backofficedossierlist.jsp");
+	iteratorURL.setParameter("tab1", ProcessMgtUtil.TOP_TABS_DOSSIERLIST);
 	
-	String domainCode = ParamUtil.getString(request, ProcessDisplayTerms.PROCESS_DOMAINCODE);
-	String dossierStatus = 	ParamUtil.getString(request, ProcessDisplayTerms.PROCESS_DOSSIERSTATUS);
-	request.setAttribute(ProcessDisplayTerms.PROCESS_DOMAINCODE, domainCode);
-	request.setAttribute(ProcessDisplayTerms.PROCESS_DOSSIERSTATUS, dossierStatus);
+	String domainCode = ParamUtil.getString(request, DossierDisplayTerms.SERVICE_DOMAIN_CODE);
+	String dossierStatus = 	ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS);
+	request.setAttribute(DossierDisplayTerms.SERVICE_DOMAIN_CODE, domainCode);
+	request.setAttribute(DossierDisplayTerms.DOSSIER_STATUS, dossierStatus);
 	
 	List<String> headerNames = new ArrayList<String>();
 	
@@ -47,8 +53,8 @@
 	headerNames.add("reception-no");
 	headerNames.add("subjectname");
 	headerNames.add("serviceinfo-name");
-	headerNames.add("dossier-status");
 	headerNames.add("finish-datetime");
+	headerNames.add("dossier-status");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
@@ -58,7 +64,7 @@
 	}
 %>
 
-<liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
+<liferay-ui:search-container searchContainer="<%= new DossierBackOfficeSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
 	headerNames="<%= headers %>">
 		
 	<liferay-ui:search-container-results>
@@ -92,7 +98,12 @@
 			row.addText(String.valueOf(row.getPos() + 1), viewURL);		
 		
 			// receive datetime column
-			row.addText(dateFormatDate.format(dossier.getReceiveDatetime()));
+			if (Validator.isNotNull(dossier.getReceiveDatetime())) {
+				row.addText(dateFormatDate.format(dossier.getReceiveDatetime()));				
+			}
+			else {
+				row.addText(StringPool.BLANK);
+			}
 			
 			// reception no column
 			row.addText(dossier.getReceptionNo(), viewURL);
@@ -103,13 +114,47 @@
 			// serviceinfo name column
 			ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
 			row.addText(serviceInfo.getServiceName());
+						
+			// finish datetime column
+			if (Validator.isNotNull(dossier.getFinishDatetime())) {
+				row.addText(dateFormatDate.format(dossier.getFinishDatetime()));				
+			}
+			else {
+				row.addText("");
+			}
 			
 			// dossierstatus column
-			DictItem itemStatus = DictItemLocalServiceUtil.getDictItem(dossier.getDossierStatus());
-			row.addText(itemStatus.getItemName());
-			
-			// finish datetime column
-			row.addText(dateFormatDate.format(dossier.getFinishDatetime()));
+			String dossierStatusText = "";
+			switch (dossier.getDossierStatus()) {
+			case PortletConstants.DOSSIER_STATUS_NEW:
+				dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-new");
+				break;
+			case PortletConstants.DOSSIER_STATUS_RECEIVING:
+				dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-receiving");
+				break;
+			case PortletConstants.DOSSIER_STATUS_WAITING:
+				dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-waiting");
+				break;
+			case PortletConstants.DOSSIER_STATUS_PAYING:
+				dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-paying");
+				break;
+			case PortletConstants.DOSSIER_STATUS_PROCESSING:
+				dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-processing");
+				break;
+			case PortletConstants.DOSSIER_STATUS_DONE:
+				dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-done");
+				break;
+			case PortletConstants.DOSSIER_STATUS_SYSTEM:
+				dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-system");
+				break;
+			case PortletConstants.DOSSIER_STATUS_ERROR:
+				dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-error");
+				break;
+			default:
+				dossierStatusText = "";
+				break;
+			}
+			row.addText(String.valueOf(dossierStatusText));			
 		%>	
 	
 	</liferay-ui:search-container-row>	

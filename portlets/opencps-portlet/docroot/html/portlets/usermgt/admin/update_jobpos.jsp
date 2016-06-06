@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
@@ -39,6 +40,8 @@
 	
 	String [] updateJobPosSections = {"jobpos","role_jobpos"};
 	String [][] updateCategorySections = {updateJobPosSections};
+	
+	String message = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), "are-you-sure-to-update");
 %>
 <liferay-ui:header
 	backURL="<%= redirectURL %>"
@@ -60,15 +63,26 @@
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
 </portlet:actionURL>
 
-<liferay-util:buffer var="htmlTop">
 
+<liferay-util:buffer var="htmlTop">
+	<c:if test="<%= jobPos != null %>">
+        <div class="form-navigator-topper edit-jobpos">
+            <div class="form-navigator-container">
+                <i aria-hidden="true" class="fa topper edit-jobpos"></i>
+                <span class="form-navigator-topper-name"><%= HtmlUtil.escape(jobPos.getTitle()) %></span>
+            </div>
+        </div>
+    </c:if> 
 </liferay-util:buffer>
 
 <liferay-util:buffer var="htmlBot">
-
+	<div class="button-holder ">
+		<aui:button name="submitbtn" value="submit" cssClass="btn-primary"/>
+		<aui:button name="cancel" value="cancel" href="<%=redirectURL %>" cssClass="btn-cancel"/>	
+	</div>
 </liferay-util:buffer>
 
-<aui:form name="fm" 
+<aui:form name="fm2" 
 	method="post" 
 	action="<%=editJobPosURL.toString() %>">
 	<liferay-ui:form-navigator 
@@ -78,6 +92,7 @@
 		htmlBottom="<%= htmlBot %>"
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%=templatePath + "jobpos/" %>'
+		showButtons="false"
 		>	
 	</liferay-ui:form-navigator>
 	<aui:input name="<%=JobPosDisplayTerms.ID_JOBPOS %>" 
@@ -85,6 +100,46 @@
 		
 </aui:form>
 
+<aui:script use='liferay-util-window'>
+	AUI().use(function(A) {
+		var message = '<%=message%>';
+		var btnChoose = A.one('#<portlet:namespace />submitbtn');
+		var btnChooseCancel = A.one('#<portlet:namespace />cancel');
+		if(btnChooseCancel) {
+			btnChooseCancel.on('click', function() {
+				Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+			});
+		}
+		
+		if(btnChoose) {
+			btnChoose.on('click',function(){
+				var r = confirm(message);
+				if(r == true) {
+					<portlet:namespace/>submitItemForm();
+				} else {
+					Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+				}
+				
+			});
+		}
+	});
+	
+    Liferay.provide(window,'<portlet:namespace/>submitItemForm',
+         function() {
+          var A = AUI();
+          A.io.request('<%=editJobPosURL %>',{
+              method: 'POST',
+              form: { id: '<portlet:namespace />fm2' },
+              on: {
+                  success: function(){
+                	  Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+                	  
+                  }
+             }
+        });
+  	},['aui-base','aui-io','aui-node']);
+    
+</aui:script>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.usermgt.admin.update_jobpos.jsp");

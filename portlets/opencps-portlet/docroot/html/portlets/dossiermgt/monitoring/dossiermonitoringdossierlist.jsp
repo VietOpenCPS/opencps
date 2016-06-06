@@ -1,3 +1,17 @@
+<%@page import="com.liferay.portal.kernel.exception.SystemException"%>
+<%@page import="com.liferay.portal.kernel.exception.PortalException"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.search.Document"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.liferay.portal.kernel.search.SearchEngineUtil"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearchUtil"%>
+<%@page import="com.liferay.portal.kernel.search.BooleanQuery"%>
+<%@page import="com.liferay.portal.kernel.search.SearchException"%>
+<%@page import="com.liferay.portal.kernel.search.Hits"%>
+<%@page import="com.liferay.portal.kernel.search.IndexerRegistryUtil"%>
+<%@page import="com.liferay.portal.kernel.search.Indexer"%>
+<%@page import="com.liferay.portal.kernel.search.SearchContextFactory"%>
+<%@page import="com.liferay.portal.kernel.search.SearchContext"%>
 <%@page import="java.util.Date"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
@@ -38,11 +52,14 @@
 <liferay-util:include page="/html/portlets/dossiermgt/monitoring/dossierlisttoolbar.jsp" servletContext="<%=application %>" />
 
 <%
-	String keywordSearch = ParamUtil.getString(request, "keywords");
-	_log.info("----KEYWORD----" + keywordSearch);
+	String keywordSearch = ParamUtil.getString(request, "keywords", StringPool.BLANK);
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossiermonitoringdossierlist.jsp");
+	SearchContext searchContext = SearchContextFactory.getInstance(request);
+	searchContext.setKeywords(keywordSearch);
+	searchContext.setAttribute("paginationType", "more");
+	
 %>
 
 <liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
@@ -51,29 +68,50 @@
 		<%
 			DossierSearchTerms searchTerms = (DossierSearchTerms)searchContainer.getSearchTerms();
 			
-			String[] keywordArrs = null;
-			
-			if(Validator.isNotNull(searchTerms.getKeywords())){
-				keywordArrs = CustomSQLUtil.keywords(searchTerms.getKeywords());
-			}
-			
-			if (keywordArrs != null) {
-				List<Dossier> dossiers = null;
+				List<Dossier> dossiers = new ArrayList<Dossier>();
 				Integer totalCount = 0;
 				
+				Indexer indexer = IndexerRegistryUtil.getIndexer(Dossier.class);
+				_log.info("----KEYWORD----" + searchTerms.getKeywords());
+				searchContext.setLike(true);
+
 				try {
-					dossiers = DossierLocalServiceUtil.getDossier(scopeGroupId, searchTerms.getKeywords(), -1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-					totalCount = DossierLocalServiceUtil.countDossier(scopeGroupId, searchTerms.getKeywords(), -1);
-				} catch(Exception e){
-					_log.error(e);
+				    //Hits hits = indexer.search(searchContext);
+				    BooleanQuery query = DossierSearchUtil.buildSearchQuery(searchTerms.getKeywords(), searchContext);
+				    Hits hits = SearchEngineUtil.search(searchContext, query);
+					System.out.println("----HITS----" + hits.getLength());
+					totalCount = hits.getLength();
+					searchContext.setStart(searchContainer.getStart());
+					searchContext.setEnd(searchContainer.getEnd());
+					hits = SearchEngineUtil.search(searchContext, query);
+				    for (int i = 0; i < hits.getDocs().length; i++) {
+				    	Document doc = hits.doc(i);
+
+				        long dossierId = GetterUtil
+				                .getLong(doc.get(DossierDisplayTerms.DOSSIER_ID));
+
+				        Dossier dossier = null;
+
+				        try {
+				        	dossier = DossierLocalServiceUtil.getDossier(dossierId);
+				        } catch (PortalException pe) {
+				        	_log.error(pe.getLocalizedMessage());
+				        } catch (SystemException se) {
+				            _log.error(se.getLocalizedMessage());
+				        }
+						if (!dossiers.contains(dossier))
+				        	dossiers.add(dossier);
+					}		    
 				}
-			
+				catch (SearchException se) {
+				}
+				
+				//totalCount = dossiers.size();
 				total = totalCount;
 				results = dossiers;
 				
-				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("results", dossiers);
 				pageContext.setAttribute("total", total);				
-			}
 		%>
 	</liferay-ui:search-container-results>	
 		<liferay-ui:search-container-row 
@@ -82,6 +120,13 @@
 			keyProperty="dossierId"
 		>
 		<%
+			PortletURL viewURL = renderResponse.createRenderURL();
+			viewURL.setParameter("mvcPath", templatePath + "dossiermonitoringresult.jsp");
+			viewURL.setParameter(DossierDisplayTerms.DOSSIER_ID, String.valueOf(dossier.getDossierId()));
+			viewURL.setParameter("backURL", currentURL);
+			if (!StringPool.BLANK.equals(keywordSearch)) {
+				viewURL.setParameter("keywords", keywordSearch);
+			}
 			String statusText = "";
 			if (Validator.isNotNull(dossier.getFinishDatetime()) && Validator.isNotNull(dossier.getEstimateDatetime())) {
 				if (dossier.getFinishDatetime().after(dossier.getEstimateDatetime())) {
@@ -108,7 +153,7 @@
 			}
 		%>
 		<liferay-ui:search-container-column-text name="row-no" title="row-no" value="<%= String.valueOf(row.getPos() + 1) %>"/>
-		<liferay-ui:search-container-column-text orderable="true" name="subject-name" title="subject-name" value="<%= dossier.getSubjectName() %>"/>
+		<liferay-ui:search-container-column-text orderable="true" name="subject-name" title="subject-name" value="<%= dossier.getSubjectName() %>" href="<%= viewURL.toString() %>" />
 		<liferay-ui:search-container-column-text name="govagency-name" title="govagency-name" value="<%= dossier.getGovAgencyName() %>"/>
 		<liferay-ui:search-container-column-text orderable="true" name="receive-datetime" title="receive-datetime" value="<%= Validator.isNotNull(dossier.getReceiveDatetime()) ? dateFormatDate.format(dossier.getReceiveDatetime()) : \"\" %>"/>
 		<liferay-ui:search-container-column-text orderable="true" name="finish-datetime" title="finish-datetime" value="<%= Validator.isNotNull(dossier.getFinishDatetime()) ? dateFormatDate.format(dossier.getFinishDatetime()) : \"\" %>"/>

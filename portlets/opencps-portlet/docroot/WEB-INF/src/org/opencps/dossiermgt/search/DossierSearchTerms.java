@@ -55,6 +55,9 @@ public class DossierSearchTerms extends DossierDisplayTerms {
 		receptionNo = DAOParamUtil
 			.getString(portletRequest, RECEPTION_NO);
 		
+		domainCode = DAOParamUtil
+				.getString(portletRequest, SERVICE_DOMAIN_CODE);
+
 		govAgencyName = DAOParamUtil
 			.getString(portletRequest, GOVAGENCY_NAME);
 		
@@ -122,6 +125,15 @@ public class DossierSearchTerms extends DossierDisplayTerms {
 
 	protected int dossierStatus;	
 	protected String serviceName;
+	protected String domainCode;
+	public String getDomainCode() {
+		return domainCode;
+	}
+
+	public void setDomainCode(String domainCode) {
+		this.domainCode = domainCode;
+	}
+
 	protected String govAgencyName;
 	protected String receptionNo;
 	protected Date createDate;

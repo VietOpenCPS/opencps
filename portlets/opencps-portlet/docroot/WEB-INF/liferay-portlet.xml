@@ -195,6 +195,8 @@
 		<portlet-name>19</portlet-name>
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.opencps.dossiermgt.action.ConfigurationActionImpl</configuration-action-class>		
+		<indexer-class>org.opencps.dossiermgt.search.DossierIndexer</indexer-class>
+		<indexer-class>org.opencps.dossiermgt.search.DossierFileIndexer</indexer-class>
 		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>

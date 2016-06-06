@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
-
 /**
  * The implementation of the service config local service. <p> All custom
  * service methods should be put in this class. Whenever methods are added,
@@ -279,5 +278,10 @@ public class ServiceConfigLocalServiceImpl
 		return serviceConfigPersistence
 		    .update(serviceConfig);
 
+	}
+	
+	public ServiceConfig getServiceConfigByG_S(long groupId, long serviceInfoId) 
+					throws NoSuchServiceConfigException, SystemException {
+		return serviceConfigPersistence.findByG_S(groupId, serviceInfoId);
 	}
 }

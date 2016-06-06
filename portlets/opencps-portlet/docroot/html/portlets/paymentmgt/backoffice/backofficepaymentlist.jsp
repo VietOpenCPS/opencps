@@ -1,3 +1,5 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="javax.portlet.PortletRequest"%>
@@ -126,7 +128,7 @@
 				
 				row.addText(String.valueOf(paymentFile.getPaymentName()));	
 				
-				row.addText(String.valueOf(paymentFile.getAmount()));	
+				row.addText(String.valueOf(NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount())));	
 				
 				row.addText(LanguageUtil.get(pageContext, PortletUtil.getPaymentStatusLabel(paymentFile.getPaymentStatus(), locale)));	
 				

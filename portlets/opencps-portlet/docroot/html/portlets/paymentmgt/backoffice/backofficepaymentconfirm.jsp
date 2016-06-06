@@ -1,3 +1,7 @@
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.paymentmgt.search.PaymentFileDisplayTerms"%>
+<%@page import="java.text.NumberFormat"%>
+<%@page import="org.opencps.usermgt.NoSuchWorkingUnitException"%>
 <%@page import="org.opencps.usermgt.service.WorkingUnitLocalServiceUtil"%>
 <%@page import="org.opencps.usermgt.model.WorkingUnit"%>
 <%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
@@ -49,7 +53,14 @@
 		paymentFile = new PaymentFileImpl();
 	}else{
 		soHoSo = DossierLocalServiceUtil.fetchDossier(paymentFile.getDossierId()).getReceptionNo();
-		coQuanQuanLyHoaDon = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getGovAgencyOrganizationId()).getName();
+		try {
+			WorkingUnit wunit = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getGovAgencyOrganizationId());
+			if (wunit != null)
+				coQuanQuanLyHoaDon = wunit.getName();
+		}
+		catch (NoSuchWorkingUnitException e) {
+			
+		}
 	}
 %>
 <liferay-ui:header
@@ -57,8 +68,17 @@
 	title="payment-confirm"
 	backLabel="back"
 />
+
+<c:choose>
+<c:when test="<%= !StringPool.BLANK.equals(coQuanQuanLyHoaDon) %>">
+<liferay-ui:success key="<%= MessageKeys.PAYMENT_FILE_CONFIRM_CASH_SUCCESS %>" message="payment.file.confirm.cash.success"
+/>
+<liferay-ui:error key="<%= MessageKeys.PAYMENT_FILE_CONFIRM_CASH_ERROR %>" message="payment.file.confirm.cash.error" />
+
 <p></p>
-<aui:form name="payForm" action="">
+<portlet:actionURL var="confirmPaymentRequestedURL" windowState="normal" name="confirmPaymentRequested"/>
+<aui:form name="payForm" action="<%= confirmPaymentRequestedURL.toString() %>">
+<aui:input type="hidden" name="<%= PaymentFileDisplayTerms.PAYMENT_FILE_ID %>" value="<%= String.valueOf(paymentFileId) %>"></aui:input>
 <div class="lookup-result">
 	<table>
 		<tr>
@@ -94,7 +114,7 @@
 				<liferay-ui:message key="so-tien"/>
 			</td>
 			<td class="col-right">
-				<%=HtmlUtil.escape(String.valueOf(paymentFile.getAmount())) %>
+				<%=HtmlUtil.escape(String.valueOf(NumberFormat.getInstance(locale).format(paymentFile.getAmount()))) %>
 			</td>
 		</tr>		
 		<tr>
@@ -160,3 +180,10 @@
 		}
 	}
 </script>
+</c:when>
+<c:otherwise>
+	<div class="alert">
+		<strong><liferay-ui:message key="warning">!</liferay-ui:message></strong>&nbsp;<liferay-ui:message key="working-unit-not-found"></liferay-ui:message>
+	</div>
+</c:otherwise>
+</c:choose>

@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
@@ -37,7 +38,7 @@
 %>
 <%@ include file="../init.jsp"%>
 <%
-	long dossierId = ParamUtil.getLong(request, "dossierId");
+	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
 	Dossier dossier = null;
 	ServiceInfo serviceInfo = null;
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -66,6 +67,38 @@
 	border: 1px solid #cbcbcb;
 }
 </style>
+<%
+	String keywordSearch = ParamUtil.getString(request, "keywords", StringPool.BLANK);
+	System.out.println("----KEY WORDS----" + keywordSearch);
+%>
+
+<c:if test="<%= !StringPool.BLANK.equals(keywordSearch) %>">
+<portlet:renderURL var="backURL">
+	<portlet:param name="mvcPath"
+		value="/html/portlets/dossiermgt/monitoring/dossiermonitoringdossierlist.jsp" />	
+	<portlet:param name="keywords"
+		value="<%= keywordSearch %>" />	
+</portlet:renderURL>
+<liferay-ui:header
+	backURL="<%= backURL.toString() %>"
+	title="dossier-list"
+	backLabel="back"
+/>
+</c:if>
+<c:if test="<%= StringPool.BLANK.equals(keywordSearch) %>">
+<portlet:renderURL var="backURL">
+	<portlet:param name="mvcPath"
+		value="/html/portlets/dossiermgt/monitoring/dossiermonitoringsearch.jsp" />	
+	<portlet:param name="keywords"
+		value="<%= keywordSearch %>" />	
+</portlet:renderURL>
+<liferay-ui:header
+	backURL="<%= backURL.toString() %>"
+	title="dossier-list"
+	backLabel="back"
+/>
+</c:if>
+
 <div class="lookup-result">
 	<%
 		if (dossier != null) {
@@ -95,7 +128,7 @@
 			</td>
 			<td class="col-right">
 				<% if (serviceInfo != null) { %>
-					<%= DictItemUtil.getNameDictItem(serviceInfo.getAdministrationCode())  %>
+					<%= dossier.getGovAgencyName()  %>
 				<% } %>
 			</td>
 		</tr>		

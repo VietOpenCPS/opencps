@@ -34,8 +34,11 @@
 <%@ include file="../../init.jsp"%>
 <%
 
-	if(request.getAttribute(WebKeys.EMPLOYEE_ENTRY) != null){
-		employee = (Employee)request.getAttribute(WebKeys.EMPLOYEE_ENTRY);
+	long employeeId = ParamUtil.getLong(request, EmployeeDisplayTerm.EMPLOYEE_ID);
+	try {
+		employee = EmployeeLocalServiceUtil.getEmployee(employeeId);
+	} catch(Exception e) {
+		
 	}
 
 	WorkingUnit mappingWorkingUnit = (WorkingUnit)request.getAttribute(WebKeys.WORKING_UNIT_MAPPING_ENTRY);

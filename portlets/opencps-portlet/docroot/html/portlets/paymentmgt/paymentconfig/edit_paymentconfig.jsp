@@ -1,3 +1,5 @@
+<%@page import="org.opencps.usermgt.service.WorkingUnitLocalServiceUtil"%>
+<%@page import="org.opencps.usermgt.model.WorkingUnit"%>
 <%@page import="org.opencps.paymentmgt.NoSuchPaymentConfigException"%>
 <%@page import="org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil"%>
 <%@page import="org.opencps.paymentmgt.model.PaymentConfig"%>
@@ -37,12 +39,14 @@
 	catch (NoSuchPaymentConfigException e) {
 		
 	}
+	List<WorkingUnit> wunits = WorkingUnitLocalServiceUtil.getWorkingUnits(scopeGroupId);
 	List<Organization> orgs = OrganizationLocalServiceUtil.getOrganizations(QueryUtil.ALL_POS,QueryUtil.ALL_POS);
 %>
 <c:choose>
 <c:when test="<%= PaymentConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.MANAGE_PAYMENT_CONFIG) %>">
 	<portlet:resourceURL var="resourceURL"/>
 	<script type="text/javascript">
+		loadPaymentConfig();
 		function loadPaymentConfig() {
 		    AUI().use('aui-io-request', function(A){
 		    	var govAgencyOrganizationId = A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.GOV_AGENCY_ORGANIZATION_ID %>').val();
@@ -119,6 +123,10 @@
 		<portlet:param name="backURL" value="<%=backURL %>"/>
 	</portlet:actionURL>
 	
+	<liferay-ui:success key="update-payment-config-success" message="update-payment-config-success"
+	/>
+	<liferay-ui:error key="update-payment-config-error" message="update-payment-config-error" />
+	
 	<aui:form 
 		action="<%= updatePaymentConfigURL.toString() %>"
 		method="post"
@@ -136,15 +144,15 @@
 		<aui:col>
 			<aui:select id="<%= PaymentConfigDisplayTerms.GOV_AGENCY_ORGANIZATION_ID %>" onChange="loadPaymentConfig()" name="<%= PaymentConfigDisplayTerms.GOV_AGENCY_ORGANIZATION_ID %>" label="gov-agency-organization-id">
 			<%
-				for (Organization org : orgs) {
-					if (c != null && org.getOrganizationId() == c.getGovAgencyOrganizationId()) {
+				for (WorkingUnit wunit : wunits) {
+					if (c != null && wunit.getMappingOrganisationId() == c.getGovAgencyOrganizationId()) {
 			%>	
-			<aui:option selected="<%= true %>" value="<%= org.getOrganizationId() %>"><%= org.getName() %></aui:option>
+			<aui:option selected="<%= true %>" value="<%= wunit.getMappingOrganisationId() %>"><%= wunit.getName() %></aui:option>
 			<%
 					}
 					else {
 			%>
-			<aui:option selected="<%= false %>" value="<%= org.getOrganizationId() %>"><%= org.getName() %></aui:option>
+			<aui:option selected="<%= false %>" value="<%= wunit.getMappingOrganisationId() %>"><%= wunit.getName() %></aui:option>
 			<%			
 					}
 				}
@@ -239,7 +247,12 @@
 	</aui:row>
 	<aui:row>
 		<aui:col>
-			<aui:input id="<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>" type="textarea" style="width: 98%" name="<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>">
+			<aui:button cssClass="pull-right" name="view-report-template" value="view-report-template"></aui:button>
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col>
+			<aui:input value="<%= c != null ? c.getReportTemplate() : \"\" %>" id="<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>" type="textarea" style="width: 98%" name="<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>">
 			</aui:input>
 		</aui:col>
 	</aui:row>

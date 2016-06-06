@@ -1,5 +1,6 @@
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,10 +21,33 @@
 %>
 
 <%@ include file="../../init.jsp" %>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 
 <%
 	ServiceInfo serviceInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_ENTRY);
+	long serviceInfoId = (serviceInfo != null) ? serviceInfo.getServiceinfoId() : 0L;
+	long frontServicePlid = PortalUtil.getPlidFromPortletId(scopeGroupId, true,  WebKeys.DOSSIER_MGT_PORTLET);
+	
+	ServiceConfig serviceConfig = null;
+	
+	try {
+		serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfigByG_S(scopeGroupId, serviceInfoId);
+	} catch (Exception e) {
+		
+	}
+	
 %>
+<liferay-portlet:renderURL 
+		var="servieOnlinePopURL" 
+		portletName="<%=WebKeys.DOSSIER_MGT_PORTLET %>"
+		plid="<%=frontServicePlid %>"
+		portletMode="VIEW"
+	>
+		<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp"/>
+		<portlet:param name="<%=DossierDisplayTerms.SERVICE_CONFIG_ID %>" value="<%=(serviceConfig != null) ? String.valueOf(serviceConfig.getServiceConfigId()) : String.valueOf(0) %>"/>
+</liferay-portlet:renderURL>
+
 
 <aui:model-context bean="<%= serviceInfo %>" model="<%= ServiceInfo.class %>"/>
 
@@ -69,10 +93,16 @@
 	</aui:col>
 </aui:row>
 
-
 <aui:row>
 	<aui:col width="100">
-		<aui:input cssClass="input100" name="<%= ServiceDisplayTerms.SERVICE_ONLINEURL %>"></aui:input>
+		<c:choose>
+			<c:when test="<%=Validator.isNotNull(serviceConfig) && Validator.isNotNull(serviceInfo) && Validator.isNull(serviceInfo.getOnlineUrl())%>">
+				<aui:input cssClass="input100" name="urlOnline" type="text" value="<%=servieOnlinePopURL.toString() %>"/>
+			</c:when>
+			<c:otherwise>
+				<aui:input cssClass="input100" name="<%= ServiceDisplayTerms.SERVICE_ONLINEURL %>" />
+			</c:otherwise>
+		</c:choose>	
 	</aui:col>
 </aui:row>
 

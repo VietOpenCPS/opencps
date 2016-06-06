@@ -47,20 +47,24 @@ implements DossierFileFinder {
 
 		String[] keywords = null;
 		int dossierFileType = DossierMgtUtil.DOSSIERFILETYPE_ALL;
+		boolean andOperator = false;
 		if (Validator
 		    .isNotNull(keyword)) {
 			keywords = CustomSQLUtil
 			    .keywords(keyword);
 		}
+		else {
+			andOperator = true;
+		}
 		if (onlyViewFileResult) {
 			dossierFileType = DossierMgtUtil.DOSSIERFILETYPE_OUTPUT;
 		}
-		return countDossierFile(groupId, keywords, dossierTemplateId, dossierFileType, fileEntryId);
+		return countDossierFile(groupId, keywords, dossierTemplateId, dossierFileType, fileEntryId, andOperator);
 	}
 
 	private int countDossierFile(
 	    long groupId, String[] keywords, long dossierTemplateId,
-	    int dossierFileType, long fileEntryId) {
+	    int dossierFileType, long fileEntryId, boolean andOperator) {
 
 		Session session = null;
 
@@ -73,17 +77,12 @@ implements DossierFileFinder {
 			if (keywords != null && keywords.length > 0) {
 				sql = CustomSQLUtil
 				    .replaceKeywords(
-				        sql, "lower(opencps_dossier_file.templateFileNo) LIKE ? [$AND_OR_NULL_CHECK$]",
-				        StringPool.LIKE, true, keywords);
-
-				sql = CustomSQLUtil
-				    .replaceKeywords(
-				        sql, "lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$]",
+				        sql, "lower(opencps_dossier_file.displayName)",
 				        StringPool.LIKE, true, keywords);
 				
 				sql = CustomSQLUtil
 							    .replaceKeywords(
-							        sql, "lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$]",
+							        sql, "lower(opencps_dossier_file.dossierFileNo)",
 							        StringPool.LIKE, true, keywords);
 			}
 
@@ -93,22 +92,25 @@ implements DossierFileFinder {
 				sql = StringUtil
 				    .replace(
 				        sql,
-				        "AND lower(opencps_dossier_file.templateFileNo) LIKE ? [$AND_OR_NULL_CHECK$]",
+				        "AND (lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])",
 				        StringPool.BLANK);
 
 				sql = StringUtil
 				    .replace(
 				        sql,
-				        "OR lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$]",
-				        StringPool.BLANK);
-
-				sql = StringUtil
-				    .replace(
-				        sql,
-				        "(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+				        "OR (lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])",
 				        StringPool.BLANK);
 			}
 
+			if (dossierTemplateId != 0) {
+			}
+			else {
+				sql = StringUtil
+							    .replace(
+							        sql, "AND (opencps_dossierpart.dossierTemplateId = ?)",
+							        StringPool.BLANK);				
+			}
+			
 			if (dossierFileType != DossierMgtUtil.DOSSIERFILETYPE_ALL) {
 			}
 			else {
@@ -129,7 +131,7 @@ implements DossierFileFinder {
 			}
 
 			sql = CustomSQLUtil
-						    .replaceAndOperator(sql, false);
+						    .replaceAndOperator(sql, andOperator);
 			
 			SQLQuery q = session
 			    .createSQLQuery(sql);
@@ -147,21 +149,23 @@ implements DossierFileFinder {
 				qPos
 				    .add(keywords, 2);
 				qPos
-				    .add(keywords, 2);
-				qPos
 			    	.add(keywords, 2);				
 			}
 
-			if (dossierFileType != DossierMgtUtil.DOSSIERFILETYPE_ALL) {
-				qPos
-				    .add(dossierFileType);
-			}
-			
 			if (fileEntryId > 0) {
 				qPos
 					.add(fileEntryId);
 			}
 			
+			if (dossierFileType != DossierMgtUtil.DOSSIERFILETYPE_ALL) {
+				qPos
+				    .add(dossierFileType);
+			}
+						
+			if (dossierTemplateId > 0) {
+				qPos
+					.add(dossierTemplateId);
+			}
 			Iterator<Integer> itr = q
 			    .iterate();
 
@@ -195,22 +199,26 @@ implements DossierFileFinder {
 	    OrderByComparator obc) {
 
 		String[] keywords = null;
+		boolean andOperator = false;
 		if (Validator
 		    .isNotNull(keyword)) {
 			keywords = CustomSQLUtil
 			    .keywords(keyword);
+		}
+		else {
+			andOperator = true;
 		}
 		int dossierFileType = DossierMgtUtil.DOSSIERFILETYPE_ALL;
 		if (onlyViewFileResult) {
 			dossierFileType = DossierMgtUtil.DOSSIERFILETYPE_OUTPUT;
 		}
 		return searchDossierFile(
-		    groupId, keywords, dossierTemplateId, dossierFileType, fileEntryId, start, end, obc);
+		    groupId, keywords, dossierTemplateId, dossierFileType, fileEntryId, start, end, obc, andOperator);
 	}
 
 	private List<DossierFile> searchDossierFile(
 	    long groupId, String[] keywords, long dossierTemplateId, int dossierFileType, long fileEntryId,
-	    int start, int end, OrderByComparator obc) {
+	    int start, int end, OrderByComparator obc, boolean andOperator) {
 
 		Session session = null;
 
@@ -223,17 +231,12 @@ implements DossierFileFinder {
 			if (keywords != null && keywords.length > 0) {
 				sql = CustomSQLUtil
 				    .replaceKeywords(
-				        sql, "lower(opencps_dossier_file.templateFileNo) LIKE ? [$AND_OR_NULL_CHECK$]",
-				        StringPool.LIKE, true, keywords);
-
-				sql = CustomSQLUtil
-				    .replaceKeywords(
-				        sql, "lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$]",
+				        sql, "lower(opencps_dossier_file.displayName)",
 				        StringPool.LIKE, true, keywords);
 				
 				sql = CustomSQLUtil
 							    .replaceKeywords(
-							        sql, "lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$]",
+							        sql, "lower(opencps_dossier_file.dossierFileNo)",
 							        StringPool.LIKE, true, keywords);
 			}
 
@@ -243,22 +246,25 @@ implements DossierFileFinder {
 				sql = StringUtil
 				    .replace(
 				        sql,
-				        "AND lower(opencps_dossier_file.templateFileNo) LIKE ? [$AND_OR_NULL_CHECK$]",
+				        "AND (lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])",
 				        StringPool.BLANK);
 
 				sql = StringUtil
 				    .replace(
 				        sql,
-				        "OR lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$]",
-				        StringPool.BLANK);
-
-				sql = StringUtil
-				    .replace(
-				        sql,
-				        "(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+				        "OR (lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])",
 				        StringPool.BLANK);
 			}
 
+			if (dossierTemplateId != 0) {
+			}
+			else {
+				sql = StringUtil
+							    .replace(
+							        sql, "AND (opencps_dossierpart.dossierTemplateId = ?)",
+							        StringPool.BLANK);				
+			}
+			
 			if (dossierFileType != DossierMgtUtil.DOSSIERFILETYPE_ALL) {
 			}
 			else {
@@ -279,8 +285,7 @@ implements DossierFileFinder {
 			}
 
 			sql = CustomSQLUtil
-						    .replaceAndOperator(sql, false);
-
+						    .replaceAndOperator(sql, andOperator);
 			SQLQuery q = session
 			    .createSQLQuery(sql);
 
@@ -298,20 +303,21 @@ implements DossierFileFinder {
 				    .add(keywords, 2);
 				qPos
 				    .add(keywords, 2);
+			}
+
+			if (fileEntryId > 0) {
 				qPos
-			    	.add(keywords, 2);				
+					.add(fileEntryId);
 			}
 
 			if (dossierFileType != DossierMgtUtil.DOSSIERFILETYPE_ALL) {
-				System.out.println("DOSSIER FILE TYPE: " + dossierFileType);
-				System.out.println("SQL: " + sql);
 				qPos
 				    .add(dossierFileType);
 			}
 			
-			if (fileEntryId > 0) {
+			if (dossierTemplateId > 0) {
 				qPos
-					.add(fileEntryId);
+					.add(dossierTemplateId);
 			}
 			return (List<DossierFile>) QueryUtil
 			    .list(q, getDialect(), start, end);

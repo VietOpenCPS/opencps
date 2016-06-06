@@ -52,7 +52,9 @@ public class BackOfficeProcessCallback implements MessageListener{
     	SendToCallbackMsg msgToCalback = (SendToCallbackMsg) message.get("toCallback");
     	
     	try {
-        	ProcessOrderLocalServiceUtil.updateProcessOrderStatus(msgToCalback.getProcessOrderId(), msgToCalback.getDossierStatus());
+			ProcessOrderLocalServiceUtil.updateProcessOrderStatus(
+			    msgToCalback.getProcessOrderId(),
+			    msgToCalback.getDossierStatus());
         }
         catch (Exception e) {
 	        // TODO: handle exception

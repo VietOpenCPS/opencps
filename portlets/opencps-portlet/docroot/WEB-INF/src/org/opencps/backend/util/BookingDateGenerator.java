@@ -17,11 +17,64 @@
 
 package org.opencps.backend.util;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+
 
 /**
  * @author khoavd
  *
  */
 public class BookingDateGenerator {
+	
+	/**
+	 * Generate Booking date
+	 * 
+	 * @param receiveDate
+	 * @param pattern
+	 * @return
+	 */
+	public static Date dateGenerator(Date receiveDate, String pattern) {
+		
+		Calendar cal = Calendar.getInstance();
+		
+		cal.setTime(receiveDate);
+		
+		String [] splitPattern = StringUtil.split(pattern, StringPool.SPACE);
+		
+		int bookingDays = 0;
+		int bookingHour = 0;
+		int bookingMinutes = 0;
+		
+		if (splitPattern.length == 2) {
+		
+			bookingDays = GetterUtil.getInteger(splitPattern[0],0);
+			
+			String [] splitHour = StringUtil.split(splitPattern[1], StringPool.COLON);
+			
+			if (splitHour.length == 2) {
+				bookingHour = GetterUtil.getInteger(splitHour[0]);
+				bookingMinutes = GetterUtil.getInteger(splitHour[1]);
+			}
+		}
+		
+		cal.add(Calendar.DATE, bookingDays);
+		cal.add(Calendar.HOUR, bookingHour);
+		cal.add(Calendar.MINUTE, bookingMinutes);
+		
+		return cal.getTime();
+		
+	}
+	
+	public static void main(String[] args) {
 
+	    Date bookingDate = dateGenerator(new Date(), "+29 7:33");
+	    
+	    System.out.println(bookingDate);
+    }
+	
 }

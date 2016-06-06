@@ -44,6 +44,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
@@ -506,11 +508,16 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		            .getSubjectName(),
 		        StringPool.BLANK, StringPool.BLANK, null, null, 0, 0, 0, false);
 
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+                Dossier.class);
+
+		indexer.reindex(dossier);
+
 		return dossier;
 	}
 
 	public void deleteDossierByDossierId(long userId, long dossierId)
-	    throws NoSuchDossierException, SystemException {
+	    throws NoSuchDossierException, SystemException, PortalException {
 
 		Date now = new Date();
 		Dossier dossier = dossierPersistence
@@ -551,6 +558,12 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		    .setModifiedDate(now);
 		dossier
 		    .setUserId(userId);
+		
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+                Dossier.class);
+
+		indexer.delete(dossier);
+
 		dossierPersistence
 		    .update(dossier);
 	};
@@ -975,8 +988,13 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		}
 
-		return dossierPersistence
-		    .update(dossier);
+		dossier = dossierPersistence
+			    .update(dossier); 
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+                Dossier.class);
+
+		indexer.reindex(dossier);
+		return dossier;
 	}
 	
 	public boolean updateDossierStatus(

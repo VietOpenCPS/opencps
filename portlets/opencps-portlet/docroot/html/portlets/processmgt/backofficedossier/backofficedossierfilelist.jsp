@@ -1,3 +1,12 @@
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.Business"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
+<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+<%@page import="com.liferay.portal.kernel.exception.SystemException"%>
+<%@page import="org.opencps.accountmgt.NoSuchCitizenException"%>
+<%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.Citizen"%>
+<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
@@ -35,6 +44,7 @@
 	User mappingUser = (User)request.getAttribute(WebKeys.USER_MAPPING_ENTRY);
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "backofficedossierfilelist.jsp");
+	iteratorURL.setParameter("tab1", ProcessMgtUtil.TOP_TABS_DOSSIERFILELIST);
 	
 	long dossierTemplateId = ParamUtil.getLong(request, ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID);
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
@@ -42,24 +52,29 @@
 	boolean onlyViewFileResult = ParamUtil.getBoolean(request, "onlyViewFileResult");
 	request.setAttribute(ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID, dossierTemplateId);
 	request.setAttribute("onlyViewFileResult", onlyViewFileResult);
+	
+	List<String> headerNames = new ArrayList<String>();
+	
+	headerNames.add("no");
+	headerNames.add("dossierfile-filetype");
+	headerNames.add("dossierfile-fileno");
+	headerNames.add("dossierfile-filedate");
+	headerNames.add("dossierfile-displayname");
+	headerNames.add("dossierfile-receptionno");
+	headerNames.add("subjectname");
+	
+	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+	
 %>
 
-<liferay-ui:search-container searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+<liferay-ui:search-container searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" headerNames="<%= headers %>">
 
 	<liferay-ui:search-container-results>
 		<%
 			DossierFileSearchTerms searchTerms = (DossierFileSearchTerms)searchContainer.getSearchTerms();
-			
-			String[] keywordArrs = null;
-			
-			if(Validator.isNotNull(searchTerms.getKeywords())){
-				keywordArrs = CustomSQLUtil.keywords(searchTerms.getKeywords());
-			}
-			
-			if (keywordArrs != null) {
+						
 				List<DossierFile> dossierFiles = null;
 				Integer totalCount = 0;
-				
 				try {
 					dossierFiles = DossierFileLocalServiceUtil.searchDossierFile(scopeGroupId, searchTerms.getKeywords(), dossierTemplateId, -1, onlyViewFileResult, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 					totalCount = DossierFileLocalServiceUtil.countDossierFile(scopeGroupId, searchTerms.getKeywords(), dossierTemplateId, -1, onlyViewFileResult);
@@ -72,7 +87,6 @@
 				
 				pageContext.setAttribute("results", results);
 				pageContext.setAttribute("total", total);				
-			}
 		%>
 	</liferay-ui:search-container-results>	
 		<liferay-ui:search-container-row 
@@ -84,29 +98,64 @@
 			    // no column
 				row.addText(String.valueOf(row.getPos() + 1));
 				
-				// create date column
-				row.addText(dateFormatDate.format(dossierFile.getCreateDate()));
+				// dossier file type column
+				String dossierFileTypeText = "";
+				switch (dossierFile.getDossierFileType()) {
+				case DossierMgtUtil.DOSSIERFILETYPE_INPUT:
+					dossierFileTypeText = LanguageUtil.get(pageContext, "dossier-filetype-input");
+					break;
+				case DossierMgtUtil.DOSSIERFILETYPE_OUTPUT:
+					dossierFileTypeText = LanguageUtil.get(pageContext, "dossier-filetype-output");
+					break;
+				default:
+					dossierFileTypeText = "";
+					break;
+				}
+				row.addText(dossierFileTypeText);
 				
 				// dossier file no column
-				row.addText(dossierFile.getTemplateFileNo());
-				
+				row.addText(dossierFile.getDossierFileNo());
+								
 				// dossier file date column
-				row.addText(dateFormatDate.format(dossierFile.getDossierFileDate()));
+				if (Validator.isNotNull(dossierFile.getDossierFileDate())) {
+					row.addText(dateFormatDate.format(dossierFile.getDossierFileDate()));					
+				}
+				else {
+					row.addText("");
+				}
 				
 				// dossier display name column
 				row.addText(dossierFile.getDisplayName());
 				
 				// reception no column
-				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierFile.getDossierId());
-				row.addText(dossier.getReceptionNo());
-				
-				// dossier file type
-				if (dossierFile.getDossierFileType() == DossierMgtUtil.DOSSIERFILETYPE_INPUT) {
-					row.addText(LanguageUtil.get(portletConfig, locale, "dossier-filetype-input"));
+				Dossier dossier = null;
+				try {
+					dossier = DossierLocalServiceUtil.getDossier(dossierFile.getDossierId());
 				}
-				else if (dossierFile.getDossierFileType() == DossierMgtUtil.DOSSIERFILETYPE_OUTPUT) {
-					row.addText(LanguageUtil.get(portletConfig, locale, "dossier-filetype-output"));
+				catch (NoSuchDossierException e) {
+					
 				}
+				row.addText(dossier != null ? dossier.getReceptionNo() : "");
+
+				// owner name column
+				Citizen citizenOwner = null;
+				Business businessOwner = null;
+				try {
+					if (dossier != null) {
+						if (dossier.getOwnerOrganizationId() == 0) {
+							citizenOwner = CitizenLocalServiceUtil.getByMappingUserId(dossier.getUserId());							
+						}
+						else {
+							businessOwner = BusinessLocalServiceUtil.getBymappingOrganizationId(dossier.getOwnerOrganizationId());
+						}
+					}
+					else
+						citizenOwner = CitizenLocalServiceUtil.getByMappingUserId(dossierFile.getOwnerUserId());
+				}
+				catch (SystemException e) {
+					
+				}
+				row.addText(citizenOwner != null ? citizenOwner.getFullName() : (businessOwner != null ? businessOwner.getName() : ""));
 			%>	
 		</liferay-ui:search-container-row> 
 	

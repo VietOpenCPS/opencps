@@ -64,7 +64,7 @@
 		new String[]{"dossier_info"};
 	
 	String[][] categorySections = {dossierSections};
-
+	
 %>
 <c:choose>
 	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&

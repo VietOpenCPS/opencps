@@ -21,11 +21,16 @@ import java.util.Date;
 import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchDossierFileException;
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -60,7 +65,7 @@ public class DossierFileLocalServiceImpl
 	    int dossierFileMark, int dossierFileType, String dossierFileNo,
 	    Date dossierFileDate, int original, int syncStatus,
 	    ServiceContext serviceContext)
-	    throws SystemException {
+	    throws SystemException, PortalException {
 
 		long dossierFileId = counterLocalService
 		    .increment(DossierFile.class
@@ -107,11 +112,16 @@ public class DossierFileLocalServiceImpl
 		dossierFile
 		    .setOwnerOrganizationId(ownerOrganizationId);
 		dossierFile
-		    .setUuid(PortalUUIDUtil
+		    .setOid(PortalUUIDUtil
 		        .generate());
+		
+		dossierFile = dossierFilePersistence
+			    .update(dossierFile); 
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+                DossierFile.class);
 
-		return dossierFilePersistence
-		    .update(dossierFile);
+		indexer.reindex(dossierFile);
+		return dossierFile;
 	}
 
 	public void deleteDossierFile(long dossierFileId, long fileEntryId)
@@ -122,6 +132,12 @@ public class DossierFileLocalServiceImpl
 			    .deleteDLFileEntry(fileEntryId);
 		}
 
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+                DossierFile.class);
+
+		DossierFile dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+		indexer.delete(dossierFile);
+		
 		dossierFilePersistence
 		    .remove(dossierFileId);
 	}
@@ -158,7 +174,7 @@ public class DossierFileLocalServiceImpl
 	public DossierFile updateDossierFile(
 	    long dossierFileId, long ownerUserId, long ownerOrganizationId,
 	    long fileEntryId, String displayName)
-	    throws NoSuchDossierFileException, SystemException {
+	    throws NoSuchDossierFileException, SystemException, PortalException {
 
 		DossierFile dossierFile = dossierFilePersistence
 		    .findByPrimaryKey(dossierFileId);
@@ -177,8 +193,14 @@ public class DossierFileLocalServiceImpl
 		    .setOwnerUserId(ownerUserId);
 		dossierFile
 		    .setOwnerOrganizationId(ownerOrganizationId);
-		return dossierFilePersistence
-		    .update(dossierFile);
+		dossierFile = dossierFilePersistence
+			    .update(dossierFile);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+                DossierFile.class);
+
+		indexer.reindex(dossierFile);
+	
+		return dossierFile;
 	}
 
 	public List<DossierFile> searchDossierFile(long groupId, String keyword, long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult, int start, int end, OrderByComparator obc)

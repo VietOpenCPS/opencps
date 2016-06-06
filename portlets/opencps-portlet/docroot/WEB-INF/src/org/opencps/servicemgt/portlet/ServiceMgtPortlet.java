@@ -10,7 +10,6 @@
  * copy of the GNU Affero General Public License along with this program. If
  * not, see <http://www.gnu.org/licenses/>
  */
-
 package org.opencps.servicemgt.portlet;
 
 import java.io.IOException;
@@ -45,6 +44,7 @@ import org.opencps.servicemgt.search.ServiceDisplayTerms;
 import org.opencps.servicemgt.service.ServiceFileTemplateLocalServiceUtil;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.servicemgt.service.TemplateFileLocalServiceUtil;
+import org.opencps.util.ActionKeys;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletPropsValues;
@@ -203,7 +203,8 @@ public class ServiceMgtPortlet extends MVCPortlet {
 		SessionMessages.add(
 		    actionRequest, PortalUtil.getPortletId(actionRequest) +
 		        SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
-
+		String urlOnline = ParamUtil.getString(actionRequest, "urlOnline");
+		String onlineURL = Validator.isNotNull(urlOnline) ? urlOnline : displayTerms.getOnlineUrl();
 		try {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
@@ -232,7 +233,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 				    displayTerms.getDomainCode(),
 				    displayTerms.getDomainIndex(),
 				    displayTerms.getActiveStatus(),
-				    displayTerms.getOnlineUrl(),
+				    onlineURL,
 				    displayTerms.setFileTemplateIds(actionRequest), serviceContext);
 
 				// Redirect page
@@ -262,7 +263,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 				    displayTerms.getAdministrationCode(),
 				    displayTerms.getAdministrationIndex(),
 				    displayTerms.getDomainCode(),
-				    displayTerms.getDomainIndex(), displayTerms.getOnlineUrl(),
+				    displayTerms.getDomainIndex(), onlineURL,
 				    displayTerms.setFileTemplateIds(actionRequest), serviceContext);
 				
 				// Redirect page
@@ -543,6 +544,8 @@ public class ServiceMgtPortlet extends MVCPortlet {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(
 			        DLFileEntry.class.getName(), uploadPortletRequest);
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
 
 			FileEntry fileEntry = null;
 
@@ -612,7 +615,10 @@ public class ServiceMgtPortlet extends MVCPortlet {
 
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
-
+			
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
+			
 			if (isRootFolderExist) {
 				Folder rootFolder = null;
 

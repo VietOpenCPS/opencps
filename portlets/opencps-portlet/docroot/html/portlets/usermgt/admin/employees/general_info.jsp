@@ -1,3 +1,4 @@
+<%@page import="org.opencps.usermgt.service.EmployeeLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -35,8 +36,11 @@
 
 
 <%
-	if(request.getAttribute(WebKeys.EMPLOYEE_ENTRY) != null){
-		employee = (Employee)request.getAttribute(WebKeys.EMPLOYEE_ENTRY);
+	long employeeId = ParamUtil.getLong(request, EmployeeDisplayTerm.EMPLOYEE_ID);
+	try {
+		employee = EmployeeLocalServiceUtil.getEmployee(employeeId);
+	} catch(Exception e) {
+		
 	}
 	
 

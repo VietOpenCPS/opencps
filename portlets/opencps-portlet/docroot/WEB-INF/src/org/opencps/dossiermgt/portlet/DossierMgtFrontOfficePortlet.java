@@ -140,6 +140,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 			.getUploadPortletRequest(actionRequest);
+		
+		//AccountBean accountBean = AccountUtil.getAccountBean();
+		
+		Dossier dossier = null;
+		//DossierFile dossierFile = null;
+		//FileGroup fileGroup = null;
+		//DossierPart dossierPart = null;
 
 		boolean updated = false;
 
@@ -205,8 +212,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String redirectURL = ParamUtil
 			.getString(uploadPortletRequest, "redirectURL");
 
-		Dossier dossier = null;
-
+		
 		InputStream inputStream = null;
 
 		Date fileDate = DateTimeUtil
@@ -2053,5 +2059,51 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			.createReportPDFfFile(jrxmlTemplate, formData, map,
 				outputDestination, fileName);
 	}
+
+	private static boolean validateAccount(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		AccountBean accountBean = AccountUtil
+			.getAccountBean();
+		if (accountBean == null) {
+			SessionErrors
+				.add(actionRequest, MessageKeys.ACCOUNTMGT_NO_ACCOUNT_INFO);
+			return false;
+		}
+		else if (Validator
+			.isNull(accountBean
+				.getAccountType())) {
+			SessionErrors
+				.add(actionRequest, MessageKeys.ACCOUNTMGT_NO_ACCOUNT_TYPE);
+			return false;
+		}
+		else if (accountBean
+			.getAccountFolder() == null) {
+			SessionErrors
+				.add(actionRequest, MessageKeys.ACCOUNTMGT_NO_ACCOUNT_FOLDER);
+			return false;
+		}
+		else if (accountBean
+			.isCitizen() && accountBean
+				.getOwnerUserId() == 0) {
+			SessionErrors
+				.add(actionRequest,
+					MessageKeys.ACCOUNTMGT_NO_ACCOUNT_OWNERUSERID);
+			return false;
+		}
+		else if (accountBean
+			.isBusiness() && accountBean
+				.getOwnerOrganizationId() == 0) {
+			SessionErrors
+				.add(actionRequest,
+					MessageKeys.ACCOUNTMGT_NO_ACCOUNT_OWNERORGANIZATIONID);
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
+	
 
 }

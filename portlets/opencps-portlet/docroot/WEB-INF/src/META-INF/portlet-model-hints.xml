@@ -249,7 +249,9 @@
 		<field name="domainIndex" type="String" />
 		<field name="activeStatus" type="int" />
 		<field name="hasTemplateFiles" type="int" />
-		<field name="onlineUrl" type="String" />
+		<field name="onlineUrl" type="String">
+			<hint name="max-length">1000</hint>
+		</field>
 	</model>
 	<model name="org.opencps.servicemgt.model.TemplateFile">
 		<field name="templatefileId" type="long" />
@@ -450,7 +452,7 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="dossierId" type="long" />
-		<field name="uuid" type="String" />
+		<field name="oid" type="String" />
 		<field name="dossierPartId" type="long" />
 		<field name="templateFileNo" type="String" />
 		<field name="groupFileId" type="long" />
@@ -473,6 +475,7 @@
 		<field name="removed" type="int" />
 		<field name="original" type="int" />
 		<field name="syncStatus" type="int" />
+		<field name="version" type="int" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierLog">
 		<field name="dossierLogId" type="long" />

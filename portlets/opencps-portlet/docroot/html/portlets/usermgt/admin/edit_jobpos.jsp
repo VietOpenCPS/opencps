@@ -1,4 +1,6 @@
 
+<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
@@ -40,11 +42,20 @@
 	} catch(Exception e) {
 		_log.error(e);
 	}
-	
+		
 	String redirectURL = ParamUtil.getString(request, "redirectURL");
 	String returnURL = currentURL;
 	String [] jobPosSections = {"general_jobpos","role_jobpos"};
 	String [][] categorySections = {jobPosSections};
+	
+	boolean success = false;
+
+	try{
+		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
+		
+	}catch(Exception e){
+		
+	}
 %>
 
 <liferay-ui:header
@@ -52,17 +63,19 @@
 	title='<%= (jobPos == null) ? "add-jobpos" : "update-jobpos" %>'
 />
 
+
 <liferay-ui:error 
-	key="<%=MessageKeys.USERMGT_JOBPOS_UPDATE_ERROR %>"
+	key="<%=MessageKeys.USERMGT_JOBPOS_DELETE_ERROR %>" 
 	message="<%=LanguageUtil.get(pageContext, 
-		MessageKeys.USERMGT_JOBPOS_UPDATE_ERROR) %>"
+		MessageKeys.USERMGT_JOBPOS_DELETE_ERROR) %>"
 />
 
 <liferay-ui:success 
-	key="<%=MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS %>"
+	key="<%=MessageKeys.USERMGT_JOBPOS_DELETE_SUCCESS %>"
 	message="<%=LanguageUtil.get(pageContext, 
-		MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS) %>"
+		MessageKeys.USERMGT_JOBPOS_DELETE_SUCCESS) %>"
 />
+
 <portlet:actionURL var="updateJobPosURL" name="updateJobPoses">
 	<portlet:param name="workingUnitId" value="<%=String.valueOf(workingUnitId) %>"/>
 	<portlet:param name="redirectURL" value="<%=redirectURL %>"/>
@@ -79,12 +92,14 @@
         </div>
     </c:if> 
 </liferay-util:buffer>
+<div class = "class-to-action">
+	<liferay-util:buffer var="htmlBot">
 
-<liferay-util:buffer var="htmlBot">
+	</liferay-util:buffer>
+</div>
 
-</liferay-util:buffer>
 
-<aui:form name="fm" 
+<aui:form name="fm1" 
 	method="post" 
 	action="<%=updateJobPosURL.toString() %>">
 	<liferay-ui:form-navigator 
@@ -94,7 +109,7 @@
 		htmlBottom="<%= htmlBot %>"
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%=templatePath + "jobpos/" %>'
-		>	
+		>
 	</liferay-ui:form-navigator>
 	<aui:input name="<%=JobPosDisplayTerms.ID_JOBPOS %>" 
 		type="hidden" />
@@ -104,3 +119,11 @@
 <%! 
 	Log _log = LogFactoryUtil.getLog("html.portlets.usermgt.admin.edit_jobpos.jsp");
 %>
+<aui:script use='liferay-util-window'>
+	AUI().ready(function(A) {
+		var success = '<%= success%>';
+		if(success == 'true') {
+			Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+		}
+	});
+</aui:script>

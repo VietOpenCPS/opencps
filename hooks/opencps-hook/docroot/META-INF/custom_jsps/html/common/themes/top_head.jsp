@@ -161,6 +161,7 @@ StringBundler pageTopSB = OutputTag.getData(request, WebKeys.PAGE_TOP);
 <link class="lfr-css-file" href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getPathThemeCss() + "/main.css")) %>" rel="stylesheet" type="text/css" />
 <link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/font-awesome.min.css")) %>" rel="stylesheet" type="text/css" />
 <link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/alpaca.min.css")) %>" rel="stylesheet" type="text/css" />
+<link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/bootstrap-datetimepicker.css")) %>" rel="stylesheet" type="text/css" />
 <%-- User Inputted Layout CSS --%>
 
 <c:if test="<%= (layout != null) && Validator.isNotNull(layout.getCssText()) %>">

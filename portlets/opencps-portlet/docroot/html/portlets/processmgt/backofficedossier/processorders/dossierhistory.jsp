@@ -85,9 +85,9 @@
 				</td>
 				<td>
 					<%
-						Employee employee = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(scopeGroupId, histories.get(i).getActionUserId());
+						Employee employee2 = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(scopeGroupId, histories.get(i).getActionUserId());
 					%>
-					<%= employee.getFullName() %>
+					<%= employee2.getFullName() %>
 				</td>
 				<td>
 					<%= histories.get(i).getActionNote() %>

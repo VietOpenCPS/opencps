@@ -34,7 +34,13 @@
 <portlet:actionURL name="searchAction" var="searchUrl"></portlet:actionURL>
 
 <portlet:actionURL name="searchServiceAction" var="serviceUrl"></portlet:actionURL>
-
+<style>
+<!--
+.keywordinput {
+	width: 80%
+}
+-->
+</style>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		
@@ -53,8 +59,9 @@
 									<liferay-ui:input-search										
 										id="keywords"
 										name="keywords"
+										cssClass="keywordinput input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-										placeholder="<%= LanguageUtil.get(portletConfig, locale, \"search-dossier-placeholder\") %>" 
+										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
 									/>
 								</aui:col>
 							</aui:row>
@@ -76,8 +83,9 @@
 									<liferay-ui:input-search
 										id="keywords"
 										name="keywords"
+										cssClass="keywordinput input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-										placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
+										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-file-search-keywords\") %>" 
 									/>
 								</aui:col>
 							</aui:row>
@@ -99,8 +107,9 @@
 									<liferay-ui:input-search
 										id="keywords"
 										name="keywords"
+										cssClass="keywordinput input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-										placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
+										placeholder="<%= LanguageUtil.get(pageContext, \"service-search-keywords\") %>" 
 									/>
 								</aui:col>
 							</aui:row>

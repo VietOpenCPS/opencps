@@ -1,4 +1,6 @@
 
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="org.opencps.servicemgt.NoSuchServiceInfoException"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
@@ -97,7 +99,7 @@
 		</tr>
 		<tr>
 			<td class="col-left"><liferay-ui:message key="amount"></liferay-ui:message></td>
-			<td class="col-right"><%= paymentFile.getAmount() %></td>
+			<td class="col-right"><%= NumberFormat.getInstance(new Locale("vi","VN")).format(paymentFile.getAmount()) %></td>
 		</tr>
 	</table>
 </div>

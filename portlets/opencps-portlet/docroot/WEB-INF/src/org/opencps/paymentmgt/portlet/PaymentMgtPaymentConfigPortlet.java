@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -149,17 +150,10 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 
 			addProcessActionSuccessMessage = false;
 			actionResponse.setRenderParameter(PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID, String.valueOf(paymentConfigId));
-			if (Validator.isNotNull(returnURL)) {
-				actionResponse.sendRedirect(returnURL);
-			}
-			else if (Validator.isNotNull(backURL)) {
-				actionResponse.sendRedirect(backURL);
-			}
+			SessionMessages.add(actionRequest, "update-payment-config-success");
 		}
 		catch (Exception e) {
-			if (Validator.isNotNull(currentURL)) {
-				actionResponse.sendRedirect(currentURL);
-			}
+			SessionErrors.add(actionRequest, "update-payment-config-error");
 		}
 
 	}

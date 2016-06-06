@@ -280,4 +280,26 @@ public class PortletPropsValues {
 	public static final String OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL =
 	    PortletProps
 	        .get(PortletPropsKeys.OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL);
+	
+	// KeyPay
+	public static final String OPENCPS_KEYPAY_CURRENT_LOCATE =
+				    PortletProps.get(PortletPropsKeys.OPENCPS_KEYPAY_CURRENT_LOCATE);
+
+	public static final String OPENCPS_KEYPAY_COUNTRY_CODE =
+				    PortletProps.get(PortletPropsKeys.OPENCPS_KEYPAY_COUNTRY_CODE);
+
+	public static final String OPENCPS_KEYPAY_INTERNAL_BANK =
+				    PortletProps.get(PortletPropsKeys.OPENCPS_KEYPAY_INTERNAL_BANK);
+	
+	public static final String OPENCPS_KEYPAY_SERVICE_CODE =
+				    PortletProps.get(PortletPropsKeys.OPENCPS_KEYPAY_SERVICE_CODE);
+
+	
+	public static final String OPENCPS_KEYPAY_COMMAND =
+				    PortletProps.get(PortletPropsKeys.OPENCPS_KEYPAY_COMMAND);
+
+	
+	public static final String OPENCPS_KEYPAY_CURRENCY_CODE =
+				    PortletProps.get(PortletPropsKeys.OPENCPS_KEYPAY_CURRENCY_CODE);
+
 }

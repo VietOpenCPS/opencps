@@ -18,6 +18,7 @@
 package org.opencps.jasperreport.compile;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -56,24 +57,32 @@ public class JRReportTemplate extends JasperReport {
 	}
 	
 	public static JasperReport getJasperReport(String jrxmlTemplate)
-	    throws JRException {
+	    throws JRException, IOException {
 
 		InputStream isTemplate = new ByteArrayInputStream(jrxmlTemplate
 		    .getBytes(StandardCharsets.UTF_8));
 		JasperReport reportTemplate = JasperCompileManager
 		    .compileReport(isTemplate);
+		
+		if(isTemplate != null){
+			isTemplate.close();
+		}
 
 		return reportTemplate;
 	}
 
 	public static JRReportTemplate getJRReportTemplate(String jrxmlTemplate)
-	    throws JRException {
+	    throws JRException, IOException {
 
 		InputStream isTemplate = new ByteArrayInputStream(jrxmlTemplate
 		    .getBytes(StandardCharsets.UTF_8));
 		JRReportTemplate reportTemplate =
 		    (JRReportTemplate) JasperCompileManager
 		        .compileReport(isTemplate);
+		
+		if(isTemplate != null){
+			isTemplate.close();
+		}
 
 		return reportTemplate;
 	}

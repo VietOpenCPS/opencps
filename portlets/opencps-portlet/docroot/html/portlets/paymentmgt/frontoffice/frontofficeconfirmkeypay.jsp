@@ -1,3 +1,11 @@
+<%@page import="org.opencps.keypay.model.KeyPay"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil"%>
+<%@page import="org.opencps.paymentmgt.model.PaymentConfig"%>
+<%@page import="org.opencps.keypay.security.HashFunction"%>
+<%@page import="java.util.Map"%>
 <%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
 <%@page import="org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil"%>
 <%@page import="org.opencps.paymentmgt.model.PaymentFile"%>
@@ -36,6 +44,53 @@
 	HttpServletRequest r = PortalUtil.getHttpServletRequest(renderRequest);
 	String responseCode = PortalUtil.getOriginalServletRequest(r).getParameter("response_code");
 	String trans_id = PortalUtil.getOriginalServletRequest(r).getParameter("trans_id");
+	String secure_hash = PortalUtil.getOriginalServletRequest(r).getParameter("secure_hash");
+	Map<String, String[]> params = PortalUtil.getOriginalServletRequest(r).getParameterMap();
+    Map<String, String> fields = new HashMap<String, String>();
+	
+	for (Map.Entry<String, String[]> entry : params.entrySet())
+	{
+		fields.put(entry.getKey(), entry.getValue()[0]);
+	}
+	
+	String command = PortalUtil.getOriginalServletRequest(r).getParameter("command");
+	String merchant_trans_id = PortalUtil.getOriginalServletRequest(r).getParameter("merchant_trans_id");
+	String merchant_code = PortalUtil.getOriginalServletRequest(r).getParameter("merchant_code");
+	String response_code = PortalUtil.getOriginalServletRequest(r).getParameter("response_code");
+	String good_code = PortalUtil.getOriginalServletRequest(r).getParameter("good_code");
+	String net_cost = PortalUtil.getOriginalServletRequest(r).getParameter("net_cost");
+	String ship_fee = PortalUtil.getOriginalServletRequest(r).getParameter("ship_fee");
+	String tax = PortalUtil.getOriginalServletRequest(r).getParameter("tax");
+	String service_code = PortalUtil.getOriginalServletRequest(r).getParameter("service_code");
+	String currency_code = PortalUtil.getOriginalServletRequest(r).getParameter("currency_code");
+	String bank_code = PortalUtil.getOriginalServletRequest(r).getParameter("bank_code");
+	String desc_1 = PortalUtil.getOriginalServletRequest(r).getParameter("desc_1");
+	String desc_2 = PortalUtil.getOriginalServletRequest(r).getParameter("desc_2");
+	String desc_3 = PortalUtil.getOriginalServletRequest(r).getParameter("desc_3");
+	String desc_4 = PortalUtil.getOriginalServletRequest(r).getParameter("desc_4");
+	String desc_5 = PortalUtil.getOriginalServletRequest(r).getParameter("desc_5");
+	String p_p_id = PortalUtil.getOriginalServletRequest(r).getParameter("p_p_id");
+	String p_p_lifecycle = PortalUtil.getOriginalServletRequest(r).getParameter("p_p_id");
+	KeyPay keyPay = new KeyPay(PortalUtil.getOriginalServletRequest(r));
+	
+	/*
+	fields.put("command", command);
+    fields.put("merchant_trans_id", merchant_trans_id);
+    fields.put("merchant_code", merchant_code);
+    fields.put("good_code", good_code);
+    fields.put("net_cost", net_cost);
+    fields.put("ship_fee", ship_fee);
+    fields.put("tax", tax);
+    fields.put("service_code", service_code);
+    fields.put("currency_code", currency_code);
+	fields.put("response_code", response_code);
+	fields.put("bank_code", bank_code);
+	fields.put("desc_1", desc_1);
+	fields.put("desc_2", desc_2);
+	fields.put("desc_3", desc_3);
+	fields.put("desc_4", desc_4);
+	fields.put("desc_5", desc_5);	
+	*/
 %>
 <style>
 .lookup-result table {
@@ -65,7 +120,6 @@
 			<liferay-ui:message key="keypay-success"></liferay-ui:message>
 		</div>
 		<%
-			String good_code = PortalUtil.getOriginalServletRequest(r).getParameter("good_code");
 			String receptionNo = good_code.split("GC_")[1];
 			System.out.println("----RECEPTION NO----" + receptionNo);
 			System.out.println("----GOOD CODE----" + good_code);
@@ -87,10 +141,21 @@
 			}
 			PaymentFile paymentFile = null;
 			try {
-				paymentFile = PaymentFileLocalServiceUtil.getPaymentFileByGoodCode(scopeGroupId, good_code);
-				paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
-				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
-				System.out.println("----PAYMENT FILE----" + paymentFile.getAmount());
+				//paymentFile = PaymentFileLocalServiceUtil.getPaymentFileByGoodCode(scopeGroupId, good_code);
+				paymentFile = PaymentFileLocalServiceUtil.getPaymentFileByMerchantResponse(Long.parseLong(merchant_trans_id), good_code, Double.parseDouble(net_cost));
+				if (paymentFile != null) {
+					PaymentConfig paymentConfig = PaymentConfigLocalServiceUtil.getPaymentConfigByGovAgency(scopeGroupId, paymentFile.getGovAgencyOrganizationId());
+					if (paymentConfig != null) {
+						System.out.println("----HASH----" + keyPay.getSecureHashMerchant());
+						System.out.println("----SECURE HASH----" + secure_hash);
+						if (keyPay.checkSecureHash(secure_hash)) {
+							System.out.println("----PAY SUCCESS---");
+							paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
+							PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);							
+						}
+					}
+					System.out.println("----PAYMENT FILE----" + paymentFile.getAmount());
+				}
 			}
 			catch (SystemException e) {
 				
@@ -121,7 +186,7 @@
 				</tr>
 				<tr>
 					<td class="col-left"><liferay-ui:message key="amount"></liferay-ui:message></td>
-					<td class="col-right"><%= paymentFile.getAmount() %></td>
+					<td class="col-right"><%= NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount()) %></td>
 				</tr>
 				<tr>
 					<td class="col-left"><liferay-ui:message key="trans_id"></liferay-ui:message></td>
@@ -138,7 +203,6 @@
 	</c:when>
 	<c:otherwise>
 		<%
-			String good_code = PortalUtil.getOriginalServletRequest(r).getParameter("good_code");
 			String receptionNo = good_code.split("GC_")[1];
 			System.out.println("----RECEPTION NO----" + receptionNo);
 			System.out.println("----GOOD CODE----" + good_code);

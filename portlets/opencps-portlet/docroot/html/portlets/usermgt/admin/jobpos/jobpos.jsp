@@ -39,10 +39,6 @@
 		_log.error(e);
 	}
 %>
-
-
-
-
 	<aui:model-context bean="<%=jobPos %>" model="<%=JobPos.class %>" />
 	<aui:input name="<%=JobPosDisplayTerms.TITLE_JOBPOS %>">
 		<aui:validator name="required"></aui:validator>

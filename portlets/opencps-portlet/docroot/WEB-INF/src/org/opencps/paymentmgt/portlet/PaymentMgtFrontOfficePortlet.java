@@ -195,7 +195,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
                 current_locale, country_code, return_url, internal_bank, merchant_secure_key);
 	        keypay.setKeypay_url(paymentConfig.getKeypayDomain());
 	        
-	        String url_redirect = paymentConfig.getKeypayDomain();
+	        String url_redirect = paymentFile.getKeypayUrl();
 	        String param = "";
 	        param += "merchant_code=" + URLEncoder.encode(keypay.getMerchant_code(), "UTF-8") + "&";
 	        param += "merchant_secure_key=" + URLEncoder.encode(keypay.getMerchant_secure_key(), "UTF-8") + "&";
@@ -221,6 +221,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 	        param += "xml_description=" + URLEncoder.encode(keypay.getXml_description(), "UTF-8") + "&";
 	        
 	        url_redirect += param + "secure_hash=" + keypay.getSecure_hash();
+	        System.out.println("----URL----" + url_redirect);
 	        actionResponse.sendRedirect(url_redirect);
 		}
 	}
@@ -269,7 +270,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 					paymentFile = PaymentFileLocalServiceUtil.getPaymentFile(paymentFileId);
 					if (paymentFile != null) {
 						paymentFile.setConfirmFileEntryId(fileEntry.getFileEntryId());
-						paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED);
+						paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REQUESTED);
 						PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 					}
 				}
@@ -279,11 +280,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 
 				SessionMessages.add(
 				    actionRequest,
-				    MessageKeys.PAYMENT_FILE_CONFIRM_BANK_SUCESS);
-			}
-
-			if (Validator.isNotNull(redirectURL)) {
-				actionResponse.sendRedirect(redirectURL);
+				    MessageKeys.PAYMENT_FILE_CONFIRM_BANK_SUCCESS);
 			}
 		}
 		catch (Exception e) {
@@ -307,10 +304,6 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 				SessionErrors.add(
 				    actionRequest,
 				    MessageKeys.SERVICE_TEMPLATE_EXCEPTION_OCCURRED);
-			}
-
-			if (Validator.isNotNull(returnURL)) {
-				actionResponse.sendRedirect(returnURL);
 			}
 		}
 
@@ -346,7 +339,8 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 			folderId = folderFile.getFolderId();
 		}
 
-		String sourceFileName =
+		Date now = new Date();
+		String sourceFileName = now.getTime() + "_" +
 		    uploadPortletRequest.getFileName("uploadedFile");
 		String title = ParamUtil.getString(uploadPortletRequest, "fileName");
 

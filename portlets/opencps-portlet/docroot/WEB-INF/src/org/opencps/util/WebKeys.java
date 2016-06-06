@@ -121,6 +121,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String ACTION_CHANGE_VALUE = "change";
 	
+	public static final String ACTION_REPAIR_VALUE = "repair";
+	
 	public static final String ACTION_PAY_VALUE = "pay";
 	
 	public static final String ACTION_CANCEL_VALUE = "cancel";
@@ -162,4 +164,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String PRE_CONDITION_ONEGATE = "onegate";
 	
 	public static final String PRE_CONDITION_ONELINE = "oneline";
+	
+	
 }

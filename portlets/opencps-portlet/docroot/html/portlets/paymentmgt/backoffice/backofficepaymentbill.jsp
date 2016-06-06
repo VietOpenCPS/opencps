@@ -20,6 +20,7 @@
 <%@ include file="../init.jsp"%>
 <%
 	String backRedirect = ParamUtil.getString(request, "redirect");
+	long paymentFileId = ParamUtil.getLong(request, "paymentFileId");
 %>
 <liferay-ui:header
 	backURL="<%= backRedirect %>"
@@ -36,7 +37,7 @@
 </aui:form>
 <aui:script>
 AUI().ready(function(A){
-			<portlet:namespace/>createReport(1);
+			<portlet:namespace/>createReport(<%= paymentFileId %>);
 });
 	Liferay.provide(window, '<portlet:namespace/>createReport', function(paymentFileId) {
 		var A = AUI();

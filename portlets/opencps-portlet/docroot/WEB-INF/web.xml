@@ -6,7 +6,7 @@
 			<taglib-location>/WEB-INF/tld/opencps-datamgt.tld</taglib-location>
 		</taglib>
 		<taglib>
-			<taglib-uri>http://opencps.org/datamgt</taglib-uri>
+			<taglib-uri>http://opencps.org/accountmgt</taglib-uri>
 			<taglib-location>/WEB-INF/tld/opencps-accountmgt.tld</taglib-location>
 		</taglib>
 	</jsp-config>

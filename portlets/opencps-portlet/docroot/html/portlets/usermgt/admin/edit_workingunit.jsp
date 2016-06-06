@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 	/**
@@ -62,7 +64,14 @@
 		workingunitSections[2] = "jobpos";
 	}
 	
-				
+	boolean success = false;
+
+	try{
+		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
+		
+	}catch(Exception e){
+		
+	}
 	String[][] categorySections = {workingunitSections};
 %>
 
@@ -100,25 +109,17 @@
 	message="<%= DuplicatWorkingUnitEmailException.class.getName() %>" 
 />
 
+<liferay-ui:success 
+	key="<%=MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS %>"
+	message="<%=LanguageUtil.get(pageContext, 
+		MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS) %>"
+/>
+
 <portlet:actionURL var="updateWorkingUnitURL" name="updateWorkingUnit" >
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
 	<portlet:param name="redirectURL" value="<%=redirectURL %>"/>
 	<portlet:param name="isAddChild" value="<%=isAddChild %>"/>
 </portlet:actionURL>
-
-
-<portlet:renderURL	
-		var="dialogURL"	
-		windowState="<%=LiferayWindowState.POP_UP.toString()%>"
-	>
-	
-	<portlet:param name="mvcPath" value='<%= templatePath + "jobpos.jsp" %>' />
-	
-	<portlet:param 
-		name="workingUnitId" 
-		value="<%=String.valueOf(workingUnitId) %>"
-	/>
-</portlet:renderURL>
 
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%= workingUnit != null %>">
@@ -154,28 +155,18 @@
 	></aui:input>
 </aui:form>
 
-<aui:script use="liferay-util-window">
-	AUI().ready(function(A){
-		var onclickJobPos = A.one('#<portlet:namespace/>jobposLink');
-		if(onclickJobPos) {
-			onclickJobPos.on('click', function(event) {
-				Liferay.Util.openWindow({
-					dialog : {
-						center : true,
-						
-						modal : true
-						
-					},
-					id : '<portlet:namespace/>dialog',
-					title : '<%= LanguageUtil.get(locale, "edit-jobpos")%>',
-					uri : '<%=dialogURL %>'
-				});
-			});
-		}
-	});
-</aui:script>
-
 <%!
 	private Log _log = LogFactoryUtil.
 		getLog("html.portlets.usermgt.admin.edit_workingunit.jsp");
 %>
+
+<aui:script use='liferay-util-window'>
+	AUI().ready(function(A) {
+		var success = '<%= success%>';
+		if(success == 'true') {
+			Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+		}
+	});
+	
+    
+</aui:script>

@@ -1,3 +1,4 @@
+<%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.paymentmgt.model.PaymentFile"%>
 <%
@@ -44,24 +45,23 @@
 	<a href="<%=detailURL.toString() %>" ><liferay-ui:message key="detail" ></liferay-ui:message></a> | 
 
 <c:choose>
-	<c:when test="<%=rowPay.getPaymentStatus() == 0 %>">
+	<c:when test="<%=rowPay.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING %>">
 		<%
 			detailURL.setParameter("mvcPath", templatePath + "backofficepaymentcash.jsp");
 		%>
 		<a href="<%=detailURL.toString() %>" ><liferay-ui:message key="thu-phi" ></liferay-ui:message></a>
 	</c:when>
 	
-	<c:when test="<%=rowPay.getPaymentStatus() == 1 %>">
+	<c:when test="<%=rowPay.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED %>">
 		<%
 			detailURL.setParameter("mvcPath", templatePath + "backofficepaymentconfirm.jsp");
 		%>
 		<a href="<%=detailURL.toString() %>" ><liferay-ui:message key="xac-nhan" ></liferay-ui:message></a>
 	</c:when>
 	
-	<c:when test="<%=rowPay.getPaymentStatus() == 2 %>">
+	<c:when test="<%=rowPay.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
 		<%
 			detailURL.setParameter("mvcPath", templatePath + "backofficepaymentbill.jsp");
-			detailURL.setParameter("paymentFileId", String.valueOf(rowPay.getPaymentFileId()));
 		%>
 		<a href="<%=detailURL.toString() %>" ><liferay-ui:message key="in-bien-lai" ></liferay-ui:message></a>
 	</c:when>

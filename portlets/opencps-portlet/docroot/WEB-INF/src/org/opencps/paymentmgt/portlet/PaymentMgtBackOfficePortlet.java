@@ -29,12 +29,17 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.WindowStateException;
 
+import org.opencps.accountmgt.model.Citizen;
+import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.jasperreport.util.JRReportUtil;
+import org.opencps.paymentmgt.NoSuchPaymentFileException;
 import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.paymentmgt.search.PaymentFileDisplayTerms;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
+import org.opencps.paymentmgt.util.PaymentMgtUtil;
 import org.opencps.usermgt.model.Employee;
 import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.service.EmployeeLocalServiceUtil;
@@ -42,10 +47,13 @@ import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
 import org.opencps.util.AccountUtil;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
+import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -53,6 +61,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletMode;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -89,6 +99,60 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		    .createReportPDFfFile(
 		        jrxmlTemplate, formData, map, outputDestination, fileName);
 	}
+	/**
+	 * @param actionRequest
+	 * 
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void confirmPaymentRequested(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+		long paymentFileId =
+			    ParamUtil.getLong(actionRequest, PaymentFileDisplayTerms.PAYMENT_FILE_ID);
+		int confirmHopLe = ParamUtil.getInteger(actionRequest, "confirmHopLeHidden", 0);
+		String lyDo = "";
+		if (confirmHopLe == 0) {
+			lyDo = ParamUtil.getString(actionRequest, "lyDo");
+		}
+		PaymentFile paymentFile = null;
+		try {
+			paymentFile = PaymentFileLocalServiceUtil.getPaymentFile(paymentFileId);
+			if (paymentFile != null) {
+				if (confirmHopLe == 1) {
+					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
+				}
+				else if (confirmHopLe == 0) {
+					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REJECTED);
+					paymentFile.setApproveNote(lyDo);
+				}
+				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
+				SessionMessages.add(
+					    actionRequest,
+					    MessageKeys.PAYMENT_FILE_CONFIRM_CASH_SUCCESS);				
+			}
+			
+		}
+		catch (NoSuchPaymentFileException e) {
+			SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.PAYMENT_FILE_CONFIRM_CASH_ERROR);			
+		}
+		catch (SystemException e) {
+			SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.PAYMENT_FILE_CONFIRM_CASH_ERROR);
+			
+		}
+		catch (PortalException e) {
+			SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.PAYMENT_FILE_CONFIRM_CASH_ERROR);
+			
+		}
+
+	}
+	
 	/**
 	 * @param actionRequest
 	 * 
@@ -162,9 +226,24 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		        payloadJSON.put("ownerUserId", paymentFile.getOwnerUserId());
 		        payloadJSON.put("ownerOrganizationId", paymentFile.getOwnerOrganizationId());
 		        //TODO
-		        workingUnit = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getOwnerOrganizationId());
-		        payloadJSON.put("ownerOrganizationName", workingUnit.getName());
-		        payloadJSON.put("ownerOrganizationAddress", workingUnit.getAddress());
+		        
+		        Citizen citizen = null;
+		        if (paymentFile.getOwnerOrganizationId() != 0)
+		        	workingUnit = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getOwnerOrganizationId());
+		        else if (paymentFile.getOwnerUserId() != 0)
+		        	citizen = CitizenLocalServiceUtil.getByMappingUserId(paymentFile.getOwnerUserId());
+		        if (workingUnit != null) {
+			        payloadJSON.put("ownerOrganizationName", workingUnit.getName());
+			        payloadJSON.put("ownerOrganizationAddress", workingUnit.getAddress());		        	
+		        }
+		        else if (citizen != null) {
+			        payloadJSON.put("ownerOrganizationName", citizen.getFullName());
+			        payloadJSON.put("ownerOrganizationAddress", citizen.getAddress());		        	
+		        }
+		        else {
+			        payloadJSON.put("ownerOrganizationName", "");
+			        payloadJSON.put("ownerOrganizationAddress", "");		        			        	
+		        }
 		        
 		        payloadJSON.put("govAgencyOrganizationId", paymentFile.getGovAgencyOrganizationId());
 		        payloadJSON.put("paymentName", paymentFile.getPaymentName());

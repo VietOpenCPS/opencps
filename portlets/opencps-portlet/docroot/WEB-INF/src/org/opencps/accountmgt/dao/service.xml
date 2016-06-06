@@ -273,5 +273,10 @@
 		<exception>InvalidFileUpload</exception>
 		<exception>OutOfSizeFileUpload</exception>
 		<exception>FileTypeFail</exception>
+        <exception>NoSuchAccount</exception>
+        <exception>NoSuchAccountType</exception>
+        <exception>NoSuchAccountFolder</exception>
+        <exception>NoSuchAccountOwnUserId</exception>
+        <exception>NoSuchAccountOwnOrgId</exception>
 	</exceptions>
 </service-builder>
