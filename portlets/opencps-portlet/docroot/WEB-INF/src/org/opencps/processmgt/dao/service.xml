@@ -219,6 +219,10 @@
 			<finder-column name="postback"/>
 		</finder>
 		
+		<finder return-type="Collection" name="P_W_ID_Esign">
+			<finder-column name="processWorkflowId"/>
+			<finder-column name="esign"/>
+		</finder>
 	</entity>
 
 	<entity name="ProcessOrder" local-service="true" remote-service="true"

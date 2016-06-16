@@ -1,3 +1,7 @@
+<%@page import="com.liferay.portal.security.permission.PermissionThreadLocal"%>
+<%@page import="com.liferay.portal.security.permission.PermissionCheckerFactoryUtil"%>
+<%@page import="com.liferay.portal.security.permission.PermissionChecker"%>
+<%@page import="com.liferay.portal.security.auth.PrincipalThreadLocal"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software

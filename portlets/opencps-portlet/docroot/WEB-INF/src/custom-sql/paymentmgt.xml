@@ -13,9 +13,9 @@
 				LEFT JOIN opencps_acc_business
 				ON opencps_payment_file.ownerOrganizationId = opencps_acc_business.mappingOrganizationId
 	    	WHERE
-	    		(opencps_payment_file.groupId = ?)
+	    		(1 = 1)
 	    	AND
-	    		((lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
+	    		((lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
 	    	AND
 				(opencps_payment_file.paymentStatus = ?)
 		]]>
@@ -34,9 +34,9 @@
 				LEFT JOIN opencps_acc_business
 				ON opencps_payment_file.ownerOrganizationId = opencps_acc_business.mappingOrganizationId
 	    	WHERE
-	    		(opencps_payment_file.groupId = ?)
+	    		1 = 1
 	    	AND
-	    		((lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
+	    		((lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
 	    	AND
 				(opencps_payment_file.paymentStatus = ?)
 		]]>

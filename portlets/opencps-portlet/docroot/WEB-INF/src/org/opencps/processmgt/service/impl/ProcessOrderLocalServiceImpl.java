@@ -521,6 +521,18 @@ public class ProcessOrderLocalServiceImpl
 
 	}
 	
+	public List<ProcessOrder> oneGateSearchProcessOrder(
+			long groupId,
+			String keyword,
+		    int dossierStatus, long serviceInfoId, long processStepId, int start, int end,
+		    OrderByComparator obc) throws SystemException {
 
+			return processOrderFinder
+			    .oneGateSearchProcessOrder(groupId, keyword, dossierStatus, serviceInfoId, processStepId, start, end, obc);
+		}
+	
+	public long oneGateCountProcessOrder(long groupId, String keyword, int dossierStatus, long serviceInfoId, long processStepId) throws SystemException {
+		return processOrderFinder.oneGateCountProcessOrder(groupId, keyword, dossierStatus, serviceInfoId, processStepId);
+	}
 
 }

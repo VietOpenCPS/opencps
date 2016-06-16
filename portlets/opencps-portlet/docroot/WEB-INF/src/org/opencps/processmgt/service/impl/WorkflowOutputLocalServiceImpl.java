@@ -129,4 +129,16 @@ public class WorkflowOutputLocalServiceImpl
 		return workflowOutputPersistence.findByP_W_ID_PB(processWorkflowId, postback);
 	}
 
+
+	/**
+	 * @param processWorkflowId
+	 * @param esign
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<WorkflowOutput> getByProcessWFEsign(long processWorkflowId, boolean esign)
+	    throws PortalException, SystemException {
+		return workflowOutputPersistence.findByP_W_ID_Esign(processWorkflowId, esign);
+	}
 }

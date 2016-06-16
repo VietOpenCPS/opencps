@@ -22,4 +22,8 @@ public class ProcessMgtUtil {
 	public static final String[] _PROCESS_ORDER_CATEGORY_NAMES = {
 		"process-order"
 	};	
+	public static final String TOP_TABS_ONEGATE_DOSSIERLIST = "top_tabs_onegate_dossier_list";
+	public static final String TOP_TABS_ONEGATE_RETURNLIST = "top_tabs_onegate_return_list";
+	public static final int SERVICEINFO_ALL = -1;
+	public static final int DOMAIN_ALL = -1;
 }

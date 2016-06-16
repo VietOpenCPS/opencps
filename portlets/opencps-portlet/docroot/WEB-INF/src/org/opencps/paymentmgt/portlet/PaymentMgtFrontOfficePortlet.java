@@ -271,6 +271,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 					if (paymentFile != null) {
 						paymentFile.setConfirmFileEntryId(fileEntry.getFileEntryId());
 						paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REQUESTED);
+						paymentFile.setPaymentMethod(4);
 						PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 					}
 				}
@@ -376,7 +377,11 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(
 			        DLFileEntry.class.getName(), uploadPortletRequest);
-
+			serviceContext
+			.setAddGroupPermissions(true);
+			serviceContext
+			.setAddGuestPermissions(true);
+			
 			FileEntry fileEntry = null;
 
 			// Add file entry
