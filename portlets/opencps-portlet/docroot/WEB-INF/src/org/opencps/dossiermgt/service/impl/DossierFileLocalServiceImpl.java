@@ -921,4 +921,10 @@ public class DossierFileLocalServiceImpl
 		OrderByComparator comparator = orderByComparatorFactory.create("DossierFile", "modifiedDate", true);
 		return dossierFilePersistence.fetchByTemplateFileNoDossierId_First(dossierId, templateFileNo, comparator);
 	}
+	
+	public DossierFile fetchByTemplateFileNoDossierId_First(long dossierId, String templateFileNo) throws SystemException {
+		OrderByComparatorFactory orderByComparatorFactory = OrderByComparatorFactoryUtil.getOrderByComparatorFactory();
+		OrderByComparator comparator = orderByComparatorFactory.create("DossierFile", "modifiedDate", true);
+		return dossierFilePersistence.fetchByTemplateFileNoDossierId_First(dossierId, templateFileNo, comparator);
+	}
 }
