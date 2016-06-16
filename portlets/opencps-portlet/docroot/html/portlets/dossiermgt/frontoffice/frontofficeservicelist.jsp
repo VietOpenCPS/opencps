@@ -107,6 +107,7 @@
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container> --%>
 
+<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 

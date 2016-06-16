@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +17,7 @@
  */
 %>
 
+<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
@@ -33,62 +33,108 @@
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	PortletURL searchURL = renderResponse.createRenderURL();
+	
+	boolean isListServiceConfig = ParamUtil.getBoolean(request, "isListServiceConfig", false);
 %>
 
 <aui:nav-bar cssClass="custom-toolbar">
-	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left font-pull" >
-		<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER) && tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)%>">
-			
-			<portlet:renderURL var="addDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
-				<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
-				<portlet:param name="backURL" value="<%=currentURL %>"/>
-			</portlet:renderURL>
-			<aui:nav-item
-				id="addDictItem" 
-				label="add-dossier" 
-				iconCssClass="icon-plus"  
-				href="<%=addDossierURL %>"
-			/>
-		</c:if>
-	</aui:nav>
+
+	<c:if test="<%=!isListServiceConfig %>">
+		<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left font-pull" >
+			<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER) 
+				&& tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)%>">
+				
+				<portlet:renderURL var="addDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
+					<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
+					<portlet:param name="isListServiceConfig" value="<%=String.valueOf(true) %>"/>
+					<portlet:param name="backURL" value="<%=currentURL %>"/>
+				</portlet:renderURL>
+				<aui:nav-item 
+					id="addDictItem" 
+					label="add-dossier" 
+					iconCssClass="icon-plus"  
+					href="<%=addDossierURL %>"
+				/>
+			</c:if>
+		</aui:nav>
+	</c:if>
 	
 	<aui:nav-bar-search cssClass="pull-right front-custom-select-search">
 		<div class="form-search">
 			<aui:form action="<%= searchURL %>" method="post" name="fm">
-				<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
-					<%
-						searchURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
-						searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
-					%>
-					<aui:row>
-						<aui:col width="50">
-							<aui:select name="dossierStatus" label="dossier-status" inlineField="<%=true %>" inlineLabel="left">
-								<aui:option><liferay-ui:message key="dossier-status-fill"/></aui:option>
-								<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
-								<%
-									for(Integer status : PortletUtil.getDossierStatus()){
-										%>
-											<aui:option 
-												value="<%= status%>"
-												
-											>
-												<%=PortletUtil.getDossierStatusLabel(status, locale) %>
-											</aui:option>
-										<%
-									}
-								%>
-							</aui:select>
-						</aui:col>
-						<aui:col width="50">
-							<liferay-ui:input-search 
-								id="keywords1"
-								name="keywords"
-								title="keywords"
-								placeholder='<%= LanguageUtil.get(locale, "keywords") %>' 
-							/>
-						</aui:col>
-					</aui:row>
-				</c:if>
+
+				<c:choose>
+					<c:when test="<%=isListServiceConfig %>">
+						<aui:row>
+							<aui:col width="33">
+								<datamgt:ddr 
+									depthLevel="1" 
+									dictCollectionCode="<%=ServiceUtil.SERVICE_DOMAIN %>" 
+									name="serviceDomain"
+									itemNames="service-domain"
+									inlineField="<%=true%>"
+									inlineLabel="left"
+								/>
+							</aui:col>
+							<aui:col width="33">
+								<datamgt:ddr 
+									depthLevel="1" 
+									dictCollectionCode="<%=ServiceUtil.SERVICE_ADMINISTRATION %>" 
+									name="govAgency"
+									itemNames="gov-agency"
+									inlineField="<%=true%>"
+									inlineLabel="left"
+								/>
+							</aui:col>
+							<aui:col width="33">
+								<liferay-ui:input-search 
+									id="keywords1"
+									name="keywords"
+									title="keywords"
+									placeholder='<%= LanguageUtil.get(locale, "keywords") %>'
+									
+								/>
+							</aui:col>
+						</aui:row>
+					</c:when>
+					<c:otherwise>
+	
+						<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
+						<%
+							searchURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
+							searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+						%>
+							<aui:row>
+								<aui:col width="50">
+									<aui:select name="dossierStatus" label="dossier-status" inlineField="<%=true %>" inlineLabel="left">
+										<aui:option><liferay-ui:message key="dossier-status-fill"/></aui:option>
+										<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
+											<%
+												for(Integer status : PortletUtil.getDossierStatus()){
+													%>
+														<aui:option 
+															value="<%= status%>"
+															
+														>
+															<%=PortletUtil.getDossierStatusLabel(status, locale) %>
+														</aui:option>
+													<%
+												}
+											%>
+									</aui:select>
+								</aui:col>
+								<aui:col width="50">
+									<liferay-ui:input-search 
+										id="keywords1"
+										name="keywords"
+										title="keywords"
+										placeholder='<%=LanguageUtil.get(locale, "keywords") %>' 
+									/>
+								</aui:col>
+							</aui:row>
+						</c:if>
+					</c:otherwise>
+				</c:choose>
 			</aui:form>
 		</div>
 	</aui:nav-bar-search>

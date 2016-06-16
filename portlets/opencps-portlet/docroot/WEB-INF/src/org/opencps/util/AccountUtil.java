@@ -51,8 +51,9 @@ import com.liferay.portlet.documentlibrary.model.DLFolder;
  * @author trungnt
  */
 public class AccountUtil {
+
 	private static AccountBean _accountBean;
-	
+
 	/**
 	 * @param accountInstance
 	 * @param accountType
@@ -74,8 +75,6 @@ public class AccountUtil {
 		AccountUtil
 			.setAccountBean(accountBean);
 	}
-	
-	
 
 	/**
 	 * @param request
@@ -190,8 +189,6 @@ public class AccountUtil {
 
 		// System.gc();
 	}
-
-	
 
 	/**
 	 * @param userId
@@ -340,18 +337,27 @@ public class AccountUtil {
 
 		return accountBean;
 	}
-	
-	
-	public static void setAccountBean(AccountBean accountBean) {
 
-		_accountBean = accountBean;
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	public static AccountBean getAccountBean(HttpServletRequest request) {
+
+		HttpSession session = request
+			.getSession();
+
+		AccountBean accountBean = (AccountBean) session
+			.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		return accountBean;
 	}
 
-	public static AccountBean getAccountBean() {
-		
-		return _accountBean;
-	}
-	
+	/**
+	 * @param actionRequest
+	 * @return
+	 */
 	public static AccountBean getAccountBean(ActionRequest actionRequest) {
 
 		HttpServletRequest request = PortalUtil
@@ -365,5 +371,17 @@ public class AccountUtil {
 		return accountBean;
 	}
 	
-	private static Log _log = LogFactoryUtil.getLog(AccountUtil.class.getName());
+	public static void setAccountBean(AccountBean accountBean) {
+
+		_accountBean = accountBean;
+	}
+
+	public static AccountBean getAccountBean() {
+
+		return _accountBean;
+	}
+
+	private static Log _log = LogFactoryUtil
+		.getLog(AccountUtil.class
+			.getName());
 }

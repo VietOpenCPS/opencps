@@ -283,5 +283,91 @@
 				opencps_dossier_file.modifiedDate DESC, opencps_dossier_file.displayName ASC
 		]]>
 	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFileByG_K_T_R">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier_file
+			WHERE
+				(opencps_dossier_file.groupId = ?)
+			AND 
+				(opencps_dossier_file.removed = ?)
+			AND
+				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier_file.templateFileNo = ?)
+			ORDER BY 
+				opencps_dossier_file.modifiedDate DESC, opencps_dossier_file.displayName ASC
+		]]>
+	</sql>
 
+
+	<sql id="org.opencps.dossiermgt.service.persistence.ServiceConfigFinder.searchServiceConfigAdvance">	
+		<![CDATA[
+			SELECT
+				opencps_service_config.companyId,
+				opencps_service_config.dossierTemplateId,
+				opencps_service_config.govAgencyCode,
+				opencps_service_config.govAgencyIndex,
+				opencps_service_config.govAgencyName,
+				opencps_service_config.govAgencyOrganizationId,
+				opencps_service_config.groupId,
+				opencps_service_config.serviceAdministrationIndex,
+				opencps_service_config.serviceBackoffice,
+				opencps_service_config.serviceBusinees,
+				opencps_service_config.serviceCitizen,
+				opencps_service_config.serviceConfigId,
+				opencps_service_config.serviceDomainIndex,
+				opencps_service_config.serviceInfoId,
+				opencps_service_config.serviceLevel,
+				opencps_service_config.serviceOnegate,
+				opencps_service_config.servicePortal,
+				opencps_service_config.serviceProcessId,
+				opencps_service_config.userId,
+				opencps_serviceinfo.serviceName,
+				opencps_serviceinfo.fullName,
+				opencps_serviceinfo.serviceNo
+			FROM
+				opencps_service_config
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			WHERE
+				groupId = ?
+			AND 
+				opencps_service_config.servicePortal = ?
+			AND 
+				opencps_service_config.serviceOnegate = ?
+			AND 
+				opencps_service_config.serviceBackoffice = ?
+			AND 
+				opencps_service_config.serviceCitizen = ?
+			AND 
+				opencps_service_config.serviceBusinees = ?
+			AND 
+			(
+				opencps_service_config.serviceDomainIndex LIKE ?
+				OR 
+				opencps_service_config.serviceDomainIndex = ?
+			)
+			AND 
+			(
+				opencps_service_config.govAgencyIndex LIKE ?
+				OR 
+				opencps_service_config.govAgencyIndex = ?
+			)
+			AND 
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			OR
+				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			
+			ORDER BY
+				opencps_service_config.govAgencyName ASC
+		]]>
+	</sql>
 </custom-sql>

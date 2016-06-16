@@ -92,7 +92,7 @@
 		}
 	}
 	
-	AccountBean accBean = AccountUtil.getAccountBean();
+	AccountBean accBean = AccountUtil.getAccountBean(request);
 	
 	Citizen ownerCitizen = null;
 	Business ownerBusiness = null;
