@@ -170,7 +170,7 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		    .getLong(actionRequest, "paymentFileId");
 		
 		AccountBean accountBean = AccountUtil
-					    .getAccountBean(actionRequest);
+					    .getAccountBean();
 		File file = null;
 
 		InputStream inputStream = null;

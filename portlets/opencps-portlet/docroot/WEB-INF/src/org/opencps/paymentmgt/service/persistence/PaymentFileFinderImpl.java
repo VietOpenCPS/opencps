@@ -101,9 +101,7 @@ implements PaymentFileFinder {
 		long groupId, String paymentStatus, boolean andOperator, String[] keywords, int start, int end) {
 
 		keywords = CustomSQLUtil.keywords(keywords);
-		System.out.println("PaymentFileFinderImpl.groupId()"+groupId);
-		System.out.println("PaymentFileFinderImpl.groupId()"+paymentStatus);
-		System.out.println("PaymentFileFinderImpl.groupId()"+keywords);
+
 		Session session = null;
 		try {
 			session = openSession();
@@ -137,7 +135,13 @@ implements PaymentFileFinder {
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
-			qPos.add(keywords, 8);
+			qPos.add(groupId);
+
+			qPos.add(keywords, 2);
+			
+			qPos.add(keywords, 2);
+
+			qPos.add(keywords, 2);
 			
 			qPos.add(paymentStatus);
 			
@@ -194,7 +198,13 @@ implements PaymentFileFinder {
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
-			qPos.add(keywords, 8);
+			qPos.add(groupId);
+
+			qPos.add(keywords, 2);
+			
+			qPos.add(keywords, 2);
+
+			qPos.add(keywords, 2);
 
 			qPos.add(paymentStatus);
 			

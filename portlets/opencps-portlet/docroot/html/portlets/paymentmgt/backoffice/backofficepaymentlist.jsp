@@ -83,7 +83,7 @@
 				
 			}else{
 				try {
-					dossierFiles = PaymentFileLocalServiceUtil.getPaymentFiles(searchContainer.getStart(), searchContainer.getEnd());
+					dossierFiles = PaymentFileLocalServiceUtil.getPaymentFiles(-1, -1);
 					totalCount = PaymentFileLocalServiceUtil.getPaymentFilesCount();
 				} catch(Exception e){
 					_log.error(e);
@@ -133,7 +133,7 @@
 				
 				row.addText(LanguageUtil.get(pageContext, PortletUtil.getPaymentStatusLabel(paymentFile.getPaymentStatus(), locale)));	
 				
-				row.addText(LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)));	
+				row.addText(LanguageUtil.get(locale, PaymentMgtUtil.getPaymentMethod(paymentFile.getPaymentFileId())));	
 				
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "payment_actions.jsp", config.getServletContext(), request, response);
 			%>	
