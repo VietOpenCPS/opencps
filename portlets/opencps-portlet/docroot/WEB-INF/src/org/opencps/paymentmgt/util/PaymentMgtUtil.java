@@ -31,7 +31,6 @@ import com.liferay.portal.service.UserLocalServiceUtil;
  * @author trungdk
  */
 public class PaymentMgtUtil {
-	public static final int PAYMENT_STATUS_ON_PROCESSING = 0;
 	public static final int PAYMENT_STATUS_REQUESTED = 0;
 	public static final int PAYMENT_STATUS_CONFIRMED = 1;
 	public static final int PAYMENT_STATUS_APPROVED = 2;
