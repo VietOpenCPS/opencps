@@ -45,7 +45,7 @@
 	<a href="<%=detailURL.toString() %>" ><liferay-ui:message key="detail" ></liferay-ui:message></a> | 
 
 <c:choose>
-	<c:when test="<%=rowPay.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING ||
+	<c:when test="<%=
 			rowPay.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || rowPay.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED %>">
 		<%
 			detailURL.setParameter("mvcPath", templatePath + "backofficepaymentcash.jsp");
