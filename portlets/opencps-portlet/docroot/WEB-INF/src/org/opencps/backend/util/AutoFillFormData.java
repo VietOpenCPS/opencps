@@ -25,16 +25,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -118,7 +121,7 @@ public class AutoFillFormData {
 	 	}
 		
 		try {
-			JSONObject jsonSampleData = new JSONObject(sampleData);
+			JSONObject jsonSampleData = JSONFactoryUtil.createJSONObject(sampleData);
 			Map<String, Object> jsonMap = jsonToMap(jsonSampleData);
 			for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
 //				System.out.println(entry.getKey() + ": " + entry.getValue());
@@ -148,7 +151,20 @@ public class AutoFillFormData {
 						jsonMap.put(entry.getKey(), _contactTelNo);
 					}else if(value.equals("_contactEmail")){
 						jsonMap.put(entry.getKey(), _contactEmail);
+					}else if(value.equals("_ngayNopDon")){
+						jsonMap.put(entry.getKey(), ngayNopDon());
+					}else if(value.equals("_donViThucHien")){
+						if(dossierId > 0){
+							try {
+								Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
+								jsonMap.put(entry.getKey(), dossier.getGovAgencyName());
+							} catch (SystemException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
 					}
+					
 				}else if(value.startsWith("#") && value.contains("@")){
 					String newString = value.substring(1);
 					String[] stringSplit = newString.split("@");
@@ -157,7 +173,7 @@ public class AutoFillFormData {
 					try {
 						DossierFile dossierFile = DossierFileLocalServiceUtil.fetchByTemplateFileNoDossierId_First(dossierId, paper);
 						if(Validator.isNotNull(dossierFile) && Validator.isNotNull(dossierFile.getFormData())){
-							JSONObject jsonOtherData = new JSONObject(dossierFile.getFormData());
+							JSONObject jsonOtherData = JSONFactoryUtil.createJSONObject(dossierFile.getFormData());
 							Map<String, Object> jsonOtherMap = jsonToMap(jsonOtherData);
 							jsonMap.put(entry.getKey(), String.valueOf(jsonOtherMap.get(variable)));
 						}
@@ -168,8 +184,13 @@ public class AutoFillFormData {
 				}
 			}
 			
-			jsonMap.put("_ngayNopDon", ngayNopDon());
-			jsonSampleData = new JSONObject(jsonMap);
+			jsonSampleData = JSONFactoryUtil.createJSONObject();
+			for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
+//				System.out.println(entry.getKey() + ": " + entry.getValue());
+				jsonSampleData.put(entry.getKey(), entry.getValue()+"");
+			}
+			
+			
 			result = jsonSampleData.toString();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -213,7 +234,7 @@ public class AutoFillFormData {
 	public static Map<String, Object> jsonToMap(JSONObject json) {
         Map<String, Object> retMap = new HashMap<String, Object>();
 
-        if(json != JSONObject.NULL) {
+        if(Validator.isNotNull(json)) {
             try {
 				retMap = toMap(json);
 			} catch (JSONException e) {
@@ -230,16 +251,21 @@ public class AutoFillFormData {
         Iterator<String> keysItr = object.keys();
         while(keysItr.hasNext()) {
             String key = keysItr.next();
-            Object value = object.get(key);
-
-            if(value instanceof JSONArray) {
-                value = toList((JSONArray) value);
+            Object value = null;
+            if(Validator.isNotNull(object.getJSONArray(key))) {
+                value = toList((JSONArray) object.getJSONArray(key));
+                map.put(key, value);
             }
 
-            else if(value instanceof JSONObject) {
-                value = toMap((JSONObject) value);
+            else if(Validator.isNotNull(object.getJSONObject(key))) {
+                value = toMap((JSONObject) object.getJSONObject(key));
+                map.put(key, value);
             }
-            map.put(key, value);
+            
+            else  {
+                value = object.getString(key);
+                map.put(key, value);
+            }
         }
         return map;
     }
@@ -247,16 +273,13 @@ public class AutoFillFormData {
     public static List<Object> toList(JSONArray array) throws JSONException {
         List<Object> list = new ArrayList<Object>();
         for(int i = 0; i < array.length(); i++) {
-            Object value = array.get(i);
-            if(value instanceof JSONArray) {
-                value = toList((JSONArray) value);
-            }
+            Object value = array.getJSONObject(i);
 
-            else if(value instanceof JSONObject) {
+            if(value instanceof JSONObject) {
                 value = toMap((JSONObject) value);
             }
             list.add(value);
         }
         return list;
-}
+    }
 }
