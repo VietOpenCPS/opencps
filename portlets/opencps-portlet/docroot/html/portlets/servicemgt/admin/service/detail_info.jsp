@@ -48,50 +48,63 @@
 
 <aui:row >
 	<aui:col width="100">
-		<aui:input name="<%= ServiceDisplayTerms.SERVICE_DOSSIER %>" type="textarea" cssClass="txtarea-medium">
-		</aui:input>
+		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_DOSSIER %>" type="textarea" cssClass="txtarea-medium">
+		</aui:input> --%>
+		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_DOSSIER %>" initMethod="service_dossier"/>
 	</aui:col>
 </aui:row>
 
 <aui:row >
 	<aui:col width="100">
-		<aui:input name="<%= ServiceDisplayTerms.SERVICE_CONDITION %>" type="textarea" cssClass="txtarea-medium">
-		</aui:input>
+		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_CONDITION %>" type="textarea" cssClass="txtarea-medium">
+		</aui:input> --%>
+		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_CONDITION %>" initMethod="service_condition"/>
 	</aui:col>
 </aui:row>
 
 <aui:row >
 	<aui:col width="100">
-		<aui:input name="<%= ServiceDisplayTerms.SERVICE_DURATION %>" type="textarea" cssClass="txtarea-medium">
+		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_DURATION %>" type="textarea" cssClass="txtarea-medium">
 		</aui:input>
+		 --%>
+		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_DURATION %>" initMethod="service_duration"/>
 	</aui:col>
 </aui:row>
 
 <aui:row >
 	<aui:col width="100">
-		<aui:input name="<%= ServiceDisplayTerms.SERVICE_ACTORS %>" type="textarea" cssClass="txtarea-medium">
-		</aui:input>
+		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_ACTORS %>" type="textarea" cssClass="txtarea-medium">
+		</aui:input> --%>
+		
+		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_ACTORS %>" initMethod="service_actors"/>
 	</aui:col>
 </aui:row>
 
 <aui:row >
 	<aui:col width="100">
-		<aui:input name="<%= ServiceDisplayTerms.SERVICE_FEE %>" type="textarea" cssClass="txtarea-medium">
+		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_FEE %>" type="textarea" cssClass="txtarea-medium">
 		</aui:input>
+		 --%>
+		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_FEE %>" initMethod="service_fee"/>
 	</aui:col>
 </aui:row>
 
 <aui:row >
 	<aui:col width="100">
-		<aui:input name="<%= ServiceDisplayTerms.SERVICE_RESULTS %>" type="textarea" cssClass="txtarea-medium">
-		</aui:input>
+		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_RESULTS %>" type="textarea" cssClass="txtarea-medium">
+		</aui:input> --%>
+		
+		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_RESULTS %>" initMethod="service_results"/>
 	</aui:col>
 </aui:row>
 
 <aui:row >
 	<aui:col width="100">
-		<aui:input name="<%= ServiceDisplayTerms.SERVICE_RECORDS %>" type="textarea" cssClass="txtarea-medium">
-		</aui:input>
+		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_RECORDS %>" type="textarea" cssClass="txtarea-medium">
+		</aui:input> --%>
+		
+		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_RECORDS %>" initMethod="service_records"/>
+		
 	</aui:col>
 </aui:row>
 
@@ -116,6 +129,34 @@
 	
 	function <portlet:namespace />initInstructions() {
 		return "<%= Validator.isNotNull(serviceInfo) ? UnicodeFormatter.toString(serviceInfo.getServiceInstructions()) : StringPool.BLANK %>";
+	}
+	
+	function <portlet:namespace />service_dossier() {
+		return "<%= Validator.isNotNull(serviceInfo) ? UnicodeFormatter.toString(serviceInfo.getServiceDossier()) : StringPool.BLANK %>";
+	}
+	
+	function <portlet:namespace />service_condition() {
+		return "<%= Validator.isNotNull(serviceInfo) ? UnicodeFormatter.toString(serviceInfo.getServiceCondition()) : StringPool.BLANK %>";
+	}
+	
+	function <portlet:namespace />service_duration() {
+		return "<%= Validator.isNotNull(serviceInfo) ? UnicodeFormatter.toString(serviceInfo.getServiceDuration()) : StringPool.BLANK %>";
+	}
+	
+	function <portlet:namespace />service_actors() {
+		return "<%= Validator.isNotNull(serviceInfo) ? UnicodeFormatter.toString(serviceInfo.getServiceActors()) : StringPool.BLANK %>";
+	}
+	
+	function <portlet:namespace />service_fee() {
+		return "<%= Validator.isNotNull(serviceInfo) ? UnicodeFormatter.toString(serviceInfo.getServiceFee()) : StringPool.BLANK %>";
+	}
+	
+	function <portlet:namespace />service_results() {
+		return "<%= Validator.isNotNull(serviceInfo) ? UnicodeFormatter.toString(serviceInfo.getServiceResults()) : StringPool.BLANK %>";
+	}
+	
+	function <portlet:namespace />service_records() {
+		return "<%= Validator.isNotNull(serviceInfo) ? UnicodeFormatter.toString(serviceInfo.getServiceResults()) : StringPool.BLANK %>";
 	}
 
 </aui:script>

@@ -22,11 +22,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.opencps.dossiermgt.bean.DossierBean;
 import org.opencps.dossiermgt.bean.DossierFileBean;
-import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.impl.DossierFileImpl;
+import org.opencps.dossiermgt.util.DossierMgtUtil;
 
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -42,9 +41,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
-
-import org.opencps.dossiermgt.service.persistence.DossierFileFinder;
-import org.opencps.dossiermgt.util.DossierMgtUtil;
 
 /**
  * @author trungnt

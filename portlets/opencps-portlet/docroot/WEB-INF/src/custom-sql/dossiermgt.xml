@@ -6,10 +6,21 @@
 				opencps_service_config.*
 			FROM
 				opencps_service_config
+			INNER JOIN
+				opencps_serviceinfo
+			ON 
+				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceinfoId
+			INNER JOIN 
+				opencps_dossiertemplate
+			ON 
+				opencps_service_config.dossierTemplateId = opencps_dossiertemplate.dossierTemplateId
+			
 			WHERE
-				groupId = ?
+				(opencps_service_config.groupId = ?)
 			AND (
-				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))
+				(lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			OR (
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))	
 			AND (opencps_service_config.govAgencyCode = ?)
 			AND (opencps_service_config.domainCode = ?)
 		]]>
@@ -36,10 +47,20 @@
 				count(*) AS COUNT_VALUE
 			FROM
 				opencps_service_config
+			INNER JOIN
+				opencps_serviceinfo
+			ON 
+				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceinfoId
+			INNER JOIN 
+				opencps_dossiertemplate
+			ON 
+				opencps_service_config.dossierTemplateId = opencps_dossiertemplate.dossierTemplateId
 			WHERE
-				groupId = ?
+				(opencps_service_config.groupId = ?)
 			AND (
-				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))
+				(lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			OR (
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND (opencps_service_config.govAgencyCode = ?)
 			AND (opencps_service_config.domainCode = ?)
 		]]>
@@ -227,7 +248,7 @@
 		]]>
 	</sql>	
 	
-	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">
+	<!-- <sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">
 		<![CDATA[
 			SELECT
 				*
@@ -239,6 +260,23 @@
 				opencps_dossier_log.actor IN(?)
 			AND 
 				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			ORDER BY 
+				opencps_dossier_log.updateDatetime DESC
+		]]>
+	</sql> -->
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier_log
+			WHERE
+				opencps_dossier_log.dossierId = ?
+			AND 
+				opencps_dossier_log.actor IN (?)
+			AND 
+				opencps_dossier_log.requestCommand IN (?)
 			ORDER BY 
 				opencps_dossier_log.updateDatetime DESC
 		]]>

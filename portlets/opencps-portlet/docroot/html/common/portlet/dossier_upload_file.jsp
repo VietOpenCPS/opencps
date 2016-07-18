@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -211,7 +212,11 @@
 	});
 
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
-		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>');
+		var data = {
+			'conserveHash': true
+		};
+		
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>', data);
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>' + '<%=modalDialogId%>');
 		dialog.destroy(); // You can try toggle/hide whate
 	});

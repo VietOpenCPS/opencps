@@ -294,7 +294,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 			    .ValidateCitizen(
 			        citizenId, StringPool.BLANK, StringPool.BLANK, address,
 			        StringPool.BLANK, telNo, 1, StringPool.BLANK, cityId, districtId, wardId
-			        ,PortletPropsValues.ACCOUNTMGT_FILE_TYPE[0]);
+			        , StringPool.BLANK);
 
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
@@ -362,6 +362,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 				    .add(
 				        actionRequest,
 				        MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+				_log.error(e);
 			}
 
 			if (Validator
@@ -443,7 +444,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 			    .ValidateBusiness(
 			        businessId, email, StringPool.BLANK, enName, shortName,
 			        address, representativeName, representativeRole, cityId, districtId, wardId,
-			        1,PortletPropsValues.ACCOUNTMGT_FILE_TYPE[0]);
+			        1,StringPool.BLANK);
 
 			city = DictItemLocalServiceUtil
 			    .getDictItem(cityId);
@@ -542,6 +543,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 			    .isNotNull(returnURL)) {
 				actionResponse
 				    .sendRedirect(returnURL);
+				_log.error(e);
 			}
 
 		}

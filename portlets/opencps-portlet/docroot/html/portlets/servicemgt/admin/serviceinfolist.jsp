@@ -96,11 +96,10 @@
 			// service name
 			row.addText(service.getServiceName(), editURL);
 			
+			// service domain
+						row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , editURL);
 			// service admin
 			row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), editURL);
-
-			// service domain
-			row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , editURL);
 			
 			//service status
 			

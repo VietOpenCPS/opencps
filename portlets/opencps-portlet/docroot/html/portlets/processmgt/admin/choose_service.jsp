@@ -87,8 +87,7 @@
               form: { id: '<portlet:namespace />fm' },
               on: {
                   success: function(){
-                	  Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
-                	  
+                	  Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');  
                   }
              }
         });

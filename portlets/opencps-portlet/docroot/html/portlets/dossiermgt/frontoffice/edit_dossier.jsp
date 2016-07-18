@@ -197,13 +197,15 @@
 				htmlBottom="<%= htmlBottom %>"
 				htmlTop="<%= htmlTop %>"
 				jspPath='<%=templatePath + "dossier/" %>'
-				showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW))) ? false : true %>"
+				showButtons="<%=(cmd.equals(Constants.VIEW) || 
+					(dossier != null && !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW)) 
+					&& !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING)) ? false : true %>"
 			/>
 		</aui:form>
 	</c:when>
 	
 	<c:otherwise>
-		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-nauthorized-update-dossier"/></div>
+		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-authorized-update-dossier"/></div>
 	</c:otherwise>
  
 </c:choose>

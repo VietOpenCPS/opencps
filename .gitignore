@@ -220,6 +220,34 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/http
 
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/
 
+portlets/opencps-portlet/docroot/WEB-INF/lib/aopalliance-repackaged-2.4.0-b34.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/asm-debug-all-5.0.4.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/com.fasterxml.jackson.annotations.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/com.fasterxml.jackson.core.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/com.fasterxml.jackson.databind.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/com.lowagie.text-2.1.7.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/fontbox-1.8.10.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/hk2-api-2.4.0-b34.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/hk2-locator-2.4.0-b34.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/hk2-utils-2.4.0-b34.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/itextpdf-5.5.9.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/jasperreports-6.2.2.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/jasperreports-fonts-6.2.2.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/jasperreports-functions-6.2.2.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/jasperreports-javaflow-6.2.2.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/java-json.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/javassist-3.18.1-GA.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/javax.annotation-api-1.2.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/javax.inject-2.4.0-b34.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/javax.servlet-api-3.0.1.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/javax.ws.rs-api-2.0.1.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/jaxb-api-2.2.7.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/opencps-pki-1.0.1.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/org.osgi.core-4.2.0.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/osgi-resource-locator-1.0.1.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/pdfbox-1.8.10.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/persistence-api-1.0.jar
+portlets/opencps-portlet/docroot/WEB-INF/lib/validation-api-1.1.0.Final.jar
 bin/
 portlets/opencps-portlet/.classpath
 portlets/LiferayJSONWebservices-portlet.rar

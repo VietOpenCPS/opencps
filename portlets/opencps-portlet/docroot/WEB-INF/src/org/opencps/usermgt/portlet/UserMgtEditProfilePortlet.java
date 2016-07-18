@@ -159,7 +159,7 @@ public class UserMgtEditProfilePortlet extends MVCPortlet {
 		boolean isChangePassWord = ParamUtil.getBoolean(actionRequest,
 				EmployeeDisplayTerm.IS_CHANGE_PASS_WORD, false);
 
-		Date birthDate = DateTimeUtil.getDate(birthDateDay, birthDateMonth,
+			Date birthDate = DateTimeUtil.getDate(birthDateDay, birthDateMonth,
 				birthDateYear);
 		try {
 
@@ -168,12 +168,12 @@ public class UserMgtEditProfilePortlet extends MVCPortlet {
 
 			User mappingUser = UserLocalServiceUtil.getUser(serviceContext
 					.getUserId());
-
+			
 			// Validate before update
 			validate(employeeId, fullName, email, mobile, telNo, birthDate,
 					mappingUser.getEmailAddress(), isChangePassWord,
 					oldPassWord, passWord, rePassWord, serviceContext);
-
+			
 			EmployeeLocalServiceUtil.updateProfile(serviceContext.getUserId(),
 					employeeId, fullName, gender, telNo, mobile,
 					mappingUser.getEmailAddress(), isChangePassWord,

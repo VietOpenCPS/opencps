@@ -29,6 +29,8 @@ import org.opencps.backend.util.DossierNoGenerator;
 import org.opencps.backend.util.KeypayUrlGenerator;
 import org.opencps.backend.util.PaymentRequestGenerator;
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
@@ -94,12 +96,15 @@ public class BackOfficeProcessEngine implements MessageListener {
 			govAgencyCode = dossier.getGovAgencyCode();
 			govAgencyName = dossier.getGovAgencyName();
 			govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
+			
+			
 
 			try {
-				serviceProcessId =
-				    ServiceInfoProcessLocalServiceUtil.getServiceInfo(
+				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfigByG_S_G(toEngineMsg.getGroupId(), serviceInfoId, govAgencyCode);
+				serviceProcessId = serviceConfig.getServiceProcessId();
+/*				    ServiceInfoProcessLocalServiceUtil.getServiceInfo(
 				        serviceInfoId).getServiceProcessId();
-			}
+*/			}
 			catch (Exception e) {
 				_log.error(e);
 			}

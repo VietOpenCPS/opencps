@@ -1,19 +1,19 @@
 /**
-* OpenCPS is the open source Core Public Services software
-* Copyright (C) 2016-present OpenCPS community
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
 
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-* You should have received a copy of the GNU Affero General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>
-*/
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
 
 package org.opencps.dossiermgt.portlet;
 
@@ -88,6 +88,9 @@ import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
+import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.message.SubmitDossierMessage;
+import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
@@ -103,6 +106,7 @@ import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -137,9 +141,8 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
-	private Log _log = LogFactoryUtil
-		.getLog(DossierMgtFrontOfficePortlet.class
-			.getName());
+	private Log _log =
+		LogFactoryUtil.getLog(DossierMgtFrontOfficePortlet.class.getName());
 
 	/**
 	 * @param actionRequest
@@ -150,11 +153,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		AccountBean accountBean = AccountUtil
-			.getAccountBean(actionRequest);
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
-		UploadPortletRequest uploadPortletRequest = PortalUtil
-			.getUploadPortletRequest(actionRequest);
+		UploadPortletRequest uploadPortletRequest =
+			PortalUtil.getUploadPortletRequest(actionRequest);
 
 		Dossier dossier = null;
 		DossierFile dossierFile = null;
@@ -162,52 +164,54 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		boolean updated = false;
 
-		long dossierId = ParamUtil
-			.getLong(uploadPortletRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierId =
+			ParamUtil.getLong(uploadPortletRequest,
+				DossierDisplayTerms.DOSSIER_ID);
 
-		long dossierFileId = ParamUtil
-			.getLong(uploadPortletRequest,
+		long dossierFileId =
+			ParamUtil.getLong(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
-		long dossierPartId = ParamUtil
-			.getLong(uploadPortletRequest,
+		long dossierPartId =
+			ParamUtil.getLong(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-		long groupDossierPartId = ParamUtil
-			.getLong(uploadPortletRequest, "groupDossierPartId");
+		long groupDossierPartId =
+			ParamUtil.getLong(uploadPortletRequest, "groupDossierPartId");
 
-		long fileGroupId = ParamUtil
-			.getLong(uploadPortletRequest, DossierDisplayTerms.FILE_GROUP_ID);
+		long fileGroupId =
+			ParamUtil.getLong(uploadPortletRequest,
+				DossierDisplayTerms.FILE_GROUP_ID);
 
-		long size = uploadPortletRequest
-			.getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+		long size =
+			uploadPortletRequest.getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-		int dossierFileType = ParamUtil
-			.getInteger(uploadPortletRequest,
+		int dossierFileType =
+			ParamUtil.getInteger(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_TYPE);
 
-		int dossierFileOriginal = ParamUtil
-			.getInteger(uploadPortletRequest,
+		int dossierFileOriginal =
+			ParamUtil.getInteger(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL);
 
-		String groupName = ParamUtil
-			.getString(uploadPortletRequest,
+		String groupName =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.GROUP_NAME);
 
-		String displayName = ParamUtil
-			.getString(uploadPortletRequest,
+		String displayName =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.DISPLAY_NAME);
 
-		String dossierFileNo = ParamUtil
-			.getString(uploadPortletRequest,
+		String dossierFileNo =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_NO);
 
-		String dossierFileDate = ParamUtil
-			.getString(uploadPortletRequest,
+		String dossierFileDate =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_DATE);
 
-		String sourceFileName = uploadPortletRequest
-			.getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+		String sourceFileName =
+			uploadPortletRequest.getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
 		/*
 		 * sourceFileName = sourceFileName
@@ -215,83 +219,67 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		 * .randomString());
 		 */
 
-		String redirectURL = ParamUtil
-			.getString(uploadPortletRequest, "redirectURL");
+		String redirectURL =
+			ParamUtil.getString(uploadPortletRequest, "redirectURL");
 
 		InputStream inputStream = null;
 
 		Date fileDate = null;
 
-		if (Validator
-			.isNotNull(dossierFileDate)) {
-			fileDate = DateTimeUtil
-				.convertStringToDate(dossierFileDate);
+		if (Validator.isNotNull(dossierFileDate)) {
+			fileDate = DateTimeUtil.convertStringToDate(dossierFileDate);
 		}
 
 		try {
-			inputStream = uploadPortletRequest
-				.getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+			inputStream =
+				uploadPortletRequest.getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
 			validateAddAttachDossierFile(dossierId, dossierPartId,
 				dossierFileId, displayName, size, sourceFileName, inputStream,
 				accountBean);
 
-			ServiceContext serviceContext = ServiceContextFactory
-				.getInstance(uploadPortletRequest);
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(uploadPortletRequest);
 
-			serviceContext
-				.setAddGroupPermissions(true);
-			serviceContext
-				.setAddGuestPermissions(true);
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
 
-			dossier = DossierLocalServiceUtil
-				.getDossier(dossierId);
+			dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
 			if (dossierFileId > 0) {
-				dossierFile = DossierFileLocalServiceUtil
-					.getDossierFile(dossierFileId);
+				dossierFile =
+					DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 			}
 
-			dossierPart = DossierPartLocalServiceUtil
-				.getDossierPart(dossierPartId);
+			dossierPart =
+				DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 
-			String contentType = uploadPortletRequest
-				.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+			String contentType =
+				uploadPortletRequest.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-			DLFolder accountFolder = accountBean
-				.getAccountFolder();
+			DLFolder accountFolder = accountBean.getAccountFolder();
 
-			DLFolder dossierFolder = DLFolderUtil
-				.addFolder(serviceContext
-					.getUserId(), serviceContext
-						.getScopeGroupId(),
-					serviceContext
-						.getScopeGroupId(),
-					false, accountFolder
-						.getFolderId(),
-					String
-						.valueOf(dossier
-							.getCounter()),
-					StringPool.BLANK, false, serviceContext);
+			DLFolder dossierFolder =
+				DLFolderUtil.addFolder(serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getScopeGroupId(), false,
+					accountFolder.getFolderId(),
+					String.valueOf(dossier.getCounter()), StringPool.BLANK,
+					false, serviceContext);
 
-			DossierFileLocalServiceUtil
-				.addDossierFile(serviceContext
-					.getUserId(), dossierId, dossierPartId, dossierPart
-						.getTemplateFileNo(),
-					groupName, fileGroupId, groupDossierPartId, accountBean
-						.getOwnerUserId(),
-					accountBean
-						.getOwnerOrganizationId(),
-					displayName, StringPool.BLANK,
-					dossierFile != null ? dossierFile
-						.getFileEntryId() : 0,
-					PortletConstants.DOSSIER_FILE_MARK_UNKNOW, dossierFileType,
-					dossierFileNo, fileDate, dossierFileOriginal,
-					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
-					dossierFolder
-						.getFolderId(),
-					sourceFileName, contentType, displayName, StringPool.BLANK,
-					StringPool.BLANK, inputStream, size, serviceContext);
+			DossierFileLocalServiceUtil.addDossierFile(
+				serviceContext.getUserId(), dossierId, dossierPartId,
+				dossierPart.getTemplateFileNo(), groupName, fileGroupId,
+				groupDossierPartId, accountBean.getOwnerUserId(),
+				accountBean.getOwnerOrganizationId(), displayName,
+				StringPool.BLANK,
+				dossierFile != null ? dossierFile.getFileEntryId() : 0,
+				PortletConstants.DOSSIER_FILE_MARK_UNKNOW, dossierFileType,
+				dossierFileNo, fileDate, dossierFileOriginal,
+				PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+				dossierFolder.getFolderId(), sourceFileName, contentType,
+				displayName, StringPool.BLANK, StringPool.BLANK, inputStream,
+				size, serviceContext);
 
 			updated = true;
 
@@ -299,70 +287,59 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		catch (Exception e) {
 			updated = false;
 			if (e instanceof DuplicateFileException) {
-				SessionErrors
-					.add(actionRequest, DuplicateFileException.class);
+				SessionErrors.add(actionRequest, DuplicateFileException.class);
 			}
 			else if (e instanceof NoSuchDossierException) {
-				SessionErrors
-					.add(actionRequest, NoSuchDossierException.class);
+				SessionErrors.add(actionRequest, NoSuchDossierException.class);
 			}
 			else if (e instanceof NoSuchDossierPartException) {
-				SessionErrors
-					.add(actionRequest, NoSuchDossierPartException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchDossierPartException.class);
 			}
 			else if (e instanceof NoSuchAccountException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountException.class);
+				SessionErrors.add(actionRequest, NoSuchAccountException.class);
 			}
 			else if (e instanceof NoSuchAccountTypeException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountTypeException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountTypeException.class);
 			}
 			else if (e instanceof NoSuchAccountFolderException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountFolderException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountFolderException.class);
 			}
 			else if (e instanceof NoSuchAccountOwnUserIdException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountOwnUserIdException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountOwnUserIdException.class);
 			}
 			else if (e instanceof NoSuchAccountOwnOrgIdException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountOwnOrgIdException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountOwnOrgIdException.class);
 			}
 			else if (e instanceof PermissionDossierException) {
-				SessionErrors
-					.add(actionRequest, PermissionDossierException.class);
+				SessionErrors.add(actionRequest,
+					PermissionDossierException.class);
 			}
 			else if (e instanceof FileSizeException) {
-				SessionErrors
-					.add(actionRequest, FileSizeException.class);
+				SessionErrors.add(actionRequest, FileSizeException.class);
 			}
 			else {
-				SessionErrors
-					.add(actionRequest, "upload-error");
+				SessionErrors.add(actionRequest, "upload-error");
 
 			}
-			_log
-				.error(e);
+			_log.error(e);
 
 		}
 		finally {
 			if (updated) {
-				if (Validator
-					.isNotNull(redirectURL)) {
-					actionResponse
-						.sendRedirect(redirectURL);
+				if (Validator.isNotNull(redirectURL)) {
+					actionResponse.sendRedirect(redirectURL);
 				}
 			}
 			else {
-				actionResponse
-					.setRenderParameter("redirectURL", redirectURL);
-				actionResponse
-					.setRenderParameter("content", "upload-file");
-				actionResponse
-					.setRenderParameter("jspPage",
-						"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+				actionResponse.setRenderParameter("redirectURL", redirectURL);
+				actionResponse.setRenderParameter("content", "upload-file");
+				actionResponse.setRenderParameter("jspPage",
+					"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
 
 			}
 		}
@@ -379,68 +356,59 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		boolean updated = false;
 
-		long dossierId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 
-		long dossierPartId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+		long dossierPartId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-		String partName = ParamUtil
-			.getString(actionRequest, DossierFileDisplayTerms.PART_NAME);
+		String partName =
+			ParamUtil.getString(actionRequest,
+				DossierFileDisplayTerms.PART_NAME);
 
-		String redirectURL = ParamUtil
-			.getString(actionRequest, "redirectURL");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
 		try {
-			ServiceContext serviceContext = ServiceContextFactory
-				.getInstance(actionRequest);
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(actionRequest);
 			valiadateFileGroup(dossierId, partName);
-			FileGroupLocalServiceUtil
-				.addFileGroup(serviceContext
-					.getUserId(), dossierId, dossierPartId, partName,
-					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
-					serviceContext);
+			FileGroupLocalServiceUtil.addFileGroup(serviceContext.getUserId(),
+				dossierId, dossierPartId, partName,
+				PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+				serviceContext);
 		}
 		catch (Exception e) {
 			updated = false;
 
 			if (e instanceof NoSuchDossierException) {
-				SessionErrors
-					.add(actionRequest, NoSuchDossierException.class);
+				SessionErrors.add(actionRequest, NoSuchDossierException.class);
 			}
 			else if (e instanceof EmptyFileGroupException) {
-				SessionErrors
-					.add(actionRequest, EmptyFileGroupException.class);
+				SessionErrors.add(actionRequest, EmptyFileGroupException.class);
 			}
 			else if (e instanceof DuplicateFileGroupException) {
-				SessionErrors
-					.add(actionRequest, DuplicateFileGroupException.class);
+				SessionErrors.add(actionRequest,
+					DuplicateFileGroupException.class);
 			}
 			else {
-				SessionErrors
-					.add(actionRequest,
-						MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
+				SessionErrors.add(actionRequest,
+					MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
 			}
 
-			_log
-				.error(e);
+			_log.error(e);
 		}
 		finally {
 			if (updated) {
-				if (Validator
-					.isNotNull(redirectURL)) {
-					actionResponse
-						.sendRedirect(redirectURL);
+				if (Validator.isNotNull(redirectURL)) {
+					actionResponse.sendRedirect(redirectURL);
 				}
 			}
 			else {
-				actionResponse
-					.setRenderParameter("redirectURL", redirectURL);
-				actionResponse
-					.setRenderParameter("content", "individual");
-				actionResponse
-					.setRenderParameter("jspPage",
-						"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+				actionResponse.setRenderParameter("redirectURL", redirectURL);
+				actionResponse.setRenderParameter("content", "individual");
+				actionResponse.setRenderParameter("jspPage",
+					"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
 
 			}
 		}
@@ -453,158 +421,142 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	public void addTempFile(
 		ActionRequest actionRequest, ActionResponse actionResponse) {
 
-		UploadPortletRequest uploadPortletRequest = PortalUtil
-			.getUploadPortletRequest(actionRequest);
+		UploadPortletRequest uploadPortletRequest =
+			PortalUtil.getUploadPortletRequest(actionRequest);
 
-		long folderId = ParamUtil
-			.getLong(uploadPortletRequest, DossierFileDisplayTerms.FOLDE_ID);
+		long folderId =
+			ParamUtil.getLong(uploadPortletRequest,
+				DossierFileDisplayTerms.FOLDE_ID);
 
-		long dossierPartId = ParamUtil
-			.getLong(uploadPortletRequest,
+		long dossierPartId =
+			ParamUtil.getLong(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-		int index = ParamUtil
-			.getInteger(uploadPortletRequest, DossierFileDisplayTerms.INDEX);
+		int index =
+			ParamUtil.getInteger(uploadPortletRequest,
+				DossierFileDisplayTerms.INDEX);
 
-		int level = ParamUtil
-			.getInteger(uploadPortletRequest, DossierFileDisplayTerms.LEVEL);
+		int level =
+			ParamUtil.getInteger(uploadPortletRequest,
+				DossierFileDisplayTerms.LEVEL);
 
-		String groupName = ParamUtil
-			.getString(uploadPortletRequest,
+		String groupName =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.GROUP_NAME);
 
-		String templateFileNo = ParamUtil
-			.getString(uploadPortletRequest,
+		String templateFileNo =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierDisplayTerms.TEMPLATE_FILE_NO);
 
-		String fileName = ParamUtil
-			.getString(uploadPortletRequest, DossierFileDisplayTerms.FILE_NAME);
+		String fileName =
+			ParamUtil.getString(uploadPortletRequest,
+				DossierFileDisplayTerms.FILE_NAME);
 
-		String partType = ParamUtil
-			.getString(uploadPortletRequest, DossierFileDisplayTerms.PART_TYPE);
+		String partType =
+			ParamUtil.getString(uploadPortletRequest,
+				DossierFileDisplayTerms.PART_TYPE);
 
-		String tempFolderName = ParamUtil
-			.getString(uploadPortletRequest,
+		String tempFolderName =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.TEMP_FOLDER_NAME);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
-			.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		String redirectURL = ParamUtil
-			.getString(uploadPortletRequest, "redirectURL");
+		String redirectURL =
+			ParamUtil.getString(uploadPortletRequest, "redirectURL");
 
-		String displayName = ParamUtil
-			.getString(uploadPortletRequest,
+		String displayName =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.DISPLAY_NAME);
 
-		String dossierFileNo = ParamUtil
-			.getString(uploadPortletRequest,
+		String dossierFileNo =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_NO);
 
-		String dossierFileDate = ParamUtil
-			.getString(uploadPortletRequest,
+		String dossierFileDate =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_DATE);
 
-		String sourceFileName = uploadPortletRequest
-			.getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+		String sourceFileName =
+			uploadPortletRequest.getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-		sourceFileName = sourceFileName
-			.concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(StringUtil
-				.randomString());
+		sourceFileName =
+			sourceFileName.concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(
+				StringUtil.randomString());
 
 		InputStream inputStream = null;
 
-		JSONObject jsonObject = JSONFactoryUtil
-			.createJSONObject();
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
 
-			inputStream = uploadPortletRequest
-				.getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+			inputStream =
+				uploadPortletRequest.getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-			String contentType = uploadPortletRequest
-				.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+			String contentType =
+				uploadPortletRequest.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-			FileEntry fileEntry = DLAppServiceUtil
-				.addTempFileEntry(themeDisplay
-					.getScopeGroupId(), folderId, sourceFileName,
+			FileEntry fileEntry =
+				DLAppServiceUtil.addTempFileEntry(
+					themeDisplay.getScopeGroupId(), folderId, sourceFileName,
 					tempFolderName, inputStream, contentType);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DOSSIER_FILE_NO, dossierFileNo);
+			jsonObject.put(DossierFileDisplayTerms.DOSSIER_FILE_NO,
+				dossierFileNo);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DISPLAY_NAME, displayName);
+			jsonObject.put(DossierFileDisplayTerms.DISPLAY_NAME, displayName);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DOSSIER_FILE_DATE,
-					dossierFileDate);
+			jsonObject.put(DossierFileDisplayTerms.DOSSIER_FILE_DATE,
+				dossierFileDate);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.FILE_TITLE, fileEntry
-					.getTitle());
+			jsonObject.put(DossierFileDisplayTerms.FILE_TITLE,
+				fileEntry.getTitle());
 
-			jsonObject
-				.put(DossierFileDisplayTerms.MIME_TYPE, fileEntry
-					.getMimeType());
+			jsonObject.put(DossierFileDisplayTerms.MIME_TYPE,
+				fileEntry.getMimeType());
 
-			jsonObject
-				.put(DossierFileDisplayTerms.FILE_NAME, fileName);
+			jsonObject.put(DossierFileDisplayTerms.FILE_NAME, fileName);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.FILE_ENTRY_ID, fileEntry
-					.getFileEntryId());
-			jsonObject
-				.put(DossierFileDisplayTerms.FOLDE_ID, fileEntry
-					.getFolderId());
+			jsonObject.put(DossierFileDisplayTerms.FILE_ENTRY_ID,
+				fileEntry.getFileEntryId());
+			jsonObject.put(DossierFileDisplayTerms.FOLDE_ID,
+				fileEntry.getFolderId());
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DOSSIER_PART_ID, dossierPartId);
+			jsonObject.put(DossierFileDisplayTerms.DOSSIER_PART_ID,
+				dossierPartId);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.INDEX, index);
+			jsonObject.put(DossierFileDisplayTerms.INDEX, index);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.LEVEL, level);
+			jsonObject.put(DossierFileDisplayTerms.LEVEL, level);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.PART_TYPE, partType);
+			jsonObject.put(DossierFileDisplayTerms.PART_TYPE, partType);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.GROUP_NAME, groupName);
+			jsonObject.put(DossierFileDisplayTerms.GROUP_NAME, groupName);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL,
-					PortletConstants.DOSSIER_FILE_ORIGINAL);
+			jsonObject.put(DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL,
+				PortletConstants.DOSSIER_FILE_ORIGINAL);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DOSSIER_FILE_TYPE,
-					PortletConstants.DOSSIER_FILE_TYPE_INPUT);
+			jsonObject.put(DossierFileDisplayTerms.DOSSIER_FILE_TYPE,
+				PortletConstants.DOSSIER_FILE_TYPE_INPUT);
 
-			jsonObject
-				.put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
+			jsonObject.put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
 
 		}
 		catch (Exception e) {
-			_log
-				.error(e);
-			SessionErrors
-				.add(actionRequest, "upload-error");
+			_log.error(e);
+			SessionErrors.add(actionRequest, "upload-error");
 		}
 		finally {
-			StreamUtil
-				.cleanUp(inputStream);
-			HttpServletRequest request = PortalUtil
-				.getHttpServletRequest(actionRequest);
-			request
-				.setAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE,
-					jsonObject);
+			StreamUtil.cleanUp(inputStream);
+			HttpServletRequest request =
+				PortalUtil.getHttpServletRequest(actionRequest);
+			request.setAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE,
+				jsonObject);
 
-			if (Validator
-				.isNotNull(redirectURL)) {
-				actionResponse
-					.setRenderParameter("jspPage",
-						"/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
+			if (Validator.isNotNull(redirectURL)) {
+				actionResponse.setRenderParameter("jspPage",
+					"/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
 			}
 		}
 	}
@@ -624,111 +576,82 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		boolean updated = false;
 
-		long cloneDossierFileId = ParamUtil
-			.getLong(actionRequest, "cloneDossierFileId");
+		long cloneDossierFileId =
+			ParamUtil.getLong(actionRequest, "cloneDossierFileId");
 
-		long dossierId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 
-		long dossierPartId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+		long dossierPartId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-		long groupDossierPartId = ParamUtil
-			.getLong(actionRequest, "groupDossierPartId");
+		long groupDossierPartId =
+			ParamUtil.getLong(actionRequest, "groupDossierPartId");
 
-		long fileGroupId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.FILE_GROUP_ID);
+		long fileGroupId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.FILE_GROUP_ID);
 
-		String groupName = ParamUtil
-			.getString(actionRequest, DossierFileDisplayTerms.GROUP_NAME);
+		String groupName =
+			ParamUtil.getString(actionRequest,
+				DossierFileDisplayTerms.GROUP_NAME);
 
-		String redirectURL = ParamUtil
-			.getString(actionRequest, "redirectURL");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
 		try {
-			ServiceContext serviceContext = ServiceContextFactory
-				.getInstance(actionRequest);
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(actionRequest);
 
-			serviceContext
-				.setAddGroupPermissions(true);
-			serviceContext
-				.setAddGuestPermissions(true);
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
 
-			dossier = DossierLocalServiceUtil
-				.getDossier(dossierId);
+			dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
-			AccountBean accountBean = AccountUtil
-				.getAccountBean(dossier
-					.getUserId(), serviceContext
-						.getScopeGroupId(),
-					serviceContext);
+			AccountBean accountBean =
+				AccountUtil.getAccountBean(dossier.getUserId(),
+					serviceContext.getScopeGroupId(), serviceContext);
 
 			validateCloneDossierFile(dossierId, dossierPartId,
 				cloneDossierFileId, accountBean);
 
-			dossierFile = DossierFileLocalServiceUtil
-				.getDossierFile(cloneDossierFileId);
+			dossierFile =
+				DossierFileLocalServiceUtil.getDossierFile(cloneDossierFileId);
 
-			long fileEntryId = dossierFile
-				.getFileEntryId();
+			long fileEntryId = dossierFile.getFileEntryId();
 
-			FileEntry fileEntry = DLAppServiceUtil
-				.getFileEntry(fileEntryId);
+			FileEntry fileEntry = DLAppServiceUtil.getFileEntry(fileEntryId);
 
-			dossierPart = DossierPartLocalServiceUtil
-				.getDossierPart(dossierPartId);
+			dossierPart =
+				DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 
-			DLFolder accountFolder = accountBean
-				.getAccountFolder();
+			DLFolder accountFolder = accountBean.getAccountFolder();
 
-			DLFolder dossierFolder = DLFolderUtil
-				.addFolder(serviceContext
-					.getUserId(), serviceContext
-						.getScopeGroupId(),
-					serviceContext
-						.getScopeGroupId(),
-					false, accountFolder
-						.getFolderId(),
-					String
-						.valueOf(dossier
-							.getCounter()),
-					StringPool.BLANK, false, serviceContext);
+			DLFolder dossierFolder =
+				DLFolderUtil.addFolder(serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getScopeGroupId(), false,
+					accountFolder.getFolderId(),
+					String.valueOf(dossier.getCounter()), StringPool.BLANK,
+					false, serviceContext);
 
-			DossierFileLocalServiceUtil
-				.addDossierFile(serviceContext
-					.getUserId(), dossierId, dossierPartId, dossierPart
-						.getTemplateFileNo(),
-					groupName, fileGroupId, groupDossierPartId, accountBean
-						.getOwnerUserId(),
-					accountBean
-						.getOwnerOrganizationId(),
-					dossierFile
-						.getDisplayName(),
-					StringPool.BLANK, dossierFile != null ? dossierFile
-						.getFileEntryId() : 0,
-					PortletConstants.DOSSIER_FILE_MARK_UNKNOW, dossierFile
-						.getDossierFileType(),
-					dossierFile
-						.getDossierFileNo(),
-					dossierFile
-						.getDossierFileDate(),
-					dossierFile
-						.getOriginal(),
-					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
-					dossierFolder
-						.getFolderId(),
-					fileEntry
-						.getTitle() + StringPool.PERIOD + fileEntry
-							.getExtension(),
-					fileEntry
-						.getMimeType(),
-					fileEntry
-						.getTitle(),
-					StringPool.BLANK, StringPool.BLANK, fileEntry
-						.getContentStream(),
-					fileEntry
-						.getSize(),
-					serviceContext);
+			DossierFileLocalServiceUtil.addDossierFile(
+				serviceContext.getUserId(), dossierId, dossierPartId,
+				dossierPart.getTemplateFileNo(), groupName, fileGroupId,
+				groupDossierPartId, accountBean.getOwnerUserId(),
+				accountBean.getOwnerOrganizationId(),
+				dossierFile.getDisplayName(), StringPool.BLANK,
+				dossierFile != null ? dossierFile.getFileEntryId() : 0,
+				PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
+				dossierFile.getDossierFileType(),
+				dossierFile.getDossierFileNo(),
+				dossierFile.getDossierFileDate(), dossierFile.getOriginal(),
+				PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+				dossierFolder.getFolderId(), fileEntry.getTitle() +
+					StringPool.PERIOD + fileEntry.getExtension(),
+				fileEntry.getMimeType(), fileEntry.getTitle(),
+				StringPool.BLANK, StringPool.BLANK,
+				fileEntry.getContentStream(), fileEntry.getSize(),
+				serviceContext);
 
 			updated = true;
 
@@ -736,72 +659,60 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		catch (Exception e) {
 			updated = false;
 			if (e instanceof DuplicateFileException) {
-				SessionErrors
-					.add(actionRequest, DuplicateFileException.class);
+				SessionErrors.add(actionRequest, DuplicateFileException.class);
 			}
 			else if (e instanceof NoSuchDossierException) {
-				SessionErrors
-					.add(actionRequest, NoSuchDossierException.class);
+				SessionErrors.add(actionRequest, NoSuchDossierException.class);
 			}
 			else if (e instanceof NoSuchDossierPartException) {
-				SessionErrors
-					.add(actionRequest, NoSuchDossierPartException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchDossierPartException.class);
 			}
 			else if (e instanceof NoSuchAccountException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountException.class);
+				SessionErrors.add(actionRequest, NoSuchAccountException.class);
 			}
 			else if (e instanceof NoSuchAccountTypeException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountTypeException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountTypeException.class);
 			}
 			else if (e instanceof NoSuchAccountFolderException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountFolderException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountFolderException.class);
 			}
 			else if (e instanceof NoSuchAccountOwnUserIdException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountOwnUserIdException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountOwnUserIdException.class);
 			}
 			else if (e instanceof NoSuchAccountOwnOrgIdException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountOwnOrgIdException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountOwnOrgIdException.class);
 			}
 			else if (e instanceof PermissionDossierException) {
-				SessionErrors
-					.add(actionRequest, PermissionDossierException.class);
+				SessionErrors.add(actionRequest,
+					PermissionDossierException.class);
 			}
 			else if (e instanceof NoSuchFileEntryException) {
-				SessionErrors
-					.add(actionRequest, NoSuchFileEntryException.class);
+				SessionErrors.add(actionRequest, NoSuchFileEntryException.class);
 			}
 			else {
-				SessionErrors
-					.add(actionRequest, "upload-error");
+				SessionErrors.add(actionRequest, "upload-error");
 
 			}
-			_log
-				.error(e);
+			_log.error(e);
 
 		}
 		finally {
 			if (updated) {
-				if (Validator
-					.isNotNull(redirectURL)) {
-					actionResponse
-						.sendRedirect(redirectURL);
+				if (Validator.isNotNull(redirectURL)) {
+					actionResponse.sendRedirect(redirectURL);
 				}
 			}
 			else {
-				actionResponse
-					.setRenderParameter("redirectURL", redirectURL);
-				actionResponse
-					.setRenderParameter("content", "upload-file");
-				actionResponse
-					.setRenderParameter("tab1", "select-file");
-				actionResponse
-					.setRenderParameter("jspPage",
-						"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+				actionResponse.setRenderParameter("redirectURL", redirectURL);
+				actionResponse.setRenderParameter("content", "upload-file");
+				actionResponse.setRenderParameter("tab1", "select-file");
+				actionResponse.setRenderParameter("jspPage",
+					"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
 
 			}
 		}
@@ -817,14 +728,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
-			.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		AccountBean accountBean = AccountUtil
-			.getAccountBean(actionRequest);
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
-		long dossierFileId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		long dossierFileId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
 		String sourceFileName = StringPool.BLANK;
 
@@ -832,170 +743,136 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		File file = null;
 
-		JSONObject responseJSON = JSONFactoryUtil
-			.createJSONObject();
+		JSONObject responseJSON = JSONFactoryUtil.createJSONObject();
 
 		String fileExportDir = StringPool.BLANK;
 
 		try {
 			validateCreateDynamicForm(dossierFileId, accountBean);
 
-			ServiceContext serviceContext = ServiceContextFactory
-				.getInstance(actionRequest);
-			serviceContext
-				.setAddGroupPermissions(true);
-			serviceContext
-				.setAddGuestPermissions(true);
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(actionRequest);
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
 
 			// Get dossier file
-			DossierFile dossierFile = DossierFileLocalServiceUtil
-				.getDossierFile(dossierFileId);
+			DossierFile dossierFile =
+				DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 
 			// Get dossier part
-			DossierPart dossierPart = DossierPartLocalServiceUtil
-				.getDossierPart(dossierFile
-					.getDossierPartId());
+			DossierPart dossierPart =
+				DossierPartLocalServiceUtil.getDossierPart(dossierFile.getDossierPartId());
 
-			Dossier dossier = DossierLocalServiceUtil
-				.getDossier(dossierFile
-					.getDossierId());
+			Dossier dossier =
+				DossierLocalServiceUtil.getDossier(dossierFile.getDossierId());
 
 			// Get account folder
-			DLFolder accountForlder = accountBean
-				.getAccountFolder();
+			DLFolder accountForlder = accountBean.getAccountFolder();
 
 			// Get dossier folder
-			DLFolder dosserFolder = DLFolderUtil
-				.addFolder(themeDisplay
-					.getUserId(), themeDisplay
-						.getScopeGroupId(),
-					themeDisplay
-						.getScopeGroupId(),
-					false, accountForlder
-						.getFolderId(),
-					String
-						.valueOf(dossier
-							.getCounter()),
-					StringPool.BLANK, false, serviceContext);
+			DLFolder dosserFolder =
+				DLFolderUtil.addFolder(themeDisplay.getUserId(),
+					themeDisplay.getScopeGroupId(),
+					themeDisplay.getScopeGroupId(), false,
+					accountForlder.getFolderId(),
+					String.valueOf(dossier.getCounter()), StringPool.BLANK,
+					false, serviceContext);
 
-			String formData = dossierFile
-				.getFormData();
-			String jrxmlTemplate = dossierPart
-				.getFormReport();
+			String formData = dossierFile.getFormData();
+			String jrxmlTemplate = dossierPart.getFormReport();
 
 			// Validate json string
 
-			JSONFactoryUtil
-				.createJSONObject(formData);
+			JSONFactoryUtil.createJSONObject(formData);
 
 			String outputDestination =
 				PortletPropsValues.OPENCPS_FILE_SYSTEM_TEMP_DIR;
-			String fileName = System
-				.currentTimeMillis() + StringPool.DASH + dossierFileId +
-				StringPool.DASH + dossierPart
-					.getDossierpartId() +
-				".pdf";
+			String fileName =
+				System.currentTimeMillis() + StringPool.DASH + dossierFileId +
+					StringPool.DASH + dossierPart.getDossierpartId() + ".pdf";
 
-			fileExportDir = exportToPDFFile(jrxmlTemplate, formData, null,
-				outputDestination, fileName);
+			fileExportDir =
+				exportToPDFFile(jrxmlTemplate, formData, null,
+					outputDestination, fileName);
 
-			if (Validator
-				.isNotNull(fileExportDir)) {
+			if (Validator.isNotNull(fileExportDir)) {
 
 				file = new File(fileExportDir);
 				inputStream = new FileInputStream(file);
 				if (inputStream != null) {
-					sourceFileName = fileExportDir
-						.substring(fileExportDir
-							.lastIndexOf(StringPool.SLASH) + 1, fileExportDir
-								.length());
-					String mimeType = MimeTypesUtil
-						.getContentType(file);
+					sourceFileName =
+						fileExportDir.substring(
+							fileExportDir.lastIndexOf(StringPool.SLASH) + 1,
+							fileExportDir.length());
+					String mimeType = MimeTypesUtil.getContentType(file);
 
 					// Add new version
-					if (dossierFile
-						.getFileEntryId() > 0) {
-						DossierFileLocalServiceUtil
-							.addDossierFile(dossierFile
-								.getDossierFileId(), dosserFolder
-									.getFolderId(),
-								sourceFileName, mimeType, dossierFile
-									.getDisplayName(),
-								StringPool.BLANK, StringPool.BLANK, inputStream,
-								file
-									.length(),
-								serviceContext);
+					if (dossierFile.getFileEntryId() > 0) {
+						DossierFileLocalServiceUtil.addDossierFile(
+							dossierFile.getDossierFileId(),
+							dosserFolder.getFolderId(), sourceFileName,
+							mimeType, dossierFile.getDisplayName(),
+							StringPool.BLANK, StringPool.BLANK, inputStream,
+							file.length(), serviceContext);
 					}
 					else {
 						// Update version 1
-						DossierFileLocalServiceUtil
-							.updateDossierFile(dossierFileId, dosserFolder
-								.getFolderId(), sourceFileName, mimeType,
-								dossierFile
-									.getDisplayName(),
-								StringPool.BLANK, StringPool.BLANK, inputStream,
-								file
-									.length(),
-								serviceContext);
+						DossierFileLocalServiceUtil.updateDossierFile(
+							dossierFileId, dosserFolder.getFolderId(),
+							sourceFileName, mimeType,
+							dossierFile.getDisplayName(), StringPool.BLANK,
+							StringPool.BLANK, inputStream, file.length(),
+							serviceContext);
 					}
 				}
 			}
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierFileException) {
-				SessionErrors
-					.add(actionRequest, NoSuchDossierFileException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchDossierFileException.class);
 			}
 			else if (e instanceof NoSuchAccountException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountException.class);
+				SessionErrors.add(actionRequest, NoSuchAccountException.class);
 			}
 			else if (e instanceof NoSuchAccountTypeException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountTypeException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountTypeException.class);
 			}
 			else if (e instanceof NoSuchAccountFolderException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountFolderException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountFolderException.class);
 			}
 			else if (e instanceof NoSuchAccountOwnUserIdException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountOwnUserIdException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountOwnUserIdException.class);
 			}
 			else if (e instanceof NoSuchAccountOwnOrgIdException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountOwnOrgIdException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountOwnOrgIdException.class);
 			}
 			else if (e instanceof PermissionDossierException) {
-				SessionErrors
-					.add(actionRequest, PermissionDossierException.class);
+				SessionErrors.add(actionRequest,
+					PermissionDossierException.class);
 			}
 			else if (e instanceof DuplicateFileException) {
-				SessionErrors
-					.add(actionRequest, DuplicateFileException.class);
+				SessionErrors.add(actionRequest, DuplicateFileException.class);
 			}
 			else {
-				SessionErrors
-					.add(actionRequest, PortalException.class);
+				SessionErrors.add(actionRequest, PortalException.class);
 			}
 
-			_log
-				.error(e);
+			_log.error(e);
 		}
 		finally {
-			responseJSON
-				.put("fileExportDir", fileExportDir);
-			PortletUtil
-				.writeJSON(actionRequest, actionResponse, responseJSON);
+			responseJSON.put("fileExportDir", fileExportDir);
+			PortletUtil.writeJSON(actionRequest, actionResponse, responseJSON);
 			if (inputStream != null) {
-				inputStream
-					.close();
+				inputStream.close();
 			}
 
-			if (file
-				.exists()) {
-				file
-					.delete();
+			if (file.exists()) {
+				file.delete();
 			}
 		}
 	}
@@ -1009,36 +886,31 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		long dossierFileId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		long dossierFileId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
 		DossierFile dossierFile = null;
 
 		JSONObject jsonObject = null;
 
 		try {
 			if (dossierFileId > 0) {
-				jsonObject = JSONFactoryUtil
-					.createJSONObject();
-				dossierFile = DossierFileLocalServiceUtil
-					.getDossierFile(dossierFileId);
-				long fileEntryId = dossierFile
-					.getFileEntryId();
-				DossierFileLocalServiceUtil
-					.deleteDossierFile(dossierFileId, fileEntryId);
-				jsonObject
-					.put("deleted", Boolean.TRUE);
+				jsonObject = JSONFactoryUtil.createJSONObject();
+				dossierFile =
+					DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+				long fileEntryId = dossierFile.getFileEntryId();
+				DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId,
+					fileEntryId);
+				jsonObject.put("deleted", Boolean.TRUE);
 			}
 
 		}
 		catch (Exception e) {
-			jsonObject
-				.put("deleted", Boolean.FALSE);
-			_log
-				.error(e);
+			jsonObject.put("deleted", Boolean.FALSE);
+			_log.error(e);
 		}
 		finally {
-			PortletUtil
-				.writeJSON(actionRequest, actionResponse, jsonObject);
+			PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
 		}
 
 	}
@@ -1052,73 +924,64 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		long dossierId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 
-		String dossierStatus = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.DOSSIER_STATUS);
+		String dossierStatus =
+			ParamUtil.getString(actionRequest,
+				DossierDisplayTerms.DOSSIER_STATUS);
 
-		String redirectURL = ParamUtil
-			.getString(actionRequest, "redirectURL");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
-		AccountBean accountBean = AccountUtil
-			.getAccountBean(actionRequest);
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		try {
-			if (dossierStatus
-				.equals(PortletConstants.DOSSIER_STATUS_NEW)) {
+			if (dossierStatus.equals(PortletConstants.DOSSIER_STATUS_NEW)) {
 				validateDeleteDossier(dossierId, accountBean);
-				DLFolder accountFolder = accountBean
-					.getAccountFolder();
+				DLFolder accountFolder = accountBean.getAccountFolder();
 
-				DossierLocalServiceUtil
-					.deleteDossierByDossierId(dossierId, accountFolder);
+				DossierLocalServiceUtil.deleteDossierByDossierId(dossierId,
+					accountFolder);
 			}
 
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierException) {
-				SessionErrors
-					.add(actionRequest, NoSuchDossierException.class);
+				SessionErrors.add(actionRequest, NoSuchDossierException.class);
 			}
 
 			else if (e instanceof NoSuchAccountException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountException.class);
+				SessionErrors.add(actionRequest, NoSuchAccountException.class);
 			}
 			else if (e instanceof NoSuchAccountTypeException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountTypeException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountTypeException.class);
 			}
 			else if (e instanceof NoSuchAccountFolderException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountFolderException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountFolderException.class);
 			}
 			else if (e instanceof NoSuchAccountOwnUserIdException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountOwnUserIdException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountOwnUserIdException.class);
 			}
 			else if (e instanceof NoSuchAccountOwnOrgIdException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountOwnOrgIdException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountOwnOrgIdException.class);
 			}
 			else if (e instanceof PermissionDossierException) {
-				SessionErrors
-					.add(actionRequest, PermissionDossierException.class);
+				SessionErrors.add(actionRequest,
+					PermissionDossierException.class);
 			}
 			else {
-				SessionErrors
-					.add(actionRequest, PortalException.class);
+				SessionErrors.add(actionRequest, PortalException.class);
 			}
 
-			_log
-				.error(e);
+			_log.error(e);
 		}
 		finally {
-			if (Validator
-				.isNotNull(redirectURL)) {
-				actionResponse
-					.sendRedirect(redirectURL);
+			if (Validator.isNotNull(redirectURL)) {
+				actionResponse.sendRedirect(redirectURL);
 			}
 		}
 
@@ -1133,40 +996,34 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		long dossierFileId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		long dossierFileId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
 		if (dossierFileId > 0) {
 			DossierFile dossierFile = null;
-			JSONObject jsonObject = JSONFactoryUtil
-				.createJSONObject();
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			try {
-				dossierFile = DossierFileLocalServiceUtil
-					.getDossierFile(dossierFileId);
+				dossierFile =
+					DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 				if (dossierFile != null) {
-					long fileEntryId = dossierFile
-						.getFileEntryId();
+					long fileEntryId = dossierFile.getFileEntryId();
 					try {
 						if (fileEntryId > 0) {
-							DLAppServiceUtil
-								.deleteFileEntry(fileEntryId);
+							DLAppServiceUtil.deleteFileEntry(fileEntryId);
 						}
 					}
 					catch (Exception e) {
 						// nothing to do
 					}
 
-					DossierFileLocalServiceUtil
-						.deleteDossierFile(dossierFile);
-					jsonObject
-						.put("deleted", Boolean.TRUE);
+					DossierFileLocalServiceUtil.deleteDossierFile(dossierFile);
+					jsonObject.put("deleted", Boolean.TRUE);
 				}
 			}
 			catch (Exception e) {
-				_log
-					.error(e);
+				_log.error(e);
 
-				jsonObject
-					.put("deleted", Boolean.FALSE);
+				jsonObject.put("deleted", Boolean.FALSE);
 
 			}
 
@@ -1184,30 +1041,23 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
-			.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		long fileEntryId = ParamUtil
-			.getLong(actionRequest, "fileEntryId");
+		long fileEntryId = ParamUtil.getLong(actionRequest, "fileEntryId");
 
-		JSONObject jsonObject = JSONFactoryUtil
-			.createJSONObject();
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
-			DLAppServiceUtil
-				.deleteFileEntry(fileEntryId);
-			jsonObject
-				.put("deleted", Boolean.TRUE);
+			DLAppServiceUtil.deleteFileEntry(fileEntryId);
+			jsonObject.put("deleted", Boolean.TRUE);
 		}
 		catch (Exception e) {
-			String errorMessage = themeDisplay
-				.translate(
-					"an-unexpected-error-occurred-while-deleting-the-file");
+			String errorMessage =
+				themeDisplay.translate("an-unexpected-error-occurred-while-deleting-the-file");
 
-			jsonObject
-				.put("deleted", Boolean.FALSE);
-			jsonObject
-				.put("errorMessage", errorMessage);
+			jsonObject.put("deleted", Boolean.FALSE);
+			jsonObject.put("errorMessage", errorMessage);
 		}
 
 		writeJSON(actionRequest, actionResponse, jsonObject);
@@ -1225,32 +1075,27 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		throws Exception {
 
 		try {
-			DLAppServiceUtil
-				.deleteTempFileEntry(groupId, folderId, fileName,
-					tempFolderName);
+			DLAppServiceUtil.deleteTempFileEntry(groupId, folderId, fileName,
+				tempFolderName);
 
 		}
 		catch (Exception e) {
-			_log
-				.error(e);
+			_log.error(e);
 		}
 	}
 
 	public void deleteTempFiles(
 		ActionRequest actionRequest, ActionResponse actionResponse) {
 
-		String strFileEntryIds = ParamUtil
-			.getString(actionRequest, "fileEntryIds");
+		String strFileEntryIds =
+			ParamUtil.getString(actionRequest, "fileEntryIds");
 
-		if (Validator
-			.isNotNull(strFileEntryIds)) {
-			long[] fileEntryIds = StringUtil
-				.split(strFileEntryIds, 0L);
+		if (Validator.isNotNull(strFileEntryIds)) {
+			long[] fileEntryIds = StringUtil.split(strFileEntryIds, 0L);
 			if (fileEntryIds != null) {
 				for (int i = 0; i < fileEntryIds.length; i++) {
 					try {
-						DLAppServiceUtil
-							.deleteFileEntry(fileEntryIds[i]);
+						DLAppServiceUtil.deleteFileEntry(fileEntryIds[i]);
 					}
 					catch (Exception e) {
 						continue;
@@ -1273,9 +1118,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String jrxmlTemplate, String formData, Map<String, Object> map,
 		String outputDestination, String fileName) {
 
-		return JRReportUtil
-			.createReportPDFfFile(jrxmlTemplate, formData, map,
-				outputDestination, fileName);
+		return JRReportUtil.createReportPDFfFile(jrxmlTemplate, formData, map,
+			outputDestination, fileName);
 	}
 
 	/**
@@ -1292,62 +1136,50 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String wardCode = StringPool.BLANK;
 		if (object instanceof Citizen) {
 			Citizen citizen = (Citizen) object;
-			cityCode = citizen
-				.getCityCode();
-			districtCode = citizen
-				.getDistrictCode();
-			wardCode = citizen
-				.getWardCode();
+			cityCode = citizen.getCityCode();
+			districtCode = citizen.getDistrictCode();
+			wardCode = citizen.getWardCode();
 		}
 		else if (object instanceof Business) {
 			Business business = (Business) object;
-			cityCode = business
-				.getCityCode();
-			districtCode = business
-				.getDistrictCode();
-			wardCode = business
-				.getWardCode();
+			cityCode = business.getCityCode();
+			districtCode = business.getDistrictCode();
+			wardCode = business.getWardCode();
 		}
 		else if (object instanceof Dossier) {
 			Dossier dossier = (Dossier) object;
-			cityCode = dossier
-				.getCityCode();
-			districtCode = dossier
-				.getDistrictCode();
-			wardCode = dossier
-				.getWardCode();
+			cityCode = dossier.getCityCode();
+			districtCode = dossier.getDistrictCode();
+			wardCode = dossier.getWardCode();
 		}
 
 		try {
-			DictItem city = DictItemLocalServiceUtil
-				.getDictItemInuseByItemCode(dictCollection
-					.getDictCollectionId(), cityCode);
-			DictItem district = DictItemLocalServiceUtil
-				.getDictItemInuseByItemCode(dictCollection
-					.getDictCollectionId(), districtCode);
-			DictItem ward = DictItemLocalServiceUtil
-				.getDictItemInuseByItemCode(dictCollection
-					.getDictCollectionId(), wardCode);
+			DictItem city =
+				DictItemLocalServiceUtil.getDictItemInuseByItemCode(
+					dictCollection.getDictCollectionId(), cityCode);
+			DictItem district =
+				DictItemLocalServiceUtil.getDictItemInuseByItemCode(
+					dictCollection.getDictCollectionId(), districtCode);
+			DictItem ward =
+				DictItemLocalServiceUtil.getDictItemInuseByItemCode(
+					dictCollection.getDictCollectionId(), wardCode);
 
 			String[] dictItemIds = new String[3];
 
-			dictItemIds[0] = city != null ? String
-				.valueOf(city
-					.getDictItemId())
-				: StringPool.BLANK;
+			dictItemIds[0] =
+				city != null
+					? String.valueOf(city.getDictItemId()) : StringPool.BLANK;
 
-			dictItemIds[1] = district != null ? String
-				.valueOf(district
-					.getDictItemId())
-				: StringPool.BLANK;
+			dictItemIds[1] =
+				district != null
+					? String.valueOf(district.getDictItemId())
+					: StringPool.BLANK;
 
-			dictItemIds[2] = ward != null ? String
-				.valueOf(ward
-					.getDictItemId())
-				: StringPool.BLANK;
+			dictItemIds[2] =
+				ward != null
+					? String.valueOf(ward.getDictItemId()) : StringPool.BLANK;
 
-			selectedItems = StringUtil
-				.merge(dictItemIds);
+			selectedItems = StringUtil.merge(dictItemIds);
 		}
 		catch (Exception e) {
 			// Nothing todo
@@ -1363,24 +1195,22 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	public void previewAttachmentFile(
 		ActionRequest actionRequest, ActionResponse actionResponse) {
 
-		long dossierFileId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
-			.getAttribute(WebKeys.THEME_DISPLAY);
-		String url = DLFileEntryUtil
-			.getDossierFileAttachmentURL(dossierFileId, themeDisplay);
-		JSONObject jsonObject = JSONFactoryUtil
-			.createJSONObject();
+		long dossierFileId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		String url =
+			DLFileEntryUtil.getDossierFileAttachmentURL(dossierFileId,
+				themeDisplay);
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		// url = "http://docs.google.com/gview?url=" + url + "&embedded=true";
-		jsonObject
-			.put("url", url);
+		jsonObject.put("url", url);
 		try {
-			PortletUtil
-				.writeJSON(actionRequest, actionResponse, jsonObject);
+			PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
 		}
 		catch (IOException e) {
-			_log
-				.error(e);
+			_log.error(e);
 		}
 	}
 
@@ -1393,56 +1223,46 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		long dossierFileId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		long dossierFileId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
-		String redirectURL = ParamUtil
-			.getString(actionRequest, "redirectURL");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
-		HttpServletResponse response = PortalUtil
-			.getHttpServletResponse(actionResponse);
-		response
-			.setContentType("text/html");
+		HttpServletResponse response =
+			PortalUtil.getHttpServletResponse(actionResponse);
+		response.setContentType("text/html");
 
 		PrintWriter writer = null;
 
 		try {
-			writer = response
-				.getWriter();
+			writer = response.getWriter();
 
 			// Get dossier file
-			DossierFile dossierFile = DossierFileLocalServiceUtil
-				.getDossierFile(dossierFileId);
+			DossierFile dossierFile =
+				DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 
 			// Get dossier part
-			DossierPart dossierPart = DossierPartLocalServiceUtil
-				.getDossierPart(dossierFile
-					.getDossierPartId());
+			DossierPart dossierPart =
+				DossierPartLocalServiceUtil.getDossierPart(dossierFile.getDossierPartId());
 
-			String formData = dossierFile
-				.getFormData();
-			String jrxmlTemplate = dossierPart
-				.getFormReport();
+			String formData = dossierFile.getFormData();
+			String jrxmlTemplate = dossierPart.getFormReport();
 
 			// Validate json string
 
-			JSONFactoryUtil
-				.createJSONObject(formData);
+			JSONFactoryUtil.createJSONObject(formData);
 
-			JRReportUtil
-				.renderReportHTMLStream(response, writer, jrxmlTemplate,
-					formData, null);
+			JRReportUtil.renderReportHTMLStream(response, writer,
+				jrxmlTemplate, formData, null);
 
 		}
 		catch (Exception e) {
-			_log
-				.error(e);
+			_log.error(e);
 		}
 		finally {
-			if (Validator
-				.isNotNull(redirectURL)) {
-				response
-					.sendRedirect(redirectURL);
+			if (Validator.isNotNull(redirectURL)) {
+				response.sendRedirect(redirectURL);
 			}
 
 		}
@@ -1458,49 +1278,42 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		long dossierFileId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		long dossierFileId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
 		JSONObject jsonObject = null;
 
 		try {
 
-			DossierFile dossierFile = DossierFileLocalServiceUtil
-				.getDossierFile(dossierFileId);
+			DossierFile dossierFile =
+				DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 
-			DossierPart dossierPart = DossierPartLocalServiceUtil
-				.getDossierPart(dossierFile
-					.getDossierPartId());
-			jsonObject = JSONFactoryUtil
-				.createJSONObject();
-			if (dossierFileId > 0 && dossierPart
-				.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER) {
+			DossierPart dossierPart =
+				DossierPartLocalServiceUtil.getDossierPart(dossierFile.getDossierPartId());
+			jsonObject = JSONFactoryUtil.createJSONObject();
+			if (dossierFileId > 0 &&
+				dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER) {
 
-				DossierFileLocalServiceUtil
-					.removeDossierFile(dossierFileId);
+				DossierFileLocalServiceUtil.removeDossierFile(dossierFileId);
 
 			}
 			else {
 
-				DossierFileLocalServiceUtil
-					.deleteDossierFile(dossierFileId, dossierFile
-						.getFileEntryId());
+				DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId,
+					dossierFile.getFileEntryId());
 
 			}
 
-			jsonObject
-				.put("deleted", Boolean.TRUE);
+			jsonObject.put("deleted", Boolean.TRUE);
 
 		}
 		catch (Exception e) {
-			jsonObject
-				.put("deleted", Boolean.FALSE);
-			_log
-				.error(e);
+			jsonObject.put("deleted", Boolean.FALSE);
+			_log.error(e);
 		}
 		finally {
-			PortletUtil
-				.writeJSON(actionRequest, actionResponse, jsonObject);
+			PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
 		}
 
 	}
@@ -1514,37 +1327,33 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		long fileGroupId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.FILE_GROUP_ID);
+		long fileGroupId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.FILE_GROUP_ID);
 
-		long dossierId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 
-		long dossierPartId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+		long dossierPartId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_PART_ID);
 
 		JSONObject jsonObject = null;
 		try {
 			if (fileGroupId > 0) {
-				jsonObject = JSONFactoryUtil
-					.createJSONObject();
-				FileGroupLocalServiceUtil
-					.deleteFileGroup(dossierId, dossierPartId, fileGroupId);
+				jsonObject = JSONFactoryUtil.createJSONObject();
+				FileGroupLocalServiceUtil.deleteFileGroup(dossierId,
+					dossierPartId, fileGroupId);
 
-				jsonObject
-					.put("deleted", Boolean.TRUE);
+				jsonObject.put("deleted", Boolean.TRUE);
 			}
 
 		}
 		catch (Exception e) {
-			jsonObject
-				.put("deleted", Boolean.FALSE);
-			_log
-				.error(e);
+			jsonObject.put("deleted", Boolean.FALSE);
+			_log.error(e);
 		}
 		finally {
-			PortletUtil
-				.writeJSON(actionRequest, actionResponse, jsonObject);
+			PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
 		}
 	}
 
@@ -1559,122 +1368,111 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		RenderRequest renderRequest, RenderResponse renderResponse)
 		throws PortletException, IOException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
-			.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		Dossier dossier = (Dossier) renderRequest
-			.getAttribute(WebKeys.DOSSIER_ENTRY);
+		Dossier dossier =
+			(Dossier) renderRequest.getAttribute(WebKeys.DOSSIER_ENTRY);
 
 		DictCollection dictCollection = null;
 
-		long dossierId = ParamUtil
-			.getLong(renderRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierId =
+			ParamUtil.getLong(renderRequest, DossierDisplayTerms.DOSSIER_ID);
 
-		long dossierFileId = ParamUtil
-			.getLong(renderRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		long dossierFileId =
+			ParamUtil.getLong(renderRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
-		long dossierPartId = ParamUtil
-			.getLong(renderRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+		long dossierPartId =
+			ParamUtil.getLong(renderRequest,
+				DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-		long serviceConfigId = ParamUtil
-			.getLong(renderRequest, DossierDisplayTerms.SERVICE_CONFIG_ID);
+		long serviceConfigId =
+			ParamUtil.getLong(renderRequest,
+				DossierDisplayTerms.SERVICE_CONFIG_ID);
 
-		HttpServletRequest request = PortalUtil
-			.getHttpServletRequest(renderRequest);
+		HttpServletRequest request =
+			PortalUtil.getHttpServletRequest(renderRequest);
 
-		HttpSession session = request
-			.getSession();
+		HttpSession session = request.getSession();
 
-		String accountType = GetterUtil
-			.getString(session
-				.getAttribute(WebKeys.ACCOUNT_TYPE));
+		String accountType =
+			GetterUtil.getString(session.getAttribute(WebKeys.ACCOUNT_TYPE));
 
 		String selectedItems = StringPool.BLANK;
 
 		try {
 
 			if (dossierId > 0) {
-				dossier = DossierLocalServiceUtil
-					.getDossier(dossierId);
+				dossier = DossierLocalServiceUtil.getDossier(dossierId);
 			}
 
-			dictCollection = DictCollectionLocalServiceUtil
-				.getDictCollection(themeDisplay
-					.getScopeGroupId(),
+			dictCollection =
+				DictCollectionLocalServiceUtil.getDictCollection(
+					themeDisplay.getScopeGroupId(),
 					PortletPropsValues.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION);
 
 			if (dossier != null) {
-				renderRequest
-					.setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
-				serviceConfigId = dossier
-					.getServiceConfigId();
+				renderRequest.setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
+				serviceConfigId = dossier.getServiceConfigId();
 				selectedItems = getSelectedItems(dossier, dictCollection);
 
 			}
 			else {
-				if (accountType
-					.equals(
-						PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
-					Citizen citizen = (Citizen) session
-						.getAttribute(WebKeys.CITIZEN_ENTRY);
+				if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+					Citizen citizen =
+						(Citizen) session.getAttribute(WebKeys.CITIZEN_ENTRY);
 					selectedItems = getSelectedItems(citizen, dictCollection);
 
 				}
-				else if (accountType
-					.equals(
-						PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
-					Business business = (Business) session
-						.getAttribute(WebKeys.BUSINESS_ENTRY);
+				else if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+					Business business =
+						(Business) session.getAttribute(WebKeys.BUSINESS_ENTRY);
 					selectedItems = getSelectedItems(business, dictCollection);
 
 				}
 			}
-			renderRequest
-				.setAttribute(WebKeys.DICT_ITEM_SELECTED, selectedItems);
+			renderRequest.setAttribute(WebKeys.DICT_ITEM_SELECTED,
+				selectedItems);
 
 			if (serviceConfigId > 0) {
-				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil
-					.getServiceConfig(serviceConfigId);
+				ServiceConfig serviceConfig =
+					ServiceConfigLocalServiceUtil.getServiceConfig(serviceConfigId);
 
-				renderRequest
-					.setAttribute(WebKeys.SERVICE_CONFIG_ENTRY, serviceConfig);
+				renderRequest.setAttribute(WebKeys.SERVICE_CONFIG_ENTRY,
+					serviceConfig);
 
-				if (serviceConfig != null && serviceConfig
-					.getServiceInfoId() > 0) {
-					ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil
-						.getServiceInfo(serviceConfig
-							.getServiceInfoId());
+				if (serviceConfig != null &&
+					serviceConfig.getServiceInfoId() > 0) {
+					ServiceInfo serviceInfo =
+						ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
 
-					renderRequest
-						.setAttribute(WebKeys.SERVICE_INFO_ENTRY, serviceInfo);
+					renderRequest.setAttribute(WebKeys.SERVICE_INFO_ENTRY,
+						serviceInfo);
 
 					DossierTemplate dossierTemplate =
-						DossierTemplateLocalServiceUtil
-							.getDossierTemplate(serviceConfig
-								.getDossierTemplateId());
-					renderRequest
-						.setAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY,
-							dossierTemplate);
+						DossierTemplateLocalServiceUtil.getDossierTemplate(serviceConfig.getDossierTemplateId());
+					renderRequest.setAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY,
+						dossierTemplate);
 				}
 			}
 
 			if (dossierFileId > 0) {
-				DossierFile dossierFile = DossierFileLocalServiceUtil
-					.getDossierFile(dossierFileId);
-				renderRequest
-					.setAttribute(WebKeys.DOSSIER_FILE_ENTRY, dossierFile);
+				DossierFile dossierFile =
+					DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+				renderRequest.setAttribute(WebKeys.DOSSIER_FILE_ENTRY,
+					dossierFile);
 			}
 
 			if (dossierPartId > 0) {
-				DossierPart dossierPart = DossierPartLocalServiceUtil
-					.getDossierPart(dossierPartId);
-				renderRequest
-					.setAttribute(WebKeys.DOSSIER_PART_ENTRY, dossierPart);
+				DossierPart dossierPart =
+					DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+				renderRequest.setAttribute(WebKeys.DOSSIER_PART_ENTRY,
+					dossierPart);
 			}
 		}
 		catch (Exception e) {
-			_log
-				.error(e);
+			_log.error(e);
 		}
 
 		super.render(renderRequest, renderResponse);
@@ -1690,123 +1488,122 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
-			.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		HttpServletRequest request = PortalUtil
-			.getHttpServletRequest(actionRequest);
+		HttpServletRequest request =
+			PortalUtil.getHttpServletRequest(actionRequest);
 
-		HttpSession session = request
-			.getSession();
+		HttpSession session = request.getSession();
 
-		String accountType = GetterUtil
-			.getString(session
-				.getAttribute(WebKeys.ACCOUNT_TYPE));
+		String accountType =
+			GetterUtil.getString(session.getAttribute(WebKeys.ACCOUNT_TYPE));
 
 		Dossier dossier = null;
 
-		long dossierId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
-		long dossierTemplateId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.DOSSIER_TEMPLATE_ID);
-		long serviceInfoId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.SERVICE_INFO_ID);
-		long cityId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.CITY_ID);
-		long districtId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.DISTRICT_ID);
-		long wardId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.WARD_ID);
-		long serviceConfigId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.SERVICE_CONFIG_ID);
+		long dossierId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierTemplateId =
+			ParamUtil.getLong(actionRequest,
+				DossierDisplayTerms.DOSSIER_TEMPLATE_ID);
+		long serviceInfoId =
+			ParamUtil.getLong(actionRequest,
+				DossierDisplayTerms.SERVICE_INFO_ID);
+		long cityId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.CITY_ID);
+		long districtId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DISTRICT_ID);
+		long wardId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.WARD_ID);
+		long serviceConfigId =
+			ParamUtil.getLong(actionRequest,
+				DossierDisplayTerms.SERVICE_CONFIG_ID);
 
-		long govAgencyOrganizationId = ParamUtil
-			.getLong(actionRequest,
+		long govAgencyOrganizationId =
+			ParamUtil.getLong(actionRequest,
 				DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
-		long ownerUserId = GetterUtil
-			.getLong(session
-				.getAttribute(WebKeys.ACCOUNT_OWNERUSERID));
-		long ownerOrganizationId = GetterUtil
-			.getLong(session
-				.getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));
+		long ownerUserId =
+			GetterUtil.getLong(session.getAttribute(WebKeys.ACCOUNT_OWNERUSERID));
+		long ownerOrganizationId =
+			GetterUtil.getLong(session.getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));
 
-		int serviceMode = ParamUtil
-			.getInteger(actionRequest, DossierDisplayTerms.SERVICE_MODE);
-		String serviceDomainIndex = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.SERVICE_DOMAIN_INDEX);
+		int serviceMode =
+			ParamUtil.getInteger(actionRequest,
+				DossierDisplayTerms.SERVICE_MODE);
+		String serviceDomainIndex =
+			ParamUtil.getString(actionRequest,
+				DossierDisplayTerms.SERVICE_DOMAIN_INDEX);
 
-		String govAgencyCode = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.GOVAGENCY_CODE);
-		String govAgencyName = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.GOVAGENCY_NAME);
+		String govAgencyCode =
+			ParamUtil.getString(actionRequest,
+				DossierDisplayTerms.GOVAGENCY_CODE);
+		String govAgencyName =
+			ParamUtil.getString(actionRequest,
+				DossierDisplayTerms.GOVAGENCY_NAME);
 
-		String serviceAdministrationIndex = ParamUtil
-			.getString(actionRequest,
+		String serviceAdministrationIndex =
+			ParamUtil.getString(actionRequest,
 				DossierDisplayTerms.SERVICE_ADMINISTRATION_INDEX);
-		String templateFileNo = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.TEMPLATE_FILE_NO);
-		String subjectName = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.SUBJECT_NAME);
-		String subjectId = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.SUBJECT_ID);
-		String address = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.ADDRESS);
-		String contactName = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.CONTACT_NAME);
-		String contactTelNo = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.CONTACT_TEL_NO);
-		String contactEmail = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.CONTACT_EMAIL);
-		String note = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.NOTE);
+		String templateFileNo =
+			ParamUtil.getString(actionRequest,
+				DossierDisplayTerms.TEMPLATE_FILE_NO);
+		String subjectName =
+			ParamUtil.getString(actionRequest, DossierDisplayTerms.SUBJECT_NAME);
+		String subjectId =
+			ParamUtil.getString(actionRequest, DossierDisplayTerms.SUBJECT_ID);
+		String address =
+			ParamUtil.getString(actionRequest, DossierDisplayTerms.ADDRESS);
+		String contactName =
+			ParamUtil.getString(actionRequest, DossierDisplayTerms.CONTACT_NAME);
+		String contactTelNo =
+			ParamUtil.getString(actionRequest,
+				DossierDisplayTerms.CONTACT_TEL_NO);
+		String contactEmail =
+			ParamUtil.getString(actionRequest,
+				DossierDisplayTerms.CONTACT_EMAIL);
+		String note =
+			ParamUtil.getString(actionRequest, DossierDisplayTerms.NOTE);
 
-		String backURL = ParamUtil
-			.getString(actionRequest, "backURL");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
 
-		String redirectURL = ParamUtil
-			.getString(actionRequest, "redirectURL");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
-		String redirectPaymentURL = ParamUtil
-			.getString(request, DossierDisplayTerms.REDIRECT_PAYMENT_URL);
+		String redirectPaymentURL =
+			ParamUtil.getString(request,
+				DossierDisplayTerms.REDIRECT_PAYMENT_URL);
 
-		boolean isEditDossier = ParamUtil
-			.getBoolean(request, "isEditDossier");
+		boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 
 		boolean update = false;
 
 		try {
-			ServiceContext serviceContext = ServiceContextFactory
-				.getInstance(actionRequest);
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(actionRequest);
 
-			serviceContext
-				.setAddGroupPermissions(true);
-			serviceContext
-				.setAddGuestPermissions(true);
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
 
 			if (dossierId > 0) {
-				dossier = DossierLocalServiceUtil
-					.getDossier(dossierId);
+				dossier = DossierLocalServiceUtil.getDossier(dossierId);
 			}
 
 			String dossierDestinationFolder = StringPool.BLANK;
 
-			if (accountType
-				.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
-				dossierDestinationFolder = PortletUtil
-					.getCitizenDossierDestinationFolder(serviceContext
-						.getScopeGroupId(), ownerUserId);
+			if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+				dossierDestinationFolder =
+					PortletUtil.getCitizenDossierDestinationFolder(
+						serviceContext.getScopeGroupId(), ownerUserId);
 			}
-			else if (accountType
-				.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
-				dossierDestinationFolder = PortletUtil
-					.getBusinessDossierDestinationFolder(serviceContext
-						.getScopeGroupId(), ownerOrganizationId);
+			else if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+				dossierDestinationFolder =
+					PortletUtil.getBusinessDossierDestinationFolder(
+						serviceContext.getScopeGroupId(), ownerOrganizationId);
 
 			}
 
 			if (dossier != null) {
-				dossierDestinationFolder += StringPool.SLASH + dossier
-					.getCounter();
+				dossierDestinationFolder +=
+					StringPool.SLASH + dossier.getCounter();
 			}
 
 			validateDossier(cityId, districtId, wardId, accountType,
@@ -1821,82 +1618,67 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			String districtName = StringPool.BLANK;
 			String wardName = StringPool.BLANK;
 
-			DictItem city = DictItemLocalServiceUtil
-				.getDictItem(cityId);
-			DictItem district = DictItemLocalServiceUtil
-				.getDictItem(districtId);
-			DictItem ward = DictItemLocalServiceUtil
-				.getDictItem(wardId);
+			DictItem city = DictItemLocalServiceUtil.getDictItem(cityId);
+			DictItem district =
+				DictItemLocalServiceUtil.getDictItem(districtId);
+			DictItem ward = DictItemLocalServiceUtil.getDictItem(wardId);
 
 			if (city != null) {
-				cityCode = city
-					.getItemCode();
-				cityName = city
-					.getItemName(themeDisplay
-						.getLocale());
+				cityCode = city.getItemCode();
+				cityName = city.getItemName(themeDisplay.getLocale());
 			}
 
 			if (district != null) {
-				districtCode = district
-					.getItemCode();
-				districtName = district
-					.getItemName(themeDisplay
-						.getLocale());
+				districtCode = district.getItemCode();
+				districtName = district.getItemName(themeDisplay.getLocale());
 			}
 
 			if (ward != null) {
-				wardCode = ward
-					.getItemCode();
-				wardName = ward
-					.getItemName(themeDisplay
-						.getLocale());
+				wardCode = ward.getItemCode();
+				wardName = ward.getItemName(themeDisplay.getLocale());
 			}
 
-			DLFolder dossierFolder = DLFolderUtil
-				.getTargetFolder(serviceContext
-					.getUserId(), serviceContext
-						.getScopeGroupId(),
-					serviceContext
-						.getScopeGroupId(),
-					false, 0, dossierDestinationFolder, StringPool.BLANK, false,
+			DLFolder dossierFolder =
+				DLFolderUtil.getTargetFolder(serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getScopeGroupId(), false, 0,
+					dossierDestinationFolder, StringPool.BLANK, false,
 					serviceContext);
 
 			if (dossierId == 0) {
-				dossier = DossierLocalServiceUtil
-					.addDossier(serviceContext
-						.getUserId(), ownerOrganizationId, dossierTemplateId,
-						templateFileNo, serviceConfigId, serviceInfoId,
-						serviceDomainIndex, govAgencyOrganizationId,
-						govAgencyCode, govAgencyName, serviceMode,
-						serviceAdministrationIndex, cityCode, cityName,
-						districtCode, districtName, wardName, wardCode,
-						subjectName, subjectId, address, contactName,
+				dossier =
+					DossierLocalServiceUtil.addDossier(
+						serviceContext.getUserId(), ownerOrganizationId,
+						dossierTemplateId, templateFileNo, serviceConfigId,
+						serviceInfoId, serviceDomainIndex,
+						govAgencyOrganizationId, govAgencyCode, govAgencyName,
+						serviceMode, serviceAdministrationIndex, cityCode,
+						cityName, districtCode, districtName, wardName,
+						wardCode, subjectName, subjectId, address, contactName,
 						contactTelNo, contactEmail, note,
 						PortletConstants.DOSSIER_SOURCE_DIRECT,
-						PortletConstants.DOSSIER_STATUS_NEW, dossierFolder
-							.getFolderId(),
-						redirectPaymentURL, serviceContext);
+						PortletConstants.DOSSIER_STATUS_NEW,
+						dossierFolder.getFolderId(), redirectPaymentURL,
+						serviceContext);
 
 			}
 			else {
-				dossier = DossierLocalServiceUtil
-					.updateDossier(dossierId, serviceContext
-						.getUserId(), ownerOrganizationId, dossierTemplateId,
-						templateFileNo, serviceConfigId, serviceInfoId,
-						serviceDomainIndex, govAgencyOrganizationId,
-						govAgencyCode, govAgencyName, serviceMode,
-						serviceAdministrationIndex, cityCode, cityName,
-						districtCode, districtName, wardName, wardCode,
-						subjectName, subjectId, address, contactName,
+				dossier =
+					DossierLocalServiceUtil.updateDossier(dossierId,
+						serviceContext.getUserId(), ownerOrganizationId,
+						dossierTemplateId, templateFileNo, serviceConfigId,
+						serviceInfoId, serviceDomainIndex,
+						govAgencyOrganizationId, govAgencyCode, govAgencyName,
+						serviceMode, serviceAdministrationIndex, cityCode,
+						cityName, districtCode, districtName, wardName,
+						wardCode, subjectName, subjectId, address, contactName,
 						contactTelNo, contactEmail, note,
 
-						dossierFolder
-							.getFolderId(),
-						serviceContext);
+						dossierFolder.getFolderId(), serviceContext);
 			}
 
-			SessionMessages
-				.add(actionRequest, MessageKeys.DOSSIER_UPDATE_SUCCESS);
+			SessionMessages.add(actionRequest,
+				MessageKeys.DOSSIER_UPDATE_SUCCESS);
 
 			update = true;
 		}
@@ -1920,18 +1702,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				e instanceof EmptyDossierFileException ||
 				e instanceof DuplicateFolderNameException) {
 
-				SessionErrors
-					.add(actionRequest, e
-						.getClass());
+				SessionErrors.add(actionRequest, e.getClass());
 			}
 			else {
-				SessionErrors
-					.add(actionRequest,
-						MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
+				SessionErrors.add(actionRequest,
+					MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
 			}
 
-			_log
-				.error(e);
+			_log.error(e);
 
 		}
 		finally {
@@ -1940,38 +1718,30 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			 */
 
 			if (update) {
-				if (Validator
-					.isNotNull(redirectURL)) {
+				if (Validator.isNotNull(redirectURL)) {
 
-					actionResponse
-						.sendRedirect(
-							redirectURL + "&_" + WebKeys.DOSSIER_MGT_PORTLET +
-								"_dossierId=" + dossier
-									.getDossierId());
+					actionResponse.sendRedirect(redirectURL + "&_" +
+						WebKeys.DOSSIER_MGT_PORTLET + "_dossierId=" +
+						dossier.getDossierId());
 
 				}
 			}
 			else {
 
-				actionResponse
-					.setRenderParameter("backURL", backURL);
+				actionResponse.setRenderParameter("backURL", backURL);
 
-				actionResponse
-					.setRenderParameter(DossierDisplayTerms.SERVICE_CONFIG_ID,
-						String
-							.valueOf(serviceConfigId));
-				actionResponse
-					.setRenderParameter(DossierDisplayTerms.DOSSIER_ID, String
-						.valueOf(dossier != null ? dossier
-							.getDossierId() : 0));
+				actionResponse.setRenderParameter(
+					DossierDisplayTerms.SERVICE_CONFIG_ID,
+					String.valueOf(serviceConfigId));
+				actionResponse.setRenderParameter(
+					DossierDisplayTerms.DOSSIER_ID,
+					String.valueOf(dossier != null ? dossier.getDossierId() : 0));
 
-				actionResponse
-					.setRenderParameter("isEditDossier", String
-						.valueOf(isEditDossier));
+				actionResponse.setRenderParameter("isEditDossier",
+					String.valueOf(isEditDossier));
 
-				actionResponse
-					.setRenderParameter("mvcPath",
-						"/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
+				actionResponse.setRenderParameter("mvcPath",
+					"/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
 			}
 
 		}
@@ -1984,217 +1754,187 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	public void updateDossierFile(
 		ActionRequest actionRequest, ActionResponse actionResponse) {
 
-		UploadPortletRequest uploadPortletRequest = PortalUtil
-			.getUploadPortletRequest(actionRequest);
+		UploadPortletRequest uploadPortletRequest =
+			PortalUtil.getUploadPortletRequest(actionRequest);
 
-		long dossierFileId = ParamUtil
-			.getLong(uploadPortletRequest,
+		long dossierFileId =
+			ParamUtil.getLong(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
-		long dossierPartId = ParamUtil
-			.getLong(uploadPortletRequest,
+		long dossierPartId =
+			ParamUtil.getLong(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-		int index = ParamUtil
-			.getInteger(uploadPortletRequest, DossierFileDisplayTerms.INDEX);
+		int index =
+			ParamUtil.getInteger(uploadPortletRequest,
+				DossierFileDisplayTerms.INDEX);
 
-		String groupName = ParamUtil
-			.getString(uploadPortletRequest,
+		String groupName =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.GROUP_NAME);
 
-		String templateFileNo = ParamUtil
-			.getString(uploadPortletRequest,
+		String templateFileNo =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierDisplayTerms.TEMPLATE_FILE_NO);
 
-		String fileName = ParamUtil
-			.getString(uploadPortletRequest, DossierFileDisplayTerms.FILE_NAME);
+		String fileName =
+			ParamUtil.getString(uploadPortletRequest,
+				DossierFileDisplayTerms.FILE_NAME);
 
-		String redirectURL = ParamUtil
-			.getString(uploadPortletRequest, "redirectURL");
+		String redirectURL =
+			ParamUtil.getString(uploadPortletRequest, "redirectURL");
 
-		String displayName = ParamUtil
-			.getString(uploadPortletRequest,
+		String displayName =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.DISPLAY_NAME);
 
-		String dossierFileNo = ParamUtil
-			.getString(uploadPortletRequest,
+		String dossierFileNo =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_NO);
 
-		String dossierFileDate = ParamUtil
-			.getString(uploadPortletRequest,
+		String dossierFileDate =
+			ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_DATE);
 
-		String sourceFileName = uploadPortletRequest
-			.getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+		String sourceFileName =
+			uploadPortletRequest.getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-		sourceFileName = sourceFileName
-			.concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(StringUtil
-				.randomString());
+		sourceFileName =
+			sourceFileName.concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(
+				StringUtil.randomString());
 
-		String accountType = ParamUtil
-			.getString(uploadPortletRequest, WebKeys.ACCOUNT_TYPE);
+		String accountType =
+			ParamUtil.getString(uploadPortletRequest, WebKeys.ACCOUNT_TYPE);
 
 		InputStream inputStream = null;
 
-		JSONObject jsonObject = JSONFactoryUtil
-			.createJSONObject();
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
-			.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		try {
-			ServiceContext serviceContext = ServiceContextFactory
-				.getInstance(uploadPortletRequest);
-			DossierFile dossierFile = DossierFileLocalServiceUtil
-				.getDossierFile(dossierFileId);
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(uploadPortletRequest);
+			DossierFile dossierFile =
+				DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 
 			long storeFolderId = 0;
 
 			if (dossierFile != null) {
-				long fileEntryId = dossierFile
-					.getFileEntryId();
+				long fileEntryId = dossierFile.getFileEntryId();
 				if (fileEntryId > 0) {
-					FileEntry fileEntry = DLAppServiceUtil
-						.getFileEntry(fileEntryId);
-					storeFolderId = fileEntry
-						.getFolderId();
+					FileEntry fileEntry =
+						DLAppServiceUtil.getFileEntry(fileEntryId);
+					storeFolderId = fileEntry.getFolderId();
 				}
 				else {
-					long dossierId = dossierFile
-						.getDossierId();
-					Dossier dossier = DossierLocalServiceUtil
-						.getDossier(dossierId);
+					long dossierId = dossierFile.getDossierId();
+					Dossier dossier =
+						DossierLocalServiceUtil.getDossier(dossierId);
 
-					int dossierNo = dossier
-						.getCounter();
+					int dossierNo = dossier.getCounter();
 
 					String destination = StringPool.BLANK;
-					if (accountType
-						.equals(
-							PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
-						destination = PortletUtil
-							.getCitizenDossierDestinationFolder(dossier
-								.getGroupId(), themeDisplay
-									.getUserId()) +
-							StringPool.SLASH + String
-								.valueOf(dossierNo);
+					if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+						destination =
+							PortletUtil.getCitizenDossierDestinationFolder(
+								dossier.getGroupId(), themeDisplay.getUserId()) +
+								StringPool.SLASH + String.valueOf(dossierNo);
 
 					}
-					else if (accountType
-						.equals(
-							PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+					else if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
 
-						destination = PortletUtil
-							.getBusinessDossierDestinationFolder(dossier
-								.getGroupId(), dossier
-									.getOwnerOrganizationId()) +
-							StringPool.SLASH + String
-								.valueOf(dossierNo);
+						destination =
+							PortletUtil.getBusinessDossierDestinationFolder(
+								dossier.getGroupId(),
+								dossier.getOwnerOrganizationId()) +
+								StringPool.SLASH + String.valueOf(dossierNo);
 
 					}
 
-					DLFolder storeFolder = DLFolderUtil
-						.getTargetFolder(themeDisplay
-							.getUserId(), themeDisplay
-								.getScopeGroupId(),
-							themeDisplay
-								.getScopeGroupId(),
-							false, 0, destination, StringPool.BLANK, false,
+					DLFolder storeFolder =
+						DLFolderUtil.getTargetFolder(themeDisplay.getUserId(),
+							themeDisplay.getScopeGroupId(),
+							themeDisplay.getScopeGroupId(), false, 0,
+							destination, StringPool.BLANK, false,
 							serviceContext);
 
-					storeFolderId = storeFolder
-						.getFolderId();
+					storeFolderId = storeFolder.getFolderId();
 				}
 			}
 
-			inputStream = uploadPortletRequest
-				.getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+			inputStream =
+				uploadPortletRequest.getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-			long size = uploadPortletRequest
-				.getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+			long size =
+				uploadPortletRequest.getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-			String contentType = uploadPortletRequest
-				.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+			String contentType =
+				uploadPortletRequest.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-			String mimeType = Validator
-				.isNotNull(contentType) ? MimeTypesUtil
-					.getContentType(contentType) : StringPool.BLANK;
+			String mimeType =
+				Validator.isNotNull(contentType)
+					? MimeTypesUtil.getContentType(contentType)
+					: StringPool.BLANK;
 
-			FileEntry fileEntry = DLAppServiceUtil
-				.addFileEntry(serviceContext
-					.getScopeGroupId(), storeFolderId, sourceFileName, mimeType,
-					displayName, StringPool.BLANK, StringPool.BLANK,
-					inputStream, size, serviceContext);
+			FileEntry fileEntry =
+				DLAppServiceUtil.addFileEntry(serviceContext.getScopeGroupId(),
+					storeFolderId, sourceFileName, mimeType, displayName,
+					StringPool.BLANK, StringPool.BLANK, inputStream, size,
+					serviceContext);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DOSSIER_FILE_NO, dossierFileNo);
+			jsonObject.put(DossierFileDisplayTerms.DOSSIER_FILE_NO,
+				dossierFileNo);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DISPLAY_NAME, displayName);
+			jsonObject.put(DossierFileDisplayTerms.DISPLAY_NAME, displayName);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DOSSIER_FILE_DATE,
-					dossierFileDate);
+			jsonObject.put(DossierFileDisplayTerms.DOSSIER_FILE_DATE,
+				dossierFileDate);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.FILE_TITLE, fileEntry
-					.getTitle());
+			jsonObject.put(DossierFileDisplayTerms.FILE_TITLE,
+				fileEntry.getTitle());
 
-			jsonObject
-				.put(DossierFileDisplayTerms.MIME_TYPE, fileEntry
-					.getMimeType());
+			jsonObject.put(DossierFileDisplayTerms.MIME_TYPE,
+				fileEntry.getMimeType());
 
-			jsonObject
-				.put(DossierFileDisplayTerms.FILE_NAME, fileName);
+			jsonObject.put(DossierFileDisplayTerms.FILE_NAME, fileName);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.FILE_ENTRY_ID, fileEntry
-					.getFileEntryId());
-			jsonObject
-				.put(DossierFileDisplayTerms.FOLDE_ID, fileEntry
-					.getFolderId());
+			jsonObject.put(DossierFileDisplayTerms.FILE_ENTRY_ID,
+				fileEntry.getFileEntryId());
+			jsonObject.put(DossierFileDisplayTerms.FOLDE_ID,
+				fileEntry.getFolderId());
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DOSSIER_PART_ID, dossierPartId);
+			jsonObject.put(DossierFileDisplayTerms.DOSSIER_PART_ID,
+				dossierPartId);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.INDEX, index);
+			jsonObject.put(DossierFileDisplayTerms.INDEX, index);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.GROUP_NAME, groupName);
+			jsonObject.put(DossierFileDisplayTerms.GROUP_NAME, groupName);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL,
-					PortletConstants.DOSSIER_FILE_ORIGINAL);
+			jsonObject.put(DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL,
+				PortletConstants.DOSSIER_FILE_ORIGINAL);
 
-			jsonObject
-				.put(DossierFileDisplayTerms.DOSSIER_FILE_TYPE,
-					PortletConstants.DOSSIER_FILE_TYPE_INPUT);
+			jsonObject.put(DossierFileDisplayTerms.DOSSIER_FILE_TYPE,
+				PortletConstants.DOSSIER_FILE_TYPE_INPUT);
 
-			jsonObject
-				.put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
+			jsonObject.put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
 
 		}
 		catch (Exception e) {
-			_log
-				.error(e);
-			SessionErrors
-				.add(actionRequest, "upload-error");
+			_log.error(e);
+			SessionErrors.add(actionRequest, "upload-error");
 		}
 		finally {
-			StreamUtil
-				.cleanUp(inputStream);
-			HttpServletRequest request = PortalUtil
-				.getHttpServletRequest(actionRequest);
-			request
-				.setAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE,
-					jsonObject);
+			StreamUtil.cleanUp(inputStream);
+			HttpServletRequest request =
+				PortalUtil.getHttpServletRequest(actionRequest);
+			request.setAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE,
+				jsonObject);
 
-			if (Validator
-				.isNotNull(redirectURL)) {
-				actionResponse
-					.setRenderParameter("jspPage",
-						"/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
+			if (Validator.isNotNull(redirectURL)) {
+				actionResponse.setRenderParameter("jspPage",
+					"/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
 			}
 		}
 	}
@@ -2203,134 +1943,82 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	 * @param actionRequest
 	 * @param actionResponse
 	 * @throws IOException
+	 * @throws SystemException
+	 * @throws PortalException
 	 */
 	public void updateDossierStatus(
 		ActionRequest actionRequest, ActionResponse actionResponse)
-		throws IOException {
+		throws IOException, PortalException, SystemException {
 
-		long dossierId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 
-		long fileGroupId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_DATE);
+		long fileGroupId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_DATE);
 
-		long govAgencyOrganizationId = ParamUtil
-			.getLong(actionRequest,
-				DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
+		/*
+		 * long govAgencyOrganizationId = ParamUtil.getLong(actionRequest,
+		 * DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
+		 */
 
-		String dossierStatus = ParamUtil
-			.getString(actionRequest, DossierDisplayTerms.DOSSIER_STATUS);
+		String dossierStatus =
+			ParamUtil.getString(actionRequest,
+				DossierDisplayTerms.DOSSIER_STATUS);
 
-		String redirectURL = ParamUtil
-			.getString(actionRequest, "redirectURL");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+
+		// Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
 		try {
-			ServiceContext serviceContext = ServiceContextFactory
-				.getInstance(actionRequest);
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(actionRequest);
 
 			UserActionMsg actionMsg = new UserActionMsg();
 
 			Message message = new Message();
+
 			switch (dossierStatus) {
 			case PortletConstants.DOSSIER_STATUS_WAITING:
 
-				actionMsg
-					.setAction(WebKeys.ACTION_RESUBMIT_VALUE);
+				actionMsg.setAction(WebKeys.ACTION_RESUBMIT_VALUE);
 
-				actionMsg
-					.setDossierId(dossierId);
+				actionMsg.setDossierId(dossierId);
 
-				actionMsg
-					.setFileGroupId(fileGroupId);
+				actionMsg.setFileGroupId(fileGroupId);
 
-				actionMsg
-					.setLocale(serviceContext
-						.getLocale());
+				actionMsg.setLocale(serviceContext.getLocale());
 
-				actionMsg
-					.setUserId(serviceContext
-						.getUserId());
+				actionMsg.setUserId(serviceContext.getUserId());
 
-				ProcessOrder processOrder = ProcessOrderLocalServiceUtil
-					.getProcessOrder(dossierId, fileGroupId);
+				actionMsg.setGroupId(serviceContext.getScopeGroupId());
 
-				actionMsg
-					.setProcessOrderId(processOrder
-						.getProcessOrderId());
+				ProcessOrder processOrder =
+					ProcessOrderLocalServiceUtil.getProcessOrder(dossierId,
+						fileGroupId);
 
-				message
-					.put("action", "resubmit");
-				message
-					.put("dossierId", dossierId);
-				message
-					.put("fileGroupId", fileGroupId);
-				message
-					.put("level", PortletConstants.DOSSIER_LOG_NORMAL);
-				message
-					.put("locale", serviceContext
-						.getLocale());
+				actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
 
-				message
-					.put("groupId", serviceContext
-						.getScopeGroupId());
-
-				message
-					.put("govAgencyOrganizationId", govAgencyOrganizationId);
-
-				message
-					.put("userId", serviceContext
-						.getUserId());
-
-				message
-					.put("msgToEngine", actionMsg);
+				message.put("msgToEngine", actionMsg);
 
 				break;
 			case PortletConstants.DOSSIER_STATUS_NEW:
 
 				validateSubmitDossier(dossierId);
 
-				actionMsg
-					.setAction(WebKeys.ACTION_SUBMIT_VALUE);
+				actionMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
 
-				actionMsg
-					.setDossierId(dossierId);
+				actionMsg.setDossierId(dossierId);
 
-				actionMsg
-					.setFileGroupId(fileGroupId);
+				actionMsg.setFileGroupId(fileGroupId);
 
-				actionMsg
-					.setLocale(serviceContext
-						.getLocale());
+				actionMsg.setLocale(serviceContext.getLocale());
 
-				actionMsg
-					.setUserId(serviceContext
-						.getUserId());
+				actionMsg.setUserId(serviceContext.getUserId());
 
-				message
-					.put("action", "submit");
-				message
-					.put("dossierId", dossierId);
-				message
-					.put("fileGroupId", fileGroupId);
-				message
-					.put("level", PortletConstants.DOSSIER_LOG_NORMAL);
-				message
-					.put("locale", serviceContext
-						.getLocale());
+				actionMsg.setGroupId(serviceContext.getScopeGroupId());
 
-				message
-					.put("groupId", serviceContext
-						.getScopeGroupId());
-
-				message
-					.put("govAgencyOrganizationId", govAgencyOrganizationId);
-
-				message
-					.put("userId", serviceContext
-						.getUserId());
-
-				message
-					.put("msgToEngine", actionMsg);
+				message.put("msgToEngine", actionMsg);
 
 				break;
 
@@ -2338,8 +2026,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				break;
 			}
 
-			MessageBusUtil
-				.sendMessage("opencps/frontoffice/out/destination", message);
+			/*
+			 * JMSContext context =
+			 * JMSMessageUtil.createProducer(serviceContext.getCompanyId(),
+			 * dossier.getGovAgencyCode(), true, "submitDossier");
+			 * SubmitDossierMessage submitDossierMessage = new
+			 * SubmitDossierMessage(context);
+			 * submitDossierMessage.sendMessage(dossierId);
+			 */
+
+			MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
+				message);
 
 		}
 		catch (Exception e) {
@@ -2348,24 +2045,18 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				e instanceof NoSuchDossierTemplateException ||
 				e instanceof RequiredDossierPartException) {
 
-				SessionErrors
-					.add(actionRequest, e
-						.getClass());
+				SessionErrors.add(actionRequest, e.getClass());
 			}
 			else {
-				SessionErrors
-					.add(actionRequest,
-						MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
+				SessionErrors.add(actionRequest,
+					MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
 			}
 
-			_log
-				.error(e);
+			_log.error(e);
 		}
 		finally {
-			if (Validator
-				.isNotNull(redirectURL)) {
-				actionResponse
-					.sendRedirect(redirectURL);
+			if (Validator.isNotNull(redirectURL)) {
+				actionResponse.sendRedirect(redirectURL);
 			}
 		}
 	}
@@ -2379,21 +2070,22 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		AccountBean accountBean = AccountUtil
-			.getAccountBean(actionRequest);
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		DossierFile dossierFile = null;
 
-		long dossierId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
-		long dossierPartId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
-		long dossierFileId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
-		long fileGroupId = ParamUtil
-			.getLong(actionRequest, DossierDisplayTerms.FILE_GROUP_ID);
-		long groupDossierPartId = ParamUtil
-			.getLong(actionRequest, "groupDossierPartId");
+		long dossierId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierPartId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_PART_ID);
+		long dossierFileId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		long fileGroupId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.FILE_GROUP_ID);
+		long groupDossierPartId =
+			ParamUtil.getLong(actionRequest, "groupDossierPartId");
 
 		long fileEntryId = 0;
 
@@ -2403,140 +2095,120 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		int syncStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC;
 		int original = PortletConstants.DOSSIER_FILE_ORIGINAL;
 
-		String formData = ParamUtil
-			.getString(actionRequest, DossierFileDisplayTerms.FORM_DATA);
+		String formData =
+			ParamUtil.getString(actionRequest,
+				DossierFileDisplayTerms.FORM_DATA);
 
 		// Default value
 		String dossierFileNo = StringPool.BLANK;
 		String templateFileNo = StringPool.BLANK;
 		String displayName = StringPool.BLANK;
-		String groupName = ParamUtil
-			.getString(actionRequest, DossierFileDisplayTerms.GROUP_NAME);
+		String groupName =
+			ParamUtil.getString(actionRequest,
+				DossierFileDisplayTerms.GROUP_NAME);
 		Date dossierFileDate = null;
 
 		try {
 			validateDynamicFormData(dossierId, dossierPartId, accountBean);
 
-			ServiceContext serviceContext = ServiceContextFactory
-				.getInstance(actionRequest);
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(actionRequest);
 
-			DossierPart dossierPart = DossierPartLocalServiceUtil
-				.getDossierPart(dossierPartId);
+			DossierPart dossierPart =
+				DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 
-			if (Validator
-				.isNotNull(dossierPart
-					.getTemplateFileNo())) {
-				templateFileNo = dossierPart
-					.getTemplateFileNo();
+			if (Validator.isNotNull(dossierPart.getTemplateFileNo())) {
+				templateFileNo = dossierPart.getTemplateFileNo();
 			}
 
-			if (Validator
-				.isNotNull(dossierPart
-					.getPartName())) {
-				displayName = dossierPart
-					.getPartName();
+			if (Validator.isNotNull(dossierPart.getPartName())) {
+				displayName = dossierPart.getPartName();
 			}
 
 			if (dossierFileId == 0) {
-				dossierFile = DossierFileLocalServiceUtil
-					.addDossierFile(serviceContext
-						.getUserId(), dossierId, dossierPartId, templateFileNo,
-						groupName, fileGroupId, groupDossierPartId, accountBean
-							.getOwnerUserId(),
-						accountBean
-							.getOwnerOrganizationId(),
-						displayName, formData, fileEntryId, dossierFileMark,
+				dossierFile =
+					DossierFileLocalServiceUtil.addDossierFile(
+						serviceContext.getUserId(), dossierId, dossierPartId,
+						templateFileNo, groupName, fileGroupId,
+						groupDossierPartId, accountBean.getOwnerUserId(),
+						accountBean.getOwnerOrganizationId(), displayName,
+						formData, fileEntryId, dossierFileMark,
 						dossierFileType, dossierFileNo, dossierFileDate,
 						original, syncStatus, serviceContext);
 			}
 			else {
-				dossierFile = DossierFileLocalServiceUtil
-					.getDossierFile(dossierFileId);
-				dossierFileMark = dossierFile
-					.getDossierFileMark();
-				dossierFileType = dossierFile
-					.getDossierFileType();
-				syncStatus = dossierFile
-					.getSyncStatus();
-				original = dossierFile
-					.getOriginal();
+				dossierFile =
+					DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+				dossierFileMark = dossierFile.getDossierFileMark();
+				dossierFileType = dossierFile.getDossierFileType();
+				syncStatus = dossierFile.getSyncStatus();
+				original = dossierFile.getOriginal();
 
-				dossierFileNo = Validator
-					.isNotNull(dossierFile
-						.getDossierFileNo()) ? dossierFile
-							.getDossierFileNo() : StringPool.BLANK;
-				templateFileNo = Validator
-					.isNotNull(dossierFile
-						.getTemplateFileNo()) ? dossierFile
-							.getTemplateFileNo() : StringPool.BLANK;
-				displayName = Validator
-					.isNotNull(dossierFile
-						.getDisplayName()) ? dossierFile
-							.getDisplayName() : StringPool.BLANK;
+				dossierFileNo =
+					Validator.isNotNull(dossierFile.getDossierFileNo())
+						? dossierFile.getDossierFileNo() : StringPool.BLANK;
+				templateFileNo =
+					Validator.isNotNull(dossierFile.getTemplateFileNo())
+						? dossierFile.getTemplateFileNo() : StringPool.BLANK;
+				displayName =
+					Validator.isNotNull(dossierFile.getDisplayName())
+						? dossierFile.getDisplayName() : StringPool.BLANK;
 
-				dossierFile = DossierFileLocalServiceUtil
-					.updateDossierFile(dossierFileId, serviceContext
-						.getUserId(), dossierId, dossierPartId, templateFileNo,
-						fileGroupId, accountBean
-							.getOwnerUserId(),
-						accountBean
-							.getOwnerOrganizationId(),
-						displayName, formData, fileEntryId, dossierFileMark,
+				dossierFile =
+					DossierFileLocalServiceUtil.updateDossierFile(
+						dossierFileId, serviceContext.getUserId(), dossierId,
+						dossierPartId, templateFileNo, fileGroupId,
+						accountBean.getOwnerUserId(),
+						accountBean.getOwnerOrganizationId(), displayName,
+						formData, fileEntryId, dossierFileMark,
 						dossierFileType, dossierFileNo, dossierFileDate,
 						original, syncStatus, serviceContext);
 			}
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierException) {
-				SessionErrors
-					.add(actionRequest, NoSuchDossierException.class);
+				SessionErrors.add(actionRequest, NoSuchDossierException.class);
 			}
 			else if (e instanceof NoSuchDossierPartException) {
-				SessionErrors
-					.add(actionRequest, NoSuchDossierPartException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchDossierPartException.class);
 			}
 			else if (e instanceof NoSuchAccountException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountException.class);
+				SessionErrors.add(actionRequest, NoSuchAccountException.class);
 			}
 			else if (e instanceof NoSuchAccountTypeException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountTypeException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountTypeException.class);
 			}
 			else if (e instanceof NoSuchAccountFolderException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountFolderException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountFolderException.class);
 			}
 			else if (e instanceof NoSuchAccountOwnUserIdException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountOwnUserIdException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountOwnUserIdException.class);
 			}
 			else if (e instanceof NoSuchAccountOwnOrgIdException) {
-				SessionErrors
-					.add(actionRequest, NoSuchAccountOwnOrgIdException.class);
+				SessionErrors.add(actionRequest,
+					NoSuchAccountOwnOrgIdException.class);
 			}
 			else if (e instanceof PermissionDossierException) {
-				SessionErrors
-					.add(actionRequest, PermissionDossierException.class);
+				SessionErrors.add(actionRequest,
+					PermissionDossierException.class);
 			}
 			else {
-				SessionErrors
-					.add(actionRequest, PortalException.class);
+				SessionErrors.add(actionRequest, PortalException.class);
 			}
 
-			_log
-				.error(e);
+			_log.error(e);
 		}
 		finally {
-			actionResponse
-				.setRenderParameter("primaryKey", String
-					.valueOf(dossierFile != null ? dossierFile
-						.getDossierFileId() : 0));
-			actionResponse
-				.setRenderParameter("content", "declaration-online");
-			actionResponse
-				.setRenderParameter("jspPage",
-					"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+			actionResponse.setRenderParameter("primaryKey",
+				String.valueOf(dossierFile != null
+					? dossierFile.getDossierFileId() : 0));
+			actionResponse.setRenderParameter("content", "declaration-online");
+			actionResponse.setRenderParameter("jspPage",
+				"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
 		}
 	}
 
@@ -2549,33 +2221,27 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		long dossierPartId = ParamUtil
-			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
-		int index = ParamUtil
-			.getInteger(actionRequest, DossierFileDisplayTerms.INDEX);
-		String formData = ParamUtil
-			.getString(actionRequest, DossierFileDisplayTerms.FORM_DATA);
+		long dossierPartId =
+			ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_PART_ID);
+		int index =
+			ParamUtil.getInteger(actionRequest, DossierFileDisplayTerms.INDEX);
+		String formData =
+			ParamUtil.getString(actionRequest,
+				DossierFileDisplayTerms.FORM_DATA);
 
-		HttpServletRequest request = PortalUtil
-			.getHttpServletRequest(actionRequest);
+		HttpServletRequest request =
+			PortalUtil.getHttpServletRequest(actionRequest);
 
-		request
-			.setAttribute(WebKeys.FORM_DATA + String
-				.valueOf(dossierPartId) + StringPool.DASH + String
-					.valueOf(index),
-				formData);
+		request.setAttribute(WebKeys.FORM_DATA + String.valueOf(dossierPartId) +
+			StringPool.DASH + String.valueOf(index), formData);
 
-		HttpSession session = request
-			.getSession();
-		session
-			.setAttribute(WebKeys.FORM_DATA + String
-				.valueOf(dossierPartId) + StringPool.DASH + String
-					.valueOf(index),
-				formData);
+		HttpSession session = request.getSession();
+		session.setAttribute(WebKeys.FORM_DATA + String.valueOf(dossierPartId) +
+			StringPool.DASH + String.valueOf(index), formData);
 
-		actionResponse
-			.setRenderParameter("mvcPath",
-				"/html/portlets/dossiermgt/frontoffice/dynamic_form.jsp");
+		actionResponse.setRenderParameter("mvcPath",
+			"/html/portlets/dossiermgt/frontoffice/dynamic_form.jsp");
 
 	}
 
@@ -2595,25 +2261,19 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		if (accountBean == null) {
 			throw new NoSuchAccountException();
 		}
-		else if (Validator
-			.isNull(accountBean
-				.getAccountType())) {
+		else if (Validator.isNull(accountBean.getAccountType())) {
 			throw new NoSuchAccountTypeException();
 		}
-		else if (accountBean
-			.getAccountFolder() == null) {
+		else if (accountBean.getAccountFolder() == null) {
 			throw new NoSuchAccountFolderException();
 		}
 
-		else if (accountBean
-			.isCitizen() && accountBean
-				.getOwnerUserId() == 0) {
+		else if (accountBean.isCitizen() && accountBean.getOwnerUserId() == 0) {
 			throw new NoSuchAccountOwnUserIdException();
 		}
 
-		else if (accountBean
-			.isBusiness() && accountBean
-				.getOwnerOrganizationId() == 0) {
+		else if (accountBean.isBusiness() &&
+			accountBean.getOwnerOrganizationId() == 0) {
 			throw new NoSuchAccountOwnOrgIdException();
 		}
 	}
@@ -2650,35 +2310,27 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		Dossier dossier = null;
 
 		try {
-			dossier = DossierLocalServiceUtil
-				.getDossier(dossierId);
+			dossier = DossierLocalServiceUtil.getDossier(dossierId);
 		}
 		catch (Exception e) {
 			throw new NoSuchDossierPartException();
 		}
 
-		if (accountBean
-			.isBusiness()) {
-			if (dossier
-				.getOwnerOrganizationId() != accountBean
-					.getOwnerOrganizationId()) {
+		if (accountBean.isBusiness()) {
+			if (dossier.getOwnerOrganizationId() != accountBean.getOwnerOrganizationId()) {
 				throw new PermissionDossierException();
 			}
 
 		}
-		else if (accountBean
-			.isCitizen()) {
-			if (dossier
-				.getUserId() != accountBean
-					.getOwnerUserId()) {
+		else if (accountBean.isCitizen()) {
+			if (dossier.getUserId() != accountBean.getOwnerUserId()) {
 				throw new PermissionDossierException();
 			}
 
 		}
 
 		try {
-			DossierPartLocalServiceUtil
-				.getDossierPart(dossierPartId);
+			DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 		}
 		catch (Exception e) {
 			throw new NoSuchDossierPartException();
@@ -2710,8 +2362,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		DossierFile dossierFile = null;
 
 		try {
-			dossierFile = DossierFileLocalServiceUtil
-				.getDossierFile(dossierFileId);
+			dossierFile =
+				DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 		}
 		catch (Exception e) {
 			// TODO: handle exception
@@ -2747,8 +2399,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			Dossier dossier = null;
 
 			try {
-				dossier = DossierLocalServiceUtil
-					.getDossier(dossierId);
+				dossier = DossierLocalServiceUtil.getDossier(dossierId);
 			}
 			catch (Exception e) {
 			}
@@ -2773,18 +2424,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		if (dossierId <= 0) {
 			throw new NoSuchDossierException();
 		}
-		else if (Validator
-			.isNull(partName
-				.trim())) {
+		else if (Validator.isNull(partName.trim())) {
 			throw new EmptyFileGroupException();
 		}
 
 		int count = 0;
 
 		try {
-			count = FileGroupLocalServiceUtil
-				.countByD_DN(dossierId, partName
-					.trim());
+			count =
+				FileGroupLocalServiceUtil.countByD_DN(dossierId,
+					partName.trim());
 		}
 		catch (Exception e) {
 		}
@@ -2836,35 +2485,27 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		Dossier dossier = null;
 
 		try {
-			dossier = DossierLocalServiceUtil
-				.getDossier(dossierId);
+			dossier = DossierLocalServiceUtil.getDossier(dossierId);
 		}
 		catch (Exception e) {
 			throw new NoSuchDossierPartException();
 		}
 
-		if (accountBean
-			.isBusiness()) {
-			if (dossier
-				.getOwnerOrganizationId() != accountBean
-					.getOwnerOrganizationId()) {
+		if (accountBean.isBusiness()) {
+			if (dossier.getOwnerOrganizationId() != accountBean.getOwnerOrganizationId()) {
 				throw new PermissionDossierException();
 			}
 
 		}
-		else if (accountBean
-			.isCitizen()) {
-			if (dossier
-				.getUserId() != accountBean
-					.getOwnerUserId()) {
+		else if (accountBean.isCitizen()) {
+			if (dossier.getUserId() != accountBean.getOwnerUserId()) {
 				throw new PermissionDossierException();
 			}
 
 		}
 
 		try {
-			DossierPartLocalServiceUtil
-				.getDossierPart(dossierPartId);
+			DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 		}
 		catch (Exception e) {
 			throw new NoSuchDossierPartException();
@@ -2913,8 +2554,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		DossierFile dossierFile = null;
 
 		try {
-			dossierFile = DossierFileLocalServiceUtil
-				.getDossierFile(dossierFileId);
+			dossierFile =
+				DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 		}
 		catch (Exception e) {
 
@@ -2924,8 +2565,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new NoSuchDossierFileException();
 		}
 
-		if (dossierFile
-			.getFileEntryId() <= 0) {
+		if (dossierFile.getFileEntryId() <= 0) {
 			throw new NoSuchFileEntryException();
 		}
 
@@ -2940,35 +2580,27 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		Dossier dossier = null;
 
 		try {
-			dossier = DossierLocalServiceUtil
-				.getDossier(dossierId);
+			dossier = DossierLocalServiceUtil.getDossier(dossierId);
 		}
 		catch (Exception e) {
 			throw new NoSuchDossierPartException();
 		}
 
-		if (accountBean
-			.isBusiness()) {
-			if (dossier
-				.getOwnerOrganizationId() != accountBean
-					.getOwnerOrganizationId()) {
+		if (accountBean.isBusiness()) {
+			if (dossier.getOwnerOrganizationId() != accountBean.getOwnerOrganizationId()) {
 				throw new PermissionDossierException();
 			}
 
 		}
-		else if (accountBean
-			.isCitizen()) {
-			if (dossier
-				.getUserId() != accountBean
-					.getOwnerUserId()) {
+		else if (accountBean.isCitizen()) {
+			if (dossier.getUserId() != accountBean.getOwnerUserId()) {
 				throw new PermissionDossierException();
 			}
 
 		}
 
 		try {
-			DossierPartLocalServiceUtil
-				.getDossierPart(dossierPartId);
+			DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 		}
 		catch (Exception e) {
 			throw new NoSuchDossierPartException();
@@ -2992,8 +2624,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		Dossier dossier = null;
 
 		try {
-			dossier = DossierLocalServiceUtil
-				.getDossier(dossierId);
+			dossier = DossierLocalServiceUtil.getDossier(dossierId);
 		}
 		catch (Exception e) {
 		}
@@ -3005,9 +2636,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		DossierTemplate dossierTemplate = null;
 
 		try {
-			dossierTemplate = DossierTemplateLocalServiceUtil
-				.getDossierTemplate(dossier
-					.getDossierTemplateId());
+			dossierTemplate =
+				DossierTemplateLocalServiceUtil.getDossierTemplate(dossier.getDossierTemplateId());
 		}
 		catch (Exception e) {
 		}
@@ -3019,9 +2649,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
 
 		try {
-			dossierPartsLevel1 = DossierPartLocalServiceUtil
-				.getDossierPartsByT_P(dossierTemplate
-					.getDossierTemplateId(), 0);
+			dossierPartsLevel1 =
+				DossierPartLocalServiceUtil.getDossierPartsByT_P(
+					dossierTemplate.getDossierTemplateId(), 0);
 		}
 		catch (Exception e) {
 
@@ -3031,22 +2661,22 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		if (dossierPartsLevel1 != null) {
 			for (DossierPart dossierPartLevel1 : dossierPartsLevel1) {
-				List<DossierPart> dossierParts = DossierMgtUtil
-					.getTreeDossierPart(dossierPartLevel1
-						.getDossierpartId());
+				List<DossierPart> dossierParts =
+					DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
 
 				if (requiredFlag) {
 					break;
 				}
 
 				for (DossierPart dossierPart : dossierParts) {
-					if (dossierPart
-						.getRequired()) {
+					if (dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_RESULT &&
+						dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT &&
+						dossierPart.getRequired()) {
 						DossierFile dossierFile = null;
 						try {
-							dossierFile = DossierFileLocalServiceUtil
-								.getDossierFileInUse(dossierId, dossierPart
-									.getDossierpartId());
+							dossierFile =
+								DossierFileLocalServiceUtil.getDossierFileInUse(
+									dossierId, dossierPart.getDossierpartId());
 						}
 						catch (Exception e) {
 							// TODO: handle exception
@@ -3102,9 +2732,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String dossierDestinationFolder, String subjectName, String subjectId,
 		String address, String contactName, String contactTelNo,
 		String contactEmail)
-		throws EmptyDossierCityCodeException, EmptyDossierDistrictCodeException,
-		EmptyDossierWardCodeException, InvalidDossierObjectException,
-		CreateDossierFolderException, EmptyDossierSubjectNameException,
+		throws EmptyDossierCityCodeException,
+		EmptyDossierDistrictCodeException, EmptyDossierWardCodeException,
+		InvalidDossierObjectException, CreateDossierFolderException,
+		EmptyDossierSubjectNameException,
 		OutOfLengthDossierSubjectNameException, EmptyDossierSubjectIdException,
 		OutOfLengthDossierSubjectIdException, EmptyDossierAddressException,
 		OutOfLengthDossierContactEmailException,
@@ -3125,64 +2756,98 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new EmptyDossierWardCodeException();
 		}
 
-		if (Validator
-			.isNull(accountType)) {
+		if (Validator.isNull(accountType)) {
 			throw new InvalidDossierObjectException();
 		}
 
-		if (Validator
-			.isNull(dossierDestinationFolder)) {
+		if (Validator.isNull(dossierDestinationFolder)) {
 			throw new CreateDossierFolderException();
 		}
 
-		if (Validator
-			.isNull(subjectName)) {
+		if (Validator.isNull(subjectName)) {
 			throw new EmptyDossierSubjectNameException();
 		}
 
-		if (subjectName
-			.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_NAME_LENGTH) {
+		if (subjectName.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_NAME_LENGTH) {
 			throw new OutOfLengthDossierSubjectNameException();
 		}
 
-		if (Validator
-			.isNull(subjectId)) {
+		if (Validator.isNull(subjectId)) {
 			throw new EmptyDossierSubjectIdException();
 		}
 
-		if (subjectId
-			.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_ID_LENGTH) {
+		if (subjectId.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_ID_LENGTH) {
 			throw new OutOfLengthDossierSubjectIdException();
 		}
 
-		if (Validator
-			.isNull(address)) {
+		if (Validator.isNull(address)) {
 			throw new EmptyDossierAddressException();
 		}
 
-		if (address
-			.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_ADDRESS_LENGTH) {
+		if (address.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_ADDRESS_LENGTH) {
 			throw new OutOfLengthDossierAddressException();
 		}
 
-		if (Validator
-			.isNull(contactName)) {
+		if (Validator.isNull(contactName)) {
 			throw new EmptyDossierContactNameException();
 		}
 
-		if (contactName
-			.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_NAME_LENGTH) {
+		if (contactName.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_NAME_LENGTH) {
 			throw new OutOfLengthDossierContactNameException();
 		}
 
-		if (contactTelNo
-			.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_TEL_NO_LENGTH) {
+		if (contactTelNo.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_TEL_NO_LENGTH) {
 			throw new OutOfLengthDossierContactTelNoException();
 		}
 
-		if (contactEmail
-			.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_EMAIL_LENGTH) {
+		if (contactEmail.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_EMAIL_LENGTH) {
 			throw new OutOfLengthDossierContactEmailException();
 		}
+	}
+
+	public void TestConsumer(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		try {
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(actionRequest);
+
+			JMSContext context =
+				JMSMessageUtil.createConsumer(serviceContext.getCompanyId(),
+					"111", true, "submitDossier");
+
+			SubmitDossierMessage submitDossierMessage =
+				new SubmitDossierMessage(context);
+			submitDossierMessage.receiveMessage();
+
+			/*
+			 * javax.jms.Message message =
+			 * context.getMessageConsumer().receive(); if (message != null) { if
+			 * (message instanceof TextMessage) {
+			 * _log.info("*******************TextMessage*******************");
+			 * _log.info(((TextMessage) message).getText()); } else if (message
+			 * instanceof ObjectMessage) {
+			 * _log.info("*******************ObjectMessage*******************");
+			 * _log.info(((ObjectMessage) message).getClass().getName()); } else
+			 * if (message instanceof BytesMessage) { BytesMessage bytesMessage
+			 * = (BytesMessage) message;
+			 * _log.info("*******************BytesMessage*******************");
+			 * _log.info(((BytesMessage) message).getBodyLength()); byte[]
+			 * result = new byte[(int) bytesMessage.getBodyLength()];
+			 * bytesMessage.readBytes(result); Object object =
+			 * JMSMessageUtil.convertByteArrayToObject(result); DossierMsgBody
+			 * dossierMsgBody = (DossierMsgBody) object; } else if (message
+			 * instanceof StreamMessage) {
+			 * _log.info("*******************StreamMessage*******************");
+			 * } } else {
+			 * _log.info("*******************Null Message*******************");
+			 * } context.destroy();
+			 */
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
 	}
 }

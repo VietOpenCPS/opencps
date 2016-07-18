@@ -161,6 +161,9 @@ Liferay.provide(window, 'closeDialog', function(id, portletName) {
 	var dialog = Liferay.Util.getWindow(id);
 	
 	if(portletName){
+		var data = {
+			'conserveHash': true
+		};
 		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_' + portletName);
 	}
 	dialog.destroy();

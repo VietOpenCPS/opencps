@@ -132,6 +132,24 @@ public class UserActionMsg {
 	protected long processOrderId;
 	
     /**
+     * @return the groupId
+     */
+    public long getGroupId() {
+    
+    	return groupId;
+    }
+
+	
+    /**
+     * @param groupId the groupId to set
+     */
+    public void setGroupId(long groupId) {
+    
+    	this.groupId = groupId;
+    }
+	protected long groupId;
+	
+    /**
      * @return the noReceptionNo
      */
     public String getNoReceptionNo() {

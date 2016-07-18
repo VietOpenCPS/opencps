@@ -44,14 +44,25 @@
 <c:choose>
 	<c:when test="<%=dossier != null && !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
 		<%
-			String[] actors = new String[]{WebKeys.ACTOR_ACTION_CITIZEN};
-			String[] requestCommands = new String[]{WebKeys.ACTION_RESUBMIT_VALUE, WebKeys.ACTION_PAY_VALUE};
+			String[] actors = new String[]{StringPool.APOSTROPHE + WebKeys.ACTOR_ACTION_EMPLOYEE + StringPool.APOSTROPHE};
+			String[] requestCommands = new String[]{StringPool.APOSTROPHE + WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST + StringPool.APOSTROPHE, StringPool.APOSTROPHE + WebKeys.DOSSIER_LOG_PAYMENT_REQUEST + StringPool.APOSTROPHE};
 			List<DossierLog> dossierLogs = DossierLogLocalServiceUtil.findRequiredProcessDossier(dossier.getDossierId(), actors, requestCommands);
 			List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
 			
 			if(dossierTemplate != null){
+				
 				try{
-					dossierPartsLevel1 = DossierPartLocalServiceUtil.getDossierPartsByT_P_PT(dossierTemplate.getDossierTemplateId(), 0, PortletConstants.DOSSIER_PART_TYPE_RESULT);
+					List<DossierPart> lstTmp1 = DossierPartLocalServiceUtil.getDossierPartsByT_P_PT(dossierTemplate.getDossierTemplateId(), 0, PortletConstants.DOSSIER_PART_TYPE_RESULT);
+					if(lstTmp1 != null){
+						dossierPartsLevel1.addAll(lstTmp1);
+					}
+				}catch(Exception e){}
+				
+				try{
+					List<DossierPart> lstTmp2 = DossierPartLocalServiceUtil.getDossierPartsByT_P_PT(dossierTemplate.getDossierTemplateId(), 0, PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT);
+					if(lstTmp2 != null){
+						dossierPartsLevel1.addAll(lstTmp2);
+					}
 				}catch(Exception e){}
 			}
 		%>
@@ -111,9 +122,11 @@
 		<c:if test="<%=dossierLogs != null && !dossierLogs.isEmpty() %>">
 			<aui:row>
 				<label>
-					<liferay-ui:message key="required-process"/>
+					<b>
+						<liferay-ui:message key="required-process"/>
+					</b>
 				</label>
-				<table>
+				<table width="100%" border="1">
 					<tr>
 						<td width="10%"><liferay-ui:message key="number-order"/></td>
 						<td width="30%"><liferay-ui:message key="datetime"/></td>
@@ -125,7 +138,7 @@
 							%>
 								<tr>
 									<td>
-										<%=dossierLogs.indexOf(dossierLog) %>
+										<%=dossierLogs.indexOf(dossierLog) + 1 %>
 									</td>
 									<td>
 										<%=dossierLog.getUserUuid() != null ? 
@@ -134,7 +147,7 @@
 										%>
 									</td>
 									<td>
-										<%=dossierLog.getRequestCommand() %>
+										<liferay-ui:message key="<%=dossierLog.getRequestCommand() %>"/>
 									</td>
 									<td>
 										<%=dossierLog.getMessageInfo() %>
@@ -149,6 +162,12 @@
 		<%
 		if(dossierPartsLevel1 != null){
 			%>
+			<aui:row>
+				<label>
+					<b>
+						<liferay-ui:message key="dossier-file-result"/>
+					</b>
+				</label>
 				<table width="100%" border="1">
 					<tr>
 						<td width="10%" bordercolor="#ccc"><liferay-ui:message key="number-order"/></td>
@@ -214,6 +233,7 @@
 					}
 					%>
 				</table>
+			</aui:row>
 			<%
 		}
 		%>

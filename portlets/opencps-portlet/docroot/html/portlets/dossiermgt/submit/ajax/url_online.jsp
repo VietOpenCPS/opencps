@@ -34,7 +34,7 @@
 		
 		serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceInfoId);
 		serviceConfig = ServiceConfigLocalServiceUtil
-						.getServiceConfigByG_S_A(scopeGroupId, serviceInfo.getServiceinfoId(), govAdmin);
+						.getServiceConfigByG_S_G(scopeGroupId, serviceInfo.getServiceinfoId(), govAdmin);
 	} catch (Exception e) {
 		//nothing to do
 	}

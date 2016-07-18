@@ -167,6 +167,12 @@
 			<finder-column name="serviceAdministrationIndex" />
 		</finder>
 		
+		<finder return-type="ServiceConfig" name="G_S_G">
+			<finder-column name="groupId" />
+			<finder-column name="serviceInfoId" />
+			<finder-column name="govAgencyCode" />
+		</finder>
+		
 		<finder return-type="Collection" name="G_M">
 			<finder-column name="groupId" />
 			<finder-column name="serviceMode"/>
@@ -454,6 +460,7 @@
 
 		<exception>OutOfLengthServiceConfigGovName</exception>
 		<exception>OutOfLengthServiceConfigGovCode</exception>
+		<exception>DuplicateServiceConfigGovCodeAndServiceInFo</exception>
 
 		<exception>InvalidServiceConfigGovName</exception>
 		<exception>InvalidServiceConfigGovCode</exception>

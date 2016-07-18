@@ -100,7 +100,7 @@
 			<%
 				for(DictItem dictItem : listAdmin) {
 					%>
-						<aui:option value="<%=dictItem.getTreeIndex() %>">
+						<aui:option value="<%=dictItem.getItemCode() %>">
 							<%=dictItem.getItemName(themeDisplay.getLocale(),true) %>
 						</aui:option>
 					<%

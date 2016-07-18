@@ -111,7 +111,7 @@
 				name="service-domain" value="<%=DictItemUtil.getNameDictItem(service.getDomainCode()) %>"
 			/>
 		<liferay-ui:search-container-column-text 
-				name="service-administration" value="<%=DictItemUtil.getNameDictItem(service.getAdministrationCode()) %>"
+				name="service-administration" value="<%=DictItemUtil.getNameDictItem(serviceConfig.getGovAgencyCode()) %>"
 			/>
 		<%
 			 final String hrefFix = "location.href='" + deteleRelaSeInfoAndProcessURL .toString()+"'";
@@ -149,6 +149,7 @@
 		var dialog = Liferay.Util.Window.getById(dialogId);
 		dialog.destroy();
 		
-		window.location.reload();
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>');
+		
 	}, [ 'liferay-util-window' ]);
 </aui:script>

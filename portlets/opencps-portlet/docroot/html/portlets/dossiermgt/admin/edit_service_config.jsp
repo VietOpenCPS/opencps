@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.DuplicateServiceConfigGovCodeAndServiceInFoException"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
@@ -148,6 +149,11 @@
 <liferay-ui:error 
 	key="<%= MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED%>"
 	message="<%= MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED %>"
+/>
+
+<liferay-ui:error 
+	exception="<%= DuplicateServiceConfigGovCodeAndServiceInFoException.class%>"
+	message="<%= DuplicateServiceConfigGovCodeAndServiceInFoException.class.getName() %>"
 />
 
 <portlet:renderURL 

@@ -43,7 +43,7 @@
 <%
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "dossier_common/dossierpartlist.jsp");
+	iteratorURL.setParameter("mvcPath", templatePath + "serviceconfiglist.jsp");
 	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_SERVICE_CONFIG);
 	
 	List<ServiceConfig> serviceConfigs = new ArrayList<ServiceConfig>();

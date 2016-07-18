@@ -181,7 +181,10 @@
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dossierFileId');
 		dialog.destroy();
-		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
+		var data = {
+			'conserveHash': true
+		};
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_', data);
 	});
 
 </aui:script>

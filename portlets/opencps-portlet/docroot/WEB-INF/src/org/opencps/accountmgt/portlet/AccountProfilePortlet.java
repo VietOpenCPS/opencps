@@ -171,7 +171,7 @@ public class AccountProfilePortlet extends MVCPortlet {
 		    .ValidateCitizen(
 		        citizenId, StringPool.BLANK, StringPool.BLANK, address,
 		        StringPool.BLANK, telNo, 1, StringPool.BLANK, cityId, districtId, wardId,
-		        PortletPropsValues.ACCOUNTMGT_FILE_TYPE[0]);
+		        StringPool.BLANK);
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
 			city = DictItemLocalServiceUtil.getDictItem(cityId);
@@ -302,7 +302,7 @@ public class AccountProfilePortlet extends MVCPortlet {
 		    .ValidateBusiness(
 		        businessId, StringPool.BLANK, StringPool.BLANK, enName, shortName,
 		        address, representativeName, representativeRole, cityId, districtId, wardId,
-		        1 , PortletPropsValues.ACCOUNTMGT_FILE_TYPE[0]);
+		        1 , StringPool.BLANK);
 			city = DictItemLocalServiceUtil.getDictItem(cityId);
 
 			district = DictItemLocalServiceUtil.getDictItem(districtId);

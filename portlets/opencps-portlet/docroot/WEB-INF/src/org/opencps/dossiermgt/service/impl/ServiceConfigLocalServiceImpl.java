@@ -351,6 +351,21 @@ public class ServiceConfigLocalServiceImpl
 					return serviceConfigPersistence
 						.findByG_S_A(groupId, serviceInfoId, serviceAdministrationIndex);
 				}
+	
+	/**
+	 * @param groupId
+	 * @param serviceInfoId
+	 * @param govAgencyCode
+	 * @return
+	 * @throws NoSuchServiceConfigException
+	 * @throws SystemException
+	 */
+	public ServiceConfig getServiceConfigByG_S_G(long groupId, long serviceInfoId, String govAgencyCode)
+					throws NoSuchServiceConfigException, SystemException {
+
+					return serviceConfigPersistence
+						.findByG_S_G(groupId, serviceInfoId, govAgencyCode);
+				}
 
 	/**
 	 * @param dossierTemplateId

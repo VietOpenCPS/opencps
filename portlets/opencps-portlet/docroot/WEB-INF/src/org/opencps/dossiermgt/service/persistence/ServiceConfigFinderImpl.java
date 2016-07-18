@@ -102,14 +102,34 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			String sql = CustomSQLUtil
 				.get(COUNT_SERVICE_CONFIG_SQL);
 
-			sql = CustomSQLUtil
-				.replaceKeywords(sql,
-					"lower(opencps_service_config.govAgencyName",
-					StringPool.LIKE, true, keywords);
-
-			sql = CustomSQLUtil
-				.replaceAndOperator(sql, andOperator);
-
+			if (keywords != null && keywords.length > 0) {
+				sql = CustomSQLUtil
+					.replaceKeywords(sql,
+						"lower(opencps_dossiertemplate.templateName)",
+							StringPool.LIKE, true, keywords);
+				
+				sql = CustomSQLUtil
+						.replaceKeywords(sql,
+							"lower(opencps_serviceinfo.serviceName)",
+								StringPool.LIKE, true, keywords);
+			} else {
+				sql = StringUtil
+								.replace(sql,
+									"INNER JOIN opencps_serviceinfo ON opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceinfoId",
+										StringPool.BLANK);
+				sql = StringUtil
+								.replace(sql,
+									"INNER JOIN opencps_dossiertemplate ON opencps_service_config.dossierTemplateId = opencps_dossiertemplate.dossierTemplateId",
+										StringPool.BLANK);
+				sql = StringUtil
+								.replace(sql,
+									"AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+										StringPool.BLANK);
+				sql = StringUtil
+								.replace(sql,
+									"OR ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+										StringPool.BLANK);
+			}
 			// remove condition query
 			if (govAgencyCode
 				.equals(StringPool.BLANK)) {
@@ -126,7 +146,10 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.replace(sql, "AND (opencps_service_config.domainCode = ?)",
 						StringPool.BLANK);
 			}
-
+			
+			sql = CustomSQLUtil
+							.replaceAndOperator(sql, andOperator);
+			
 			SQLQuery q = session
 				.createSQLQuery(sql);
 
@@ -140,9 +163,12 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 			qPos
 				.add(groupId);
-			qPos
-				.add(keywords, 2);
-
+			if (keywords != null && keywords.length > 0) {
+				qPos
+					.add(keywords, 2);
+				qPos
+					.add(keywords, 2);
+			}
 			if (!govAgencyCode
 				.equals(StringPool.BLANK)) {
 				qPos
@@ -462,15 +488,36 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			// get sql command from sql xml
 			String sql = CustomSQLUtil
 				.get(SEARCH_SERVICE_CONFIG_SQL);
-
-			sql = CustomSQLUtil
-				.replaceKeywords(sql,
-					"lower(opencps_service_config.govAgencyName)",
-					StringPool.LIKE, true, keywords);
-
-			sql = CustomSQLUtil
-				.replaceAndOperator(sql, andOperator);
-
+			
+			if (keywords != null && keywords.length > 0) {
+				sql = CustomSQLUtil
+					.replaceKeywords(sql,
+						"lower(opencps_dossiertemplate.templateName)",
+							StringPool.LIKE, true, keywords);
+				
+				sql = CustomSQLUtil
+						.replaceKeywords(sql,
+							"lower(opencps_serviceinfo.serviceName)",
+								StringPool.LIKE, true, keywords);
+			} else {
+				sql = StringUtil
+								.replace(sql,
+									"INNER JOIN opencps_serviceinfo ON opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceinfoId",
+										StringPool.BLANK);
+				sql = StringUtil
+								.replace(sql,
+									"INNER JOIN opencps_dossiertemplate ON opencps_service_config.dossierTemplateId = opencps_dossiertemplate.dossierTemplateId",
+										StringPool.BLANK);
+				sql = StringUtil
+								.replace(sql,
+									"AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+										StringPool.BLANK);
+				sql = StringUtil
+								.replace(sql,
+									"OR ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+										StringPool.BLANK);
+			}
+			
 			// remove condition query
 			if (govAgencyCode
 				.equals(StringPool.BLANK)) {
@@ -487,10 +534,11 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.replace(sql, "AND (opencps_service_config.domainCode = ?)",
 						StringPool.BLANK);
 			}
-
+			
+			sql = CustomSQLUtil
+					.replaceAndOperator(sql, andOperator);
 			SQLQuery q = session
 				.createSQLQuery(sql);
-
 			q
 				.setCacheable(false);
 			q
@@ -501,9 +549,14 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 			qPos
 				.add(groupId);
-			qPos
-				.add(keywords, 2);
-
+			
+			if (keywords != null && keywords.length > 0) {
+				qPos
+					.add(keywords, 2);
+				qPos
+					.add(keywords, 2);
+			}
+			
 			if (!govAgencyCode
 				.equals(StringPool.BLANK)) {
 				qPos

@@ -451,6 +451,15 @@ public class PortletUtil {
 			String.valueOf(orgId);
 	}
 
+	public static String getDossierDestinationFolder(
+		long groupId, int year, int month, int day, String oid) {
+
+		return String.valueOf(groupId) + StringPool.SLASH + "Dossiers" +
+			StringPool.SLASH + String.valueOf(year) + StringPool.SLASH +
+			String.valueOf(month) + StringPool.SLASH + String.valueOf(day) +
+			StringPool.SLASH + oid;
+	}
+
 	public static DictItem getDictItem(
 		String collectionCode, String itemCode, long groupId) {
 
@@ -752,31 +761,86 @@ public class PortletUtil {
 			PrefsPropsUtil.getPreferences(companyId, true);
 
 		String jmsJson =
-			GetterUtil.getString(preferences.getValue(code +
-				StringPool.UNDERLINE + WebKeys.JMS_CONFIGURATION,
-				StringPool.BLANK));
+			GetterUtil.getString(preferences.getValue(
+				WebKeys.JMS_CONFIGURATION, StringPool.BLANK));
+
+		_log.info("(PortletUtil.getJMSContextProperties) - jmsJson: --------------------- " +
+			jmsJson);
 
 		try {
-			JSONObject jmsObject = JSONFactoryUtil.createJSONObject(jmsJson);
-			JSONObject lookupObject = jmsObject.getJSONObject(code);
+			JSONObject jmsConfigObject =
+				JSONFactoryUtil.createJSONObject(jmsJson);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - jmsConfigObject:************************** " +
+				jmsConfigObject.toString());
+			JSONObject lookupConfigObject = jmsConfigObject.getJSONObject(code);
+			_log.info("(PortletUtil.getJMSContextProperties) - lookupConfigObject:************************** " +
+				lookupConfigObject.toString());
+			JSONObject serverConfigObject =
+				lookupConfigObject.getJSONObject(remote ? "remote" : "local");
+			_log.info("(PortletUtil.getJMSContextProperties) - serverConfigObject:************************** " +
+				serverConfigObject.toString());
 			JSONObject channelObject =
-				lookupObject.getJSONObject(WebKeys.JMS_CHANNEL);
-
+				serverConfigObject.getJSONObject(WebKeys.JMS_CHANNEL);
+			_log.info("(PortletUtil.getJMSContextProperties) - channelObject:************************** " +
+				channelObject.toString());
 			String providerURL =
-				lookupObject.getString(WebKeys.JMS_PROVIDER_URL);
-
+				serverConfigObject.getString(WebKeys.JMS_PROVIDER_URL);
+			_log.info("(PortletUtil.getJMSContextProperties) - providerURL:************************** " +
+				providerURL.toString());
 			if (remote && Validator.isNotNull(providerURL)) {
 				providerURL = "remote://" + providerURL;
 			}
 
 			String providerPort =
-				lookupObject.getString(WebKeys.JMS_PROVIDER_PORT);
+				serverConfigObject.getString(WebKeys.JMS_PROVIDER_PORT);
 
-			String userName = lookupObject.getString(WebKeys.JMS_USERNAME);
+			_log.info("(PortletUtil.getJMSContextProperties) - providerPort:************************** " +
+				providerPort.toString());
 
-			String passWord = lookupObject.getString(WebKeys.JMS_PASSWORD);
+			String userName =
+				serverConfigObject.getString(WebKeys.JMS_USERNAME);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - userName:************************** " +
+				userName.toString());
+
+			String passWord =
+				serverConfigObject.getString(WebKeys.JMS_PASSWORD);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - passWord:************************** " +
+				passWord.toString());
+
+			String syncCompanyId =
+				serverConfigObject.getString(WebKeys.JMS_COMPANY_ID);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - syncCompanyId:************************** " +
+				syncCompanyId);
+			String syncGroupId =
+				serverConfigObject.getString(WebKeys.JMS_GROUP_ID);
+			_log.info("(PortletUtil.getJMSContextProperties) - syncGroupId:************************** " +
+				syncGroupId);
+			String syncUserId =
+				serverConfigObject.getString(WebKeys.JMS_USER_ID);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - syncUserId:************************** " +
+				syncUserId);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - channelName:************************** " +
+				channelName.toString());
 
 			String channel = channelObject.getString(channelName);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - channel:************************** " +
+				channel);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - providerURL:************************** " +
+				providerURL);
+			_log.info("(PortletUtil.getJMSContextProperties) - userName:************************** " +
+				userName);
+			_log.info("(PortletUtil.getJMSContextProperties) - passWord:************************** " +
+				passWord);
+			_log.info("(PortletUtil.getJMSContextProperties) - channel:************************** " +
+				channel);
 
 			properties.put(
 				Context.INITIAL_CONTEXT_FACTORY,
@@ -789,6 +853,9 @@ public class PortletUtil {
 			properties.put(Context.SECURITY_CREDENTIALS, passWord);
 
 			properties.put(WebKeys.JMS_DESTINATION, channel);
+			properties.put(WebKeys.JMS_COMPANY_ID, syncCompanyId);
+			properties.put(WebKeys.JMS_GROUP_ID, syncGroupId);
+			properties.put(WebKeys.JMS_USER_ID, syncUserId);
 
 		}
 		catch (JSONException e) {

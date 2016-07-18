@@ -51,7 +51,7 @@ public class JMSRecevieQueue implements MessageListener{
 	 */
 	
     private static final String DEFAULT_CONNECTION_FACTORY = "jms/RemoteConnectionFactory";
-    private static final String DEFAULT_DESTINATION = "java:/jms/queue/test";
+    private static final String DEFAULT_DESTINATION = "java:/jms/queue/demoQueue";
     private static final String DEFAULT_USERNAME = "user1";
     private static final String DEFAULT_PASSWORD = "fds@123456";
     private static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";

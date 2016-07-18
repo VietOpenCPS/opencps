@@ -211,7 +211,11 @@
 		var success = '<%=success%>';
 		
 		if(success == 'true'){
-			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>');
+			var data = {
+				'conserveHash': true
+			};
+			
+			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>', data);
 		}
 	});
 	

@@ -66,9 +66,12 @@
 								.getDossierTemplates(searchTerms.getKeywords(),
 									searchContainer.getStart(), searchContainer.getEnd(), 
 									searchContainer.getOrderByComparator());
-				totalCount = DossierTemplateLocalServiceUtil
-								.countDossierTemplatesByName(searchTerms.getKeywords());
-			
+				if(Validator.isNotNull(searchTerms.getKeywords())) {
+					totalCount = DossierTemplateLocalServiceUtil
+									.countDossierTemplatesByName(searchTerms.getKeywords());
+				} else {
+					totalCount = DossierTemplateLocalServiceUtil.countAll();
+				}
 			total = totalCount;
 			results = dossierTemplates;
 			pageContext.setAttribute("results", results);

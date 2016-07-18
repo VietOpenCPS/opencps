@@ -1,4 +1,4 @@
-<%@page import="com.liferay.portlet.documentlibrary.DuplicateFolderNameException"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -43,6 +43,7 @@
 <%@page import="org.opencps.dossiermgt.EmptyDossierContactNameException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierAddressException"%>
 <%@page import="org.opencps.dossiermgt.InvalidDossierObjectException"%>
+<%@page import="com.liferay.portlet.documentlibrary.DuplicateFolderNameException"%>
 <%@ include file="../../init.jsp"%>
 
 <%
