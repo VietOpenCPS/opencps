@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+#parse ($init)
+
+<html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
+
+<head>
+	<title>$the_title - $company_name</title>
+
+	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
+
+	$theme.include($top_head_include)
+	
+	<link rel="shortcut icon" type="image/png" href="$images_folder/custom/favicon.png"/>
+	
+</head>
+
+<body class="$css_class opencps-theme">
+
+	$theme.include($body_top_include)
+	
+	#if ($is_signed_in && $permissionChecker.isOmniadmin())
+		#dockbar()
+	#end
+	
+	<header id="banner" role="banner">
+		<div class="header container align-middle">
+            <a href="" class="logo"></a>
+            <div class="hotline">
+                Đường dây nóng<br/><span>1900 0311</span>
+            </div>
+            <a href="$sign_in_url" class="btn-dn">Đăng nhập</a>
+            <a href="$register_url" class="btn-dk">Đăng ký</a>
+		</div>
+	</header>
+	
+	#if ($has_navigation || $is_signed_in)
+		#parse ("$full_templates_path/navigation.vm")
+	#end
+	
+	<article id="wrapper" class="container">	
+		<div id="content">
+			#*<nav id="breadcrumbs">#breadcrumbs()</nav>*#
+	
+			#if ($selectable)
+				$theme.include($content_include)
+			#else
+				$portletDisplay.recycle()
+	
+				$portletDisplay.setTitle($the_title)
+	
+				$theme.wrapPortlet("portlet.vm", $content_include)
+			#end
+		</div>
+	</article>
+	
+	<footer>
+		<div class="footer">
+            <div class="logo">
+                <p>Copyright © 2016 - OpenCPS v1.2</p>
+            </div>
+            <div class="danhmuc">
+                <p class="title">Danh mục</p>
+                <ul>
+                    <li><a href="">Trang chủ</a></li>
+                    <li><a href="">Thông báo</a></li>
+                    <li><a href="">Văn bản pháp luật</a></li>
+                    <li><a href="">Thủ tục hành chính</a></li>
+                </ul>
+            </div>
+            <div class="huongdan">
+                <p class="title">Hướng dẫn</p>
+                <ul>
+                    <li><a href="">Đăng ký tài khoản</a></li>
+                    <li><a href="">Đăng nhập hệ thống</a></li>
+                    <li><a href="">Nộp hồ sơ trực tuyến</a></li>
+                    <li><a href="">Tra cứu kết quả</a></li>
+                    <li><a href="">Cán bộ xử lý hồ sơ</a></li>
+                </ul>
+            </div>
+            <div class="lienhehotro">
+                <p class="title">Liên hệ hỗ trợ</p>
+                <p class="diachi">Tòa nhà VAPA, số 2,<br/>đường Tôn Thất Thuyết</p>
+                <p class="mail">opencps@gmail.com</p>
+                <p class="phone">1900 0311</p>
+            </div>
+            <div class="lienketwebsite">
+                <p class="title">Liên kết website</p>
+                <div class="select">
+                    <select>
+                        <option>Chọn liên kết website</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+	</footer>
+
+
+	$theme.include($body_bottom_include)
+	
+	$theme.include($bottom_include)
+
+</body>
+
+</html>

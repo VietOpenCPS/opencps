@@ -1,0 +1,92 @@
+/* ---------- Logo ---------- */
+.logo {
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle; }
+
+/* ---------- Table styles ---------- */
+@media (max-width: 979px) {
+  .responsive-table-horizontal {
+    display: block;
+    position: relative;
+    width: 100%; }
+    .responsive-table-horizontal:after {
+      clear: both;
+      content: '';
+      display: block;
+      font-size: 0;
+      height: 0;
+      visibility: hidden; }
+    .responsive-table-horizontal tbody {
+      display: block;
+      overflow-x: auto;
+      position: relative;
+      white-space: nowrap;
+      width: auto; }
+      .responsive-table-horizontal tbody tr {
+        display: inline-block;
+        vertical-align: top; }
+        .responsive-table-horizontal tbody tr td {
+          display: block;
+          margin-bottom: 20px; }
+          .responsive-table-horizontal tbody tr td:first-child {
+            text-align: left; }
+    .responsive-table-horizontal thead {
+      display: block;
+      float: left;
+      margin-right: 10px; }
+      .responsive-table-horizontal thead:after {
+        clear: both;
+        content: "";
+        display: block;
+        font-size: 0;
+        height: 0;
+        visibility: hidden; }
+      .responsive-table-horizontal thead th {
+        display: block;
+        margin-bottom: 20px;
+        text-align: right; }
+        .responsive-table-horizontal thead th:first-child {
+          text-align: right; }
+
+  .ie9 .responsive-table-horizontal thead {
+    float: none; } }
+/* ---------- Text formatting ---------- */
+.important {
+  font-weight: bold; }
+
+/* ---------- Main content body ---------- */
+.portal-iframe #main-content {
+  width: 100%; }
+
+/* ---------- Loading animation ---------- */
+.loading-animation {
+  background: url(../images/progress_bar/loading_animation.gif) no-repeat top center;
+  margin-top: 10px;
+  padding-top: 40px;
+  text-align: left; }
+
+/* ---------- Separator ---------- */
+.separator {
+  border-top: 1px dotted #BFBFBF; }
+
+/* ---------- Update manager ---------- */
+.update-available {
+  margin-top: 10px;
+  padding: 2px;
+  text-align: left; }
+
+/* ---------- Text highlighting ---------- */
+.highlight {
+  background: #FFC;
+  font-weight: bold;
+  margin: 0 1px; }
+
+/* ---------- Miscellaneous ---------- */
+span.alert {
+  display: inline-block; }
+
+#skip-to-content {
+  clip: rect(0 0 0 0);
+  position: absolute; }
+

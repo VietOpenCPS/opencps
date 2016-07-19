@@ -1,0 +1,29 @@
+.service-menu {
+    display: block;
+}
+
+.service-menu ul {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.service-menu ul li {
+    color: #333;
+    display: block;
+    padding: 8px 15px;
+}
+
+.service-menu ul li.odd {
+    background-color: #ddd;
+}
+
+.service-menu ul li i {
+    color: #2587b4;
+    display: table-cell;
+    padding-right: 5px;
+}
+
+.service-menu ul li a {
+    display: table-cell;
+}

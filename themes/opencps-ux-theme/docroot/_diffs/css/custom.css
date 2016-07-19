@@ -1,0 +1,1416 @@
+/* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
+
+@import url(font_face.css);
+@import url(controls.css);
+@import url(support.css);
+@import url(font-awesome.min.css);
+@import url(portlets/p_10.css);
+@import url(portlets/p_13.css);
+
+
+
+/* body {
+    background-color: #f2f2f2;
+    display: table;
+    font-family: 'Roboto-Regular';
+    font-size: 14px;
+    width: 100%;
+}
+
+.w1100 {
+    width: 1100px;
+    margin: auto
+}
+
+
+---------- Header ----------
+
+#wrapper {
+    padding: 2em 125px 0;
+}
+.opencps-theme.register #wrapper{
+	background-size: cover !important;
+}
+
+@media (max-width: 800px) {
+    #wrapper {
+        padding: 2em 0;
+    }
+}
+
+
+
+@media (min-width: 500px) and (max-width: 900px) {
+    #wrapper{
+		padding: 2em 125px 0;
+	}
+}
+
+#banner {
+    background-image: url(../images/custom/bg_gradient.png);
+    height: 140px;
+    background-size: 100%
+}
+
+#banner .header {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    padding: 0 125px;
+}
+
+@media (max-width: 500px) {
+    #banner {
+        height: 100px;
+    }
+    #banner .header {
+        height: 100px;
+    }
+}
+
+@media (max-width: 800px) {
+    #banner .header {
+        padding: 0;
+    }
+}
+
+#banner .options {
+    margin-left: auto
+}
+
+#banner .options > div {
+    float: left;
+    margin-right: 30px;
+    color: white
+}
+
+#banner .options > div a {
+    display: flex;
+    align-items: center
+}
+
+#banner .options i {
+    padding: 6px 8px;
+    border: 1px solid white;
+    border-radius: 4px;
+    font-size: 18px;
+    margin-right: 5px
+}
+
+@media (max-width: 500px) {
+    #banner .options {
+        display: none;
+    }
+}
+
+
+---------- Menu ----------
+
+.opencps-theme nav.top-menu {
+    height: 40px;
+    background-color: #0acaf4
+}
+
+.opencps-theme nav.top-menu > ul {
+    line-height: 40px;
+    height: 100%;
+    margin-bottom: 0;
+    font-size: 16px;
+    text-transform: uppercase;
+    margin: auto;
+    position: relative;
+    padding: 0 125px;
+    overflow: hidden;
+}
+
+.opencps-theme nav.top-menu > ul > li {
+    float: left;
+    color: #fff;
+    line-height: 40px !important;
+}
+
+.opencps-theme nav.top-menu.top-menu > ul > li img {
+    padding-bottom: 4px;
+    padding-right: 5px;
+}
+
+.opencps-theme nav.top-menu > ul > li > a {
+    display: flex;
+    align-items: center;
+    padding-right: 20px;
+    padding-left: 20px
+}
+
+.opencps-theme nav.top-menu > ul > li > a:before {
+    content: "";
+    font-family: FontAwesome;
+    display: inline-block;
+    font-size: 18px;
+}
+
+.opencps-theme nav.top-menu > ul > li.trangchu > a:before {
+    content: "\f015"
+}
+
+.opencps-theme nav.top-menu > ul > li.thongbao > a:before {
+    content: "\f0a1"
+}
+
+.opencps-theme nav.top-menu > ul > li.tthc > a:before {
+    content: "\f044"
+}
+
+.opencps-theme nav.top-menu > ul > li.dangnhap > a:before {
+    content: "\f023"
+}
+
+.opencps-theme nav.top-menu > ul > li.active,
+.opencps-theme nav.top-menu > ul > li:hover,
+.opencps-theme nav.top-menu > ul > li.active > a:before,
+.opencps-theme nav.top-menu > ul > li:hover > a:before {
+    background-color: white;
+    color: #2a2a2a
+}
+
+.opencps-theme nav.top-menu.top-menu > ul > li.selected {
+    background-color: white;
+    color: #2a2a2a;
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle {
+    display: none;
+    position: absolute;
+    margin: 0 0 0 -30px;
+    background-color: white;
+    left: 0;
+    padding: 40px 35px 25px 0;
+    width: 90%;
+    z-index: 10
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first {
+    float: left;
+    padding: 0 25px 0 0;
+    background: none;
+    width: 65%;
+    color: #2a2a2a !important;
+    font-size: 14px
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first > img {
+    float: left;
+    margin-right: 25px
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first div.box {
+    float: left;
+    width: calc(100% - 239px)
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first p,
+.opencps-theme nav.top-menu ul li div.div_toogle div.first a {
+    line-height: normal;
+    text-transform: none;
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first p.title {
+    font-family: 'Roboto-Bold';
+    font-size: 16px
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first a.list_style {
+    background: url(../images/home/list_style.png) 0 center no-repeat;
+    padding-left: 25px;
+    color: #3087c8 !important;
+    text-decoration: underline !important
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first .lb {
+    font-family: 'Roboto-Bold';
+    padding-top: 6px;
+    margin-bottom: 0
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first p.dk {
+    margin-bottom: 0px
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first p.dk a {
+    color: #3087c8 !important;
+    text-decoration: underline !important
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first p.forgot_pw a {
+    background: url(../images/home/list_style.png) 0 center no-repeat;
+    padding-left: 20px;
+    color: #f17118 !important;
+    text-decoration: underline !important
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.first button {
+    background: url(../images/home/bg_dn.png) center center no-repeat transparent;
+    width: 96px;
+    height: 35px;
+    border: 0;
+    color: transparent;
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle ul,
+.opencps-theme nav.top-menu ul li div.div_toogle div.second {
+    width: 32%;
+    float: left;
+    border-left: 1px solid #ccc;
+    line-height: normal;
+    text-transform: none;
+    font-size: 14px
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle li {
+    background: url(../images/home/list_style.png) 25px center no-repeat;
+    padding-left: 50px;
+    color: #3087c8;
+    margin-bottom: 20px
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.second > p {
+    padding-left: 25px;
+    color: #2a2a2a !important
+}
+
+.opencps-theme nav.top-menu ul li div.div_toogle div.second > p:first-child {
+    font-size: 16px
+}
+
+.opencps-theme nav.top-menu ul li:hover div.div_toogle {
+    display: block;
+}
+
+
+---------- Footer ----------
+
+footer {
+    align-items: center;
+    background-image: url("/opencps-theme/css/../images/custom/bg_gradient.png");
+    background-size: 100% 100px;
+    color: white;
+    display: flex !important;
+    height: 45px;
+    padding-left: 20px;
+}
+
+footer > p {
+    margin-bottom: 0 !important;
+}
+
+footer > p:nth-child(2) {
+    margin-left: auto;
+    margin-bottom: 0;
+    text-transform: uppercase;
+}
+
+
+---------- Main ----------
+
+.main {
+    width: 92%;
+    margin: 50px auto 25px;
+    overflow: hidden;
+}
+
+.head_title {
+    border-bottom: 2px solid #2587b4;
+    margin-bottom: 20px;
+    color: white !important;
+    font-size: 14px !important;
+}
+
+.head_title p {
+    margin-bottom: 0;
+    background-color: #2587b4;
+    display: inline-block;
+    padding: 0 25px;
+    font-weight: bold;
+    line-height: 42px;
+    color: white;
+    border-radius: 8px 8px 0 0
+}
+
+.error {
+    color: #ec3a3a;
+    font-weight: bold
+}
+
+.lH40 {
+    line-height: 40px;
+    height: 40px
+}
+
+.full_width {
+    width: 100%
+}
+
+.head_title .portlet-title-text {
+    background-color: #2587b4;
+    border: 1px solid #2587b4;
+    border-radius: 8px 8px 0 0;
+    display: inline-block;
+    max-width: 95%;
+    overflow: hidden;
+    padding: 0 10px;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap
+}
+
+
+--- Khung chứa, tạm coi tương đương .portlet ----
+
+.box {}
+
+.box .box_content {}
+
+
+---- Class tướng ứng cho layout có menu phụ hay không ----
+
+.main.one_col {}
+
+.main.two_col {}
+
+.main.two_col_canbo {
+    width: 100%;
+    margin: 0
+}
+
+
+---- Các cột tự định nghĩa ----
+
+.col {
+    float: left;
+    padding: 0 15px
+}
+
+.col_20 {
+    width: 20%
+}
+
+.col_40 {
+    width: 40%
+}
+
+.col_main {
+    width: 80%
+}
+
+.col_sub {
+    width: 20%;
+    margin-top: 42px;
+    background-color: #b9d8e7;
+}
+
+@media (min-width: 1500px) {
+    .col_main {
+        width: 83%
+    }
+    .col_sub {
+        width: 17%
+    }
+}
+
+.reverse_row {
+    margin-right: 15px !important;
+    margin-left: 15px !important
+}
+
+.col_menu {
+    width: 20%;
+    background-color: #b9d8e7;
+    border-right: 10x solid #ccc
+}
+
+.col_content {
+    width: 80%;
+    padding: 30px
+}
+
+
+---- Khu lựa chọn các khung select, datetime ... ----
+
+.condition_box {
+    overflow: hidden;
+    margin-bottom: 30px
+}
+
+
+---- Table ----
+
+.mTable {}
+
+.mTable th {
+    color: white;
+    background-color: #177faf
+}
+
+.mTable th,
+.mTable td {
+    vertical-align: middle !important
+}
+
+.mTable tr > th:first-child .checkbox,
+.mTable tr > td:first-child .checkbox {
+    margin: 0 auto
+}
+
+.mTable tr > th:first-child input[type="checkbox"],
+.mTable tr > td:first-child input[type="checkbox"] {
+    margin-left: -15px
+}
+
+
+---- Pagination ----
+
+.pagination > li > a,
+.pagination > li > span {
+    background-color: #177faf;
+    color: white !important;
+}
+
+.pagination > .active > a,
+.pagination > li > a:hover {
+    border-color: #ddd;
+    background-color: #1d94cb;
+}
+
+
+---- Sub menu ----
+
+.sub_menu {}
+
+.sub_menu li {
+    height: 70px;
+    background-color: #479ac0;
+    border-bottom: 1px solid #c1f0f8;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+}
+
+.sub_menu li a {
+    display: block;
+    line-height: 70px
+}
+
+.sub_menu li:hover {
+    background-color: #2fcde9
+}
+
+.sub_menu li:first-child {
+    background-color: #177faf;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sub_menu li:first-child p {
+    margin-bottom: 0
+}
+
+.sub_menu li:first-child p span {
+    text-transform: uppercase;
+}
+
+.sub_menu li:first-child i {
+    padding: 7px;
+    font-size: 24px;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-right: 10px
+}
+
+.sub_menu li.active {
+    background-color: #2fcde9
+}
+
+
+---- Menu tabs ----
+
+.nav-tabs {
+    border-bottom: 2px solid #2587b4;
+    margin-bottom: 20px
+}
+
+.nav-tabs > li {
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.nav-tabs > li > a {
+    margin-right: 3px;
+    border: 1px solid #b0b0b0;
+    background-color: #dadada;
+    color: #616161 !important
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus,
+.nav-tabs > li > a:hover {
+    border: 1px solid #2587b4;
+    background-color: #2587b4;
+    color: white !important
+}
+
+
+---- Sub table ----
+
+.sm_row {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+}
+
+.sm_row.odd {}
+
+.sm_row.even {
+    background-color: #ebebeb
+}
+
+.sm_row .sm_cell {}
+
+.sm_row .sm_cell.cell_1 {}
+
+.sm_row .sm_cell.cell_2,
+.sm_row .sm_cell.cell_3,
+.sm_row .sm_cell.cell_4,
+.sm_row .sm_cell.cell_5 {
+    position: absolute;
+    top: 7px;
+}
+
+.sm_row .sm_cell.cell_2 {
+    right: 193px
+}
+
+.sm_row .sm_cell.cell_3 {
+    right: 82px
+}
+
+.sm_row .sm_cell.cell_4 {
+    right: 46px
+}
+
+.sm_row .sm_cell.cell_5 {
+    right: 10px;
+    top: 5px
+}
+
+.sm_row .sm_cell.cell_2 button,
+.sm_row .sm_cell.cell_3 button,
+.sm_row .sm_cell.cell_4 button,
+.sm_row .sm_cell.file_dk span {
+    padding: 3px 9px;
+    background-color: #177faf;
+    border-radius: 5px;
+    color: white !important;
+    border: 0
+}
+
+.sm_row .sm_cell.cell_4 button,
+.sm_row .sm_cell.file_dk span {
+    padding: 3px 6px
+}
+
+.sm_row .sm_cell.cell_5 i,
+.sm_row .sm_cell.delete i {
+    font-size: 30px;
+    color: #a94040
+}
+
+.sm_row .sm_cell.delete {
+    line-height: 30px;
+    margin-left: 15px
+}
+
+.sm_row .sm_cell.c_1,
+.sm_row .sm_cell.c_2,
+.sm_row .sm_cell.c_3,
+.sm_row .sm_cell.c_4 {
+    line-height: 40px;
+    padding-right: 10px
+}
+
+.sm_row .sm_cell.c_1 {
+    width: 23%
+}
+
+.sm_row .sm_cell.c_2 {
+    width: 27%
+}
+
+.sm_row .sm_cell.c_3 {
+    width: 25%
+}
+
+.sm_row .sm_cell.c_4 {
+    width: 25%
+}
+
+@media (min-width: 1365px) {
+    .sm_row .sm_cell.c_1 {
+        width: 17%
+    }
+    .sm_row .sm_cell.c_2 {
+        width: 25%
+    }
+    .sm_row .sm_cell.c_3 {
+        width: 18%
+    }
+    .sm_row .sm_cell.c_4 {
+        width: 25%
+    }
+}
+
+@media (min-width: 1599px) {
+    .sm_row .sm_cell.c_1 {
+        width: 15%
+    }
+    .sm_row .sm_cell.c_2 {
+        width: 25%
+    }
+    .sm_row .sm_cell.c_3 {
+        width: 15%
+    }
+    .sm_row .sm_cell.c_4 {
+        width: 25%
+    }
+}
+
+@media (min-width: 1919px) {
+    .sm_row .sm_cell.c_1 {
+        width: 13%
+    }
+    .sm_row .sm_cell.c_2 {
+        width: 24%
+    }
+    .sm_row .sm_cell.c_3 {
+        width: 13%
+    }
+    .sm_row .sm_cell.c_4 {
+        width: 25%
+    }
+}
+
+
+---- Vertical menu ----
+
+.col_menu .title {
+    text-align: center;
+    line-height: 40px;
+    background-color: #177faf;
+    color: white;
+    font-weight: bold;
+}
+
+.col_menu ul {}
+
+.col_menu ul li {
+    border-bottom: 1px solid #ccc
+}
+
+.col_menu ul li a {
+    display: block;
+    padding: 10px 15px
+}
+
+.col_menu ul li span {
+    float: right;
+}
+
+
+---- Overwrite Tab ----
+
+.opencps-theme .nav-tabs {
+    border-bottom: 2px solid #2587b4;
+}
+
+.opencps-theme .nav-tabs > li {
+    margin-bottom: 0px !important;
+}
+
+.opencps-theme .nav-tabs > .active > a:focus {
+    background-color: #2587b4 !important;
+    border-color: #2587b4 #2587b4 transparent !important;
+    color: white;
+    cursor: default;
+}
+
+.opencps-theme .nav-tabs > .active > a,
+.opencps-theme .nav-tabs > .active > a:hover {
+    background-color: #479ac0 !important;
+}
+
+.opencps-theme .box_content {
+    padding: 12px 0 10px !important;
+}
+
+.opencps-theme .table-columns {
+    background-color: #177faf;
+    color: white;
+}
+
+.opencps-theme .table thead th {
+    vertical-align: middle !important;
+}
+
+.opencps-theme .taglib-form-navigator ul.form-navigator.well {
+    background-color: #b9d8e7;
+    padding: 0;
+    width: 20% !important;
+}
+
+.opencps-theme .taglib-form-navigator div.form-navigator-content.tab-content {
+    padding: 20px 20px 0 0;
+    width: 80% !important;
+}
+
+.opencps-theme .taglib-form-navigator ul.form-navigator.well li {
+    background-color: #479ac0;
+    border-bottom: 1px solid #c1f0f8;
+    color: white;
+    display: table;
+    font-size: 14px;
+    height: 70px;
+    text-align: left;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.opencps-theme .taglib-form-navigator ul.form-navigator.well li a {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.opencps-theme .taglib-form-navigator ul.form-navigator.well li a:HOVER {
+    background-color: #2fcde9 !important;
+}
+
+.opencps-theme .taglib-form-navigator ul.form-navigator.well li a:FOCUS {
+    background-color: #2fcde9 !important;
+}
+
+.opencps-theme .nav-list > li > a {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.opencps-theme .nav-list .nav-header {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    background-image: linear-gradient(#fff 0px, #f2f2f2 100%);
+    color: #999 !important;
+    font-size: 12px !important;
+    height: 30px !important;
+    line-height: 30px;
+    text-align: center !important;
+}
+
+.opencps-theme .nav-header {
+    padding: 0 !important;
+}
+
+.opencps-theme .taglib-form-navigator ul.form-navigator.well .button-holder {
+    text-align: center;
+}
+
+.fa.result {
+    @extend .fa-check-square-o;
+    vertical-align: middle;
+}
+
+.fa.dossier_part {
+    @extend .fa-inbox;
+    vertical-align: middle;
+}
+
+.fa.history {
+    @extend .fa-calendar;
+    vertical-align: middle;
+}
+
+.fa.dossier_info {
+    @extend .fa-briefcase;
+    vertical-align: middle;
+}
+
+.fa.general_info {
+    @extend .fa-check-square-o;
+    vertical-align: middle;
+}
+
+.fa.contact_info {
+    @extend .fa-check-square-o;
+    vertical-align: middle;
+}
+
+.fa.dossier_content {
+    @extend .fa-folder-o;
+    vertical-align: middle;
+}
+
+.fa.process {
+    @extend .fa-pencil-square-o;
+    vertical-align: middle;
+}
+
+
+
+.opencps-theme .taglib-form-navigator .section-modified .modified-notice {
+    display: block;
+}
+
+.opencps-theme .form-navigator-topper {
+    background-color: #177faf;
+    border-bottom: 1px solid #c1f0f8;
+    color: #fff;
+    display: table;
+    font-size: 14px;
+    font-weight: bold;
+    height: 70px;
+    text-align: center;
+    width: 100%;
+}
+
+.opencps-theme .form-navigator-container {
+    display: table-cell;
+    height: 70px;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.opencps-theme .form-navigator-container img{
+    height: 32px;
+    width: 32px;
+}
+
+.opencps-theme .form-navigator-container i {
+    font-size: 24px;
+}
+
+
+---- Overwrite header taglib ----
+
+.opencps-theme .taglib-header {
+    border-bottom: 2px solid #2587b4;
+    margin-bottom: 0 !important;
+    position: relative;
+}
+
+.opencps-theme .taglib-header .header-title {
+    margin: 0 !important;
+}
+
+.opencps-theme .taglib-header .header-title > span {
+    background-color: #2587b4;
+    border-radius: 8px 8px 0 0;
+    color: white;
+    display: table;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 42px;
+    margin-bottom: 0;
+    overflow: hidden;
+    padding: 0 35px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.opencps-theme .header-back-to {
+    color: #fff;
+    left: 10px;
+    position: absolute;
+}
+
+.opencps-theme .input100 {
+    box-sizing: border-box;
+    css3 rec
+    -moz-box-sizing: border-box;
+    ff2
+    -ms-box-sizing: border-box;
+    ie8
+    -webkit-box-sizing: border-box;
+    safari3
+    -khtml-box-sizing: border-box;
+    konqueror
+    box-sizing: border-box;
+    min-height: 30px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+.opencps-theme .input100 input{
+    box-sizing: border-box;
+    css3 rec
+    -moz-box-sizing: border-box;
+    ff2
+    -ms-box-sizing: border-box;
+    ie8
+    -webkit-box-sizing: border-box;
+    safari3
+    -khtml-box-sizing: border-box;
+    konqueror
+    box-sizing: border-box;
+    min-height: 30px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+.search-wrapper {
+    display: table;
+    margin: auto;
+    padding: 161px 0;
+}
+
+
+.opencps-theme .search-container {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    display: table;
+    padding: 5px;
+}
+
+
+.opencps-theme .search-input {
+    display: table-cell;
+    width: 530px;
+}
+
+
+.opencps-theme .search-input input {
+    border-color: #fff !important;
+    border-right-style: none;
+    border-right-width: 0;
+    box-shadow: none !important;
+    height: 50px;
+    margin: 0;
+}
+
+
+.opencps-theme .search-button {
+    background-color: #fff;
+    border: 1px solid #fff;
+    display: table-cell;
+}
+
+.opencps-theme .search-options {
+    display: block;
+    margin: 0;
+    padding: 15px 0;
+}
+
+
+.opencps-theme .search-options > li {
+    display: inline-block;
+}
+
+.opencps-theme .search-options > li .label {
+    background-color: #edebec;
+    border-radius: 0.25em;
+    color: #4b4b4b;
+    display: block;
+    font-size: 85%;
+    font-weight: normal;
+    line-height: 1;
+    padding: 0.6em;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+
+.opencps-theme .search-options > li .label.active {
+    background-color: rgba(1, 1, 1, 0.6);
+    color: #fff;
+}
+
+
+---- Home layout ----
+.home-screen {
+    height: 502px;
+    margin-bottom: 30px;
+}
+
+---- Merger from DungLT ----
+
+.opencps-theme input[type="text"].input100, .opencps-theme select.input100, .opencps-theme .input100.lfr-input-date input {
+	 box-sizing: border-box; css3 rec
+     -moz-box-sizing: border-box; ff2
+     -ms-box-sizing: border-box; ie8
+     -webkit-box-sizing: border-box; safari3
+     -khtml-box-sizing: border-box; konqueror
+     
+     box-sizing: border-box;
+     max-width: 100% !important;
+     width: 100% !important;
+     border-radius: 5px !important;
+     padding: 1px 6px;
+     min-height: 32px;
+}
+
+.navbar.custom-toolbar .container > span:nth-child(2) > div:nth-child(2) .control-group.control-group-inline.form-inline {margin:0}
+.opencps-theme .nav-button-container  {
+	margin-top: 4px !important;
+}
+---- Custom liferay toolbar ----
+.opencps-theme .nav-button-container .item-config{
+	background-color: #337ab7;
+	border-color: #2e6da4;
+	font-size : 14px;
+	display: inline-block;
+	color : #FFFFFF;
+	border-radius : 4px;
+	padding: 6px 12px;
+	min-height: 15px;
+}
+
+.opencps-theme .nav-button-container .item-config > a {
+	padding: 0px !important;
+}
+
+.opencps-theme .nav-button-container .item-config > a > span{
+	text-align : center;
+}
+
+.opencps-theme .nav-button-container .item-config .icon-config{
+	@extend .fa-cogs;
+}
+
+.opencps-theme .fake_textarea {height: 90px; border: 1px solid #acacac; border-radius: 5px; background-color: white; padding: 0 10px; overflow-y: auto}
+
+.opencps-theme input[type="text"].input100, .opencps-theme select.input100, .opencps-theme .input100.lfr-input-date input {
+	 box-sizing: border-box; css3 rec
+     -moz-box-sizing: border-box; ff2
+     -ms-box-sizing: border-box; ie8
+     -webkit-box-sizing: border-box; safari3
+     -khtml-box-sizing: border-box; konqueror
+     box-sizing: border-box;
+     max-width: 100% !important;
+     width: 100% !important;
+     border-radius: 5px !important;
+     padding: 1px 6px;
+}
+
+.opencps-theme.register input[type="text"].input100, 
+.opencps-theme.register select, 
+.opencps-theme.register .input100.lfr-input-date input {
+	height: 23px;
+	padding:1px 6px;
+}
+
+.opencps-theme table.dossier-info-table > tbody > tr:first-child {
+	background-color: #2587b4;
+	color: white;
+	font-weight: bold;
+}
+
+
+	table of dossier-content.jsp
+
+.opencps-theme.fake_table .opencps.dossiermgt.dossier-part-tree>div {
+	border:1px solid #ccc;
+	border-top:0;
+	display:flex
+}
+.opencps-theme.fake_table .opencps.dossiermgt.dossier-part-tree:first-child>div {
+	border-top:1px solid #ccc
+}
+.opencps-theme.fake_table .opencps.dossiermgt.dossier-part-tree>div>span {
+	padding:3px 6px;
+	display: block;
+}
+.opencps-theme.fake_table .opencps.dossiermgt.dossier-part-tree>div>span:first-child {
+	border-right:1px solid #ccc;
+	width:calc(100% - 95px);
+}
+.opencps-theme.fake_table .opencps.dossiermgt.dossier-part-tree>div>span:last-child {
+	position: relative;
+	width: auto;
+}
+.opencps-theme.fake_table .opencps.dossiermgt.dossier-part-tree>div .opencps.dossiermgt.part-file-ctr {
+	text-indent:999px;
+	width:22px;
+	height:21px;
+	background-size:100% 100%;
+	position: absolute;
+	overflow: hidden;
+	left: 15px;
+}
+.opencps-theme.fake_table .opencps.dossiermgt.dossier-part-tree.dossier_edit>div .opencps.dossiermgt.part-file-ctr {
+	text-indent:0;
+	width:auto;
+	height:auto;
+	background-image: none;
+	position: relative;
+}
+.opencps-theme.fake_table .opencps.dossiermgt.dossier-part-tree>div .opencps.dossiermgt.part-file-ctr.view-form {
+	background:url("/opencps-theme/css/../images/custom/xembieumau.png") center center no-repeat;
+}
+.opencps-theme.fake_table .opencps.dossiermgt.dossier-part-tree>div .opencps.dossiermgt.part-file-ctr.view-attachment {
+	background:url("/opencps-theme/css/../images/custom/xemtepdinhkem.png") center center no-repeat;
+	left: 47px;
+}
+.opencps-theme.fake_table.view_doc .opencps.dossiermgt.dossier-part-tree>div .opencps.dossiermgt.part-file-ctr.view-form {
+	background:url("/opencps-theme/css/../images/custom/upload.png") center center no-repeat;
+}
+.opencps-theme.fake_table.view_doc .opencps.dossiermgt.dossier-part-tree>div .opencps.dossiermgt.part-file-ctr.view-attachment {
+	background:url("/opencps-theme/css/../images/custom/delete.png") center center no-repeat;
+	left: 47px;
+}
+
+
+.opencps-theme.fake_table .form-section.tab-pane > div.row-fluid > div  {
+	display: flex;
+	align-items: center;
+	padding: 0 0 0 4px;
+}
+.opencps-theme.fake_table .form-section.tab-pane > div.opencps.dossiermgt.dossier-part-tree:nth-child(5) >div {
+	border-top: 1px solid #ccc;
+}
+.opencps-theme.fake_table .form-section.tab-pane > div.row-fluid:last-child {
+	margin-top: 15px;
+}
+.opencps-theme.fake_table .form-section.tab-pane > div:nth-child(odd) {
+	background-color: #ebebeb;
+}
+.opencps-theme.fake_table .form-section.tab-pane > div.opencps.dossiermgt.dossier-part-tree .dossier_control tr td:nth-child(1) {
+	width: 0;
+}
+.opencps-theme.fake_table .form-section.tab-pane > div.opencps.dossiermgt.dossier-part-tree .dossier_control tr td:nth-child(2) {
+	width: 40%;
+}
+.opencps-theme.fake_table .form-section.tab-pane > div.opencps.dossiermgt.dossier-part-tree .dossier_control tr td:nth-child(2) a {
+	background:url("/opencps-theme/css/../images/custom/upload.png") center center no-repeat;
+}
+.opencps-theme.fake_table .form-section.tab-pane > div.opencps.dossiermgt.dossier-part-tree .dossier_control tr td:nth-child(3) {
+	width: 20%;
+}
+.opencps-theme.fake_table .form-section.tab-pane > div.opencps.dossiermgt.dossier-part-tree .dossier_control tr td:nth-child(4) {
+	width: 40%;
+	background:url("/opencps-theme/css/../images/custom/delete.png") center center no-repeat;
+}
+
+	end table of dossier-content.jsp
+
+
+
+	custom home-page
+
+	.opencps-theme .home-search {
+	position: relative;
+	height: 100px;
+	width:560px;
+	margin: 170px auto 0;
+}
+.opencps-theme .home-search .nav.nav-tabs {
+	position: absolute;
+	top: 75px;
+}
+.opencps-theme .home-search .navbar.custom-toolbar {
+	position: absolute;
+	top:0;
+}
+.opencps-theme .home-search .nav.nav-tabs {
+	border-bottom: 0
+}
+.opencps-theme .home-search .nav.nav-tabs li a {
+	background: #edebec;
+	padding: 3px 6px;
+	line-height: normal;
+	border-radius: 4px;
+	font-weight: normal;
+	font-size: 12px;
+	border: 0;
+}
+.opencps-theme .home-search .nav.nav-tabs li.active a {
+	background-color: rgba(0,0,0,0.4) !important;
+	border: 0;
+}
+.opencps-theme .home-search .navbar-inner {
+	background: transparent none;
+	box-shadow: none;
+	border: 0;
+	padding: 0;
+}
+.opencps-theme .home-search .navbar-inner label {
+	display: none;
+}
+.opencps-theme .home-search .navbar-inner .input-append {
+	width: auto;
+	padding: 5px;
+	background-color: rgba(255,255,255,0.5);
+	border-radius: 5px; 
+}
+.opencps-theme .home-search .input-append input[type="text"].search-query {
+	border-radius: 5px 0 0 5px;
+	height: 50px;
+	width: 500px;
+	border-right: 0; 
+}
+.opencps-theme .home-search .input-append button.btn {
+	border-left: 0;
+	background: url(../images/custom/home/icon_search.png) center center no-repeat transparent;
+	box-shadow: none;
+	background-size: 100% 100%;
+	text-indent: -9999px;
+	width: 50px;
+	height: 50px;
+	border-radius: 0 5px 5px 0 !important;
+}
+
+.opencps-theme .search-container-action {
+	display: table-cell;
+}
+
+.opencps-theme .search-container-action.forward {	
+	background: url(/opencps-theme/css/../images/custom/send.png) center center no-repeat;
+	background-size: 80% 80%;
+}
+.opencps-theme .search-container-action.forward img {
+	width: 0 !important;
+	height: 0 !important;
+	padding: 8px;
+	background-image: none !important
+}
+
+.opencps-theme .search-container-action.delete {	
+	background: url(/opencps-theme/css/../images/custom/delete.png) center center no-repeat;
+	background-size: 80% 80%;
+}
+.opencps-theme .search-container-action.delete img {
+	width: 0 !important;
+	height: 0 !important;
+	padding: 8px;
+	background-image: none !important
+}
+
+.opencps-theme .search-container-action.edit {	
+	background: url(/opencps-theme/css/../images/custom/thaydoi.png) center center no-repeat;
+	background-size: 80% 80%;
+}
+.opencps-theme .search-container-action.edit img {
+	width: 0 !important;
+	height: 0 !important;
+	padding: 8px;
+	background-image: none !important
+}
+
+.opencps-theme .search-container-action.view {	
+	background: url(/opencps-theme/css/../images/custom/xem.png) center center no-repeat;
+	background-size: 100% 50%;
+	margin-right: 2px;
+}
+.opencps-theme .search-container-action.view a {
+	width: 0 !important;
+	height: 0 !important;
+	padding: 8px;
+	background-image: none !important
+}
+.opencps-theme .search-container-action.view img {
+	display: none;
+} 
+
+.opencps-theme .nav-display-style-buttons.font-pull {
+	background-color: #0077b3;
+	color: white;
+	border-radius: 4px; 
+}
+
+.opencps-theme .custom-input-search {
+	text-align: right;
+}
+
+.opencps-theme .front-custom-select-search .row-fluid > .span6:nth-child(1) > div > label {
+	display: none;
+}
+
+.opencps-theme .front-custom-select-search .row-fluid > .span6:nth-child(2) > div > button {
+	border-radius: 0 4px 4px 0; 
+}
+
+.opencps-theme .front-custom-select-search .row-fluid > .span6:nth-child(2) > div > input {
+	border-radius: 4px 0 0 4px; 
+}
+
+.opencps-theme .custom-input-search .input-append .search-query {
+	border-radius: 4px 0 0 4px; 
+}
+
+.opencps-theme .custom-input-search .input-append .btn {
+	border-radius: 0 4px 4px 0;
+}
+
+.opencps-theme .button-add-front-service {
+	background: #0077b3 none;
+	color: white !important;
+	border: 1px solid #0077b3;
+}
+
+.opencps-theme .font-dossier-list-action {
+	width:80px; 
+	vertical-align: middle !important;
+}
+
+.opencps-theme .sitemap-class {
+	margin: 0;
+}
+.opencps-theme .sitemap-class > li {
+	padding: 5px 10px;	
+}
+.opencps-theme .sitemap-class > li:nth-child(even) {
+	background-color: #ddd;
+}
+
+.opencps-theme .pull-right.custom-service-config {
+	width: 82%;
+	padding: 0px 10px;
+	box-sizing: border-box;
+}
+
+.opencps-theme .custom-button-service-config {
+	background-color: #0077b3;
+    border-radius: 4px;
+    color: white;
+	margin-top: 20px;
+	padding: 10px;
+}
+.opencps-theme .custom-button-dossier-temp {
+	background-color: #0077b3;
+    border-radius: 4px;
+    color: white;
+    padding: 10px;
+}
+
+.dialog-iframe-popup .nav-tabs > li {
+	font-weight: normal;
+}
+.dialog-iframe-popup .nav-tabs > li > a {
+	background-color: transparent;
+	color: inherit !important;
+}
+.dialog-iframe-popup .nav-tabs > li.active > a, 
+.dialog-iframe-popup .nav-tabs > li.active > a:hover, 
+.dialog-iframe-popup .nav-tabs > li.active > a:focus, 
+.dialog-iframe-popup .nav-tabs > li > a:hover {
+	color: #555 !important;
+} */
+/*
+	--end---
+*/
+
+
+
+@import url(custom_frame_1.css);
+@import url(header_style_1.css);
