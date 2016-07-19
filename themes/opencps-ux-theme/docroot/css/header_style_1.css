@@ -1,0 +1,16 @@
+/*---------- Header ----------*/
+.opencps-theme > header {background: url(../images/frame_1/bg_header.png) center center no-repeat; background-size: cover; height: 123px}
+.opencps-theme > header .header {height: 123px}
+.opencps-theme > header .header .logo {background: url(../images/frame_1/logo.png) center center no-repeat; width: 411px; height: 46px}
+.opencps-theme > header .header .hotline {background: url(../images/frame_1/phone.png) 0 center no-repeat; height: 46px; padding-left: 55px; color: white; margin: 0 65px 0 auto}
+.opencps-theme > header .header .hotline span {font-family: 'Roboto-Bold'; color: #ff7d23; font-size: 22px}
+.opencps-theme > header .header .btn-dn {width: 150px; height: 36px; background: url(../images/frame_1/bg_dangnhap.png) center center no-repeat; color: white !important; border: 0; text-indent: -20px; font-family: 'Roboto-Bold'; text-transform: uppercase; margin: 0 25px 0 0; text-align: center; line-height: 36px}
+.opencps-theme > header .header .btn-dk {width: 140px; height: 36px; background: url(../images/frame_1/bg_dangky.png) center center no-repeat; color: white !important; border: 0; text-indent: -20px; font-family: 'Roboto-Bold'; text-transform: uppercase; margin-left: 0; text-align: center; line-height: 36px}
+
+/*---------- Menu ----------*/
+.opencps-theme nav {height: 50px; background-color: #0acaf4; background-image: url(../images/frame_1/bg_menu.png); color: white; font-family: 'Roboto-Bold'; margin-bottom: 0 !important; text-transform: uppercase; overflow: hidden;}
+.opencps-theme nav ul {width: 1170px; margin: auto;}
+.opencps-theme nav ul > li {float: left;}
+.opencps-theme nav ul > li > a {line-height: 50px; padding: 15px 30px;}
+.opencps-theme nav ul > li > a img {display: none;}
+.opencps-theme nav ul > li.selected > a, nav ul > li:hover > a {background-color: #0090ff}

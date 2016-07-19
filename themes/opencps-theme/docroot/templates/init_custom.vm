@@ -1,0 +1,7 @@
+#*
+This file allows you to override and define new Velocity variables.
+*#
+
+#set ($register_url = "/register")
+
+#set ($sign_in_url = "/login")

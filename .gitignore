@@ -58,7 +58,7 @@ portlets/build-common-alloy-portlet.xml
 portlets/build-common-portlet.xml
 portlets/create.bat
 portlets/create.sh
-themes/
+
 
 .project
 portlets/opencps-portlet/.project
