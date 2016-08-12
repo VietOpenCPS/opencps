@@ -53,10 +53,18 @@ public class ConfigurationActionImpl implements ConfigurationAction {
 					"portletResource");
 			String servicepage = ParamUtil.getString(actionRequest,
 					"servicepage", "");
+			String dossierpage = ParamUtil.getString(actionRequest,
+					"dossierpage", "");
+			String dossierfilepage = ParamUtil.getString(actionRequest,
+					"dossierfilepage", "");
 			PortletPreferences prefs = PortletPreferencesFactoryUtil
 					.getPortletSetup(actionRequest, portletResource);
 
 			prefs.setValue("servicepage", servicepage);
+			
+			prefs.setValue("dossierpage", dossierpage);
+			
+			prefs.setValue("dossierfilepage", dossierfilepage);
 
 			prefs.store();
 

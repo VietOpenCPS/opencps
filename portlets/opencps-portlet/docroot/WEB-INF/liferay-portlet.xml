@@ -221,7 +221,7 @@
 		<configuration-action-class>org.opencps.dossiermgt.action.ConfigurationActionImpl</configuration-action-class>		
 		<indexer-class>org.opencps.dossiermgt.search.DossierIndexer</indexer-class>
 		<indexer-class>org.opencps.dossiermgt.search.DossierFileIndexer</indexer-class>
-		<instanceable>true</instanceable>
+		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js

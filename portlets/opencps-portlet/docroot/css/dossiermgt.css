@@ -86,7 +86,7 @@
 }
 
 .opencps.dossiermgt.part-file-ctr.add-individual-part-group {
-	background-color: #698C77 !important;
+	/* background-color: #698C77 !important; */
     padding-left: 0;
     color: #fff !important;
 }

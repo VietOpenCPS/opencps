@@ -122,7 +122,7 @@ table.payment tr td:nth-last-of-type(-n+2):after {border-right: 0;}
 }
 /*--- Search File Detail ---*/
 .detail-left {background-color: white; border-radius: 8px; -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 59%; float: left; padding: 30px 25px}
+box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 58%; float: left; padding: 30px 25px}
 .detail-left h4 {margin: 0; font-family: 'Roboto-Bold'; font-weight: normal; font-size: 18px; padding-left: 25px}
 .detail-left h4 {margin-bottom: 5px}
 .detail-left h4:first-child {margin-bottom: 20px}
@@ -212,6 +212,13 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
     overflow: hidden;
 }
+.payment-ld .content.overfolow {
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0) !important;
+	overflow: unset !important;
+}
+.payment-ld .content.overfolow div.box50:first-child {
+    margin-right: 20px;
+}
 .file_manage_title {
     background: url(/opencps-ux-theme/css/../images/frame_1/icon_danhsachhoso.png) 0 center no-repeat;
     padding-left: 20px;
@@ -256,12 +263,39 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 .payment-ld .content .box50:nth-child(1) p span:first-child {
     font-family: 'Roboto-Bold';
     display: inline-block;
-    width: 135px;
 }
 .payment-ld .content .box50:nth-child(2) p span:first-child {
     font-family: 'Roboto-Bold';
     display: inline-block;
     width: 160px;
+}
+.payment-ld .content .box50:nth-child(1) div.over100{
+	overflow: hidden;
+	width: 100%;
+}
+.payment-ld .content .box50:nth-child(1) div.over100  p:first-child{
+  	width: 100%;
+}
+.payment-ld .content .box50:nth-child(1) div.over100  p span:first-child{
+	float: left;
+	width: 155px;
+}
+.payment-ld .content .box50:nth-child(1) div.over100  p span:last-child{
+	width: 65%;
+	float: left;
+	text-align: justify;
+}
+.payment-ld .content .box100 div.over100{
+	overflow: hidden;
+}
+.payment-ld .content .box100 div.over100  p span:first-child{
+	float: left;
+	width: 143px;
+}
+.payment-ld .content .box100 div.over100  p span:last-child{
+	width: 65%;
+	float: left;
+	text-align: justify;
 }
 .payment-ld .content .box50 a, .payment-ld .content .box100 a {
     color: #0090ff !important;
@@ -370,9 +404,12 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 .opencps-theme.ux .home_bg .page-search button[data-toggle="dropdown"]{
   height: 40px !important;
 }
+.opencps-theme.ux .portlet-boundary_19_WAR_opencpsportlet_ .page-search button[data-toggle="dropdown"]{
+  height: 40px !important;
+}
 .payment-ld .content .box50:nth-child(1) p:first-child {
   float: left;
-  width: 135px;
+  width: 155px;
 }
 .payment-ld .content .box50:nth-child(2) p:first-child {
   float: left;
@@ -383,4 +420,25 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 }
 .payment-ld input[type="file"]{
   display: none;
+}
+.taglib-page-iterator .pagination ul{
+	float: left;
+	left: 50%;
+	position: relative;
+	transform: translate(-50%);
+}
+.taglib-page-iterator div.search-results{
+  display: none;
+}
+.taglib-page-iterator .lfr-pagination-config{
+	float: right !important;
+}
+.opencps-theme.ux .taglib-page-iterator .btn {
+    color: #333 !important;
+}
+.taglib-search-iterator-page-iterator-top .taglib-page-iterator ul.lfr-pagination-buttons{
+  display: none;
+}
+.taglib-search-iterator-page-iterator-bottom .taglib-page-iterator ul.lfr-pagination-buttons{
+  display: block;
 }

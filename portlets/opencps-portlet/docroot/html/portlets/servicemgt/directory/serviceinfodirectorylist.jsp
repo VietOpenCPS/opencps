@@ -52,6 +52,12 @@
 	
 	request.setAttribute(ServiceDisplayTerms.SERVICE_DOMAINCODE, domainCode);
 %>
+
+<div class="title_box">
+	<p class="txtitle"><i class="fa fa-file-text-o blue MR10"></i><liferay-ui:message key="serviceprocess-list"/></p>
+</div>
+
+
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
@@ -95,7 +101,7 @@
 								id="keywords1"
 								name="keywords"
 								title="keywords"
-								placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+								placeholder='<%= LanguageUtil.get(locale, "keyword") %>' 
 							/>
 						</aui:col>
 					</aui:row>
@@ -104,6 +110,8 @@
 		</div>
 	</aui:nav-bar-search>
 </aui:nav-bar>
+
+
 <div class="opencps-searchcontainer-wrapper">
 	<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
 		headerNames="<%= headers %>">
@@ -137,26 +145,25 @@
 				viewURL.setParameter("backURL", currentURL);
 			%>
 				<liferay-util:buffer var="boundcol1">
-					<div class="row-fluid">
-						<div class="span3 bold-label">
-							<liferay-ui:message key="service-no"/>
-						</div>
-						<div class="span9">
-							<a href="<%=viewURL.toString() %>"><%=service.getServiceNo() %></a>
-						</div>
-					</div>
 					
 					<div class="row-fluid">
-						<div class="span3 bold-label">
-							<liferay-ui:message key="service-name"/>
-						</div>
-						<div class="span9">
+						<div class="span12">
 							<a href="<%=viewURL.toString() %>"><%=service.getServiceName() %></a>
 						</div>
 					</div>
 				</liferay-util:buffer>
 				
 				<liferay-util:buffer var="boundcol2">
+					<div class="row-fluid">
+						<div class="span5 bold-label">
+							<liferay-ui:message key="service-no"/>
+						</div>
+
+						<div class="span7">
+							<a href="<%=viewURL.toString() %>"><%=service.getServiceNo() %></a>
+						</div>
+					</div>
+
 					<div class="row-fluid">
 						
 						<div class="span5 bold-label">
@@ -195,7 +202,7 @@
 		
 		</liferay-ui:search-container-row>	
 	
-		<liferay-ui:search-iterator/>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
 	
 	</liferay-ui:search-container>
 </div>

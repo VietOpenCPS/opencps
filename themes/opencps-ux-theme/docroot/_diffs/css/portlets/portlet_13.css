@@ -1,3 +1,90 @@
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a > i{
+	background-position: center center;
+	background-color: transparent;
+	background-repeat: no-repeat;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li.active > a > i.dossier_info{
+	background-image: url("../images/custom/icon_dossierinfo_white.png");
+    height: 16px;
+    margin-bottom: 1px;
+    vertical-align: middle;
+    width: 19px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a > i.dossier_info{
+	background-image: url("../images/custom/icon_dossierinfo_blue.png");
+	height: 16px;
+    margin-bottom: 1px;
+    vertical-align: middle;
+    width: 19px;
+}
+
+/* .opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li:hover > a > i.dossier_info{
+	background-image: url("../images/custom/icon_dossierinfo_white.png");
+    height: 16px;
+    margin-bottom: 1px;
+    vertical-align: middle;
+    width: 19px;
+} */
+
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li.active > a > i.dossier_part{
+	background-image: url("../images/custom/icon_dossierpart_white.png");
+    height: 16px;
+    margin-bottom: 1px;
+    vertical-align: middle;
+    width: 19px;
+}
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a > i.dossier_part{
+	background-image: url("../images/custom/icon_dossierpart_blue.png");
+	height: 16px;
+    margin-bottom: 1px;
+    vertical-align: middle;
+    width: 19px;
+}
+
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li.active > a > i.result{
+	background-image: url("../images/custom/icon_dossierresult_white.png");
+    height: 16px;
+    margin-bottom: 1px;
+    vertical-align: middle;
+    width: 19px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a > i.result{
+	background-image: url("../images/custom/icon_dossierresult_blue.png");
+	height: 16px;
+    margin-bottom: 1px;
+    vertical-align: middle;
+    width: 19px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li.active > a > i.history{
+	background-image: url("../images/custom/icon_dossierhistory_white.png");
+    height: 16px;
+    margin-bottom: 1px;
+    vertical-align: middle;
+    width: 19px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a > i.history{
+	background-image: url("../images/custom/icon_dossierhistory_blue.png");
+	height: 16px;
+    margin-bottom: 1px;
+    vertical-align: middle;
+    width: 19px;
+}
+
+
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a{
+	color: #000;
+	padding: 10px 15px;
+}
+
+
 .opencps-theme.ux .opencps-form-navigator-container .opencps.dossiermgt.dossier-part-row {
 	border-bottom: 1px solid #e1e1e1;
 }
@@ -69,4 +156,18 @@
 
 .opencps-theme.ux .opencps-form-navigator-container .opencps.dossiermgt.dossier-part-row .dossier-part-control .opencps.dossiermgt.part-file-ctr.remove-dossier-file i{
 	display: none;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .opencps.dossiermgt.dossier-part-row .dossier-part-control .opencps.dossiermgt.part-file-ctr.add-individual-part-group::before {
+    content: "\f067";
+    font-family: fontawesome;
+    font-size: 18px;
+    padding-right: 5px;
+    vertical-align: middle;
+}
+
+#_13_WAR_opencpsportlet_history{
+	.lfr-search-container {
+		display:none;
+	}
 }

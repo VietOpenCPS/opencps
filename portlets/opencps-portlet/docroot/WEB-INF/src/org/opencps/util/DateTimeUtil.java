@@ -224,6 +224,8 @@ public class DateTimeUtil {
 	public static final String _VN_DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
 
 	public static final String _VN_DATE_FORMAT = "dd/MM/yyyy";
+	
+	public static final String _EMPTY_DATE_TIME = "__/__/__";
 
 	private static Log _log = LogFactoryUtil
 		.getLog(DateTimeUtil.class);

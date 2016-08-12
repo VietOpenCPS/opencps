@@ -1,0 +1,10 @@
+.opencps-theme.ux .portlet-boundary_11_WAR_opencpsportlet_ .portlet-topper .head_title:BEFORE{
+    content: "\f19c";
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    color: #0690fb;
+    margin-right: 5px;
+}

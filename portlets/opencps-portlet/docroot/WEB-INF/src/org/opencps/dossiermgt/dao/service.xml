@@ -351,6 +351,10 @@
         <finder name="DossierId" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
         </finder>
+         <finder name="DossierIdSync" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="syncStatus"></finder-column>
+        </finder>
         <finder name="D_RC" return-type="Collection">
             <finder-column name="dossierId"/>
             <finder-column name="requestCommand"/>

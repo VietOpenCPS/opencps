@@ -98,7 +98,7 @@
 						%>	
 					</liferay-ui:search-container-row> 
 				
-				<liferay-ui:search-iterator/>
+				<liferay-ui:search-iterator type="opencs_page_iterator"/>
 			</liferay-ui:search-container>	
 		</aui:col>
 		<aui:col width="50">
@@ -142,7 +142,7 @@
 						%>	
 					</liferay-ui:search-container-row> 
 				
-				<liferay-ui:search-iterator/>
+				<liferay-ui:search-iterator type="opencs_page_iterator"/>
 			</liferay-ui:search-container>	
 		</aui:col>
 	</aui:row>

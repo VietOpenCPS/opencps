@@ -1,0 +1,46 @@
+.bold{
+	font-family: "roboto-bold";
+}
+
+.bottom-line{
+	border-bottom: 1px solid #e1e1e1;
+}
+
+.top-line{
+	border-top: 1px solid #e1e1e1;
+}
+
+.radius20{
+	border-radius: 20px;
+}
+
+.pd_b20{
+	padding-bottom: 20px;
+}
+
+.pd_t1{
+	padding-top: 1px;
+}
+
+.pd_t2{
+	padding-top: 2px;
+}
+
+.pd_t3{
+	padding-top: 3px;
+}
+
+.pd_t4{
+	padding-top: 4px;
+}
+
+.pd_t5{
+	padding-top: 5px;
+}
+
+.pd_t20{
+	padding-top: 20px;
+}
+
+
+

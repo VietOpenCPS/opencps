@@ -82,7 +82,6 @@
     left: 50%;
     transform: translateX(-50%);
     margin-top: 20px !important;;
-    opacity: 0.5;
 }
 </style>
 
@@ -110,9 +109,9 @@
                         <div>
                             <p><span><liferay-ui:message key="payment-name"></liferay-ui:message>:</span></p> <%= paymentFile != null ? paymentFile.getPaymentName() : LanguageUtil.get(pageContext, "monitoring-chua-co")  %>
                         </div>
-                        <div>
-                            <p><span><liferay-ui:message key="service-name"></liferay-ui:message>:</span> </p><span><%= serviceInfo != null ? serviceInfo.getServiceName() : LanguageUtil.get(pageContext, "monitoring-chua-co")  %></span>
-                        </div>
+                        <div class="over100">
+	                        <p><span><liferay-ui:message key="service-name"/>:</span> <span><%=Validator.isNotNull(serviceInfo.getServiceName())? HtmlUtil.escape(serviceInfo.getServiceName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %></span></p>
+	                    </div>
                         <div>
                             <p><span><liferay-ui:message key="administration-name"></liferay-ui:message>:</span> </p>
                             <c:if test="<%= dossier != null %>">

@@ -279,6 +279,18 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	}
 
 	/**
+	 * @param doosierId
+	 * @param syncStatus
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<DossierLog> getDossierLogByDossierId(long dossierId, int syncStatus)
+		throws SystemException {
+
+		return dossierLogPersistence
+			.findByDossierIdSync(dossierId, syncStatus);
+	}
+	/**
 	 * @param dossierId
 	 * @param start
 	 * @param end

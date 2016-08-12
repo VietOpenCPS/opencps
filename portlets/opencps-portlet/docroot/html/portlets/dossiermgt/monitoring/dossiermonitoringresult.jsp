@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -147,7 +148,7 @@
                 <%
 	                List<DossierLog> dossierLogs = null;
 	    			try {
-	    				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId);
+	    				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
 	    			} catch(Exception e){
 	    				_log.error(e);
 	    			}
@@ -158,7 +159,7 @@
                 	%>
                     <div>
                         <p><%= (Validator.isNotNull(dossierLog.getUpdateDatetime())) ? dateFormatDate.format(dossierLog.getUpdateDatetime()) : StringPool.BLANK %></p>
-                        <p><%= dossierLog.getActionInfo() %><font style="color: #fff;">-</font></p>
+                        <p><%= dossierLog.getDossierStatus() %><font style="color: #fff;">-</font></p>
                     </div>
                     <%} %>
                 </div>
@@ -168,7 +169,7 @@
                 	%>
                     <div>
                         <p><span><liferay-ui:message key="doi-tuong"/>:</span> <%= dossierLog.getActor() %></p>
-                        <p><span><liferay-ui:message key="ghi-chu"/>:</span> <%= dossierLog.getMessageInfo() %></p>
+                        <p><span><liferay-ui:message key="ghi-chu"/>:</span> <%= dossierLog.getActionInfo() %></p>
                     </div>
                     <%} %>
                     

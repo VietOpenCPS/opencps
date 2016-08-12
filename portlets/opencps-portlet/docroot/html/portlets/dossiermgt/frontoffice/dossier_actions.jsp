@@ -1,8 +1,4 @@
 
-<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,6 +18,10 @@
  */
 %>
 
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@page import="org.opencps.dossiermgt.bean.DossierBean"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -136,7 +136,7 @@
 				</portlet:actionURL> 
 				<liferay-ui:icon-delete 
 					image="undo"
-					cssClass="search-container-action undo"
+					cssClass="search-container-action fa undo"
 					confirmation="are-you-sure-cancel-entry" 
 					message="cancel"  
 					url="<%=cancelDossierURL.toString() %>" 

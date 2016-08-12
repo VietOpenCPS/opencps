@@ -89,21 +89,17 @@
             </div>
             <div class="danhmuc">
                 <p class="title">#language ("danhmuc-key")</p>
-                <ul>
-                    <li><a href="">#language ("home-page-key")</a></li>
-                    <li><a href="">#language ("notifier-key")</a></li>
-                    <li><a href="">#language ("van-ban-phap-luat-key")</a></li>
-                    <li><a href="">#language ("serviceinfo-key")</a></li>
-                </ul>
+                #parse ("$full_templates_path/navigation_footer_public_page.vm")
+
             </div>
             <div class="huongdan">
                 <p class="title">#language ("conduct-key")</p>
                 <ul>
-                    <li><a href="">#language ("account-register-key")</a></li>
-                    <li><a href="">#language ("system-login-key")</a></li>
-                    <li><a href="">#language ("nop-hstt-key")</a></li>
-                    <li><a href="">#language ("tracuu-ketqua-key")</a></li>
-                    <li><a href="">#language ("cbxl-nophs-key")</a></li>
+                    <li><a href="/register">#language ("account-register-key")</a></li>
+                    <li><a href="/login">#language ("system-login-key")</a></li>
+                    <li><a href="/group/guest">#language ("nop-hstt-key")</a></li>
+                    <li><a href="/home">#language ("tracuu-ketqua-key")</a></li>
+                    <li><a href="/group/guest">#language ("cbxl-nophs-key")</a></li>
                 </ul>
             </div>
             <div class="lienhehotro">

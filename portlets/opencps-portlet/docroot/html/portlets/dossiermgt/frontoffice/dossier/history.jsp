@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,18 +28,24 @@
 <%@page import="org.opencps.dossiermgt.model.DossierLog"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
+
 <%@ include file="../../init.jsp"%>
 
 <%
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
+
 	long dossierId = dossier != null ? dossier.getDossierId() : 0L;
-	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dossier/history.jsp");
+	
 	List<DossierLog> dossierLogs = new ArrayList<DossierLog>();
 	
-	String serviceName = StringPool.BLANK;
-	String receptionNo = StringPool.BLANK;
+	String serviceName = StringPool.DASH;
+	String receptionNo = StringPool.DASH;
+	
 	ServiceInfo serviceInfo = null;
+	
 	if(Validator.isNotNull(dossier)) {
 		receptionNo = dossier.getReceptionNo();
 		try {
@@ -52,75 +56,109 @@
 		}
 	}
 	
+	PortletURL iteratorURL = renderResponse.createRenderURL();
+	iteratorURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dossier/history.jsp");
 %>
-<div class="ocps-title-detail">
-	<div class="ocps-title-detail-top">
-		<label class="service-reception-label">
-			<liferay-ui:message key="reception-no"/> 
-		</label>
-		<p class="service-reception-no"><%=receptionNo %></p>
-	</div>
-	<div class="ocps-title-detail-bot">
-		<label class="service-name-label">
-			<liferay-ui:message key="dossier-name"/> 
-		</label>
-		<p class="service-service-name"><%=serviceName%></p>
-	</div>
-</div>
 
-<div class="bound-search-container-history">
-	<liferay-ui:search-container 
-		emptyResultsMessage="no-history-were-found"
-		iteratorURL="<%=iteratorURL %>"
-		delta="<%=20 %>"
-		deltaConfigurable="true"
-		>
-		<liferay-ui:search-container-results>
-			<%
-				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId, searchContainer.getStart(), searchContainer.getEnd());
+<aui:row>
+	<aui:col width="20" cssClass="bold">
+		<liferay-ui:message key="reception-no"/> 
+	</aui:col>
+	<aui:col width="80">
+		<%=receptionNo %>
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="20" cssClass="bold">
+		<liferay-ui:message key="dossier-name"/> 
+	</aui:col>
+	<aui:col width="80">
+		<%=serviceName%>
+	</aui:col>
+</aui:row>
+
+<liferay-ui:search-container 
+	emptyResultsMessage="no-history-were-found"
+	iteratorURL="<%=iteratorURL %>"
+	delta="<%=20 %>"
+	deltaConfigurable="true"
+>
+	<liferay-ui:search-container-results>
+		<%
+			dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId, searchContainer.getStart(), searchContainer.getEnd());
+			
+			results = dossierLogs;
+			
+			total = DossierLogLocalServiceUtil.countDossierLogByDossierId(dossierId);
+			
+			pageContext.setAttribute("results", results);
+			pageContext.setAttribute("total", total);
+			
+			//List<ResultRow> rows = searchContainer.getResultRows();
+			
+		%>
+	</liferay-ui:search-container-results>
+	
+	<%
+		
+	%>
+	<liferay-ui:search-container-row 
+		className="org.opencps.dossiermgt.model.DossierLog" 
+		modelVar="dossierLog" 
+		keyProperty="dossierLogId"
+	>
+		<aui:row cssClass="top-line pd_b20 pd_t20">
+			<aui:col width="60">
+				<span class="span1">
+					<i class="fa fa-circle blue sx10"></i>
+				</span>
 				
-				results = dossierLogs;
-				total = DossierLogLocalServiceUtil.countDossierLogByDossierId(dossierId);
+				<span class="span3 bold">
+					<liferay-ui:message key="reception-time" />
+				</span>
 				
-				pageContext.setAttribute("results", results);
-				pageContext.setAttribute("total", total);
-			%>
-		</liferay-ui:search-container-results>
-		<liferay-ui:search-container-row 
-					className="org.opencps.dossiermgt.model.DossierLog" 
-					modelVar="dossierLog" 
-					keyProperty="dossierLogId"
-				>
+				<span class="span8">
+					<%=
+						Validator.isNotNull(dossierLog.getUpdateDatetime()) ?
+						DateTimeUtil.convertDateToString(dossierLog.getUpdateDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
+						DateTimeUtil._EMPTY_DATE_TIME 
+					%>
+				</span>
+			</aui:col>
+			<aui:col width="40">
+				<aui:row>
+					<span class="span4 bold">
+						<liferay-ui:message key="dossier-status" />
+					</span>
+					
+					<span class="span8">
+						<%=PortletUtil.getDossierStatusLabel(dossierLog.getDossierStatus(), locale)%>
+					</span>
+				</aui:row>
+			
+				<aui:row>
+					<span class="span4 bold">
+						<liferay-ui:message key="actor" />
+					</span>
+					
+					<span class="span8">
+						<%=Validator.isNotNull(dossierLog.getActor()) ? dossierLog.getActor() : StringPool.DASH %>
+					</span>
+				</aui:row>
 				
-				<%-- <liferay-ui:search-container-column-text 
-					name="row" 
-					value="<%=String.valueOf(row.getPos() +1) %>" 
-				/> --%>
-				
-				<%-- <liferay-ui:search-container-column-text 
-					name="time" 
-					value="<%=DateTimeUtil.convertDateToString(dossierLog.getUpdateDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>" 
-				/> --%>
-				
-				<%-- <liferay-ui:search-container-column-text 
-					name="	" 
-					value="<%=dossierLog.getSyncStatus() %>" 
-				/> --%>
-				 
-				<%-- <liferay-ui:search-container-column-text 
-					name="action" 
-					value="<%= dossierLog.getActionInfo() %>" 
-				/> --%>
-				
-				<%-- <liferay-ui:search-container-column-text 
-					name="note" 
-					value="<%=dossierLog.getMessageInfo() %>" 
-				/> --%>
-				
-				<liferay-ui:search-container-column-jsp path="/html/portlets/dossiermgt/frontoffice/dossier/history-bound-data-second.jsp" />
-				<liferay-ui:search-container-column-jsp path="/html/portlets/dossiermgt/frontoffice/dossier/history-bound-data.jsp" />
-				
-		</liferay-ui:search-container-row>
+				<aui:row>
+					<span class="span4 bold">
+						<liferay-ui:message key="note" />
+					</span>
+					
+					<span class="span8">
+						<%=dossierLog.getMessageInfo()%>
+					</span>
+					
+				</aui:row>
+			</aui:col>
+		</aui:row>
+	</liferay-ui:search-container-row>
 	<liferay-ui:search-iterator paginate="false"/>
-	</liferay-ui:search-container>
-</div>
+</liferay-ui:search-container>

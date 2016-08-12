@@ -47,6 +47,14 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 public class DossierMornitoringPortlet extends MVCPortlet {
  
 	public void searchAction(ActionRequest request, ActionResponse response) throws PortletException, IOException {
+		PortletPreferences prefs = request.getPreferences();
+
+	    String dossierpage = prefs.getValue(
+	        "dossierpage", "/");	
+	    String dossierfilepage = prefs.getValue(
+		        "dossierfilepage", "/");	
+		System.out.println("DossierMornitoringPortlet.searchAction()"+dossierpage.length() + "***" + dossierfilepage);
+		
 		String receptionNo = ParamUtil.getString(request, "keywords", StringPool.BLANK);
 		Dossier ds = null;
 		try {
@@ -57,9 +65,29 @@ public class DossierMornitoringPortlet extends MVCPortlet {
 		}
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		String portletName = (String)request.getAttribute(WebKeys.PORTLET_ID);
-		PortletURL redirectURL = PortletURLFactoryUtil.create(PortalUtil.getHttpServletRequest(request),
+
+		PortletURL redirectURL = null;
+		
+		redirectURL = PortletURLFactoryUtil.create(PortalUtil.getHttpServletRequest(request),
 			portletName,
 			themeDisplay.getLayout().getPlid(), PortletRequest.RENDER_PHASE); 
+		if(dossierpage.length() > 1){
+			
+			long plid = 0L;
+			
+			try {
+				
+				plid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, dossierpage).getPlid();
+				
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+				
+			}
+			
+			redirectURL = PortletURLFactoryUtil.create(PortalUtil.getHttpServletRequest(request),portletName,plid, PortletRequest.RENDER_PHASE);
+		}
+		
 		addProcessActionSuccessMessage = false;
 		
 		if (ds != null) {

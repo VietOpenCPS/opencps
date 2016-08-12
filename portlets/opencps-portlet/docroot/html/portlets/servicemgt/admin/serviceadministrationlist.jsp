@@ -72,6 +72,6 @@
 			
 			<liferay-ui:search-container-column-jsp path='<%=templatePath + "domain_actions.jsp" %>' name="action"/>
 		</liferay-ui:search-container-row>
-<liferay-ui:search-iterator/>
+<liferay-ui:search-iterator type="opencs_page_iterator"/>
 </liferay-ui:search-container>
 </div>

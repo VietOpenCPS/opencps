@@ -1,0 +1,46 @@
+.content .title_box {
+    align-content: center;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    height: 61px;
+    padding: 0 20px;
+}
+
+.txtitle {
+    font-family: "Roboto-Bold";
+    font-size: 16px;
+    line-height: 60px;
+    margin-bottom: 0;
+    text-transform: uppercase;
+}
+
+
+.fa-file-text-o::before {
+    content: "";
+}
+.blue {
+    color: #0690fb !important;
+}
+.MR10 {
+    margin-right: 10px !important;
+}
+.fa {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-language-override: normal;
+    font-size: inherit;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-synthesis: weight style;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-rendering: auto;
+}
+
+.title_box {
+    margin-left: 15px;
+}

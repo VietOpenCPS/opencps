@@ -1,0 +1,18 @@
+#set ($layoutService = $serviceLocator.findService('com.liferay.portal.service.LayoutLocalService'))
+#set ($publicLayoutPlid = $layoutService.getDefaultPlid($layout.getGroupId(), false)) ##true for private pages and false for public
+#set ($publicLayout = $layoutService.getLayout($publicLayoutPlid))
+#set ($publicLayouts = $layoutService.getLayouts($layout.getGroupId(), false, 0))
+
+
+<ul >
+	#foreach ($nav_item in $publicLayouts)
+
+		#if (!$nav_item.isHidden())
+		
+			<li >
+				<a href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"> $nav_item.getName() </a>
+
+			</li>
+		#end
+	#end
+</ul>

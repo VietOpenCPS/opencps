@@ -45,8 +45,8 @@
 <portlet:actionURL name="searchServiceAction" var="serviceUrl"></portlet:actionURL>
 
 <%
-	String keySelect = DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SERVICE;
-	String urlSelect = viewMonitoringSearchURL + "," + dossierFileSearchUrl + "," + viewMonitoringServiceURL;
+	String keySelect = DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH /*+ "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST */  + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SERVICE;
+	String urlSelect = viewMonitoringSearchURL /*+ "," + dossierFileSearchUrl */ + "," + viewMonitoringServiceURL;
 %>
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
@@ -66,6 +66,7 @@
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
+										useNamespace="<%=true %>"
 										cssClass="input-append home-bb-search"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords-home\") %>" 
@@ -93,6 +94,7 @@
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
+										useNamespace="<%=true %>"
 										cssClass="input-append home-bb-search"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
@@ -120,6 +122,7 @@
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
+										useNamespace="<%=true %>"
 										cssClass="input-append home-bb-search"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 

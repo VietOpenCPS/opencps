@@ -41,21 +41,20 @@
 	
 	String[][] categorySections = {processOrderSections};
 %>
-<div class="ocps-custom-header">
+<%-- <div class="ocps-custom-header">
 	<label class="opcps-label">
 		<liferay-ui:message key="process-order" />
 	</label>
 	<span class="ocps-span">
 		<a href="<%=backURL %>"><liferay-ui:message key="back"/></a>
 	</span>
-</div>
+</div> --%>
 
-<%-- <div class="ocps-header-history">
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	title="process-order"
 />
-</div> --%>
+
 <portlet:actionURL var="updateProcessOrderURL" name="updateDossier"/>
 <div class="ocps-history-process-bound-navigator">
 <liferay-util:buffer var="htmlTop">
@@ -87,17 +86,18 @@
 		type="hidden" 
 		value="<%= currentURL%>"
 	/>
-	
-	<liferay-ui:form-navigator
-		backURL="<%= backURL %>"
-		categoryNames="<%= ProcessUtils._PROCESS_ORDER_CATEGORY_NAMES %>"
-		categorySections="<%= categorySections %>"
-		htmlBottom="<%= htmlBottom %>"
-		htmlTop="<%= htmlTop %>"
-		jspPath='<%=templatePath + "dossier/" %>'
-		showButtons="<%=false%>"
-		displayStyle="left-navigator"
-	/>
+	<div class="opencps-form-navigator-container">
+		<liferay-ui:form-navigator
+			backURL="<%= backURL %>"
+			categoryNames="<%= ProcessUtils._PROCESS_ORDER_CATEGORY_NAMES %>"
+			categorySections="<%= categorySections %>"
+			htmlBottom="<%= htmlBottom %>"
+			htmlTop="<%= htmlTop %>"
+			jspPath='<%=templatePath + "dossier/" %>'
+			showButtons="<%=false%>"
+			displayStyle="left-navigator"
+		/>
+	</div>
 </aui:form>
 </div>
 <aui:script>

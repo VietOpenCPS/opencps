@@ -173,5 +173,6 @@
 .opencps-theme.ux .opencps-register-wrapper .term-user .term-detail-register {
     float: right;
     margin-top: -30px;
-    margin-right: 135px;
+    margin-right: 122px;
+    color: blue;
 }

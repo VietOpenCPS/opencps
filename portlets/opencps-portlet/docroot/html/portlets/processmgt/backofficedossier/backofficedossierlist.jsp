@@ -196,38 +196,38 @@
 							<liferay-ui:message key="no"/>
 						</div>
 						<div class="span7">
-							<a href="<%=viewURL.toString()%>">String.valueOf(row.getPos() + 1)</a>
+							<a href="<%=viewURL.toString()%>"><%=String.valueOf(row.getPos() + 1) %></a>
 						</div>
 					</div>
 			</liferay-util:buffer>
 			<liferay-util:buffer var="boundcol2">
 					<div class="row-fluid">
-						<div class="span3 bold-label">
+						<div class="span5 bold-label">
 							<liferay-ui:message key="receive-datetime"/>
 						</div>
 						
-						<div class="span9">
+						<div class="span7">
 							<a href="<%=viewURL.toString()%>"><%=receiveDatetime %></a>
 						</div>
 					</div>
 					
 					
 					<div class="row-fluid">
-						<div class="span3 bold-label">
+						<div class="span5 bold-label">
 							<liferay-ui:message key="reception-no"/>
 						</div>
 						
-						<div class="span9">
+						<div class="span7">
 							<a href="<%=viewURL.toString()%>"><%=dossier.getReceptionNo() %></a>
 						</div>
 					</div>
 					
 					<div class="row-fluid">
-						<div class="span3 bold-label">
+						<div class="span5 bold-label">
 							<liferay-ui:message key="subjectname"/>
 						</div>
 						
-						<div class="span9">
+						<div class="span7">
 							<a href="<%=viewURL.toString()%>"><%=dossier.getSubjectName() %></a>
 						</div>
 					</div>
@@ -279,7 +279,7 @@
 		
 		</liferay-ui:search-container-row>	
 	
-		<liferay-ui:search-iterator/>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
 	
 	</liferay-ui:search-container>
 </div>

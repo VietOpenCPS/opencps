@@ -24,6 +24,8 @@
 <%@ include file="../init.jsp"%>
 <%  
 	String servicepage_cfg = GetterUtil.getString(portletPreferences.getValue("servicepage", StringPool.BLANK));
+	String dossierpage_cfg = GetterUtil.getString(portletPreferences.getValue("dossierpage", StringPool.BLANK));
+	String dossierfilepage_cfg = GetterUtil.getString(portletPreferences.getValue("dossierfilepage", StringPool.BLANK));
 	List<String> portletIdList = themeDisplay.getLayoutTypePortlet().getPortletIds();
 	List<Layout> layoutPages = LayoutLocalServiceUtil.getLayouts(scopeGroupId, false);
 %>
@@ -44,6 +46,40 @@
 		<%
 			for (Layout l : layoutPages) {
 				if (l.getFriendlyURL().equals(servicepage_cfg)) {
+		%>
+		<aui:option selected="<%= true %>" value="<%= l.getFriendlyURL() %>"><%= l.getName() %></aui:option>
+		<%
+				}
+				else {
+		%>
+		<aui:option selected="<%= false %>" value="<%= l.getFriendlyURL() %>"><%= l.getName() %></aui:option>
+		<%
+				}
+			}
+		%>
+	</aui:select>
+	<aui:select name="dossierpage" label="config-dossierpage">
+		<aui:option value=""><liferay-ui:message key="monitoring-chua-co"></liferay-ui:message></aui:option>
+		<%
+			for (Layout l : layoutPages) {
+				if (l.getFriendlyURL().equals(dossierpage_cfg)) {
+		%>
+		<aui:option selected="<%= true %>" value="<%= l.getFriendlyURL() %>"><%= l.getName() %></aui:option>
+		<%
+				}
+				else {
+		%>
+		<aui:option selected="<%= false %>" value="<%= l.getFriendlyURL() %>"><%= l.getName() %></aui:option>
+		<%
+				}
+			}
+		%>
+	</aui:select>
+	<aui:select name="dossierfilepage" label="config-dossierfilepage">
+		<aui:option value=""><liferay-ui:message key="monitoring-chua-co"></liferay-ui:message></aui:option>
+		<%
+			for (Layout l : layoutPages) {
+				if (l.getFriendlyURL().equals(dossierfilepage_cfg)) {
 		%>
 		<aui:option selected="<%= true %>" value="<%= l.getFriendlyURL() %>"><%= l.getName() %></aui:option>
 		<%

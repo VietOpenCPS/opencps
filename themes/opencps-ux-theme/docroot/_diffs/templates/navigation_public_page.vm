@@ -30,17 +30,6 @@
 					</li>
 				#end
 			#end
-			<li class="register" $nav_item_attr_selected role="presentation">
-				<a data-redirect="$is_login_redirect_required" title="$sign_in_text" href="$register_url" id="sign-in" rel="nofollow">
-					#language("register")
-				</a>
-			</li>
-			<li class="login" $nav_item_attr_selected role="presentation">
-				<a data-redirect="$is_login_redirect_required" title="$sign_in_text" href="$sign_in_url" id="sign-in" rel="nofollow">
-					$sign_in_text
-				</a>
-			</li>
-	
 		</ul>
 	#else
 		#if($layout.isPublicLayout())

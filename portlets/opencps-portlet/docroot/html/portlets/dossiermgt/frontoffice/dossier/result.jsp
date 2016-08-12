@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -35,6 +36,7 @@
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -81,161 +83,191 @@
 			}
 		%>
 		
-		<div class="portlet_13_result">
-		
 		<aui:row>
-			<aui:col width="15" cssClass="portlet_13_lb">
+			<aui:col width="20" cssClass="bold">
 				<liferay-ui:message key="dossier-reception-no"/>
 			</aui:col>
-			<aui:col width="15">
+			<aui:col width="80">
 				<%=dossier.getReceptionNo() %>
 			</aui:col>
 		</aui:row>
 		<aui:row>
-			<aui:col width="15" cssClass="portlet_13_lb">
+			<aui:col width="20" cssClass="bold">
 				<liferay-ui:message key="dossier-service-name"/>
 			</aui:col>
-			<aui:col width="75">
+			<aui:col width="80">
 				<%=serviceInfoName %>
 			</aui:col>
 		</aui:row>
 		
 		
 		<aui:row>
-			<aui:col width="15" cssClass="portlet_13_lb">
-				<liferay-ui:message key="dossier-create-date"/>
+			<aui:col width="50">
+				<aui:row>
+					<aui:col width="30" cssClass="bold">
+						<liferay-ui:message key="dossier-create-date"/>
+					</aui:col>
+					<aui:col width="70">
+						<%=
+							Validator.isNotNull(dossier.getCreateDate()) ?
+							DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
+							DateTimeUtil._EMPTY_DATE_TIME 
+						%>
+					</aui:col>
+				</aui:row>
+				
+				<aui:row>
+					<aui:col width="30" cssClass="bold">
+						<liferay-ui:message key="dossier-receive-date"/>
+					</aui:col>
+					<aui:col width="70">
+						<%=
+							Validator.isNotNull(dossier.getReceiveDatetime()) ?
+							DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
+							DateTimeUtil._EMPTY_DATE_TIME 
+						%>
+					</aui:col>
+				</aui:row>
+				
+				<aui:row>
+					<aui:col width="30" cssClass="bold">
+						<liferay-ui:message key="dossier-estimate-date"/>
+					</aui:col>
+					<aui:col width="70">
+						<%=
+							Validator.isNotNull(dossier.getEstimateDatetime()) ? 
+							DateTimeUtil.convertDateToString(dossier.getEstimateDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
+							DateTimeUtil._EMPTY_DATE_TIME
+						%>
+					</aui:col>
+				</aui:row>
+				
+				<aui:row>
+					<aui:col width="30" cssClass="bold">
+						<liferay-ui:message key="dossier-update-date"/>
+					</aui:col>
+					<aui:col width="70">
+						<%=
+							Validator.isNotNull(dossier.getModifiedDate()) ? 
+							DateTimeUtil.convertDateToString(dossier.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
+							DateTimeUtil._EMPTY_DATE_TIME
+						%>
+					</aui:col>
+				</aui:row>
+				
 			</aui:col>
-			<aui:col width="25">
-				<%=DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
+			
+			<aui:col width="50">
+				<aui:row>
+					<aui:col width="30" cssClass="bold">
+						<liferay-ui:message key="dossier-submit-date"/>
+					</aui:col>
+					<aui:col width="70">
+						<%=
+							Validator.isNotNull(dossier.getSubmitDatetime()) ? 
+							DateTimeUtil.convertDateToString(dossier.getSubmitDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
+							DateTimeUtil._EMPTY_DATE_TIME
+						%>
+					</aui:col>
+				</aui:row>
+				
+				<aui:row>
+					<aui:col width="30" cssClass="bold">
+						<liferay-ui:message key="dossier-reception-no"/>
+					</aui:col>
+					
+					<aui:col width="70">
+						<%=Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : StringPool.DASH %>
+					</aui:col>
+				</aui:row>
+				
+				<aui:row>
+					<aui:col width="30" cssClass="bold">
+						<liferay-ui:message key="dossier-finish-date"/>
+					</aui:col>
+					<aui:col width="70">
+						<%=
+							Validator.isNotNull(dossier.getFinishDatetime()) ? 
+							DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
+							DateTimeUtil._EMPTY_DATE_TIME
+						%>
+					</aui:col>
+				</aui:row>
+				
+				<aui:row>
+					<aui:col width="30" cssClass="bold">
+						<liferay-ui:message key="log-status"/>
+					</aui:col>
+					<aui:col width="70">
+						<%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
+					</aui:col>
+				</aui:row>
 			</aui:col>
-			<aui:col width="15" cssClass="portlet_13_lb" >
-				<liferay-ui:message key="dossier-submit-date"/>
-			</aui:col>
-			<aui:col width="25">
-				<%=DateTimeUtil.convertDateToString(dossier.getSubmitDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
-			</aui:col>
-		</aui:row>
-		<aui:row>
-			<aui:col width="15" cssClass="portlet_13_lb">
-				<liferay-ui:message key="dossier-receive-date"/>
-			</aui:col>
-			<aui:col width="25">
-				<%=DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
-			</aui:col>
-			<aui:col width="15" cssClass="portlet_13_lb">
-				<liferay-ui:message key="dossier-reception-no"/>
-			</aui:col>
-			<aui:col width="25">
-				<%=dossier.getReceptionNo() %>
-			</aui:col>
-		</aui:row>
-		<aui:row>
-			<aui:col width="15" cssClass="portlet_13_lb">
-				<liferay-ui:message key="dossier-estimate-date"/>
-			</aui:col>
-			<aui:col width="25">
-				<%=DateTimeUtil.convertDateToString(dossier.getEstimateDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
-			</aui:col>
-			<aui:col width="15" cssClass="portlet_13_lb">
-				<liferay-ui:message key="dossier-finish-date"/>
-			</aui:col>
-			<aui:col width="25">
-				<%=DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
-			</aui:col>
-		</aui:row>
-		<aui:row>
-			<aui:col width="15" cssClass="portlet_13_lb">
-				<liferay-ui:message key="dossier-update-date"/>
-			</aui:col>
-			<aui:col width="25"></aui:col>
-			<aui:col width="15" cssClass="portlet_13_lb">
-				<liferay-ui:message key="log-status"/>
-			</aui:col>
-			<aui:col width="25"><%=dossier.getDossierStatus() %></aui:col>
-		</aui:row>
-		
-		<aui:row>
-			<aui:col width="100" cssClass="portlet_13_line"/>
+				
 		</aui:row>
 		
 		<c:if test="<%=dossierLogs != null && !dossierLogs.isEmpty() %>">
-			<aui:row>
-				<label class="portlet_13_txtitle portlet_13_ML15">
-					<b>
-						<liferay-ui:message key="required-process"/>
-					</b>
+			<aui:row cssClass="top-line pd_b20 pd_t20">
+				<label class="bold">
+					<liferay-ui:message key="required-process"/>
 				</label>
-				<table width="100%" border="0" class="portlet_13_table">
-					<!-- 
-					<tr>
-						<td width="10%"><liferay-ui:message key="number-order"/></td>
-						<td width="30%"><liferay-ui:message key="datetime"/></td>
-						<td width="30%"><liferay-ui:message key="request-command"/></td>
-						<td width="30%"><liferay-ui:message key="message-info"/></td>
-					</tr>
-					 -->
-					 
+			
 					<%
-						int dem = 1;
 					
+						int count = 1;
 						for(DossierLog dossierLog : dossierLogs){
-							String cssClass = dem==1? "class=\"bor-top0\"":"";
-							String cssClassLb = dem==1? "class=\"bor-top0 portlet_13_lb\"":"class=\"portlet_13_lb\"";
+							
 							%>
-								<tr>
-									<td <%=cssClass %> width="5px">
-										<i class="fa fa-circle blue sx10"></i>
-									</td>
-									<td <%=cssClassLb %> width="20px" align="center">
-										<%=dem %>
-									</td>
-									<td <%=cssClass %>>
-										<%=dossierLog.getUserUuid() != null ? 
+								<aui:row cssClass="bottom-line pd_b20 pd_t20">
+									<aui:col width="30">
+										<span class="span1">
+											<i class="fa fa-circle blue sx10"></i>
+										</span>
+										
+										<span class="span2 bold">
+											<%=count %>
+										</span>
+										
+										<span class="span9">
+											<%=
+												Validator.isNotNull(dossierLog.getUpdateDatetime()) ? 
 												DateTimeUtil.convertDateToString(dossierLog.getUpdateDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
-												StringPool.BLANK 
-										%>
-									</td>
-									
-									<td <%=cssClassLb %> width="95px">
-										<liferay-ui:message key="request-command"/>
-									</td>
-									<td <%=cssClass %>>
-										<liferay-ui:message key="<%=dossierLog.getRequestCommand() %>"/>
-									</td>
-									
-									<td <%=cssClassLb %> width="95px">
-										<liferay-ui:message key="message-info"/>
-									</td>
-									<td <%=cssClass %>>
-										<%=dossierLog.getMessageInfo() %>
-									</td>
-								</tr>
+												DateTimeUtil._EMPTY_DATE_TIME
+											%>
+										</span>
+									</aui:col>
+									<aui:col width="30">
+										<span class="span4 bold">
+											<liferay-ui:message key="request-command"/>
+										</span>
+										<span class="span8">
+											<liferay-ui:message key="<%=dossierLog.getRequestCommand() %>"/>
+										</span>
+									</aui:col>
+									<aui:col width="30">
+										<span class="span4 bold">
+											<liferay-ui:message key="message-info"/>
+										</span>
+										<span class="span8">
+											<%=dossierLog.getMessageInfo() %>
+										</span>
+									</aui:col>
+								</aui:row>
+								
 							<%
-							dem++;
+							count ++;
 						}
 					%>
-				</table>
+				
 			</aui:row>
 		</c:if>
-		<%
-		if(dossierPartsLevel1 != null){
-			%>
-			<aui:row>
-				<label class="portlet_13_txtitle portlet_13_ML15">
-					<b>
-						<liferay-ui:message key="dossier-file-result"/>
-					</b>
+		
+		<c:if test="<%=dossierPartsLevel1 != null && !dossierPartsLevel1.isEmpty() %>">
+			<aui:row cssClass="top-line pd_b20 pd_t20">
+				<label class="bold">
+					<liferay-ui:message key="dossier-file-result"/>
 				</label>
-				<table width="100%" border="0" class="portlet_13_table">
-					<!-- 
-					<tr>
-						<td width="10%" bordercolor="#ccc" class="bor-top0"><liferay-ui:message key="number-order"/></td>
-						<td width="30%" bordercolor="#ccc" class="bor-top0"><liferay-ui:message key="dossier-file-date"/></td>
-						<td width="30%" bordercolor="#ccc" class="bor-top0"><liferay-ui:message key="dossier-file-no"/></td>
-						<td width="30%" bordercolor="#ccc" class="bor-top0"><liferay-ui:message key="dossier-file-name"/></td>
-					</tr>
-					-->
-					<%
+				<%
 					int count = 1;
 					for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 						
@@ -269,53 +301,63 @@
 									continue;
 									
 								}
-								
-								String cssClass = count==1? "class=\"bor-top0\"":"";
-								String cssClassLb = count==1? "class=\"bor-top0 portlet_13_lb\"":"class=\"portlet_13_lb\"";
-								
+
 								%>
-									<tr>
-										<td <%=cssClass %> width="5px">
-											<i class="fa fa-circle blue sx10"></i>
-										</td>
-										<td <%=cssClassLb %> width="20px" align="center"><%=count %>.</td>
-										<td <%=cssClass %>>
-											<%=Validator.isNotNull(dossierFile.getDossierFileDate()) ? DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : StringPool.BLANK %>
-										</td>
-										<td <%=cssClassLb %> width="95px">
-											<liferay-ui:message key="dossier-file-no"/>
-										</td>
-										<td <%=cssClass %>>
-											<%=Validator.isNotNull(dossierFile.getDossierFileNo()) ? dossierFile.getDossierFileNo() : StringPool.BLANK %>
-										</td>
-										
-										
-										<td <%=cssClassLb %> width="95px">
-											<liferay-ui:message key="dossier-file-name"/>
-										</td>
-										
-										<td <%=cssClass %>>
-											<a class="blue" href="<%=fileURL%>" target="_blank">
-												<%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.BLANK  %>
-											</a>
-										</td>
-									</tr>
+									<aui:row cssClass="bottom-line pd_b20 pd_t20">
+										<aui:col width="50">
+											<aui:row>
+												<aui:col width="50">
+													<span class="span1">
+														<i class="fa fa-circle blue sx10"></i>
+													</span>
+													<span class="span2">
+														<%=count %>
+													</span>
+													<span class="span9">
+														<%=
+															Validator.isNotNull(dossierFile.getDossierFileDate()) ? 
+															DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
+															DateTimeUtil._EMPTY_DATE_TIME
+														%>
+														
+													</span>
+												</aui:col>
+												<aui:col width="50">
+													<span class="span4 bold">
+														<liferay-ui:message key="dossier-file-no"/>
+													</span>
+													<span class="span8">
+														<%=Validator.isNotNull(dossierFile.getDossierFileNo()) ? dossierFile.getDossierFileNo() : StringPool.DASH %>
+													</span>
+												</aui:col>
+											</aui:row>
+										</aui:col>
+										<aui:col width="50">
+											<span class="span3 bold">
+												<liferay-ui:message key="dossier-file-name"/>
+											</span>
+											<span class="span6">
+												<a class="blue" href="<%=fileURL%>" target="_blank">
+													<%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.BLANK  %>
+												</a>
+											</span>
+											<span class="span3">
+												
+											</span>
+										</aui:col>
+									</aui:row>
+									
 								<%
 								
 								count++;
 							}
 						}
 					}
-					%>
-				</table>
+				%>
 			</aui:row>
-			<%
-		}
-		%>
-		<aui:row>
-			<aui:col width="100" cssClass="portlet_13_line"/>
-		</aui:row>
-		</div>
+		</c:if>
+		
+	
 	</c:when>
 	<c:otherwise>
 		<div class="portlet-msg-info">

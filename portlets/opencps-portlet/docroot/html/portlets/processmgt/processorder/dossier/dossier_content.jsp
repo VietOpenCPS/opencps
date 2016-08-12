@@ -146,7 +146,7 @@
 												
 											</span>
 											<span class="opencps dossiermgt dossier-part-name">
-												<%=dossierPart.getPartName() + (dossierFile != null ?  " - " + dossierFile.getDossierFileNo():StringPool.BLANK) + DossierMgtUtil.getLoaiGiayToLabel(dossierFile.getDossierFileMark(), locale) %>
+												<%=dossierPart.getPartName() + (Validator.isNotNull(dossierFile) ?  " - " + dossierFile.getDossierFileNo():StringPool.BLANK) + DossierMgtUtil.getLoaiGiayToLabel((Validator.isNotNull(dossierFile) ? dossierFile.getDossierFileMark() : -1), locale) %>
 											</span>
 										</span>
 									

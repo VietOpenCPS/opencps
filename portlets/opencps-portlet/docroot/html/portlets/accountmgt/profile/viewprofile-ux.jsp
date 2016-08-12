@@ -178,10 +178,10 @@
 									
 									<aui:row>
 										<aui:col width="30">
-											<label><liferay-ui:message key="file-attach-url" /></label>
+											<label><liferay-ui:message key="file-attach-url-citizen" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=url %>"></a></div>
+											<div><a href="<%=url %>"><liferay-ui:message key="click-to-view-file"/></a></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -203,10 +203,10 @@
 									
 									<aui:row>
 										<aui:col width="30">
-											<label><liferay-ui:message key="business-id" /></label>
+											<label><liferay-ui:message key="en-name" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><%=business.getIdNumber() %></div>
+											<div><%=business.getEnName() %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -274,7 +274,7 @@
 											<label><liferay-ui:message key="file-attach-url" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=url %>"></a></div>
+											<div><a href="<%=url %>"><liferay-ui:message key="click-to-view-file"/></a></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>

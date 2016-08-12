@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -24,6 +23,7 @@
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@page import="java.util.List"%>
 <liferay-util:include page='<%= templatePath + "toolbar.jsp"%>' servletContext="<%=application %>" />
@@ -96,7 +96,7 @@
 				}
 				
 				if(levelName.equals(StringPool.BLANK) ) {
-					levelNameOutput = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), "under-level-3") ;
+					levelNameOutput = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), "have-not-config") ;
 				} else {
 					levelNameOutput = levelName;
 				}
@@ -105,6 +105,7 @@
 			
 			<liferay-util:buffer var="boundcol1">
 				<div class="row-fluid">
+				
 					<div class="span12"><%=service.getServiceName()%></div>
 				</div>
 			</liferay-util:buffer>
@@ -145,7 +146,7 @@
 				
 		</liferay-ui:search-container-row>
 			
-		<liferay-ui:search-iterator/>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
 	
 	</liferay-ui:search-container>
 </div>

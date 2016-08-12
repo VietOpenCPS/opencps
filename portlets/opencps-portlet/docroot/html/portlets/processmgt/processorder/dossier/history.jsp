@@ -157,6 +157,6 @@
 			<liferay-ui:search-container-column-jsp path="/html/portlets/processmgt/processorder/dossier/history-bound-data-col2.jsp" />
 	
 		</liferay-ui:search-container-row>
-		<liferay-ui:search-iterator/>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
 	</liferay-ui:search-container>
 </div>

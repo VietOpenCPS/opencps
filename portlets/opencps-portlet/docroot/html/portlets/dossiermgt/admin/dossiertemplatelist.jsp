@@ -133,6 +133,6 @@
 		%>
 	</liferay-ui:search-container-row>
 	
-	<liferay-ui:search-iterator/>
+	<liferay-ui:search-iterator type="opencs_page_iterator"/>
 </liferay-ui:search-container>
 </div>

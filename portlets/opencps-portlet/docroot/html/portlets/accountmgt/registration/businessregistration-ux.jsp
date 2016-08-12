@@ -293,7 +293,7 @@
 						dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
 						itemNames="businessType"
 						itemsEmptyOption="true"	
-						emptyOptionLabels="businessType"
+						emptyOptionLabels="business-type"
 						showLabel="false"
 					/>
 				</aui:row>
