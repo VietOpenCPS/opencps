@@ -1,121 +1,119 @@
-
 @media screen and (min-width: 760px) {
 	.opencps-theme.ux  .ocps-submit-online {
 		margin: auto;
-	    width: 790px;
-	    background-color: white;
-	    border-radius: 8px;
-	    -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-	    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-	    padding: 30px 0 30px;
+		width: 790px;
+		background-color: white;
+		border-radius: 8px;
+		-webkit-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
+		box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
+		padding: 30px 0 30px;
 	}
 	.opencps-theme.ux  .ocps-submit-online .row-fluid {
 		width: auto;
-	    padding-left: 25px;
-	    padding-right: 25px;
+		padding-left: 25px;
+		padding-right: 25px;
 	}
-	
 	.opencps-theme.ux  .ocps-submit-online .span4 {
-	    font-family: 'Roboto-Bold';
-	    font-weight: bold;
-	    font-size: 14px;
-	    width: 15%;
-	
+		font-family: 'Roboto-Bold';
+		font-weight: bold;
+		font-size: 14px;
+		width: 15%;
 	}
 	.opencps-theme.ux  .ocps-submit-online .span8 {
-	    width: 85%;
-	    margin-left: 0px;
-	    color: black;
-	    margin-bottom: 30px;
+		width: 85%;
+		margin-left: 0px;
+		color: black;
+		margin-bottom: 30px;
 	}
 	.opencps-theme.ux  .ocps-submit-online .span6 {
-	    border-top: 1px solid #e1e1e1;
-	    width: 100%;
-	    padding-top: 30px;
+		border-top: 1px solid #e1e1e1;
+		width: 100%;
+		padding-top: 30px;
 	}
-	.opencps-theme.ux  .ocps-submit-online .span6 .control-group label{
-	    font-family: 'Roboto-Bold';
-	    font-weight: bold;
-	    font-size: 14px;
-	    display: inline-block;
-	    width: 60%;
+	.opencps-theme.ux  .ocps-submit-online .span6 .control-group label {
+		font-family: 'Roboto-Bold';
+		font-weight: bold;
+		font-size: 14px;
+		display: inline-block;
+		width: 62%;
 	}
-	.opencps-theme.ux  .ocps-submit-online .span6 .control-group select{
-	    display: inline-block;
-	    display: inline-block;
-	    width: 39%;
-	    height: 41px;
+	.opencps-theme.ux  .ocps-submit-online .span6 .control-group select {
+		display: inline-block;
+		display: inline-block;
+		width: 28%;
+		height: 41px;
 	}
 }
 
 @media screen and (max-width: 760px) {
 	.opencps-theme.ux  .ocps-submit-online {
 		margin: auto;
-	    background-color: white;
-	    border-radius: 8px;
-	    -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-	    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-	    padding: 30px 0 30px;
+		background-color: white;
+		border-radius: 8px;
+		-webkit-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
+		box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
+		padding: 30px 0 30px;
 	}
 	.opencps-theme.ux  .ocps-submit-online .row-fluid {
 		width: auto;
-	    padding-left: 25px;
-	    padding-right: 25px;
+		padding-left: 25px;
+		padding-right: 25px;
 	}
-	
 	.opencps-theme.ux  .ocps-submit-online .span4 {
-	    font-family: 'Roboto-Bold';
-	    font-weight: bold;
-	    font-size: 14px;
-	
+		font-family: 'Roboto-Bold';
+		font-weight: bold;
+		font-size: 14px;
 	}
 	.opencps-theme.ux  .ocps-submit-online .span8 {
-	    margin-left: 0px;
-	    color: black;
-	    margin-bottom: 30px;
+		margin-left: 0px;
+		color: black;
+		margin-bottom: 30px;
 	}
 	.opencps-theme.ux  .ocps-submit-online .span6 {
-	    border-top: 1px solid #e1e1e1;
-	    width: 100%;
-	    padding-top: 30px;
+		border-top: 1px solid #e1e1e1;
+		width: 100%;
+		padding-top: 30px;
 	}
-	.opencps-theme.ux  .ocps-submit-online .span6 .control-group label{
-	    font-family: 'Roboto-Bold';
-	    font-weight: bold;
-	    font-size: 14px;
-	    display: inline-block;
+	.opencps-theme.ux  .ocps-submit-online .span6 .control-group label {
+		font-family: 'Roboto-Bold';
+		font-weight: bold;
+		font-size: 14px;
+		display: inline-block;
 	}
-	.opencps-theme.ux  .ocps-submit-online .span6 .control-group select{
-	    display: inline-block;
-	    height: 41px;
-	    width: 100%;
-	    font-size: 14px;
+	.opencps-theme.ux  .ocps-submit-online .span6 .control-group select {
+		display: inline-block;
+		height: 41px;
+		width: 100%;
+		font-size: 14px;
 	}
 }
 
-.opencps-theme.ux .ocps-submit-online .serice-des{ 
-    margin-top: 20px;
-    font-family: 'Roboto-Bold';
-    font-weight: bold;
-    font-size: 14px;
-    margin-bottom: 10px;
+.opencps-theme.ux .ocps-submit-online .serice-des {
+	margin-top: 20px;
+	font-family: 'Roboto-Bold';
+	font-weight: bold;
+	font-size: 14px;
+	margin-bottom: 10px;
 }
-.opencps-theme.ux .ocps-submit-online .btn-submit-online{
+
+.opencps-theme.ux .ocps-submit-online .btn-submit-online {
 	text-align: center;
-    margin-top: 30px;
+	margin-top: 30px;
 }
-.opencps-theme.ux .ocps-submit-online .btn-submit-online button{
-    border-radius: 20px;
-    text-transform: uppercase;
-    font-family: 'Roboto-Medium';
-    border: 0;
-    padding: 10px;
-    margin: 0 auto;
-    width: 300px;
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 30px;
+
+.opencps-theme.ux .ocps-submit-online .btn-submit-online button {
+	border-radius: 20px;
+	text-transform: uppercase;
+	font-family: 'Roboto-Medium';
+	border: 0;
+	padding: 10px;
+	margin: 0 auto;
+	width: 300px;
+	display: block;
+	margin-top: 20px;
+	margin-bottom: 30px;
 }
-.opencps-theme.ux .submit-headers .header-back-to{
+
+.opencps-theme.ux .submit-headers .header-back-to {
 	position: absolute;
 }

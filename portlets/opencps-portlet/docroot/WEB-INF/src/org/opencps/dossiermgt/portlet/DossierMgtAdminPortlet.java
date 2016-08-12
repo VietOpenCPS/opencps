@@ -384,7 +384,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 			}
 			
 			if(Validator.isNotNull(backURL)) {
-				actionResponse.sendRedirect(backURL);
+				actionResponse.sendRedirect(backURL + "#_12_WAR_opencpsportlet_tab=_12_WAR_opencpsportlet_dossierpartlist");
 			}
 		}
 		catch (Exception e) {

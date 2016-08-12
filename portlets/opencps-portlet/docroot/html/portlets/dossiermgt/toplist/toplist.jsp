@@ -162,6 +162,6 @@
 					name="date-for-receiving" value="<%=DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>"
 				/> --%>
 			</liferay-ui:search-container-row>
-			<liferay-ui:search-iterator/>
+			<liferay-ui:search-iterator type="opencs_page_iterator"/>
 	</liferay-ui:search-container>
 </div>

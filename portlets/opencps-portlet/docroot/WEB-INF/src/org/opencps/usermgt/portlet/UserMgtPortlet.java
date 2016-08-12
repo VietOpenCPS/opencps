@@ -267,7 +267,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			if (Validator
 			    .isNotNull(returnURL)) {
 				actionResponse
-				    .sendRedirect(returnURL);
+				    .sendRedirect(returnURL + "#_2_WAR_opencpsportlet_tab=_2_WAR_opencpsportlet_jobpos");
 			}
 
 		}
@@ -720,7 +720,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			if (Validator
 			    .isNotNull(redirectURL)) {
 				actionResponse
-				    .sendRedirect(redirectURL);
+				    .sendRedirect(redirectURL + "#_2_WAR_opencpsportlet_tab=_2_WAR_opencpsportlet_jobpos");
 			}
 		}
 		catch (Exception e) {

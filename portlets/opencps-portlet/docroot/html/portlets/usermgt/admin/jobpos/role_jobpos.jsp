@@ -120,7 +120,7 @@
 					%>
 				</liferay-ui:search-container-row>
 				
-				<liferay-ui:search-iterator/>
+				<liferay-ui:search-iterator type="opencs_page_iterator"/>
 			</liferay-ui:search-container>
 			
 			<%-- <aui:input 
@@ -208,7 +208,7 @@
 					%>
 					
 				</liferay-ui:search-container-row>
-			<liferay-ui:search-iterator/>
+			<liferay-ui:search-iterator type="opencs_page_iterator"/>
 		</liferay-ui:search-container>
 	</c:if>
 	<%
