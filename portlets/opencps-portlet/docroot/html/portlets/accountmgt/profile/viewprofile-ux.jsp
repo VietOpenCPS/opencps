@@ -129,6 +129,18 @@
 									
 									<aui:row>
 										<aui:col width="30">
+											<label><liferay-ui:message key="email" /></label>
+										</aui:col>
+										<aui:col width="50">
+											<div><%=citizen.getEmail() %></div>
+										</aui:col>
+										<aui:col width="20">
+											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
+										</aui:col>
+									</aui:row>
+									
+									<aui:row>
+										<aui:col width="30">
 											<label><liferay-ui:message key="pass-words" /></label>
 										</aui:col>
 										<aui:col width="50">

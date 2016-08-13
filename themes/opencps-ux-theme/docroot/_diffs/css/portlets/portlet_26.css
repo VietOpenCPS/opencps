@@ -116,4 +116,5 @@
 
 .opencps-theme.ux .submit-headers .header-back-to {
 	position: absolute;
+	text-transform: uppercase;
 }
