@@ -10,7 +10,9 @@ build.properties
 build.khoavd.properties
 build.trungnt.properties
 build.dunglt.properties
+build.Tomorow.properties
 build.xml
+build.*.properties
 ci.properties
 common.bnd
 copyright.txt
@@ -271,3 +273,4 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/persistence
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/model/impl/ApiServiceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/model/impl/
 themes/opencps-ux-theme/docroot/WEB-INF/liferay-look-and-feel.xml
+portlets/opencps-portlet/ivy.xml.MD5
