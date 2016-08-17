@@ -54,9 +54,14 @@
 			>
 			<liferay-ui:search-container-results>
 				<%
-					dossiers = DossierLocalServiceUtil.getDossierByStatus(scopeGroupId,
-						status, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-					totalCount = DossierLocalServiceUtil.countDossierByStatus(scopeGroupId, status);
+					dossiers = DossierLocalServiceUtil
+						.getDossierByG_DS_U
+							(scopeGroupId, status, user.getUserId()
+								, searchContainer.getStart(), searchContainer.getEnd());
+					
+					totalCount = DossierLocalServiceUtil
+									.countDossierByG_DS_U
+									(scopeGroupId, status, user.getUserId());		
 					
 					results = dossiers;
 					total = totalCount;

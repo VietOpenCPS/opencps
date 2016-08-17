@@ -18,6 +18,9 @@
 @import url(header.css);
 @import url(nav_menu.css);
 
+
+
+
 @import url(portlets/portlet_popup.css);
 @import url(portlets/portlet_hung_custom.css);
 
@@ -26,7 +29,6 @@
 @import url(portlets/portlet_26.css);
 @import url(portlets/portlet_11.css);
 @import url(portlets/portlet_10.css);
-@import url(portlets/portlet_18.css);
 @import url(portlets/portlet_13_fileinfo.css);
 @import url(custom_frame_1.css);
 @import url(util.css);

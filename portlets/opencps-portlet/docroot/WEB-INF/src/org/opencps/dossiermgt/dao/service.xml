@@ -258,6 +258,11 @@
             <finder-column name="groupId"></finder-column>
             <finder-column name="dossierStatus"></finder-column>
         </finder>
+        <finder name="G_DS_U" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="dossierStatus"></finder-column>
+            <finder-column name="userId"></finder-column>
+        </finder>
         <finder name="ReceptionNo" return-type="Dossier">
             <finder-column name="receptionNo"></finder-column>
         </finder>

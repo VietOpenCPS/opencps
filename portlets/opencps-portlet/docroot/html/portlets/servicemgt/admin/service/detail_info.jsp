@@ -174,7 +174,7 @@
 	}
 	
 	function <portlet:namespace />service_records() {
-		return "<%= Validator.isNotNull(serviceInfo) ? UnicodeFormatter.toString(serviceInfo.getServiceResults()) : StringPool.BLANK %>";
+		return "<%= Validator.isNotNull(serviceInfo) ? UnicodeFormatter.toString(serviceInfo.getServiceRecords()) : StringPool.BLANK %>";
 	}
 
 </aui:script>

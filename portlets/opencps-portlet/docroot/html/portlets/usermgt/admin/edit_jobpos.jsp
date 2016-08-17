@@ -56,6 +56,7 @@
 	}catch(Exception e){
 		
 	}
+	
 %>
 
 <liferay-ui:header
@@ -78,7 +79,6 @@
 
 <portlet:actionURL var="updateJobPosURL" name="updateJobPoses">
 	<portlet:param name="workingUnitId" value="<%=String.valueOf(workingUnitId) %>"/>
-	<portlet:param name="redirectURL" value="<%=redirectURL %>"/>
 	<portlet:param name="returnURL" value="<%=returnURL %>"/>
 </portlet:actionURL>
 
