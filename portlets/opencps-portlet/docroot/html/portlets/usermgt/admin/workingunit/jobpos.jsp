@@ -58,7 +58,7 @@
 	<aui:button 
 	name="add-jobpos"
 	value="add-jobpos"
-	onClick="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + updateJobPosURL +\"');\" %>"
+	onClick="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopupJobPoses('\" + updateJobPosURL +\"');\" %>"
 />
 </c:if>
 
@@ -87,7 +87,7 @@
 
 
 <aui:script>
-	Liferay.provide(window, '<portlet:namespace />showPopup', function(url){
+	Liferay.provide(window, '<portlet:namespace />showPopupJobPoses', function(url){
 		Liferay.Util.openWindow({
 			dialog : {
 				centered : true,
@@ -95,7 +95,7 @@
 				modal : true,
 				width : 11000
 			},
-			id : '<portlet:namespace/>dialog',
+			id : '<portlet:namespace/>dialogJobPoses',
 			title : '',
 			uri : url
 		});
@@ -109,7 +109,9 @@
 		// Closing the dialog
 		var dialog = Liferay.Util.Window.getById(dialogId);
 		dialog.destroy();
-		
-		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>');
+		var data = {
+			'conserveHash': true
+		};
+		 Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>', data); 
 	}, [ 'liferay-util-window','aui-dialog','aui-dialog-iframe' ]);
 </aui:script>

@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -134,6 +135,15 @@
 			dossierIndexs = new int[0];
 		}
 	}
+	
+	long dictStatusId = 0;
+	
+	DictItem itemStatus = null;
+	
+	if(step != null) {
+		itemStatus = PortletUtil.getDictItem("DOSSIER_STATUS", step.getDossierStatus(), scopeGroupId);
+		dictStatusId = itemStatus.getDictItemId();
+	}
 %>
 
 <portlet:actionURL name="updateProcessStep" var="updateProcessStepURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString()%>"/>
@@ -168,7 +178,7 @@
 	</aui:row>
 	<aui:row>
 		<aui:col width="70">
-			<aui:select name="dossierStatus" label="" inlineField="<%=true %>" inlineLabel="left">
+			<%-- <aui:select name="dossierStatus" label="" inlineField="<%=true %>" inlineLabel="left">
 				<aui:option value="<%=StringPool.BLANK %>"><liferay-ui:message key="all"/></aui:option>
 				<%
 					for(String status : PortletUtil.getDossierStatus()){
@@ -177,7 +187,18 @@
 						<%
 					}
 				%>
-			</aui:select>
+			</aui:select> --%>
+			
+			<datamgt:ddr 
+				depthLevel="1" 
+				dictCollectionCode="DOSSIER_STATUS" 
+				showLabel="<%=false%>"
+				emptyOptionLabels="dossier-status"
+				itemsEmptyOption="true"
+				itemNames="dossierStatus"
+				selectedItems="<%=String.valueOf(dictStatusId)%>"
+				optionValueType="code"
+			/>
 			
 		</aui:col>
 		<aui:col width="30">

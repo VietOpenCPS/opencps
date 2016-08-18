@@ -202,3 +202,13 @@
 	transform: translateX(-51%);
 	width: 62%;
 }
+/* custom vtduy */
+.opencps-theme.ux .changeDefErr{
+	border : 1px solid #b50303;
+	border-radius : 5px;
+	height: 41px;
+	margin-bottom: 20px;
+}
+.opencps-theme.ux .displayDefErr{
+	display: block!important;
+}

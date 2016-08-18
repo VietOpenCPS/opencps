@@ -55,6 +55,7 @@ public class MessageKeys {
 	public static final String ACCOUNT_CITIZEN_DELETE_ERROR = "account.citizen.delete.error";
 	public static final String ACCOUNT_CITIZEN_DELETE_SUCCESS = "account.citizen.delete.success";
 	public static final String ACCOUNT_BUSINESS_DELETE_SUCCESS = "account.business.delete.success";
+	public static final String ACCOUNT_UPDATE_CUCCESS = "account.update.cuccsess";
 	
 	public static final String NO_ACCOUNT_STATUS_FOUND = "no.account.status.found";
 	

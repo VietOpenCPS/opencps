@@ -137,6 +137,11 @@
 		message="<%= OutOfSizeFileUploadException.class.getName() %>" 
 	/>
 
+	<liferay-ui:success 
+		key="<%=MessageKeys.ACCOUNT_UPDATE_CUCCESS %>" 
+		message="<%=MessageKeys.ACCOUNT_UPDATE_CUCCESS %>"
+	/>
+	
 	<portlet:actionURL var="updateBusinessURL" name="updateBusiness">
 		<portlet:param 
 			name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 

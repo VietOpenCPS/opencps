@@ -44,9 +44,8 @@
 		<portlet:param name="redirectURL" value="<%=currentURL%>" />
 	</portlet:renderURL>
 	<c:if test="<%=JobPosPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
-		<liferay-ui:icon cssClass="search-container-action fa edit" image="edit" message="edit"
-		url="#" 
-		onClick="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + updateJobPos +\"');\" %>" />
+		<aui:button value="edit" onClick="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + updateJobPos +\"');\" %>"></aui:button>
+	
 	</c:if>
 
 	<portlet:actionURL var="deleteJobPosURL" name="deleteJobPos">

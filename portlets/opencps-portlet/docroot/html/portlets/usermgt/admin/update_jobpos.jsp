@@ -85,16 +85,19 @@
 <aui:form name="fm2" 
 	method="post" 
 	action="<%=editJobPosURL.toString() %>">
-	<liferay-ui:form-navigator 
-		backURL="<%= redirectURL %>"
-		categoryNames= "<%= UserMgtUtil._JOBPOS_CATEGORY_NAMES %>"	
-		categorySections="<%=updateCategorySections %>" 
-		htmlBottom="<%= htmlBot %>"
-		htmlTop="<%= htmlTop %>"
-		jspPath='<%=templatePath + "jobpos/" %>'
-		showButtons="false"
-		>	
-	</liferay-ui:form-navigator>
+	<div class="opencps-form-navigator-container">
+		<liferay-ui:form-navigator 
+			backURL="<%= redirectURL %>"
+			categoryNames= "<%= UserMgtUtil._JOBPOS_CATEGORY_NAMES %>"	
+			categorySections="<%=updateCategorySections %>" 
+			htmlBottom="<%= htmlBot %>"
+			htmlTop="<%= htmlTop %>"
+			jspPath='<%=templatePath + "jobpos/" %>'
+			showButtons="false"
+			displayStyle="left-navigator"
+			>	
+		</liferay-ui:form-navigator>
+	</div>
 	<aui:input name="<%=JobPosDisplayTerms.ID_JOBPOS %>" 
 		type="hidden" value="<%=String.valueOf(jobPosId) %>"/>
 		
@@ -113,7 +116,9 @@
 		
 		if(btnChoose) {
 			btnChoose.on('click',function(){
+				//make a confirm box
 				var r = confirm(message);
+				//check confirm
 				if(r == true) {
 					<portlet:namespace/>submitItemForm();
 				} else {

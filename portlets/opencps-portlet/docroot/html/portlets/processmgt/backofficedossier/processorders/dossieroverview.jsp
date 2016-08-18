@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.servicemgt.NoSuchServiceInfoException"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
@@ -146,39 +147,7 @@
 						<liferay-ui:message key="dossier-status"/>
 					</td>
 					<td class="col-right">
-						<% 
-							String dossierStatusText = "";
-							switch (dossier.getDossierStatus()) {
-							case PortletConstants.DOSSIER_STATUS_NEW:
-								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-new");
-								break;
-							case PortletConstants.DOSSIER_STATUS_RECEIVING:
-								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-receiving");
-								break;
-							case PortletConstants.DOSSIER_STATUS_WAITING:
-								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-waiting");
-								break;
-							case PortletConstants.DOSSIER_STATUS_PAYING:
-								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-paying");
-								break;
-							case PortletConstants.DOSSIER_STATUS_PROCESSING:
-								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-processing");
-								break;
-							case PortletConstants.DOSSIER_STATUS_DONE:
-								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-done");
-								break;
-							case PortletConstants.DOSSIER_STATUS_SYSTEM:
-								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-system");
-								break;
-							case PortletConstants.DOSSIER_STATUS_ERROR:
-								dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-error");
-								break;
-							default:
-								dossierStatusText = "";
-								break;
-							}						
-						%>
-						<%= dossierStatusText %>
+						<%= PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
 					</td>
 				</tr>	
 				<tr>

@@ -160,27 +160,18 @@
 									/>
 								</aui:col>
 								<aui:col width="30" cssClass="search-col">
-									<aui:select name="dossierStatus" 
-										label="<%=StringPool.BLANK %>" 
-										inlineField="<%=true %>" 
-										inlineLabel="left" 
+									
+									<datamgt:ddr 
+										depthLevel="1" 
+										dictCollectionCode="DOSSIER_STATUS" 
+										showLabel="<%=false%>"
+										emptyOptionLabels="dossier-status"
+										itemsEmptyOption="true"
+										itemNames="dossierStatus"
+										optionValueType="code"
 										cssClass="search-input select-box"
-									>
-										<aui:option><liferay-ui:message key="dossier-status"/></aui:option>
-										<aui:option value="<%=StringPool.BLANK %>" selected="<%=dossierStatus.equals(StringPool.BLANK)%>"><liferay-ui:message key="all"/></aui:option>
-											<%
-												for(String status : PortletUtil.getDossierStatus()){
-													%>
-														<aui:option 
-															value="<%= status%>"
-															selected="<%=dossierStatus.equals(status)%>"
-														>
-															<%=PortletUtil.getDossierStatusLabel(status, locale) %>
-														</aui:option>
-													<%
-												}
-											%>
-									</aui:select>
+									/>
+									
 								</aui:col>
 								<aui:col width="30" cssClass="search-col">
 									<liferay-ui:input-search 
