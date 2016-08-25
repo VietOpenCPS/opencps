@@ -63,7 +63,7 @@
 			if(isChildDossierPart && fileGroupId > 0){
 				version = DossierFileLocalServiceUtil.countDossierFile(dossierId, childDossierPartId, fileGroupId);
 			}else{
-				if(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER){
+				if(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER || partType==PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT){
 					version = 1;
 				}else{
 					version = DossierFileLocalServiceUtil.countDossierFile(dossierId, dossierPartId);
@@ -190,7 +190,7 @@
 				</td>
 			</c:when>
 			
-			<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && level == 0 %>">
+			<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER || partType==PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) && level == 0 %>">
 				<td width="80%" align="right">
 					<c:if test="<%=isEditDossier %>">
 						<aui:a 
@@ -216,7 +216,7 @@
 				</td>
 			</c:when>
 			
-			<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && level > 0 %>">
+			<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER || partType==PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) && level > 0 %>">
 				<td width="80" align="right">
 					<c:choose>
 						<c:when test="<%=fileEntryId > 0 %>">

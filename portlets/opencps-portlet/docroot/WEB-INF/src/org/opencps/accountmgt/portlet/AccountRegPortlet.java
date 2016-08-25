@@ -62,6 +62,7 @@ import org.opencps.util.WebKeys;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -256,6 +257,10 @@ public class AccountRegPortlet extends MVCPortlet {
 					    .updateStatus(business.getBusinessId(), serviceContext
 					        .getUserId(), 2);
 					}
+					SessionMessages.add(
+					    actionRequest,
+					    MessageKeys.ACCOUNT_UPDATE_CUCCESS);
+					
 				}
 			}
 			else {
@@ -473,7 +478,9 @@ public class AccountRegPortlet extends MVCPortlet {
 					        .getUserId(), 2);
 					}
 				}
-
+				SessionMessages.add(
+				    actionRequest,
+				    MessageKeys.ACCOUNT_UPDATE_CUCCESS);
 			}
 			else {
 
@@ -586,7 +593,6 @@ public class AccountRegPortlet extends MVCPortlet {
 			throw new OutOfSizeFileUploadException();
 		}
 		else if(Validator.isNotNull(sourceFileName) && !isFileType(sourceFileName)) {
-			System.out.println("go  hereeeeeeeee");
 			throw new FileTypeFailException();
 		}
 

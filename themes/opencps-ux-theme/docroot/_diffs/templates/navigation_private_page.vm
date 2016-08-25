@@ -44,7 +44,11 @@
     </ul>
     
     <span class="account-info">
-		<span class="account-name">#language ("welcome-key") $user_name</span>
+    	<span class="account-name">
+    		<img id="img1" alt="image user" src="../images/custom/welcome_new.png"></img>
+    		<img id="img2" alt="image user" src="../images/custom/welcome_h.png"></img>
+			<span class="tooltiptext">#language ("welcome-key") $user_name</span>
+		</span>
 		<span class="logout"><a href="$sign_out_url" class="btn-dn">#language ("logout-key")</a></span>
 	</span>
 </nav>

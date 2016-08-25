@@ -98,15 +98,59 @@
 
 .opencps-theme.ux .nav-container nav.top-menu .account-info {
 	display: block;
+	width: 188px;
 }
 
-.opencps-theme.ux .nav-container .account-info .account-name,
+/* .opencps-theme.ux .nav-container .account-info .account-name, */
 	.opencps-theme.ux .nav-container .account-info .logout {
 	color: #fff;
 	display: inline-block;
 	height: 50px;
 	line-height: 50px;
 	padding: 0 15px 0 0;
+}
+
+.opencps-theme.ux .nav-container .account-info .account-name{
+	color: #fff;
+	display: inline-block;
+	line-height: 35px;
+	padding: 0 15px 0 0;
+	margin-right:10px;
+}
+
+.opencps-theme.ux .nav-container .account-info .account-name:hover img#img2{
+	visibility: visible;
+}
+
+.opencps-theme.ux .nav-container .account-info .account-name img#img2{
+	visibility: hidden;
+}
+
+.opencps-theme.ux .nav-container .account-info .account-name .tooltiptext{
+	visibility: hidden;
+	background-color: #1b5de4;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 6px;
+	position: absolute;
+	z-index: 1;
+	margin: 31px 0 0 -115px;
+	line-height: 14px;
+	
+}
+
+.opencps-theme.ux .nav-container .account-info .account-name:hover .tooltiptext{
+	visibility: visible;
+}
+
+.opencps-theme.ux .nav-container .account-info .account-name img {
+    margin-top: 2px;
+}
+
+.opencps-theme.ux .nav-container .account-info .account-name img#img2 {
+    visibility: hidden;
+	margin: 3px 0 0 -22px;	
 }
 
 .opencps-theme.ux .nav-container .account-info .logout a {

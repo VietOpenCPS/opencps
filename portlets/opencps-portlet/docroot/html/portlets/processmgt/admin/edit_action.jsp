@@ -57,9 +57,24 @@
 		processWorkflowId = workflow.getProcessWorkflowId();
 	}
 	
-
+	List<DossierPart> dossiersResults = new ArrayList<DossierPart>();
+	
 	List<DossierPart> dossiersResult = ProcessUtils.getDossierParts(dossierTemplateId, PortletConstants.DOSSIER_PART_TYPE_RESULT);
-
+	
+	List<DossierPart> dossiersResultMulti = ProcessUtils.getDossierParts(dossierTemplateId, PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT);
+	
+	System.out.println("######### partType=" + PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT + " dossierTemplateId="+dossierTemplateId + "###");
+	
+	if(dossiersResult!=null && !dossiersResult.isEmpty()){
+		System.out.println("######### dossiersResult.size=" + dossiersResult.size() + "###");
+		dossiersResults.addAll(dossiersResult);
+	}
+	
+	if(dossiersResultMulti!=null && !dossiersResultMulti.isEmpty()){
+		System.out.println("######### dossiersResultMulti.size=" + dossiersResultMulti.size() + "###");
+		dossiersResults.addAll(dossiersResultMulti);
+	}
+	
 	List<ProcessStep> stepAll = ProcessStepLocalServiceUtil.getStepByProcess(serviceProcessId);
 	
 	List<WorkflowOutput> workflowOutputs = Collections.emptyList();
@@ -235,7 +250,7 @@
 					
 					<aui:select id='<%= "dossierPartId" + outputIndex %>' inlineField="<%= true %>" name='<%= "dossierPartId" + outputIndex %>' label="" showEmptyOption="true">
 						<%							
-							for (DossierPart dossier : dossiersResult) {
+							for (DossierPart dossier : dossiersResults) {
 						%>
 								<aui:option selected="<%=  Validator.equals(output.getDossierPartId(), dossier.getDossierpartId()) %>" value="<%= dossier.getDossierpartId() %>"><%= dossier.getPartName() %></aui:option>
 						<%
