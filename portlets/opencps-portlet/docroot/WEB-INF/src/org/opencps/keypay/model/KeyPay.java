@@ -246,6 +246,25 @@ public class KeyPay {
      *
      * @return
      */
+    public String queryBillStatusRESTful_JSON(String merchant_trans_id, String good_code,
+    		String trans_id, String merchant_code, String merchant_secure_key) {
+        String sc_querry = "";
+        try {
+            MD5 md5 = new MD5();
+            sc_querry = md5.getMD5Hash(merchant_trans_id + good_code + trans_id
+                    + merchant_code + merchant_secure_key);
+        } catch (Exception e) {
+        }
+        KPJsonRest kpJson = new KPJsonRest();
+        return kpJson.QuerryBillStatus(merchant_trans_id, good_code,
+                trans_id, merchant_code, sc_querry);
+    }
+
+    /**
+     * QueryBillStatus - Hàm kiểm tra trạng thái giao dịch - RESTful (JSON)
+     *
+     * @return
+     */
     public String queryBillStatusRESTful_JSON() {
         String sc_querry = "";
         try {
@@ -259,7 +278,7 @@ public class KeyPay {
         return kpJson.QuerryBillStatus(merchant_trans_id, good_code,
                 trans_id, merchant_code, sc_querry);
     }
-
+    
     /**
      * Hàm mao trạng thái trả về từ KeyPay
      *

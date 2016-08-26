@@ -142,6 +142,7 @@ public class KeypayUrlGenerator {
 				PaymentFileLocalServiceUtil.updatePaymentFile(
 				    paymentFileId, keypayURL, GetterUtil.getLong(merchant_trans_id,0),
 				    good_code, paymentConfig.getKeypayMerchantCode());
+				
             }
             catch (Exception e) {
 	            // TODO: handle exception

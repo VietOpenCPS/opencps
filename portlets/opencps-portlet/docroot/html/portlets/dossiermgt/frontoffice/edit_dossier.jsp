@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -45,6 +44,10 @@
 <%@page import="org.opencps.accountmgt.model.Business"%>
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -67,6 +70,18 @@
 	String[][] categorySections = {dossierSections};
 	
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
+	
+	ProcessOrder processOrder = null;
+	ProcessWorkflow workFlow = null;
+	try {
+		if(Validator.isNotNull(dossier)) {
+			processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossier.getDossierId(), 0);
+			workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), "Thông báo hủy hồ sơ");
+		}
+	}
+	catch (Exception e) {
+		
+	}
 %>
 
 <c:choose>
@@ -92,7 +107,96 @@
 		</liferay-util:buffer>
 		
 		<liferay-util:buffer var="htmlBottom">
-		
+			
+		 	<c:choose>
+		 		<c:when test="<%=Validator.isNotNull(dossier)%>">
+					<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">	
+						<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) || 
+				 			dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING)%>">
+			 			
+					 		<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
+						 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
+									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
+									<portlet:param name="backURL" value="<%=currentURL %>"/>
+								</portlet:actionURL> 
+						 		<liferay-ui:icon
+						 			cssClass="search-container-action fa forward"
+						 			image="forward"
+						 			message="send" 
+						 			url="<%=updateDossierStatusURL.toString() %>" 
+						 		/>
+					 		</c:if>
+					 		
+					 		<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING) %>">
+						 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
+									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_WAITING) %>"/>
+									<portlet:param name="backURL" value="<%=currentURL %>"/>
+								</portlet:actionURL> 
+						 		<liferay-ui:icon
+						 			cssClass="search-container-action fa forward"
+						 			image="reply"
+						 			message="resend" 
+						 			url="<%=updateDossierStatusURL.toString() %>" 
+						 		/> 
+					 		</c:if>
+					 	</c:if>
+					 	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) && dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
+					 		<portlet:actionURL var="deleteDossierURL" name="deleteDossier" >
+								<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+								<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+								<portlet:param name="dossierStatus" value="<%=dossier.getDossierStatus() %>"/>
+							</portlet:actionURL> 
+							<liferay-ui:icon-delete 
+								image="delete"
+								cssClass="search-container-action fa delete"
+								confirmation="are-you-sure-delete-entry" 
+								message="delete"  
+								url="<%=deleteDossierURL.toString() %>" 
+							/>
+					 	</c:if>
+			 		</c:if>
+			  		<c:if test="<%= (dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_PROCESSING) && workFlow != null) %>">
+					 		<portlet:actionURL var="cancelDossierURL" name="cancelDossier" >
+								<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+								<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+							</portlet:actionURL> 
+							<liferay-ui:icon-delete 
+								image="undo"
+								cssClass="search-container-action fa undo"
+								confirmation="are-you-sure-cancel-entry" 
+								message="cancel"  
+								url="<%=cancelDossierURL.toString() %>" 
+							/>
+					</c:if>  		
+			  		
+		 		</c:when>		
+		 	</c:choose>
+		 	
+		 	<%
+		 	 boolean checlShowBtnSubmitAndCacel = true;
+		 	 if(cmd.equals(Constants.VIEW)) {
+		 		checlShowBtnSubmitAndCacel = false;
+		 	 }
+		 	 
+		 	%>
+		 	<c:if test= "<%=checlShowBtnSubmitAndCacel %>">
+			 	<div>	
+			 		<aui:button 
+			 			type="submit" 
+			 			cssClass="button-add" 
+			 			icon="icon-plus"
+			 			value="edit-dossier-btn"
+			 		/>	
+			 		<%-- <aui:button 
+	 					href="<%=backURLFromList.toString() %>" 
+	 					cssClass="button-del" 
+	 					value="canceled-dossier-btn"
+			 			icon="icon-remove"
+			 		/> --%>
+			 	</div>
+		 	</c:if>
 		</liferay-util:buffer>
 	
 		<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
@@ -201,10 +305,10 @@
 					htmlBottom="<%= htmlBottom %>"
 					htmlTop="<%= htmlTop %>"
 					jspPath='<%=templatePath + "dossier/" %>'
-					showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && dossier.getDossierStatus()  != PortletConstants.DOSSIER_STATUS_NEW)) ? false : true %>"
+					showButtons="<%=false %>"
 				/>
 			</div>
-		</aui:form>
+		</aui:form>	
 	</c:when>
 	
 	<c:otherwise>

@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -66,6 +65,8 @@
 	
 	int totalCount = 0;
 	
+	String searchKeyword = ParamUtil.getString(request, "keywords1");
+	
 	iteratorURL.setParameter("mvcPath", templatePath + "citizenlist.jsp");
 	iteratorURL.setParameter(CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS, String.valueOf(accountStatus));
 	
@@ -112,19 +113,12 @@
 			<%
 				CitizenSearchTerm searchTerms = (CitizenSearchTerm) searchContainer.getSearchTerms();
 				
-				if(Validator.isNotNull(searchTerms.getKeywords())) {
-					citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
-				} else if(accountStatus!=0) {
-					citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), accountStatus);
-				} else if(Validator.isNotNull(searchTerms.getKeywords()) && accountStatus!=0)  {
-					citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
-				} else {
-					citizens = CitizenLocalServiceUtil.getCitizens(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-				}
-				
-				totalCount = CitizenLocalServiceUtil.countAll();
+				citizens = CitizenLocalServiceUtil.searchCitizen(scopeGroupId, searchKeyword, accountStatus, searchContainer.getStart(), searchContainer.getEnd());
+				totalCount = CitizenLocalServiceUtil.countCitizen(scopeGroupId, searchKeyword, accountStatus);
+				 
 				total = totalCount;
 				results = citizens;
+				
 				pageContext.setAttribute("results", results);
 				pageContext.setAttribute("total", total);
 			%>

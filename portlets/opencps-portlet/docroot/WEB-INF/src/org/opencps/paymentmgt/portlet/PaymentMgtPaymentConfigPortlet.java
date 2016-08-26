@@ -305,7 +305,7 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 		}
 		catch (SystemException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_log.error(e);
 		}
 
 		PrintWriter writer = resourceResponse.getWriter();

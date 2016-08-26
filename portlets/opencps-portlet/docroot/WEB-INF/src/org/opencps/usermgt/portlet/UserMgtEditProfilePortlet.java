@@ -251,7 +251,7 @@ public class UserMgtEditProfilePortlet extends MVCPortlet {
 						serviceContext.getCompanyId(), "emailAddress",
 						userEmail, oldPassWord);
 			} catch (Exception e) {
-				// Nothing todo
+				_log.error(e);
 			}
 
 			if (userId == 0 || userId != serviceContext.getUserId()) {
@@ -270,7 +270,7 @@ public class UserMgtEditProfilePortlet extends MVCPortlet {
 			employee = EmployeeLocalServiceUtil.getEmployeeByEmail(
 					serviceContext.getScopeGroupId(), email);
 		} catch (Exception e) {
-			// Nothing todo
+			_log.error(e);
 		}
 
 		if (employee != null && employee.getEmployeeId() != employeeId) {

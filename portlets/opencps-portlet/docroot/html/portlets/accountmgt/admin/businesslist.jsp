@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -61,12 +60,17 @@
 
 	int countLocked = BusinessLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_LOCKED);
 	
+	String businessDomain = ParamUtil.getString(request, BusinessDisplayTerms.BUSINESS_DOMAIN);
+	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS, String.valueOf(accountStatus));
-	
+	iteratorURL.setParameter("tabs1", AccountMgtUtil.TOP_TABS_BUSINESS);
+	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_DOMAIN, businessDomain);
 	List<Business> businesses = new ArrayList<Business>();
 	int totalCount = 0;
+	
+	System.out.print("Domain ..." + businessDomain);
 	
 %>
 
@@ -108,23 +112,21 @@
 		
 		<liferay-ui:search-container-results>
 			<%
+				
 				BusinessSearchTerm searchTerms = (BusinessSearchTerm) searchContainer.getSearchTerms();
+			
+				businesses = BusinessLocalServiceUtil.searchBusiness(scopeGroupId, 
+					searchTerms.getKeywords() , accountStatus, businessDomain,
+					searchContainer.getStart(), searchContainer.getEnd());
 				
-				if(Validator.isNotNull(searchTerms.getKeywords())) {
-					businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
-				} else if(accountStatus!=0) {
-					businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), accountStatus);
-				} else if(Validator.isNotNull(searchTerms.getKeywords()) && accountStatus!=0)  {
-					businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
-				} else {
-					businesses = BusinessLocalServiceUtil.getBusinesses(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-				}
+				totalCount = BusinessLocalServiceUtil.countBusiness(scopeGroupId, searchTerms.getKeywords(),
+						accountStatus, businessDomain); 
 				
-				totalCount = BusinessLocalServiceUtil.countAll();
 				total = totalCount;
 				results = businesses;
 				pageContext.setAttribute("results", results);
 				pageContext.setAttribute("total", total);
+				
 			%>
 		
 		</liferay-ui:search-container-results>

@@ -47,8 +47,8 @@
 	String headers = StringUtil.merge(headerNames);
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "frontofficeexternaldossierlist.jsp");
-	iteratorURL.setParameter("tab1", DossierMgtUtil.TOP_TABS_DOSSIER_FILE);
+	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierfilelist.jsp");
+	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_FILE);
 
 	List<DossierFileBean> dossierFileBeans = new ArrayList<DossierFileBean>();
 	int totalCount = 0;
@@ -76,7 +76,6 @@
 				} catch(Exception e){
 					
 				}
-			
 				total = totalCount;
 				results = dossierFileBeans;
 				

@@ -105,7 +105,7 @@
                             <p><span><liferay-ui:message key="payment-name"></liferay-ui:message>:</span></p><%= paymentFile != null ? paymentFile.getPaymentName() : LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                         </div>
                         <div class="over100">
-	                        <p><span><liferay-ui:message key="service-name"/>:</span> <span><%=Validator.isNotNull(serviceInfo.getServiceName())? HtmlUtil.escape(serviceInfo.getServiceName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %></span></p>
+	                        <p><span><liferay-ui:message key="service-name"/>:</span> <span><%=Validator.isNotNull(serviceInfo)? HtmlUtil.escape(serviceInfo.getServiceName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %></span></p>
 	                    </div>
                         <div>
                             <p><span><liferay-ui:message key="administration-name"></liferay-ui:message>:</span></p><%= dossier != null? dossier.getGovAgencyName() : LanguageUtil.get(pageContext, "monitoring-chua-co")%>
@@ -122,7 +122,7 @@
                     </div>
                     <div class="box50">
                         <div>
-                            <p><span><liferay-ui:message key="request-note"></liferay-ui:message>:</span></p> <%= Validator.isNotNull(paymentFile.getRequestNote()) ? paymentFile.getRequestNote() : LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+                            <p><span><liferay-ui:message key="request-note"></liferay-ui:message>:</span></p> <%= Validator.isNotNull(paymentFile) ? paymentFile.getRequestNote() : LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                         </div>
                         <div>
                             <p><span><liferay-ui:message key="payment-options"></liferay-ui:message>:</span> 
@@ -182,7 +182,7 @@
                             	</c:choose>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="request-datetime"></liferay-ui:message>:</span> </p><%= Validator.isNotNull(paymentFile.getRequestDatetime()) ? DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+                            <p><span><liferay-ui:message key="request-datetime"></liferay-ui:message>:</span> </p><%= Validator.isNotNull(paymentFile) ? DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                         </div>
                         <div>
                             <p><span><liferay-ui:message key="confirm-file-entry-id"></liferay-ui:message>:</span> 
@@ -217,7 +217,7 @@
 								</c:choose>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="confirm-datetime"></liferay-ui:message>:</span></p> <%= Validator.isNotNull(paymentFile.getConfirmDatetime()) ? DateTimeUtil.convertDateToString(paymentFile.getConfirmDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : LanguageUtil.get(pageContext, "monitoring-chua-co")  %>
+                            <p><span><liferay-ui:message key="confirm-datetime"></liferay-ui:message>:</span></p> <%= Validator.isNotNull(paymentFile) ? DateTimeUtil.convertDateToString(paymentFile.getConfirmDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : LanguageUtil.get(pageContext, "monitoring-chua-co")  %>
                         </div>
                     </div>
             

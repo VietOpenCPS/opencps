@@ -305,5 +305,12 @@ public class PortletPropsValues {
 	
 	public static final String OPENCPS_KEYPAY_CURRENCY_CODE =
 				    PortletProps.get(PortletPropsKeys.OPENCPS_KEYPAY_CURRENCY_CODE);
-
+	
+	//Constant values
+	
+	public static final String OPENCPS_CANCEL_DOSSIER_NOTICE  =
+					PortletProps.get(PortletPropsKeys.OPENCPS_CANCEL_DOSSIER_NOTICE);
+	
+	public static final String OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL  =
+					PortletProps.get(PortletPropsKeys.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
 }

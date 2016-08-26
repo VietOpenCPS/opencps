@@ -7,4 +7,5 @@
 	<sql file="custom-sql/dossiermgt.xml" />
 	<sql file="custom-sql/paymentmgt.xml" />
 	<sql file="custom-sql/datamgt.xml" />
+	<sql file="custom-sql/accountmgt.xml" />
 </custom-sql>

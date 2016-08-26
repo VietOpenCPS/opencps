@@ -40,6 +40,8 @@ public class PaymentMgtUtil {
 	public static final int PAYMENT_METHOD_KEYPAY = 2;
 	public static final int PAYMENT_METHOD_BANK = 3;
 	
+	public static final int PAYMENT_STATUS_KEYPAY_OK = 0;
+	public static final int PAYMENT_STATUS_KEYPAY_PENDING = 1;
 	
 	/**
 	 * @param ownerUserId

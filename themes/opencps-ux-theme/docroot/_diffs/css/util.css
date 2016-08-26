@@ -272,3 +272,19 @@
     border: 1px solid #e1e1e1;
     border-radius: 8px;
 }
+
+.opencps-theme.ux .button-add {
+	width: 108px;
+	border-radius: 17px 17px 17px 17px;
+	background-color: green;
+	height: 30px;
+	margin-top: 5px;
+}
+
+.opencps-theme.ux .button-del {
+	width: 108px;
+	border-radius: 17px 17px 17px 17px;
+	background-color: #b30e2c;
+	height: 30px;
+	margin-top: 5px;
+}

@@ -287,6 +287,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				size, serviceContext);
 
 			updated = true;
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+			
 			SessionErrors.clear(actionRequest);
 		}
 		catch (Exception e) {
@@ -383,6 +387,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				serviceContext.getUserId(), dossierId, dossierPartId, partName,
 				PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 				serviceContext);
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 		}
 		catch (Exception e) {
 			updated = false;
@@ -552,6 +559,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				PortletConstants.DOSSIER_FILE_TYPE_INPUT);
 
 			jsonObject.put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -669,6 +679,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			updated = true;
 
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 		}
 		catch (Exception e) {
 			updated = false;
@@ -843,7 +855,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							serviceContext);
 					}
 				}
+				
+				SessionMessages.add(
+						actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+				
 			}
+			
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierFileException) {
@@ -921,6 +938,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					dossierFileId, fileEntryId);
 				jsonObject.put("deleted", Boolean.TRUE);
 			}
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -959,6 +979,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				DossierLocalServiceUtil.deleteDossierByDossierId(dossierId);
 			}
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -1035,6 +1058,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					DossierFileLocalServiceUtil.deleteDossierFile(dossierFile);
 					jsonObject.put("deleted", Boolean.TRUE);
 				}
+				
+				SessionMessages.add(
+						actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+				
 			}
 			catch (Exception e) {
 				_log.error(e);
@@ -1067,6 +1094,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		try {
 			DLAppServiceUtil.deleteFileEntry(fileEntryId);
 			jsonObject.put("deleted", Boolean.TRUE);
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+			
 		}
 		catch (Exception e) {
 			String errorMessage =
@@ -1322,6 +1353,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 
 			jsonObject.put("deleted", Boolean.TRUE);
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -1363,6 +1397,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				jsonObject.put("deleted", Boolean.TRUE);
 			}
 
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+			
 		}
 		catch (Exception e) {
 			jsonObject.put("deleted", Boolean.FALSE);
@@ -1953,6 +1990,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				PortletConstants.DOSSIER_FILE_TYPE_INPUT);
 
 			jsonObject.put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -2217,6 +2257,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						dossierFileType, dossierFileNo, dossierFileDate,
 						original, syncStatus, serviceContext);
 			}
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+			
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierException) {
@@ -2296,6 +2340,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		actionResponse.setRenderParameter(
 			"mvcPath", "/html/portlets/dossiermgt/frontoffice/dynamic_form.jsp");
+		
+		SessionMessages.add(
+				actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 	}
 
@@ -2708,7 +2755,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					dossierTemplate.getDossierTemplateId(), 0);
 		}
 		catch (Exception e) {
-
+			
 		}
 
 		boolean requiredFlag = false;
@@ -2876,7 +2923,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			try {
 				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 				ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
-				ProcessWorkflow workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), "Thông báo hủy hồ sơ");
+				ProcessWorkflow workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
 				Message message = new Message();
 				if (Validator.isNotNull(workFlow.getAutoEvent())) {
 					message.put(ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());				
@@ -2886,7 +2933,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							workFlow.getProcessWorkflowId());				
 				}
 
-				message.put(ProcessOrderDisplayTerms.ACTION_NOTE, "Người làm thủ tục hủy hồ sơ");
+				message.put(ProcessOrderDisplayTerms.ACTION_NOTE, PortletPropsValues.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
 				message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID,
 						processOrder.getProcessStepId());
 				message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID, 0);
@@ -2910,7 +2957,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
 
-				sendToEngineMsg.setActionNote("Người làm thủ tục hủy hồ sơ");
+				sendToEngineMsg.setActionNote(PortletPropsValues.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
 				sendToEngineMsg.setAssignToUserId(0);
 				sendToEngineMsg.setActionUserId(Long.parseLong(actionRequest.getRemoteUser()));
 				sendToEngineMsg.setDossierId(dossier.getDossierId());

@@ -149,7 +149,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 	        MessageBusUtil.sendMessage("opencps/backoffice/out/destination", message);
         }
         catch (Exception e) {
-		    e.printStackTrace();
+		    _log.error(e);
         }
 		
 	}

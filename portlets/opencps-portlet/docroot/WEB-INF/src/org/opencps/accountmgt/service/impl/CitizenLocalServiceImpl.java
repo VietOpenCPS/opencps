@@ -68,13 +68,16 @@ import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.util.PwdGenerator;
 
 /**
- * The implementation of the citizen local service. <p> All custom service
- * methods should be put in this class. Whenever methods are added, rerun
- * ServiceBuilder to copy their definitions into the
- * {@link org.opencps.accountmgt.service.CitizenLocalService} interface. <p>
+ * The implementation of the citizen local service.
+ * <p>
+ * All custom service methods should be put in this class. Whenever methods are
+ * added, rerun ServiceBuilder to copy their definitions into the
+ * {@link org.opencps.accountmgt.service.CitizenLocalService} interface.
+ * <p>
  * This is a local service. Methods of this service will not have security
  * checks based on the propagated JAAS credentials because this service can only
- * be accessed from within the same VM. </p>
+ * be accessed from within the same VM.
+ * </p>
  *
  * @author khoavd
  * @author trungnt
@@ -89,37 +92,34 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 	 * the citizen local service.
 	 */
 
-	public Citizen addCitizen(
-		String fullName, String personalId, int gender, int birthDateDay,
-		int birthDateMonth, int birthDateYear, String address, String cityCode,
-		String districtCode, String wardCode, String cityName,
-		String districtName, String wardName, String email, String telNo,
-		long repositoryId, String sourceFileName, String mimeType,
-		String title, InputStream inputStream, long size,
-		ServiceContext serviceContext)
-		throws SystemException, PortalException {
+	public Citizen addCitizen(String fullName, String personalId, int gender,
+			int birthDateDay, int birthDateMonth, int birthDateYear,
+			String address, String cityCode, String districtCode,
+			String wardCode, String cityName, String districtName,
+			String wardName, String email, String telNo, long repositoryId,
+			String sourceFileName, String mimeType, String title,
+			InputStream inputStream, long size, ServiceContext serviceContext)
+			throws SystemException, PortalException {
 
-		long citizenId =
-			CounterLocalServiceUtil.increment(Citizen.class.getName());
+		long citizenId = CounterLocalServiceUtil.increment(Citizen.class
+				.getName());
 
 		Citizen citizen = citizenPersistence.create(citizenId);
 
 		Date now = new Date();
 
-		Date birthDate =
-			DateTimeUtil.getDate(birthDateDay, birthDateMonth, birthDateYear);
+		Date birthDate = DateTimeUtil.getDate(birthDateDay, birthDateMonth,
+				birthDateYear);
 
 		PortletUtil.SplitName spn = PortletUtil.splitName(fullName);
 
 		Role roleDefault = null;
 
 		try {
-			roleDefault =
-				RoleLocalServiceUtil.getRole(
+			roleDefault = RoleLocalServiceUtil.getRole(
 					serviceContext.getCompanyId(),
 					WebKeys.CITIZEN_BUSINESS_ROLE_NAME);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			_log.info("ROLE CITIZEN IS NULL");
 		}
 
@@ -138,24 +138,19 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 		// add default role
 		if (Validator.isNotNull(roleDefault)) {
-			roleIds = new long[] {
-				roleDefault.getRoleId()
-			};
+			roleIds = new long[] { roleDefault.getRoleId() };
 		}
 
 		UserGroup userGroup = null;
 		try {
-			userGroup =
-				UserGroupLocalServiceUtil.getUserGroup(
+			userGroup = UserGroupLocalServiceUtil.getUserGroup(
 					serviceContext.getCompanyId(),
 					PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
-		}
-		catch (Exception e) {
-			_log.warn(e.getMessage());
+		} catch (Exception e) {
+			_log.error(e);;
 		}
 		if (userGroup == null) {
-			userGroup =
-				UserGroupLocalServiceUtil.addUserGroup(
+			userGroup = UserGroupLocalServiceUtil.addUserGroup(
 					serviceContext.getUserId(), serviceContext.getCompanyId(),
 					PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
 					StringPool.BLANK, serviceContext);
@@ -163,34 +158,29 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		}
 
 		if (userGroup != null) {
-			userGroupIds = new long[] {
-				userGroup.getUserGroupId()
-			};
+			userGroupIds = new long[] { userGroup.getUserGroupId() };
 		}
 		password1 = PwdGenerator.getPassword();
 		password2 = password1;
 
-		Role adminRole =
-			RoleLocalServiceUtil.getRole(
+		Role adminRole = RoleLocalServiceUtil.getRole(
 				serviceContext.getCompanyId(), "Administrator");
-		List<User> adminUsers =
-			UserLocalServiceUtil.getRoleUsers(adminRole.getRoleId());
+		List<User> adminUsers = UserLocalServiceUtil.getRoleUsers(adminRole
+				.getRoleId());
 
 		PrincipalThreadLocal.setName(adminUsers.get(0).getUserId());
 		PermissionChecker permissionChecker;
 		try {
-			permissionChecker =
-				PermissionCheckerFactoryUtil.create(adminUsers.get(0));
+			permissionChecker = PermissionCheckerFactoryUtil.create(adminUsers
+					.get(0));
 			PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
 			serviceContext.setUserId(adminUsers.get(0).getUserId());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			_log.error(e);
 		}
 
-		User mappingUser =
-			userService.addUserWithWorkflow(
+		User mappingUser = userService.addUserWithWorkflow(
 				serviceContext.getCompanyId(), autoPassword, password1,
 				password2, autoScreenName, screenName, email, 0L,
 				StringPool.BLANK, LocaleUtil.getDefault(), spn.getFirstName(),
@@ -206,11 +196,9 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 		mappingUser = userService.updateStatus(mappingUser.getUserId(), status);
 
-		String[] folderNames =
-			new String[] {
+		String[] folderNames = new String[] {
 				PortletConstants.DestinationRoot.CITIZEN.toString(), cityName,
-				districtName, wardName, String.valueOf(mappingUser.getUserId())
-			};
+				districtName, wardName, String.valueOf(mappingUser.getUserId()) };
 
 		String destination = PortletUtil.getDestinationFolder(folderNames);
 
@@ -221,23 +209,21 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 		if (size > 0 && inputStream != null) {
 			// Create person folder
-			DLFolder dlFolder =
-				DLFolderUtil.getTargetFolder(
+			DLFolder dlFolder = DLFolderUtil.getTargetFolder(
 					mappingUser.getUserId(), serviceContext.getScopeGroupId(),
 					repositoryId, false, 0, destination, StringPool.BLANK,
 					false, serviceContext);
 
-			fileEntry =
-				DLAppServiceUtil.addFileEntry(
-					repositoryId, dlFolder.getFolderId(), sourceFileName,
-					mimeType, title, StringPool.BLANK, StringPool.BLANK,
-					inputStream, size, serviceContext);
+			fileEntry = DLAppServiceUtil.addFileEntry(repositoryId,
+					dlFolder.getFolderId(), sourceFileName, mimeType, title,
+					StringPool.BLANK, StringPool.BLANK, inputStream, size,
+					serviceContext);
 		}
 
 		citizen.setAccountStatus(PortletConstants.ACCOUNT_STATUS_REGISTERED);
 		citizen.setAddress(address);
-		citizen.setAttachFile(fileEntry != null
-			? fileEntry.getFileEntryId() : 0);
+		citizen.setAttachFile(fileEntry != null ? fileEntry.getFileEntryId()
+				: 0);
 		citizen.setBirthdate(birthDate);
 		citizen.setCityCode(cityCode);
 		citizen.setCompanyId(serviceContext.getCompanyId());
@@ -260,7 +246,7 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 	}
 
 	public void deleteCitizenByCitizenId(long citizenId)
-		throws SystemException, PortalException {
+			throws SystemException, PortalException {
 
 		Citizen citizen = citizenPersistence.findByPrimaryKey(citizenId);
 
@@ -285,29 +271,30 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 	}
 
 	public Citizen getCitizen(long mappingUserId)
-		throws NoSuchCitizenException, SystemException {
+			throws NoSuchCitizenException, SystemException {
 
 		return citizenPersistence.findByMappingUserId(mappingUserId);
 	}
 
-	public Citizen getCitizen(String email)
-		throws NoSuchCitizenException, SystemException {
+	public Citizen getCitizen(String email) throws NoSuchCitizenException,
+			SystemException {
 
 		return citizenPersistence.findByEmail(email);
 	}
 
-	public Citizen getCitizenByUUID(String uuid)
-		throws NoSuchCitizenException, SystemException {
+	public Citizen getCitizenByUUID(String uuid) throws NoSuchCitizenException,
+			SystemException {
 
 		return citizenPersistence.findByUUID(uuid);
 	}
 
-	public Citizen updateCitizen(
-		long citizenId, String address, String cityCode, String districtCode,
-		String wardCode, String cityName, String districtName, String wardName,
-		String telNo, boolean isChangePassWord, String newPassword,
-		String reTypePassword, long repositoryId, ServiceContext serviceContext)
-		throws SystemException, PortalException {
+	public Citizen updateCitizen(long citizenId, String address,
+			String cityCode, String districtCode, String wardCode,
+			String cityName, String districtName, String wardName,
+			String telNo, boolean isChangePassWord, String newPassword,
+			String reTypePassword, long repositoryId,
+			ServiceContext serviceContext) throws SystemException,
+			PortalException {
 
 		Citizen citizen = citizenPersistence.findByPrimaryKey(citizenId);
 
@@ -318,38 +305,35 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		if (mappingUser != null) {
 			// Reset password
 			if (isChangePassWord) {
-				mappingUser =
-					userLocalService.updatePassword(
+				mappingUser = userLocalService.updatePassword(
 						mappingUser.getUserId(), newPassword, reTypePassword,
 						false);
 			}
 
-			if ((cityCode != citizen.getCityCode() ||
-				districtCode != citizen.getDistrictCode() || wardCode != citizen.getWardCode()) &&
-				citizen.getAttachFile() > 0) {
+			if ((cityCode != citizen.getCityCode()
+					|| districtCode != citizen.getDistrictCode() || wardCode != citizen
+					.getWardCode()) && citizen.getAttachFile() > 0) {
 				// Move image folder
 
-				String[] newFolderNames =
-					new String[] {
+				String[] newFolderNames = new String[] {
 						PortletConstants.DestinationRoot.CITIZEN.toString(),
-						cityName, districtName, wardName
-					};
+						cityName, districtName, wardName };
 
-				String destination =
-					PortletUtil.getDestinationFolder(newFolderNames);
+				String destination = PortletUtil
+						.getDestinationFolder(newFolderNames);
 
-				DLFolder parentFolder =
-					DLFolderUtil.getTargetFolder(
-						mappingUser.getUserId(),
-						serviceContext.getScopeGroupId(), repositoryId, false,
-						0, destination, StringPool.BLANK, false, serviceContext);
+				DLFolder parentFolder = DLFolderUtil
+						.getTargetFolder(mappingUser.getUserId(),
+								serviceContext.getScopeGroupId(), repositoryId,
+								false, 0, destination, StringPool.BLANK, false,
+								serviceContext);
 
-				FileEntry fileEntry =
-					DLAppServiceUtil.getFileEntry(citizen.getAttachFile());
+				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(citizen
+						.getAttachFile());
 
-				DLFolderLocalServiceUtil.moveFolder(
-					mappingUser.getUserId(), fileEntry.getFolderId(),
-					parentFolder.getFolderId(), serviceContext);
+				DLFolderLocalServiceUtil.moveFolder(mappingUser.getUserId(),
+						fileEntry.getFolderId(), parentFolder.getFolderId(),
+						serviceContext);
 			}
 		}
 
@@ -369,13 +353,13 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 	}
 
-	public Citizen updateCitizen(
-		long citizenId, String fullName, String personalId, int gender,
-		int birthDateDay, int birthDateMonth, int birthDateYear,
-		String address, String cityCode, String districtCode, String wardCode,
-		String cityName, String districtName, String wardName, String telNo,
-		long repositoryId, ServiceContext serviceContext)
-		throws SystemException, PortalException {
+	public Citizen updateCitizen(long citizenId, String fullName,
+			String personalId, int gender, int birthDateDay,
+			int birthDateMonth, int birthDateYear, String address,
+			String cityCode, String districtCode, String wardCode,
+			String cityName, String districtName, String wardName,
+			String telNo, long repositoryId, ServiceContext serviceContext)
+			throws SystemException, PortalException {
 
 		Citizen citizen = citizenPersistence.findByPrimaryKey(citizenId);
 
@@ -383,37 +367,35 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 		Date now = new Date();
 
-		Date birthDate =
-			DateTimeUtil.getDate(birthDateDay, birthDateMonth, birthDateYear);
+		Date birthDate = DateTimeUtil.getDate(birthDateDay, birthDateMonth,
+				birthDateYear);
 
 		if (mappingUser != null) {
 
-			if ((cityCode != citizen.getCityCode() ||
-				districtCode != citizen.getDistrictCode() || wardCode != citizen.getWardCode()) &&
-				citizen.getAttachFile() > 0) {
+			if ((cityCode != citizen.getCityCode()
+					|| districtCode != citizen.getDistrictCode() || wardCode != citizen
+					.getWardCode()) && citizen.getAttachFile() > 0) {
 				// Move image folder
 
-				String[] newFolderNames =
-					new String[] {
+				String[] newFolderNames = new String[] {
 						PortletConstants.DestinationRoot.CITIZEN.toString(),
-						cityName, districtName, wardName
-					};
+						cityName, districtName, wardName };
 
-				String destination =
-					PortletUtil.getDestinationFolder(newFolderNames);
+				String destination = PortletUtil
+						.getDestinationFolder(newFolderNames);
 
-				DLFolder parentFolder =
-					DLFolderUtil.getTargetFolder(
-						mappingUser.getUserId(),
-						serviceContext.getScopeGroupId(), repositoryId, false,
-						0, destination, StringPool.BLANK, false, serviceContext);
+				DLFolder parentFolder = DLFolderUtil
+						.getTargetFolder(mappingUser.getUserId(),
+								serviceContext.getScopeGroupId(), repositoryId,
+								false, 0, destination, StringPool.BLANK, false,
+								serviceContext);
 
-				FileEntry fileEntry =
-					DLAppServiceUtil.getFileEntry(citizen.getAttachFile());
+				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(citizen
+						.getAttachFile());
 
-				DLFolderLocalServiceUtil.moveFolder(
-					mappingUser.getUserId(), fileEntry.getFolderId(),
-					parentFolder.getFolderId(), serviceContext);
+				DLFolderLocalServiceUtil.moveFolder(mappingUser.getUserId(),
+						fileEntry.getFolderId(), parentFolder.getFolderId(),
+						serviceContext);
 			}
 
 			// Change user name
@@ -429,8 +411,8 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 			mappingUser = userLocalService.updateUser(mappingUser);
 
 			// update birth date
-			Contact contact =
-				ContactLocalServiceUtil.getContact(mappingUser.getContactId());
+			Contact contact = ContactLocalServiceUtil.getContact(mappingUser
+					.getContactId());
 
 			if (contact != null) {
 				contact.setBirthday(birthDate);
@@ -460,7 +442,7 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 	}
 
 	public Citizen updateStatus(long citizenId, long userId, int accountStatus)
-		throws SystemException, PortalException {
+			throws SystemException, PortalException {
 
 		Citizen citizen = citizenPersistence.findByPrimaryKey(citizenId);
 
@@ -471,8 +453,8 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		}
 
 		if (citizen.getMappingUserId() > 0) {
-			userLocalService.updateStatus(
-				citizen.getMappingUserId(), userStatus);
+			userLocalService.updateStatus(citizen.getMappingUserId(),
+					userStatus);
 		}
 
 		citizen.setUserId(userId);
@@ -483,49 +465,57 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 	}
 
 	public List<Citizen> getCitizens(int start, int end, OrderByComparator odc)
-		throws SystemException {
+			throws SystemException {
 
 		return citizenPersistence.findAll(start, end, odc);
 	}
 
 	public List<Citizen> getCitizens(long groupId, int accountStatus)
-		throws SystemException {
+			throws SystemException {
 
 		return citizenPersistence.findByG_S(groupId, accountStatus);
 	}
 
-	public List<Citizen> getCitizens(
-		long groupId, String fullName, int accountStatus)
-		throws SystemException {
+	public List<Citizen> getCitizens(long groupId, String fullName,
+			int accountStatus) throws SystemException {
 
 		return citizenPersistence.findByG_N_S(groupId, fullName, accountStatus);
 	}
 
 	public List<Citizen> getCitizens(long groupId, String fullName)
-		throws SystemException {
+			throws SystemException {
 
 		return citizenPersistence.findByG_N(groupId, fullName);
 	}
 
-	public int countAll()
-		throws SystemException {
+	public int countAll() throws SystemException {
 
 		return citizenPersistence.countAll();
 	}
 
 	public int countByG_S(long groupId, int accountStatus)
-		throws SystemException {
+			throws SystemException {
 
 		return citizenPersistence.countByG_S(groupId, accountStatus);
 	}
 
 	public Citizen getByMappingUserId(long mappingUserId)
-		throws SystemException {
+			throws SystemException {
 
 		return citizenPersistence.fetchByMappingUserId(mappingUserId);
 	}
 
-	private Log _log =
-		LogFactoryUtil.getLog(CitizenLocalServiceImpl.class.getName());
+	public List<Citizen> searchCitizen(long groupId, String keyword,
+			int status, int start, int end) {
+		return citizenFinder
+				.searchCitizen(groupId, keyword, status, start, end);
+	}
+	
+	public int countCitizen(long groupId, String keyword, int status){
+		return citizenFinder.countCitizen(groupId, keyword, status);
+	}
+
+	private Log _log = LogFactoryUtil.getLog(CitizenLocalServiceImpl.class
+			.getName());
 
 }

@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -51,6 +52,9 @@
 	}else if(!isListServiceConfig && tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)){
 		searchURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
 		searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+	} else {
+		searchURL.setParameter("mvcPath", templatePath + "frontofficedossierfilelist.jsp");
+		searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_FILE);
 	}
 	
 %>
@@ -75,6 +79,7 @@
 						<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
 						<portlet:param name="isListServiceConfig" value="<%=String.valueOf(true) %>"/>
 						<portlet:param name="backURL" value="<%=currentURL %>"/>
+						<portlet:param name="backURLFromList" value="<%=currentURL %>"/>
 					</portlet:renderURL>
 					<%-- <aui:nav-item 
 						id="addDictItem" 
@@ -167,7 +172,7 @@
 										showLabel="<%=false%>"
 										emptyOptionLabels="dossier-status"
 										itemsEmptyOption="true"
-										itemNames="dossierStatus"
+										itemNames="<%=DossierDisplayTerms.DOSSIER_STATUS %>"
 										optionValueType="code"
 										cssClass="search-input select-box input100"
 									/>

@@ -100,7 +100,6 @@ public class DossierStateMenuPortlet extends MVCPortlet {
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }

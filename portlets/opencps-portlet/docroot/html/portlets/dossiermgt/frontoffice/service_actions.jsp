@@ -35,6 +35,10 @@
 <%
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 	ServiceBean service = (ServiceBean) row.getObject();
+	
+	String backURLFromList = StringPool.BLANK;
+	backURLFromList = ParamUtil.getString(request, "backURLFromList");
+	
 %> 
 
 			
@@ -45,6 +49,7 @@
 			<portlet:param name="<%=DossierDisplayTerms.SERVICE_CONFIG_ID %>" value="<%=String.valueOf(service.getServiceConfigId()) %>"/>
 			<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.ADD %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
+			<portlet:param name="backURLFromList" value="<%=backURLFromList %>"/>
 			<portlet:param name="isEditDossier" value="<%=String.valueOf(true) %>"/>
 		</portlet:renderURL> 
  		<aui:button type="button" value="choose" href="<%=addDossierURL.toString() %>" cssClass="button-add-front-service radius20"></aui:button>

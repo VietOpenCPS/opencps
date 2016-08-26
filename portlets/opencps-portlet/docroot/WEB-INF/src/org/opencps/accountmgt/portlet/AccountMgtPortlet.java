@@ -325,7 +325,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 				            .getItemName(serviceContext
 				                .getLocale(), true),
 				        telNo, isChangePassWord, newPass, rePass, serviceContext
-				            .getUserId(),
+				            .getScopeGroupId(),
 				        serviceContext);
 
 			}
@@ -488,7 +488,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 				                .getLocale(), true),
 				        telNo, representativeName, representativeRole, listBussinessDomains,
 				        isChangePassWord, curPass, rePass, serviceContext
-				            .getUserId(),
+				            .getScopeGroupId(),
 				        serviceContext);
 
 			}

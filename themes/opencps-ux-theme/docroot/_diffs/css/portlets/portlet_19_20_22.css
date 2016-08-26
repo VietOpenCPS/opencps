@@ -483,7 +483,7 @@ div.payment-ld:nth-child(2){
 }
 .paymentBtnAll{
 	height: 41px;
-	background: rgb(0, 144, 255) url(/opencps-ux-theme/css/../images/custom/icon_quanlythuphi.png) no-repeat scroll 50px center;
+	background: rgb(0, 144, 255) url(/opencps-ux-theme/css/../images/custom/icon_quanlythuphi.png) no-repeat scroll 50px center !important;
 	border: 0px none;
 	color: white;
 	font-family: "Roboto-Bold";

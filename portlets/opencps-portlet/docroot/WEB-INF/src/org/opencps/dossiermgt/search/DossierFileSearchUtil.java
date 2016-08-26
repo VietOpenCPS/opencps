@@ -16,6 +16,10 @@
  */
 package org.opencps.dossiermgt.search;
 
+import org.opencps.dossiermgt.portlet.DossierMgtFrontOfficePortlet;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.BooleanQueryFactoryUtil;
 import com.liferay.portal.kernel.search.ParseException;
@@ -36,7 +40,7 @@ public class DossierFileSearchUtil {
 					false);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_log.error(e);
 		}
 		/*
 		String[] terms = StringUtil.split(keywords);
@@ -60,4 +64,6 @@ public class DossierFileSearchUtil {
 		*/
 		return query;
 	}
+	private static Log _log =
+			LogFactoryUtil.getLog(DossierFileSearchUtil.class.getName());
 }

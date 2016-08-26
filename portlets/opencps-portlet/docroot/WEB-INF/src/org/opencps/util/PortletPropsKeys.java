@@ -133,4 +133,9 @@ public class PortletPropsKeys {
 	public static final String OPENCPS_KEYPAY_SERVICE_CODE = "opencps.keypay.service.code";
 	public static final String OPENCPS_KEYPAY_COMMAND = "opencps.keypay.command";
 	public static final String OPENCPS_KEYPAY_CURRENCY_CODE = "opencps.keypay.currency.code";
+
+	//static values
+	public static final String OPENCPS_CANCEL_DOSSIER_NOTICE = "opencps.cancel.dossier.notice";
+	public static final String OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL = "opencps.person.make.procedure.cancel";
+	
 }

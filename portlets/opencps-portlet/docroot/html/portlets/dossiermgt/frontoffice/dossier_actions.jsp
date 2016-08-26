@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -133,14 +132,7 @@
 		 		<portlet:actionURL var="cancelDossierURL" name="cancelDossier" >
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
-				</portlet:actionURL> 
-				<liferay-ui:icon-delete 
-					image="undo"
-					cssClass="search-container-action fa undo"
-					confirmation="are-you-sure-cancel-entry" 
-					message="cancel"  
-					url="<%=cancelDossierURL.toString() %>" 
-				/>
+				</portlet:actionURL>
 		</c:when>  		
  	</c:choose>
 <%-- </liferay-ui:icon-menu> --%> 

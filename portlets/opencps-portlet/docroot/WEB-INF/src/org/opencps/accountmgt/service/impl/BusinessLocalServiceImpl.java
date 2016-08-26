@@ -150,7 +150,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 					PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS);
 		}
 		catch (Exception e) {
-			_log.warn(e.getMessage());
+			_log.error(e);
 		}
 
 		if (userGroup == null) {
@@ -304,7 +304,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 				mappingUser = userLocalService.getUser(mappingUserId);
 			}
 			catch (Exception e) {
-
+				_log.error(e);
 			}
 
 			if (mappingUser != null) {
@@ -318,7 +318,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 				fileEntry = DLAppServiceUtil.getFileEntry(fileEntryId);
 			}
 			catch (Exception e) {
-				// TODO: handle exception
+				_log.error(e);
 			}
 			long folderId = 0;
 
@@ -343,7 +343,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 					organizationLocalService.getOrganization(mappingOrgId);
 			}
 			catch (Exception e) {
-				// TODO: handle exception
+				_log.error(e);
 			}
 
 			if (organization != null) {
@@ -399,7 +399,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			userLocalService.getUser(business.getMappingUserId());
 
 		Date now = new Date();
-
+		
 		if (mappingUser != null) {
 			// Reset password
 			if (isChangePassword) {
@@ -437,6 +437,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			}
 		}
 
+		
 		business.setAddress(address);
 
 		business.setBusinessType(businessType);
@@ -661,6 +662,17 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		throws SystemException, NoSuchBusinessException {
 
 		return businessPersistence.findBymappingOrganizationId(mappingOrganizationId);
+	}
+	//groupId, names, accountStatus, andOperator,businessDomain, start, end
+	public List<Business> searchBusiness(long groupId, String keywords, int accountStatus,
+		String businessDomain, int start, int end) {
+		return businessFinder.searchBusiness(groupId, keywords,
+			accountStatus, businessDomain, start, end);
+	}
+	//
+	public int countBusiness (long groupId, String keywords, int accountStatus,
+		String businessDomain) {
+		return businessFinder.countBussiness(groupId, keywords, accountStatus, businessDomain);
 	}
 
 	private Log _log =

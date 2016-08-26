@@ -96,8 +96,8 @@ public class PaymentFeeUtil {
 						
 		   } catch (ScriptException e) {
 			   
-				e.printStackTrace();
-			
+				_log.error(e);
+				
 		   }
 		    		    
 		}

@@ -193,15 +193,6 @@
 .opencps-theme.ux .input-file .detail-terms-links {
 	pointer-events: none;
 }
-/* .opencps-theme.ux.register #wrapper #main-content{
-	background-color: rgb(245, 245, 245) !important;
-}
-.portlet-boundary_5_WAR_opencpsportlet_ .portlet-body > div.alert.alert-error{
-	position: relative;
-	left: 50%;
-	transform: translateX(-51%);
-	width: 62%;
-} */
 
 /* custom vtduy */
 .opencps-theme.ux .changeDefErr{

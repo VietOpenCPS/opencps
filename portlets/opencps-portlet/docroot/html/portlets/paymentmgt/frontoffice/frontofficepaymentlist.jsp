@@ -389,4 +389,5 @@
 			submitForm(document.<portlet:namespace />payForm, "<%=requestBankPaymentURL.toString()%>");
 		}
 	},['liferay-util-list-fields']);
-			</aui:script>
+	
+</aui:script>

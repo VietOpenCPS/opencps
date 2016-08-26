@@ -106,7 +106,7 @@ public class DLFolderUtil {
 					groupId, parentFolderId, name);
 		}
 		catch (Exception e) {
-			_log.warn(e.getMessage());
+			_log.error(e);
 		}
 
 		return dlFolder;
@@ -184,7 +184,7 @@ public class DLFolderUtil {
 					groupId, parentFolderId, name);
 		}
 		catch (Exception e) {
-			_log.warn(e.getMessage());
+			_log.error(e);
 		}
 
 		result = dlFolder != null ? true : false;
@@ -222,6 +222,7 @@ public class DLFolderUtil {
 			}
 		}
 		catch (Exception e) {
+			_log.error(e);
 		}
 
 		if (Validator.isNull(destination)) {
@@ -235,6 +236,7 @@ public class DLFolderUtil {
 				}
 			}
 			catch (Exception e) {
+				_log.error(e);
 			}
 		}
 
@@ -266,6 +268,7 @@ public class DLFolderUtil {
 			}
 		}
 		catch (Exception e) {
+			_log.error(e);
 		}
 
 		if (Validator.isNull(destination)) {
@@ -279,6 +282,7 @@ public class DLFolderUtil {
 				}
 			}
 			catch (Exception e) {
+				_log.error(e);
 			}
 		}
 

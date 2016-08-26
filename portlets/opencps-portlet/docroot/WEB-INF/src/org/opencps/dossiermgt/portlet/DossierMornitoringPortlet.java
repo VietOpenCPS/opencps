@@ -31,6 +31,8 @@ import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -81,7 +83,7 @@ public class DossierMornitoringPortlet extends MVCPortlet {
 				
 			} catch (Exception e) {
 				
-				e.printStackTrace();
+				_log.error(e);
 				
 			}
 			
@@ -115,11 +117,14 @@ public class DossierMornitoringPortlet extends MVCPortlet {
 		try {
 			plid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, servicePage).getPlid();
 		} catch (Exception e) {
-			e.printStackTrace();
+			_log.error(e);
 		}
 		
 		PortletURL redirectURL = PortletURLFactoryUtil.create(PortalUtil.getHttpServletRequest(request),portletName,plid, PortletRequest.RENDER_PHASE);
 		redirectURL.setParameter("keywords", keywords);
 		response.sendRedirect(redirectURL.toString());
 	}	
+	
+	private Log _log =
+			LogFactoryUtil.getLog(DossierMornitoringPortlet.class.getName());
 }
