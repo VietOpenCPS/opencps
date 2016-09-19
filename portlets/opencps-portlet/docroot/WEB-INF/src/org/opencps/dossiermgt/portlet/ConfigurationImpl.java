@@ -54,6 +54,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		long plid = ParamUtil.getLong(actionRequest, "plid");
 		
 		long itemsToDisplay = ParamUtil.getLong(actionRequest, "itemsToDisplay");
+		
+		String templatesToDisplay = ParamUtil.getString(actionRequest, "templatesToDisplay", "default");
 
 		boolean displayDossierNo = ParamUtil.getBoolean(actionRequest, "displayDossierNo");
 		
@@ -80,6 +82,7 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("displayRecentlyResultWhenSearch", String.valueOf(displayRecentlyResultWhenSearch));
 		
 		preferences.setValue("itemsToDisplay", String.valueOf(itemsToDisplay));
+		preferences.setValue("templatesToDisplay", String.valueOf(templatesToDisplay));
 		
 		preferences.store();
 

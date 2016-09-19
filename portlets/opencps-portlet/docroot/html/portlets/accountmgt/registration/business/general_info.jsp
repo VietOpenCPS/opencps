@@ -34,6 +34,8 @@
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+
 <%@ include file="../../init.jsp" %>
 
 <%
@@ -114,9 +116,11 @@
 		</aui:col>
 		<aui:col width="50">
 			<aui:input 
-				name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS%>"  
+				name="account-status"  
 				disabled="<%=isAdminViewProfile %>" 
 				cssClass="input100" 
+				type="text"
+				value="<%=PortletUtil.getAccountStatus(business.getAccountStatus(), themeDisplay.getLocale())%>"
 			/>
 		</aui:col>
 		

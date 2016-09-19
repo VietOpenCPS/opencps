@@ -63,6 +63,7 @@ import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageBusUtil;
 import org.opencps.util.MessageKeys;
+import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
@@ -260,11 +261,11 @@ public class AccountRegPortlet extends MVCPortlet {
 					    PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS,
 					    serviceContext);
 					//check reg cfg
-					int step = ParamUtil.getInteger(actionRequest, "businessRegStep_cfg");
+					int step = ParamUtil.getInteger(uploadPortletRequest, "businessRegStep_cfg");
 					if(step == 2){
 						BusinessLocalServiceUtil
 					    .updateStatus(business.getBusinessId(), serviceContext
-					        .getUserId(), 2);
+					        .getUserId(), PortletConstants.ACCOUNT_STATUS_APPROVED);
 					}
 					SessionMessages.add(
 					    actionRequest,
@@ -501,11 +502,12 @@ public class AccountRegPortlet extends MVCPortlet {
 					    PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
 					    serviceContext);
 					//check reg cfg
-					int step = ParamUtil.getInteger(actionRequest, "citizenRegStep_cfg");
+					int step = ParamUtil.getInteger(uploadPortletRequest, "citizenRegStep_cfg");
 					if(step == 2){
 						CitizenLocalServiceUtil
 					    .updateStatus(citizen.getCitizenId(), serviceContext
-					        .getUserId(), 2);
+					        .getUserId(), PortletConstants.ACCOUNT_STATUS_APPROVED);
+						
 					}
 				}
 				SessionMessages.add(
@@ -649,7 +651,8 @@ public class AccountRegPortlet extends MVCPortlet {
 			throw new InvalidWardCodeException();
 		} 
 		else if(size == 0) {
-			throw new InvalidFileUploadException();
+			//off required file upload
+//			throw new InvalidFileUploadException();
 		} 
 		else if(size > PortletPropsValues.ACCOUNTMGT_FILE_SIZE) {
 			throw new OutOfSizeFileUploadException();
@@ -725,7 +728,8 @@ public class AccountRegPortlet extends MVCPortlet {
 			throw new InvalidWardCodeException();
 		}
 		else if(size == 0) {
-			throw new InvalidFileUploadException();
+			//off required file upload
+//			throw new InvalidFileUploadException();
 		} 
 		else if(size > PortletPropsValues.ACCOUNTMGT_FILE_SIZE) {
 			throw new OutOfSizeFileUploadException();

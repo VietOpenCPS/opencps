@@ -86,9 +86,11 @@
 		</aui:col>
 		<aui:col width="50">
 			<aui:input 
-				name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS%>" 
+				name="account-status" 
 				disabled="<%=isAdminViewProfile %>" 
 				cssClass="input100"
+				type="text"
+				value="<%=PortletUtil.getAccountStatus(citizen.getAccountStatus(), themeDisplay.getLocale()) %>"
 			/>
 		</aui:col>
 		

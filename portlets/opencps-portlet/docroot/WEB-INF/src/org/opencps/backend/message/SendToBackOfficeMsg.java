@@ -18,7 +18,6 @@
 
 package org.opencps.backend.message;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.opencps.paymentmgt.model.PaymentFile;
@@ -368,6 +367,59 @@ public class SendToBackOfficeMsg{
     
     	this.userActorAction = userActorAction;
     }
+	
+    /**
+     * @return the actor
+     */
+    public int getActor() {
+    
+    	return actor;
+    }
+
+	
+    /**
+     * @param actor the actor to set
+     */
+    public void setActor(int actor) {
+    
+    	this.actor = actor;
+    }
+
+	
+    /**
+     * @return the actorId
+     */
+    public long getActorId() {
+    
+    	return actorId;
+    }
+
+	
+    /**
+     * @param actorId the actorId to set
+     */
+    public void setActorId(long actorId) {
+    
+    	this.actorId = actorId;
+    }
+
+	
+    /**
+     * @return the actorName
+     */
+    public String getActorName() {
+    
+    	return actorName;
+    }
+
+	
+    /**
+     * @param actorName the actorName to set
+     */
+    public void setActorName(String actorName) {
+    
+    	this.actorName = actorName;
+    }
 	protected String requestCommand;
 
 	protected long processOrderId;
@@ -389,5 +441,8 @@ public class SendToBackOfficeMsg{
 	protected Date submitDateTime;
 	protected PaymentFile paymentFile;
 	protected long userActorAction;
+	protected int actor;
+	protected long actorId;
+	protected String actorName;
 
 }

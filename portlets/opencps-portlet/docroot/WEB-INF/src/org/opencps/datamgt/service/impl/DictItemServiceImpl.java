@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.opencps.datamgt.NoSuchDictCollectionException;
-import org.opencps.datamgt.NoSuchDictItemException;
+import org.opencps.datamgt.DuplicateItemCodeException;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.base.DictItemServiceBaseImpl;
@@ -33,11 +32,10 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
-import com.liferay.portal.kernel.util.GroupThreadLocal;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.ac.AccessControlled;
-import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
 
@@ -66,6 +64,15 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 			dictItemCode, String dictItemName, String parentDictItemCode) 
 		throws SystemException, PortalException {
 		
+		return dictItemService.addDictItem(dictCollectionCode, dictItemCode, 
+				dictItemName, StringPool.BLANK, parentDictItemCode);
+	}
+	
+	@JSONWebService(value = "add-dictitem", method = "POST")
+	public DictItem addDictItem(String dictCollectionCode, String
+			dictItemCode, String dictItemName, String dictItemDescription, String parentDictItemCode) 
+		throws SystemException, PortalException {
+		
 		DictCollection dictCollection = dictCollectionPersistence.findByCollectionCode(
 				dictCollectionCode);
 		
@@ -73,7 +80,7 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 				dictCollection.getDictCollectionId(), dictItemCode);
 		
 		if(dictItem != null) {
-			throw new SystemException("Duplicate dictItemCode");
+			throw new DuplicateItemCodeException();
 		}
 		
 		long parentItemId = 0;
@@ -88,19 +95,30 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 		
 		Map<Locale, String> itemNameMap = new HashMap<Locale, String>();
+		Map<Locale, String> itemDescriptionMap = new HashMap<Locale, String>();
 		Locale[] locales = LanguageUtil.getAvailableLocales();
 		
 		for(Locale locale : locales) {
 			itemNameMap.put(locale, dictItemName);
+			itemDescriptionMap.put(locale, dictItemDescription);
 		}
 		
 		return dictItemLocalService.addDictItem(getUserId(), dictCollection.getDictCollectionId(),
-				dictItemCode, itemNameMap, parentItemId, serviceContext);
+				dictItemCode, itemNameMap, itemDescriptionMap, parentItemId, serviceContext);
 	}
 	
 	@JSONWebService(value = "update-dictitem", method = "POST")
 	public DictItem updateDictItem(String dictCollectionCode, String
 			dictItemCode, String dictItemName, String parentDictItemCode) 
+		throws SystemException, PortalException {
+		
+		return dictItemService.updateDictItem(dictCollectionCode, dictItemCode, 
+			dictItemName, null, parentDictItemCode);
+	}
+	
+	@JSONWebService(value = "update-dictitem", method = "POST")
+	public DictItem updateDictItem(String dictCollectionCode, String
+			dictItemCode, String dictItemName, String dictItemDescription, String parentDictItemCode) 
 		throws SystemException, PortalException {
 		
 		DictCollection dictCollection = dictCollectionPersistence.findByCollectionCode(
@@ -121,14 +139,23 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 		
 		Map<Locale, String> itemNameMap = new HashMap<Locale, String>();
+		Map<Locale, String> itemDescriptionMap = null;
 		Locale[] locales = LanguageUtil.getAvailableLocales();
+
+		if(dictItemDescription != null) {
+			itemDescriptionMap = new HashMap<Locale, String>();
+		}
 		
 		for(Locale locale : locales) {
 			itemNameMap.put(locale, dictItemName);
+			
+			if(dictItemDescription != null) {
+				itemDescriptionMap.put(locale, dictItemDescription);
+			}
 		}
 		
 		return dictItemLocalService.updateDictItem(dictItem.getDictItemId(),
-				dictCollection.getDictCollectionId(), 0, dictItemCode, itemNameMap,
+				dictCollection.getDictCollectionId(), 0, dictItemCode, itemNameMap, itemDescriptionMap,
 				parentItemId, serviceContext);
 	}
 	

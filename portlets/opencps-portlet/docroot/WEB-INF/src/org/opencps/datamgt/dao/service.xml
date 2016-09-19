@@ -104,6 +104,7 @@
 		<column name="dictCollectionId" type="long" />
 		<column name="itemCode" type="String" />
 		<column name="itemName" type="String" localized="true"/>
+		<column name="itemDescription" type="String" localized="true"/>
 		<column name="parentItemId" type="long"/>
 		<column name="treeIndex" type="String" />
 		<column name="issueStatus" type="int" />
@@ -165,6 +166,7 @@
 		<exception>DuplicateCollection</exception>
 		<exception>DuplicateVersion</exception>
 		<exception>DuplicateItem</exception>
+		<exception>DuplicateItemCode</exception>
 		<exception>OutOfLengthCollectionName</exception>
 		<exception>OutOfLengthItemName</exception>
 		<exception>OutOfLengthCollectionDescription</exception>

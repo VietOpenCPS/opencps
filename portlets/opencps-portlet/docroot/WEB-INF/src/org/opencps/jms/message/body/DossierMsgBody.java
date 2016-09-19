@@ -106,4 +106,5 @@ public class DossierMsgBody implements Serializable {
 	private ServiceInfo _serviceInfo;
 
 	private ServiceContext _serviceContext;
+
 }

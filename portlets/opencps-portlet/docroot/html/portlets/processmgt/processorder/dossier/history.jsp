@@ -169,16 +169,16 @@
 							</span>
 						</aui:row>
 						
-						<aui:row>
-							<span class="span4 bold">
-								<liferay-ui:message key="days-delay" />
-							</span>
+<%-- 						<aui:row> --%>
+<!-- 							<span class="span4 bold"> -->
+<%-- 								<liferay-ui:message key="days-delay" /> --%>
+<!-- 							</span> -->
 							
-							<span class="span8">
-								<%=String.valueOf(actionHistory.getDaysDelay())%>
-							</span>
+<!-- 							<span class="span8"> -->
+<%-- 								<%=String.valueOf(actionHistory.getDaysDelay())%> --%>
+<!-- 							</span> -->
 							
-						</aui:row>
+<%-- 						</aui:row> --%>
 						
 						<aui:row>
 							<span class="span4 bold">

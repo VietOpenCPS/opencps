@@ -83,8 +83,8 @@ public class DossierSearch extends SearchContainer<Dossier> {
 		    (DossierDisplayTerms) getDisplayTerms();
 		
 		iteratorURL
-		    .setParameter(DossierDisplayTerms.GOVAGENCY_NAME, displayTerms
-		        .getGovAgencyName());
+		    .setParameter("serviceDomainId", displayTerms
+		        .getServiceDomainIndex());
 		iteratorURL
 		    .setParameter(DossierDisplayTerms.DOSSIER_STATUS, String.valueOf(displayTerms
 		        .getDossierStatus()));

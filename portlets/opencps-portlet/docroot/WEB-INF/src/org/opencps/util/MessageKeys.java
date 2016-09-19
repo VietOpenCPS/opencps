@@ -87,4 +87,5 @@ public class MessageKeys {
 	
 	//default message
 	public static final String DEFAULT_SUCCESS_KEY = "your-request-completed-successfully";
+	public static final String DEFAULT_SUCCESS_KEY_X = "message-x";
 }

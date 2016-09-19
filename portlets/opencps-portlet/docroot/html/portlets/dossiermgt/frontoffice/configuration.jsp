@@ -48,6 +48,8 @@
 	
 	int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
 	
+	String templatesToDisplay_cfg = GetterUtil.getString(portletPreferences.getValue("templatesToDisplay", "default"));
+	
 %>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
@@ -69,6 +71,14 @@
 		<%
 			}
 		%>
+	</aui:select>
+	
+	<aui:select name="templatesToDisplay" id="templatesToDisplay">
+			
+			<aui:option selected="<%= templatesToDisplay_cfg.equals(\"default\") %>" value="default">default</aui:option>
+			
+			<aui:option selected="<%= templatesToDisplay_cfg.equals(\"20_80\") %>" value="20_80">20_80</aui:option>
+	
 	</aui:select>
 	
 	<aui:input 

@@ -324,7 +324,7 @@
 			<finder-column name="processOrderId"/>
 		</finder>
 		
-		<finder return-type="Collection" name="ProcessOrderId">
+		<finder return-type="Collection" name="ProcessOrderId" where="stepName != ''">
 			<finder-column name="processOrderId"/>
 		</finder>
 		

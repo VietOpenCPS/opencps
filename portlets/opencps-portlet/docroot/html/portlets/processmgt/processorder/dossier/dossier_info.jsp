@@ -20,6 +20,7 @@
 
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>

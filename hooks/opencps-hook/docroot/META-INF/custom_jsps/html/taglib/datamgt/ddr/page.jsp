@@ -1,4 +1,4 @@
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@ include file="init.jsp"%>
 
 <%
@@ -137,7 +137,7 @@
 	
 	var emptyOptionLabels<%=randomInstance %> = strEmptyOptionLabel.split(",");
 	
-	var optionValueType = '<%=optionValueType %>';
+	var optionValueType<%=randomInstance %> = '<%=optionValueType %>';
 	
 	var rootDictItemsContainer =  null;
 	
@@ -216,7 +216,7 @@
 		}
 			
 		if(itemEmptyOption == 'true'){
-			if(optionValueType ==='code'){
+			if(optionValueType<%=randomInstance %> ==='code'){
 				opts += '<option value="">' + Liferay.Language.get(emptyOptionLabel) +'</option>'
 			}else{
 				opts += '<option value="0">' + Liferay.Language.get(emptyOptionLabel) +'</option>'
@@ -267,14 +267,14 @@
 			}
 		
 			if(parseInt(opt.dictItemId) == selectedItem && clearChild == false){
-				if(optionValueType ==='code'){
+				if(optionValueType<%=randomInstance %> ==='code'){
 					opts += '<option value="' + opt.itemCode + '" selected="selected">' + itemName + '</option>'
 				}else{
 					opts += '<option value="' + opt.dictItemId + '" selected="selected">' + itemName + '</option>'
 				}
 				
 			}else{
-				if(optionValueType ==='code'){
+				if(optionValueType<%=randomInstance %> ==='code'){
 					opts += '<option value="' + opt.itemCode + '">' + itemName + '</option>'
 				}else{
 					opts += '<option value="' + opt.dictItemId + '">' + itemName + '</option>'
@@ -312,7 +312,7 @@
 		
 			boundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + level);
 			var data = null;
-			if(optionValueType ==='id'){
+			if(optionValueType<%=randomInstance %> ==='id'){
 				
 				if(parentItem != 0){
 					Liferay.Service(

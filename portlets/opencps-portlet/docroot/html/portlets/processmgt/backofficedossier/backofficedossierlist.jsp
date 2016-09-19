@@ -1,3 +1,5 @@
+<%@page import="org.opencps.usermgt.service.WorkingUnitLocalServiceUtil"%>
+<%@page import="org.opencps.usermgt.model.WorkingUnit"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -46,30 +48,20 @@
 
 <%
 	String dossierStatus = 	ParamUtil.getString(request, "dossierStatusValue");
-	
+	String domainCode = ParamUtil.getString(request, DossierDisplayTerms.SERVICE_DOMAIN_CODE);
+
 	String backURL = ParamUtil.getString(request, "backURL");
-	User mappingUser = (User)request.getAttribute(WebKeys.USER_MAPPING_ENTRY);
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "backofficedossierlist.jsp");
 	iteratorURL.setParameter("tab1", ProcessMgtUtil.TOP_TABS_DOSSIERLIST);
 	iteratorURL.setParameter("dossierStatusValue", dossierStatus);
-	
-	
-	String domainCode = ParamUtil.getString(request, DossierDisplayTerms.SERVICE_DOMAIN_CODE);
+	iteratorURL.setParameter(DossierDisplayTerms.SERVICE_DOMAIN_CODE, domainCode);
 	
 	request.setAttribute(DossierDisplayTerms.SERVICE_DOMAIN_CODE, domainCode);
 	/* request.setAttribute(DossierDisplayTerms.DOSSIER_STATUS, dossierStatus); */
 	
 	List<String> headerNames = new ArrayList<String>();
-	
-	/* headerNames.add("no");
-	headerNames.add("receive-datetime");
-	headerNames.add("reception-no");
-	headerNames.add("subjectname");
-	headerNames.add("serviceinfo-name");
-	headerNames.add("finish-datetime");
-	headerNames.add("process-status"); */
 	
 	headerNames.add("boundcol2");
 	headerNames.add("boundcol3");
@@ -78,200 +70,189 @@
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone); 
 	
 %>
-<div class="opencps-searchcontainer-wrapper">
-	<liferay-ui:search-container searchContainer="<%= new DossierBackOfficeSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
-		headerNames="<%= headers %>">
-			
-		<liferay-ui:search-container-results>
-			<%
-				DossierSearchTerms searchTerms = (DossierSearchTerms) searchContainer.getSearchTerms();
+
+<c:choose>
+	<c:if test="<%=employee != null %>">
+		<%
+			List<String> govAgencyCodes = new ArrayList<String>();
+			try {
+
+				WorkingUnit workingUnit =
+					WorkingUnitLocalServiceUtil.getWorkingUnit(employee.getWorkingUnitId());
+				govAgencyCodes.add(workingUnit.getGovAgencyCode());
+
+			}
+			catch (Exception e) {
+			}
+		%>
+		<div class="opencps-searchcontainer-wrapper">
+			<liferay-ui:search-container searchContainer="<%= new DossierBackOfficeSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
+				headerNames="<%= headers %>">
+					
+				<liferay-ui:search-container-results>
+					<%
+						DossierSearchTerms searchTerms =
+							(DossierSearchTerms) searchContainer.getSearchTerms();
+
+						total =
+							DossierLocalServiceUtil.countDossierByKeywordDomainAndStatus(
+								scopeGroupId, searchTerms.getKeywords(),
+								domainCode, govAgencyCodes, dossierStatus);
+
+						results =
+							DossierLocalServiceUtil.searchDossierByKeywordDomainAndStatus(
+								scopeGroupId, searchTerms.getKeywords(),
+								domainCode, govAgencyCodes, dossierStatus,
+								searchContainer.getStart(),
+								searchContainer.getEnd(),
+								searchContainer.getOrderByComparator());
+
+						pageContext.setAttribute("results", results);
+						pageContext.setAttribute("total", total);
+					%>
+					
+				</liferay-ui:search-container-results>
+				<liferay-ui:search-container-row 
+					className="org.opencps.dossiermgt.model.Dossier" 
+					modelVar="dossier" 
+					keyProperty="dossierId"
+				>
+					<%			
+						PortletURL viewURL = renderResponse.createRenderURL();
+						viewURL.setParameter("mvcPath", templatePath + "backofficedossieroverview.jsp");
+						viewURL.setParameter("dossierId", String.valueOf(dossier.getDossierId()));
+						viewURL.setParameter("backURL", currentURL);
+								
+						String receiveDatetime = StringPool.BLANK;
+						// receive datetime column
+						if (Validator.isNotNull(dossier.getReceiveDatetime())) {
+							receiveDatetime =  dateFormatDate.format(dossier.getReceiveDatetime());				
+						}
+						
+						ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
+						
+						String finishDate = StringPool.BLANK;
+						
+						// finish datetime column
+						if (Validator.isNotNull(dossier.getFinishDatetime())) {
+							finishDate = dateFormatDate.format(dossier.getFinishDatetime());				
+						}
+						
+						String statusText = "";
+						if (Validator.isNotNull(dossier.getFinishDatetime()) && Validator.isNotNull(dossier.getEstimateDatetime())) {
+							if (dossier.getFinishDatetime().after(dossier.getEstimateDatetime())) {
+								statusText = LanguageUtil.get(pageContext, "status-late");
+							}
+							else if (dossier.getFinishDatetime().before(dossier.getEstimateDatetime())) {
+								statusText = LanguageUtil.get(pageContext, "status-soon");
+							}
+							else if (dossier.getFinishDatetime().equals(dossier.getEstimateDatetime())) {
+								statusText = LanguageUtil.get(pageContext, "status-ontime");
+							}
+						}
+						else {
+							Date now = new Date();
 							
-				total =  DossierLocalServiceUtil.countDossierByKeywordDomainAndStatus(scopeGroupId, searchTerms.getKeywords(), 
-						domainCode, dossierStatus);
-	
-				results = DossierLocalServiceUtil.searchDossierByKeywordDomainAndStatus(scopeGroupId, searchTerms.getKeywords(), 
-						domainCode, dossierStatus, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-				
-				pageContext.setAttribute("results", results);
-				pageContext.setAttribute("total", total);
-			%>
-			
-		</liferay-ui:search-container-results>
-		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.model.Dossier" 
-			modelVar="dossier" 
-			keyProperty="dossierId"
-		>
-			<%			
-				PortletURL viewURL = renderResponse.createRenderURL();
-				viewURL.setParameter("mvcPath", templatePath + "backofficedossieroverview.jsp");
-				viewURL.setParameter("dossierId", String.valueOf(dossier.getDossierId()));
-				viewURL.setParameter("backURL", currentURL);
-						
-				String receiveDatetime = StringPool.BLANK;
-				// receive datetime column
-				if (Validator.isNotNull(dossier.getReceiveDatetime())) {
-					receiveDatetime =  dateFormatDate.format(dossier.getReceiveDatetime());				
-				}
-				
-				
-				/* // reception no column
-				row.addText(dossier.getReceptionNo(), viewURL);
-				
-				// subjectname column
-				row.addText(dossier.getSubjectName(), viewURL); */
-				
-				// serviceinfo name column
-				ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
-				
-				String finishDate = StringPool.BLANK;
-				// finish datetime column
-				if (Validator.isNotNull(dossier.getFinishDatetime())) {
-					finishDate = dateFormatDate.format(dossier.getFinishDatetime());				
-				}
-				// dossierstatus column
-				/*
-				String dossierStatusText = "";
-				switch (dossier.getDossierStatus()) {
-				case PortletConstants.DOSSIER_STATUS_NEW:
-					dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-new");
-					break;
-				case PortletConstants.DOSSIER_STATUS_RECEIVING:
-					dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-receiving");
-					break;
-				case PortletConstants.DOSSIER_STATUS_WAITING:
-					dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-waiting");
-					break;
-				case PortletConstants.DOSSIER_STATUS_PAYING:
-					dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-paying");
-					break;
-				case PortletConstants.DOSSIER_STATUS_PROCESSING:
-					dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-processing");
-					break;
-				case PortletConstants.DOSSIER_STATUS_DONE:
-					dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-done");
-					break;
-				case PortletConstants.DOSSIER_STATUS_SYSTEM:
-					dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-system");
-					break;
-				case PortletConstants.DOSSIER_STATUS_ERROR:
-					dossierStatusText = LanguageUtil.get(pageContext, "dossier-status-error");
-					break;
-				default:
-					dossierStatusText = "";
-					break;
-				}
-				row.addText(String.valueOf(dossierStatusText));	
-				*/
-				String statusText = "";
-				if (Validator.isNotNull(dossier.getFinishDatetime()) && Validator.isNotNull(dossier.getEstimateDatetime())) {
-					if (dossier.getFinishDatetime().after(dossier.getEstimateDatetime())) {
-						statusText = LanguageUtil.get(pageContext, "status-late");
-					}
-					else if (dossier.getFinishDatetime().before(dossier.getEstimateDatetime())) {
-						statusText = LanguageUtil.get(pageContext, "status-soon");
-					}
-					else if (dossier.getFinishDatetime().equals(dossier.getEstimateDatetime())) {
-						statusText = LanguageUtil.get(pageContext, "status-ontime");
-					}
-				}
-				else {
-					Date now = new Date();
-					
-					if (Validator.isNotNull(dossier.getEstimateDatetime())) {
-						if (dossier.getEstimateDatetime().before(now)) {
-							statusText = LanguageUtil.get(pageContext, "status-toosoon");
-						}
-						else if (dossier.getEstimateDatetime().after(now)) {
-							statusText = LanguageUtil.get(pageContext, "status-toolate");
-						}
-					}
-				}			
-			%>	
-			<!-- uxtheme -->
-			<liferay-util:buffer var="boundcol2">
-					<div class="row-fluid">
-						<div class="span5 bold-label">
-							<liferay-ui:message key="receive-datetime"/>
+							if (Validator.isNotNull(dossier.getEstimateDatetime())) {
+								if (dossier.getEstimateDatetime().before(now)) {
+									statusText = LanguageUtil.get(pageContext, "status-toosoon");
+								}
+								else if (dossier.getEstimateDatetime().after(now)) {
+									statusText = LanguageUtil.get(pageContext, "status-toolate");
+								}
+							}
+						}			
+					%>	
+					<!-- uxtheme -->
+					<liferay-util:buffer var="info">
+						<div class="row-fluid">
+							<div class="span5 bold-label">
+								<liferay-ui:message key="receive-datetime"/>
+							</div>
+							
+							<div class="span7">
+								<a href="<%=viewURL.toString()%>"><%=receiveDatetime %></a>
+							</div>
 						</div>
 						
-						<div class="span7">
-							<a href="<%=viewURL.toString()%>"><%=receiveDatetime %></a>
-						</div>
-					</div>
-					
-					
-					<div class="row-fluid">
-						<div class="span5 bold-label">
-							<liferay-ui:message key="reception-no"/>
+						
+						<div class="row-fluid">
+							<div class="span5 bold-label">
+								<liferay-ui:message key="reception-no"/>
+							</div>
+							
+							<div class="span7">
+								<a href="<%=viewURL.toString()%>"><%=dossier.getReceptionNo() %></a>
+							</div>
 						</div>
 						
-						<div class="span7">
-							<a href="<%=viewURL.toString()%>"><%=dossier.getReceptionNo() %></a>
+						<div class="row-fluid">
+							<div class="span5 bold-label">
+								<liferay-ui:message key="subjectname"/>
+							</div>
+							
+							<div class="span7">
+								<a href="<%=viewURL.toString()%>"><%=dossier.getSubjectName() %></a>
+							</div>
 						</div>
-					</div>
+					</liferay-util:buffer>
 					
-					<div class="row-fluid">
-						<div class="span5 bold-label">
-							<liferay-ui:message key="subjectname"/>
+					<liferay-util:buffer var="detail">
+						<div class="row-fluid">
+							<div class="span3 bold-label">
+								<liferay-ui:message key="serviceinfo-name"/>
+							</div>
+							
+							<div class="span9">
+								<a href="<%=viewURL.toString()%>"><%=serviceInfo.getServiceName() %></a>
+							</div>
 						</div>
 						
-						<div class="span7">
-							<a href="<%=viewURL.toString()%>"><%=dossier.getSubjectName() %></a>
-						</div>
-					</div>
-				</liferay-util:buffer>
-				
-				<liferay-util:buffer var="boundcol3">
-					<div class="row-fluid">
-						<div class="span3 bold-label">
-							<liferay-ui:message key="serviceinfo-name"/>
-						</div>
 						
-						<div class="span9">
-							<a href="<%=viewURL.toString()%>"><%=serviceInfo.getServiceName() %></a>
-						</div>
-					</div>
-					
-					
-					<div class="row-fluid">
-						<div class="span3 bold-label">
-							<liferay-ui:message key="finish-datetime"/>
-						</div>
-						
-						<div class="span9">
-							<a href="<%=viewURL.toString()%>"><%=finishDate %></a>
-						</div>
+						<div class="row-fluid">
+							<div class="span3 bold-label">
+								<liferay-ui:message key="finish-datetime"/>
+							</div>
+							
+							<div class="span9">
+								<a href="<%=viewURL.toString()%>"><%=finishDate %></a>
+							</div>
 					</div>
 					
 					<div class="row-fluid">
 						<div class="span3 bold-label">
-							<liferay-ui:message key="process-status"/>
+								<liferay-ui:message key="process-status"/>
+							</div>
+							
+							<div class="span9">
+								<a href="<%=viewURL.toString()%>"><%=statusText %></a>
+							</div>
 						</div>
-						
-						<div class="span9">
-							<a href="<%=viewURL.toString()%>"><%=statusText %></a>
-						</div>
-					</div>
-				</liferay-util:buffer>
+					</liferay-util:buffer>
+					
+					<%
+						row.setClassName("opencps-searchcontainer-row");
+						row.addText(String.valueOf(row.getPos() + 1), viewURL);
+						row.addText(info);
+						row.addText(detail);
+					%>
 				
-				<%
-					row.setClassName("opencps-searchcontainer-row");
-					row.addText(String.valueOf(row.getPos() + 1), viewURL);
-					row.addText(boundcol2);
-					row.addText(boundcol3);
-				%>
-			
-			<%
-				
-			%>
+			</liferay-ui:search-container-row>	
 		
-		</liferay-ui:search-container-row>	
+			<liferay-ui:search-iterator type="opencs_page_iterator"/>
+		
+		</liferay-ui:search-container>
+		</div>
+	</c:if>
 	
-		<liferay-ui:search-iterator type="opencs_page_iterator"/>
-	
-	</liferay-ui:search-container>
-</div>
+	<c:otherwise>
+		<div class="portlet-msg-warring">
+			<liferay-ui:message key="your-account-not-permission-access-this-resource-or-your-session-has-finished-please-login-to-continue"/>
+		</div>
+	</c:otherwise>
+</c:choose>
+
+
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.backoffice.backofficedossierlist.jsp");
 %>

@@ -52,7 +52,6 @@ import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.jms.message.body.PaymentFileMsgBody;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
 import org.opencps.paymentmgt.model.PaymentFile;
-import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.DLFileEntryUtil;
@@ -158,15 +157,19 @@ public class JMSMessageBodyUtil {
 					new SubmitDossierMessage(context);
 
 				submitDossierMessage.receiveLocalMessage(dossierMsgBody);
-			} else if (object instanceof PaymentFileMsgBody) {
-				_log.info("////// POKEMON GO > PaymentFileMgsBody");
-				
+
+				//
+			}
+			else if (object instanceof PaymentFileMsgBody) {
+				_log.info("////// /////////////////// PaymentFileMgsBody");
+
 				PaymentFileMsgBody paymentMsgBody = (PaymentFileMsgBody) object;
-				
-				SubmitPaymentFileMessage submitPaymentFileMessage = new SubmitPaymentFileMessage(context);
-				
+
+				SubmitPaymentFileMessage submitPaymentFileMessage =
+					new SubmitPaymentFileMessage(context);
+
 				submitPaymentFileMessage.reviceLocalMessage(paymentMsgBody);
-				
+
 			}
 		}
 		else if (jsmMessage instanceof StreamMessage) {
@@ -181,7 +184,8 @@ public class JMSMessageBodyUtil {
 	 * @param dossierId
 	 * @return
 	 */
-	public static DossierMsgBody getDossierMsgBody(long dossierId, long fileGroupId) {
+	public static DossierMsgBody getDossierMsgBody(
+		long dossierId, long fileGroupId) {
 
 		DossierMsgBody dossierMsgBody = new DossierMsgBody();
 
@@ -198,7 +202,10 @@ public class JMSMessageBodyUtil {
 			List<DossierFile> dossierFiles =
 				DossierFileLocalServiceUtil.getDossierFileByD_S_R(
 					dossierId,
-					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC, 0);
+					PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC, 0);
+
+			_log.info("##################################################### SIZE" +
+				dossierFiles.size());
 
 			List<DossierFileMsgBody> dossierFileMsgBodies =
 				new ArrayList<DossierFileMsgBody>();
@@ -220,6 +227,10 @@ public class JMSMessageBodyUtil {
 						DossierPartLocalServiceUtil.getDossierPart(dossierFile.getDossierPartId());
 
 					if (dossierFile.getFileEntryId() > 0) {
+
+						_log.info("#####################################################" +
+							dossierFile.getFileEntryId());
+
 						DLFileEntry dlFileEntry =
 							DLFileEntryUtil.getDLFileEntry(dossierFile.getFileEntryId());
 						dossierFileMsgBody.setFileDescription(dlFileEntry.getDescription());
@@ -326,7 +337,7 @@ public class JMSMessageBodyUtil {
 					JMSMessageUtil.convertInputStreamToByteArray(dlFileEntry.getContentStream());
 
 				paymentFileMsgBody.setConfirmFileEntry(confirmFileEntry);
-				
+
 				paymentFileMsgBody.setExtension(dlFileEntry.getExtension());
 				paymentFileMsgBody.setFileDescription(dlFileEntry.getDescription());
 				paymentFileMsgBody.setFileName(dlFileEntry.getName());
@@ -536,7 +547,6 @@ public class JMSMessageBodyUtil {
 
 		protected LinkedHashMap<String, byte[]> _data;
 	}
-
 
 	private static Log _log =
 		LogFactoryUtil.getLog(DossierMsgBody.class.getName());

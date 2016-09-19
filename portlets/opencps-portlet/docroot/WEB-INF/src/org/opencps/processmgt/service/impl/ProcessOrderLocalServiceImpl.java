@@ -530,9 +530,8 @@ public class ProcessOrderLocalServiceImpl
 	 */
 	public List searchProcessOrder(
 		long serviceInfoId, long processStepId, long loginUserId,
-		long actionUserId, int start, int end,
-		OrderByComparator orderByComparator) {
-
+		long actionUserId, int start, int end, OrderByComparator orderByComparator) {
+		
 		return processOrderFinder
 			.searchProcessOrder(serviceInfoId, processStepId, loginUserId,
 				actionUserId, start, end, orderByComparator);

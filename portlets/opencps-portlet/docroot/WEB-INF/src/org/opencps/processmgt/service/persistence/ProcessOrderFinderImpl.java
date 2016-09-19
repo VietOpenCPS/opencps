@@ -604,7 +604,9 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 					.replace(sql, "AND opencps_processstep.processStepId = ?",
 						StringPool.BLANK);
 			}
-
+			
+			sql = CustomSQLUtil.replaceOrderBy(sql, orderByComparator);
+			
 			SQLQuery q = session
 				.createSQLQuery(sql);
 
@@ -810,7 +812,9 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 					.replace(sql, "AND opencps_processstep.processStepId = ?",
 						StringPool.BLANK);
 			}
-
+			
+			sql = CustomSQLUtil.replaceOrderBy(sql, orderByComparator);
+			
 			SQLQuery q = session
 				.createSQLQuery(sql);
 

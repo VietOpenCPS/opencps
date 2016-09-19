@@ -593,6 +593,21 @@ public class TemplateFileLocalServiceImpl
 		return folderExist;
 	}
 
+	/**
+	 * get templateFile by FileNo
+	 * 
+	 * @param groupId
+	 * @param fileName
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public TemplateFile getTemplateFileByNo(long groupId, String fileNo) throws SystemException {
+
+		return templateFilePersistence.fetchByG_F_NO(groupId, fileNo);
+		
+	}
+	
 	private String ROOT_FOLDER_NAME = "OPENCPS";
 
 	private String PARENT_FOLDER_NAME = "templates";

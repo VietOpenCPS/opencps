@@ -74,7 +74,7 @@
 				row.setClassName("opencps-searchcontainer-row");
 			%>
 			
-			<liferay-util:buffer var="no">
+			<liferay-util:buffer var="rowIndex">
 				<div class="row-fluid min-width10">
 					<div class="span12 bold">
 						<%=row.getPos() + 1 %>
@@ -83,7 +83,7 @@
 			</liferay-util:buffer>
 		
 			<liferay-ui:search-container-column-text 
-				name="row-index" value="<%= no %>"
+				name="row-index" value="<%= rowIndex %>"
 			/>
 			
 			<liferay-util:buffer var="service">

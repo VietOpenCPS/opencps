@@ -64,7 +64,7 @@
 				row.setClassName("opencps-searchcontainer-row");
 			%>
 		
-			<liferay-util:buffer var="no">
+			<liferay-util:buffer var="rowIndex">
 				<div class="row-fluid min-width10">
 					<div class="span12 bold">
 						<a href="<%=editURL.toString()%>"><%=row.getPos() + 1 %></a>
@@ -97,7 +97,7 @@
 			</liferay-util:buffer>
 			
 			<liferay-ui:search-container-column-text 
-				name="no" value="<%= no %>"
+				name="row-index" value="<%= rowIndex %>"
 			/>
 			
 			

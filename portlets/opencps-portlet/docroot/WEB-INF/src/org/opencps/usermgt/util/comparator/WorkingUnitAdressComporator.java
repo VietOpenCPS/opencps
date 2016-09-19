@@ -18,8 +18,6 @@ package org.opencps.usermgt.util.comparator;
 
 import org.opencps.usermgt.model.WorkingUnit;
 
-import sun.swing.StringUIClientPropertyKey;
-
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
 

@@ -65,6 +65,8 @@
 	
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 	
+	String cssRequired = StringPool.BLANK;
+	
 	/* if(accountRoles != null && processStep != null){
 		for(int r = 0; r < accountRoles.size(); r++){
 			try{
@@ -213,6 +215,8 @@
 										}catch(Exception e){}
 									}
 									
+									cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
+									
 									%>
 										<div 
 											id='<%=renderResponse.getNamespace() + "row-" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
@@ -229,7 +233,7 @@
 													>
 													</i>
 												</span>
-												<span class="opencps dossiermgt dossier-part-name">
+												<span class="opencps dossiermgt dossier-part-name <%=cssRequired %>">
 													<%=dossierPart.getPartName() %>
 												</span>
 											</span>
@@ -304,7 +308,9 @@
 								}
 								
 								if(hasProcecssOrderResult){
-											
+									
+									cssRequired = dossierPartLevel1.getRequired() ? "cssRequired" : StringPool.BLANK;
+									
 									%>
 										<div 
 											id='<%=renderResponse.getNamespace() + "row-" + dossierPartLevel1.getDossierpartId() + StringPool.DASH + index %>' 
@@ -316,7 +322,7 @@
 												<span class="row-icon">
 													<i class="fa fa-circle" aria-hidden="true"></i>
 												</span>
-												<span class="opencps dossiermgt dossier-part-name">
+												<span class="opencps dossiermgt dossier-part-name <%=cssRequired %>">
 													<%=dossierPartLevel1.getPartName() %>
 												</span>
 											</span>

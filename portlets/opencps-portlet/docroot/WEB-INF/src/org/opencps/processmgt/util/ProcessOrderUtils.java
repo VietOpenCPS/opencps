@@ -22,18 +22,27 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.portlet.PortletModeException;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.WindowStateException;
 
+import org.opencps.datamgt.model.DictCollection;
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
+import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.StepAllowance;
+import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
+import org.opencps.processmgt.util.comparator.ProcessOrderModifiedDateComparator;
 import org.opencps.util.PortletUtil;
 //import org.opencps.processmgt.util.comparator.BuocXuLyComparator;
 //import org.opencps.processmgt.util.comparator.ChuHoSoComparator;
@@ -42,10 +51,18 @@ import org.opencps.util.PortletUtil;
 //import org.opencps.processmgt.util.comparator.ThuTucComparator;
 import org.opencps.util.WebKeys;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -74,7 +91,11 @@ public class ProcessOrderUtils {
 		}
 
 		OrderByComparator orderByComparator = null;
-
+		
+		if(orderByCol.equals(ProcessOrderDisplayTerms.MODIFIEDDATE)) {
+			orderByComparator = new ProcessOrderModifiedDateComparator(orderByAsc);
+		}
+		
 		// if(orderByCol.equals(ProcessOrderDisplayTerms.MA_TIEP_NHAN)) {
 		// orderByComparator = new MaTiepNhanComparator(orderByAsc);
 		// } else if(orderByCol.equals(ProcessOrderDisplayTerms.CHU_HO_SO)) {
@@ -400,64 +421,204 @@ public class ProcessOrderUtils {
 
 	}
 
-	public static String generateMenuTrangThaiHoSo(
-		RenderRequest renderRequest, long[] roleIds, String active,
-		boolean counter, String renderURL)
-		throws WindowStateException, PortletModeException {
+	public static String generateTreeView(String collectionCode, String itemCode,
+			String myLabel, int level, String type,
+			boolean isCode ,RenderRequest renderRequest)		
+					throws SystemException, PortalException {
+		
+			ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
+				.getAttribute(WebKeys.THEME_DISPLAY);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
-			.getAttribute(WebKeys.THEME_DISPLAY);
+			long groupId = themeDisplay
+				.getScopeGroupId();
+			
+			//get chirentDataSource
+			
+			DictCollection dictCollection = DictCollectionLocalServiceUtil.getDictCollection(groupId, collectionCode);
+			
+			long parentId = 0;
+			
+			if(!itemCode.equalsIgnoreCase("0")){
+				
+				DictItem ett = DictItemLocalServiceUtil
+						.getDictItemInuseByItemCode(dictCollection.getDictCollectionId(), itemCode);
+				
+				parentId = ett.getDictItemId();
+				
+			}
+			
+			List<DictItem> result = DictItemLocalServiceUtil
+				.getDictItemsInUseByDictCollectionIdAndParentItemId(
+						dictCollection.getDictCollectionId(), parentId);
+			
+			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+			
+			JSONObject jsonObjectRoot = JSONFactoryUtil
+					.createJSONObject();
+			JSONObject jsonObject = null;
+			
+			for (DictItem dictItem : result) {
+				jsonObject = JSONFactoryUtil
+						.createJSONObject();
+				
+				jsonObject.put("label",
+						dictItem.getItemName(Locale.getDefault()));
+				
+				jsonObject.put("type", type);
+				
+				if(isCode){
+					jsonObject.put("id", dictItem.getItemCode());
+				}else{
+					jsonObject.put("id", StringUtil.valueOf(dictItem.getDictItemId()));
+				}
+				
+				if(level > 0){
+				
+					jsonObject.put("leaf", false);
+					
+					jsonObject = doChildTreeJson(jsonObject, type, isCode,
+							dictCollection.getDictCollectionId(), dictItem.getDictItemId(), level);
+				
+				}else{
+					
+					jsonObject.put("leaf", true);
+				
+				}
 
-		long groupId = themeDisplay
-			.getScopeGroupId();
-
-		// now read your parameters, e.g. like this:
-		// long someParameter = ParamUtil.getLong(request, "someParameter");
-
-		StringBuilder sbHtml = new StringBuilder();
-
-		sbHtml
-			.append("<ul class=\"menu-opencps\">");
-
-		for (String ett : PortletUtil
-			.getDossierStatus()) {
-			String mnClass = (Validator
-				.isNotNull(active) && active
-					.equalsIgnoreCase(String
-						.valueOf(ett)) ? "active-menu" : "");
-
-			sbHtml
-				.append("<li class=\"menu-opencps-li " + mnClass +
-					"\" onclick=\"openCPS_menu_submit('" + renderURL + "','" +
-					ett + "')\" >");
-
-			sbHtml
-				.append("<a>");
-
-			if (counter)
-				sbHtml
-					.append("<span id=\"" + "badge_" + ett +
-						"\" class=\"badge\">0</span>");
-
-			sbHtml
-				.append(HtmlUtil
-					.escape(PortletUtil
-						.getDossierStatusLabel(ett, Locale
-							.getDefault())));
-
-			sbHtml
-				.append("</a>");
-
-			sbHtml
-				.append("</li>");
-
+				jsonArray.put(jsonObject);
+			}
+			
+			jsonObjectRoot.put("children", jsonArray);
+			
+			jsonObjectRoot.put("expanded", true);
+			
+			jsonObjectRoot.put("label", myLabel);
+			
+			jsonArrayRoot.put(jsonObjectRoot);
+			
+			return jsonArrayRoot.toString();
 		}
+	
+	public static String generateTreeView(List<ProcessOrderBean> dataSource, String myLabel , String type)		
+					throws SystemException, PortalException {
+		
+			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+			
+			JSONObject jsonObjectRoot = JSONFactoryUtil
+					.createJSONObject();
+			JSONObject jsonObject = null;
+			
+			for (ProcessOrderBean item : dataSource) {
+				jsonObject = JSONFactoryUtil
+						.createJSONObject();
+				
+				if(item.getServiceInfoId() > 0){
 
-		sbHtml
-			.append("</ul>");
+					jsonObject.put("id", String.valueOf(item.getServiceInfoId()));
+					
+					jsonObject.put("label", item.getServiceName());
+				
+				}else if(item.getProcessStepId() > 0){
 
-		return sbHtml
-			.toString();
+					jsonObject.put("id", String.valueOf(item.getProcessStepId()));
+					
+					jsonObject.put("label", item.getStepName());
+				
+				}
+				
+				jsonObject.put("type", type);
+				
+				jsonObject.put("leaf", true);
+				
+				jsonArray.put(jsonObject);
+			}
+			
+			jsonObjectRoot.put("children", jsonArray);
+			
+			jsonObjectRoot.put("expanded", true);
+			
+			jsonObjectRoot.put("label", myLabel);
+			
+			jsonArrayRoot.put(jsonObjectRoot);
+			
+			return jsonArrayRoot.toString();
+		}
+	
+	private static JSONObject doChildTreeJson(JSONObject jsonObject,String type, boolean isCode,
+			long dictCollectionId, long dictItemId, int level) throws SystemException{
+		List<DictItem> resultlv1 = null;
+		resultlv1 = DictItemLocalServiceUtil
+				.getDictItemsInUseByDictCollectionIdAndParentItemId(
+						dictCollectionId, dictItemId);
+		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		for (DictItem dictItem2 : resultlv1) {
+			JSONObject jsonObjectlv1 = JSONFactoryUtil
+					.createJSONObject();
+			
+			jsonObjectlv1.put("label",
+					dictItem2.getItemName(Locale.getDefault()));
+			
+			jsonObjectlv1.put("type", type);
+			
+			if(isCode){
+				jsonObjectlv1.put("id", dictItem2.getItemCode());
+			}else{
+				jsonObjectlv1.put("id", StringUtil.valueOf(dictItem2.getDictItemId()));
+			}
+			
+			jsonObjectlv1.put("expanded", true);
+			
+			switch (level) {
+				case 1:
+					jsonObjectlv1.put("leaf", true);
+				break;
+				case 2:
+					jsonObjectlv1.put("leaf", false);
+					List<DictItem> resultlv2 = null;
+					resultlv2 = DictItemLocalServiceUtil
+							.getDictItemsInUseByDictCollectionIdAndParentItemId(
+									dictCollectionId, dictItemId);
+					JSONArray jsonArraylv2 = JSONFactoryUtil.createJSONArray();
+					for (DictItem dictItem3 : resultlv2) {
+						JSONObject jsonObjectlv2 = JSONFactoryUtil
+								.createJSONObject();
+						
+						jsonObjectlv2.put("label",
+								dictItem3.getItemName(Locale.getDefault()));
+						
+						jsonObjectlv2.put("type", type);
+						
+						if(isCode){
+							jsonObjectlv2.put("id", dictItem3.getItemCode());
+						}else{
+							jsonObjectlv2.put("id", StringUtil.valueOf(dictItem3.getDictItemId()));
+						}
+						
+						jsonObjectlv2.put("leaf", true);
+						
+						jsonObjectlv2.put("expanded", true);
+
+						jsonArraylv2.put(jsonObjectlv2);
+					}
+					jsonObjectlv1.put("children", jsonArraylv2);
+					break;
+					
+				default:
+					jsonObjectlv1.put("leaf", true);
+					break;
+			}
+
+			jsonArray.put(jsonObjectlv1);
+		}
+		
+		jsonObject.put("expanded", true);
+		
+		jsonObject.put("children", jsonArray);
+		
+		return jsonObject;
 	}
 
 }

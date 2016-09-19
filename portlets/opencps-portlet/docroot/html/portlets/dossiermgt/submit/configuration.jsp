@@ -52,7 +52,7 @@
 			<%
 				for (Layout lout : allLayout) {
 			%>
-				<aui:option value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></aui:option>
+				<aui:option value="<%= lout.getPlid() %>" selected="<%=Long.valueOf(plidRes) ==  lout.getPlid()%>"><%= lout.getName(locale) %></aui:option>
 			<%
 				}
 			%>
@@ -64,7 +64,7 @@
 			<%
 				for (Layout lout : allLayout) {
 			%>
-				<aui:option value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></aui:option>
+				<aui:option value="<%= lout.getPlid() %>" selected="<%=Long.valueOf(plidServiceDetail) ==  lout.getPlid()%>"><%= lout.getName(locale) %></aui:option>
 			<%
 				}
 			%>

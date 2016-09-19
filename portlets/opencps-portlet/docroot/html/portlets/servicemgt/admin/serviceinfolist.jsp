@@ -32,7 +32,7 @@
 	
 	List<String> headerNames = new ArrayList<String>();
 	
-	headerNames.add("no");
+	headerNames.add("row-index");
 	headerNames.add("service-info");
 	headerNames.add("service-domain-administrator");
 
@@ -131,7 +131,7 @@
 			
 			%>
 
-			<liferay-util:buffer var="no">
+			<liferay-util:buffer var="rowIndex">
 				<div class="row-fluid min-width10">
 					<div class="span12 bold">
 						<%=row.getPos() + 1 %>
@@ -190,7 +190,7 @@
 			<%
 				row.setClassName("opencps-searchcontainer-row");
 				
-				row.addText(no);
+				row.addText(rowIndex);
 				
 				row.addText(service);
 				

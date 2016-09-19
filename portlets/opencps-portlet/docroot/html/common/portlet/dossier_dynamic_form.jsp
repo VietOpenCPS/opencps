@@ -57,7 +57,6 @@
 
 	try{
 		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
-		
 	}catch(Exception e){
 		
 	}
@@ -197,7 +196,7 @@
 				<c:if test="<%=dossierFileId > 0%>">
 					<aui:button type="button" value="preview" name="preview"/>
 					
-					<aui:button type="button" value="create-file" name="create-file"/>
+<%-- 					<aui:button type="button" value="create-file" name="create-file"/> --%>
 				</c:if>
 			</c:when>
 		</c:choose>
@@ -262,6 +261,8 @@
 			};
 			
 			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>', data);
+			
+			<portlet:namespace/>createReport(dossierFileId);
 		}
 	});
 	

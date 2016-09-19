@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactory;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
@@ -254,11 +255,7 @@ public class DossierFileLocalServiceImpl
 				folderId,
 				sourceFileName,
 				mimeType,
-				oldDossierFile.getDisplayName() +
-					StringPool.DASH +
-					dossierFileId +
-					StringPool.DASH +
-					(oldDossierFile.getVersion() + 1 + StringPool.DASH + System.currentTimeMillis()),
+				getFileName(sourceFileName),
 				description, changeLog, is, size, serviceContext);
 
 		dossierFile.setFileEntryId(fileEntry.getFileEntryId());
@@ -336,11 +333,7 @@ public class DossierFileLocalServiceImpl
 				folderId,
 				sourceFileName,
 				mimeType,
-				oldDossierFile.getDisplayName() +
-					StringPool.DASH +
-					dossierFileId +
-					StringPool.DASH +
-					(oldDossierFile.getVersion() + 1 + StringPool.DASH + System.currentTimeMillis()),
+				getFileName(sourceFileName),
 				description, changeLog, bytes, serviceContext);
 
 		dossierFile.setFileEntryId(fileEntry.getFileEntryId());
@@ -460,9 +453,7 @@ public class DossierFileLocalServiceImpl
 				folderId,
 				sourceFileName,
 				mimeType,
-				displayName + StringPool.DASH + dossierFileId +
-					StringPool.DASH + version + StringPool.DASH +
-					System.currentTimeMillis(), description, changeLog, is,
+				getFileName(sourceFileName), description, changeLog, is,
 				size, serviceContext);
 
 		dossierFile.setFileEntryId(fileEntry.getFileEntryId());
@@ -619,7 +610,7 @@ public class DossierFileLocalServiceImpl
 		FileEntry fileEntry =
 			dlAppLocalService.addFileEntry(
 				serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-				folderId, sourceFileName, mimeType, title, description,
+				folderId, sourceFileName, mimeType, getFileName(sourceFileName), description,
 				changeLog, bytes, serviceContext);
 		/*
 		 * FileEntry fileEntry = dlAppServiceUtil.addFileEntry(
@@ -739,11 +730,7 @@ public class DossierFileLocalServiceImpl
 				folderId,
 				sourceFileName,
 				mimeType,
-				oldDossierFile.getDisplayName() +
-					StringPool.DASH +
-					dossierFileId +
-					StringPool.DASH +
-					(oldDossierFile.getVersion() + 1 + StringPool.DASH + System.currentTimeMillis()),
+				getFileName(sourceFileName),
 				description, changeLog, is, size, serviceContext);
 
 		dossierFile.setFileEntryId(fileEntry.getFileEntryId());
@@ -1188,9 +1175,7 @@ public class DossierFileLocalServiceImpl
 		FileEntry fileEntry =
 			dlAppService.addFileEntry(
 				serviceContext.getScopeGroupId(), folderId, sourceFileName,
-				mimeType, title + StringPool.DASH + dossierFileId +
-					StringPool.DASH + dossierFile.getVersion() +
-					StringPool.DASH + System.currentTimeMillis(), description,
+				mimeType, getFileName(sourceFileName), description,
 				changeLog, is, size, serviceContext);
 
 		dossierFile.setFileEntryId(fileEntry.getFileEntryId());
@@ -1213,5 +1198,28 @@ public class DossierFileLocalServiceImpl
 		throws SystemException {
 
 		return dossierFilePersistence.fetchByOid(oid);
+	}
+	
+	/**
+	 * Ham chuyen ten file nguoi dung upload len thanh ten do he thong quy dinh
+	 * 
+	 * @param sourceFileName
+	 * @return
+	 */
+	private String getFileName(String sourceFileName) {
+		String ext = FileUtil.getExtension(sourceFileName);
+		
+		StringBuilder sbFileName = new StringBuilder(5);
+		
+		sbFileName.append(PortalUUIDUtil.generate());
+		sbFileName.append(StringPool.DASH);
+		sbFileName.append(System.nanoTime());
+		
+		if(Validator.isNotNull(ext)) {
+			sbFileName.append(StringPool.PERIOD);
+			sbFileName.append(ext);
+		}
+		
+		return sbFileName.toString();
 	}
 }

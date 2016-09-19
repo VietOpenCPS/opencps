@@ -161,6 +161,7 @@
 	<portlet>
 		<portlet-name>16</portlet-name>
 		<icon>/icon.png</icon>
+		<configuration-action-class>org.opencps.processmgt.portlet.ConfigurationProcessOrderImpl</configuration-action-class>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<header-portlet-css>/css/processmgt.css</header-portlet-css>
 		<header-portlet-css>/css/alpacajs-icon.css</header-portlet-css>

@@ -71,16 +71,22 @@ public class VerifyEmailAddressAction extends Action {
 			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
 				Citizen citizen = CitizenLocalServiceUtil
 				    .getCitizenByUUID(token);
-				if (citizen != null && citizen
-				    .getAccountStatus() == PortletConstants.ACCOUNT_STATUS_REGISTERED) {
+				if (citizen != null && (citizen
+				    .getAccountStatus() == PortletConstants.ACCOUNT_STATUS_REGISTERED ||
+				    citizen.getAccountStatus() == PortletConstants.ACCOUNT_STATUS_APPROVED)) {
 
 					User mappingUser = UserLocalServiceUtil
 					    .updatePassword(citizen
 					        .getMappingUserId(), password, password, false);
 
-					citizen
+					if(citizen.getAccountStatus() != PortletConstants.ACCOUNT_STATUS_APPROVED){
+						
+						citizen
 					    .setAccountStatus(
 					        PortletConstants.ACCOUNT_STATUS_CONFIRMED);
+					
+					}
+					
 					citizen
 					    .setModifiedDate(new Date());
 					CitizenLocalServiceUtil
@@ -99,15 +105,22 @@ public class VerifyEmailAddressAction extends Action {
 			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
 				Business business = BusinessLocalServiceUtil
 				    .getBusinessByUUID(token);
-				if (business != null && business
-				    .getAccountStatus() == PortletConstants.ACCOUNT_STATUS_REGISTERED) {
+				if (business != null && ( business
+				    .getAccountStatus() == PortletConstants.ACCOUNT_STATUS_REGISTERED ||
+				    business.getAccountStatus() == PortletConstants.ACCOUNT_STATUS_APPROVED)) {
 
 					User mappingUser = UserLocalServiceUtil
 					    .updatePassword(business
 					        .getMappingUserId(), password, password, false);
-					business
+					
+					if(business.getAccountStatus() != PortletConstants.ACCOUNT_STATUS_APPROVED){
+						
+						business
 					    .setAccountStatus(
 					        PortletConstants.ACCOUNT_STATUS_CONFIRMED);
+					
+					}
+					
 					business
 					    .setModifiedDate(new Date());
 					BusinessLocalServiceUtil

@@ -354,7 +354,9 @@
         <column name="messageInfo" type="String"/>
         <column name="updateDatetime" type="Date"/>
         <column name="level" type="int"/>
-        <column name="actor" type="String"></column>
+        <column name="actor" type="int"></column>
+        <column name="actorId" type="long"></column>
+        <column name="actorName" type="String"></column>
         <column name="syncStatus" type="int"></column>
         <order by="desc">
             <order-column name="modifiedDate" order-by="desc"></order-column>
@@ -369,6 +371,11 @@
         <finder name="D_RC" return-type="Collection">
             <finder-column name="dossierId"/>
             <finder-column name="requestCommand"/>
+        </finder>
+        
+        <finder name="D_A" return-type="Collection" where="dossierStatus != 'system'">
+            <finder-column name="dossierId"/>
+            <finder-column name="actor"/>
         </finder>
     </entity>
     

@@ -85,7 +85,9 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String SERVICE_NO = "serviceNo";
 	public static final String ACCOUNT_TYPE = "accountType";
 	public static final String REDIRECT_PAYMENT_URL = "redirectPaymentURL";
-
+	public static final String SERVICE_DOMAIN_ID = "serviceDomainId";
+	
+	
 	public static final String USER_ID = "userId";
 
 	public DossierDisplayTerms(PortletRequest portletRequest) {
@@ -132,6 +134,9 @@ public class DossierDisplayTerms extends DisplayTerms {
 			.getLong(portletRequest, USER_ID);
 
 		groupId = setGroupId(portletRequest);
+		
+		serviceDomainIndex = ParamUtil
+				.getString(portletRequest, SERVICE_DOMAIN_ID);
 	}
 
 	public long setGroupId(PortletRequest portletRequest) {

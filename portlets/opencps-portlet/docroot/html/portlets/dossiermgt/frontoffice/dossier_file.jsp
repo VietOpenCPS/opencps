@@ -24,7 +24,7 @@
 %>
 
 <liferay-ui:tabs
-	names="upload-file,select-file"
+	names="upload-file,select-file-store"
 	refresh="<%= false %>"
 	value="<%=tab1 %>"
 >

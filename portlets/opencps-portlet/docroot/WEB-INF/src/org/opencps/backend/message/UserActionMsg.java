@@ -212,6 +212,27 @@ public class UserActionMsg {
 
 		this.paymentFileId = paymentFileId;
 	}
+	
+	
+	
+	/**
+	 * @return
+	 */
+	public String getDossierOId() {
+	
+		return dossierOId;
+	}
+
+	
+	/**
+	 * @param dossierOId
+	 */
+	public void setDossierOId(String dossierOId) {
+	
+		this.dossierOId = dossierOId;
+	}
+
+
 
 	protected long paymentFileId;
 	protected String noReceptionNo;
@@ -224,5 +245,6 @@ public class UserActionMsg {
 	protected long userId;
 	protected Locale locale;
 	protected long processOrderId;
+	protected String dossierOId;
 
 }

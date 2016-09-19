@@ -48,7 +48,7 @@
 									<liferay-ui:message key="requested"></liferay-ui:message>
 								</aui:option>
 								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED %>">
-									<liferay-ui:message key="confirmed"></liferay-ui:message>
+									<liferay-ui:message key="payment-confirmed"></liferay-ui:message>
 								</aui:option>
 								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
 									<liferay-ui:message key="approved"></liferay-ui:message>

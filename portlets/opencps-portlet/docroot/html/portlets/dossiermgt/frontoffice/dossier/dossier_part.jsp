@@ -82,6 +82,10 @@
 	
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 	
+	String cssRequired = StringPool.BLANK;
+	
+	String urlDownload = StringPool.BLANK;
+	
 	if(dossierTemplate != null){
 		try{
 			dossierPartsLevel1 = DossierPartLocalServiceUtil.getDossierPartsByT_P(dossierTemplate.getDossierTemplateId(), 0);
@@ -134,6 +138,9 @@
 									}
 								}
 								
+								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
+								
+								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPart.getTemplateFileNo());
 								
 								%>
 									<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
@@ -157,8 +164,11 @@
 												</c:choose>
 												
 											</span>
-											<span class="opencps dossiermgt dossier-part-name">
-												<%=dossierPart.getPartName() %>
+											<span class="opencps dossiermgt dossier-part-name <%=cssRequired %>">
+												<%=dossierPart.getPartName() %> 
+												<c:if test="<%=Validator.isNotNull(urlDownload) %>">
+													<a target="_blank" class="download-dossier-file" href="<%=urlDownload%>"><liferay-ui:message key="download-file-entry" /></a>
+												</c:if>
 											</span>
 										</span>
 									
@@ -293,6 +303,9 @@
 									fileGroups = FileGroupLocalServiceUtil.getFileGroupByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
 								}catch(Exception e){}
 								
+								cssRequired = dossierPartLevel1.getRequired() ? "cssRequired" : StringPool.BLANK;
+								
+								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPartLevel1.getTemplateFileNo());
 								
 							%>
 							<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
@@ -300,8 +313,11 @@
 									<span class="row-icon">
 										<i class="fa fa-circle" aria-hidden="true"></i>
 									</span>
-									<span class="opencps dossiermgt dossier-part-name">
+									<span class="opencps dossiermgt dossier-part-name <%=cssRequired %>">
 										<%=dossierPartLevel1.getPartName() %>
+										<c:if test="<%=Validator.isNotNull(urlDownload) %>">
+											<a target="_blank" class="download-dossier-file" href="<%=urlDownload%>"><liferay-ui:message key="download-file-entry" /></a>
+										</c:if>
 									</span>
 								</span>
 								<span class="opencps dossiermgt dossier-part-control">

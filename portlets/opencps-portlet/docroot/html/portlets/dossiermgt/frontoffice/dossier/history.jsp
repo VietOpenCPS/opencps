@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -26,6 +25,8 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.util.DictItemUtil"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierLog"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
@@ -141,7 +142,7 @@
 					</span>
 					
 					<span class="span8">
-						<liferay-ui:message key="<%= dossierLog.getActor() %>"/>
+						<liferay-ui:message key="<%= dossierLog.getActorName() %>"/>
 					</span>
 				</aui:row>
 				
@@ -151,7 +152,7 @@
 					</span>
 					
 					<span class="span8">
-						<%=dossierLog.getActionInfo()%>
+						<%= dossierLog.getMessageInfo() %>
 					</span>
 					
 				</aui:row>

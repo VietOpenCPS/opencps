@@ -68,6 +68,7 @@
 		
 	}
 	
+	String cssRequired = StringPool.BLANK;
 	
 	ServiceInfo serviceInfo = null;
 	ServiceConfig serviceConfig = null;
@@ -152,7 +153,7 @@
 										
 									}
 								}
-								
+								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
 								%>
 									<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
@@ -174,7 +175,7 @@
 												</c:choose>
 												
 											</span>
-											<span class="opencps dossiermgt dossier-part-name">
+											<span class="opencps dossiermgt dossier-part-name <%=cssRequired %>">
 												<%=dossierPart.getPartName() + (Validator.isNotNull(dossierFile) ?  " - " + dossierFile.getDossierFileNo():StringPool.BLANK) + DossierMgtUtil.getLoaiGiayToLabel((Validator.isNotNull(dossierFile) ? dossierFile.getDossierFileMark() : -1), locale) %>
 											</span>
 										</span>
@@ -316,14 +317,14 @@
 									fileGroups = FileGroupLocalServiceUtil.getFileGroupByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
 								}catch(Exception e){}
 								
-								
+								cssRequired = dossierPartLevel1.getRequired() ? "cssRequired" : StringPool.BLANK;
 							%>
 							<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 								<span class='<%="level-0" + " opencps dossiermgt dossier-part"%>'>
 									<span class="row-icon">
 										<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
 									</span>
-									<span class="opencps dossiermgt dossier-part-name">
+									<span class="opencps dossiermgt dossier-part-name <%=cssRequired %>">
 										<%=dossierPartLevel1.getPartName() %>
 									</span>
 								</span>
@@ -391,6 +392,130 @@
 								</c:otherwise>
 							</c:choose>
 						</c:when>
+						
+						<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_RESULT %>"
+						>
+							<%
+							for(DossierPart dossierPart : dossierParts){
+								
+								boolean isDynamicForm = false;
+								
+								if(Validator.isNotNull(dossierPart.getFormReport()) && Validator.isNotNull(dossierPart.getFormScript())){
+									isDynamicForm = true;
+								}
+								
+								int level = 1;
+								
+								String treeIndex = dossierPart.getTreeIndex();
+								
+								if(Validator.isNotNull(treeIndex)){
+									level = StringUtil.count(treeIndex, StringPool.PERIOD);
+								}
+								
+								DossierFile dossierFile = null;
+								
+								int isOnlineData = 0;
+								
+								if(dossier != null){
+									try{
+										dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), 
+												dossierPart.getDossierpartId());
+										if(dossierFile.getFormData().length() > 0){
+											isOnlineData = 1;
+										}else{
+											isOnlineData = 0;
+										}
+									}catch(Exception e){
+										
+									}
+								}
+								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
+								%>
+									<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
+										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
+											<span class="row-icon">
+												<c:choose>
+													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
+														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
+													>
+														<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+													</c:when>
+														<c:otherwise>
+														<i 
+															id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
+															class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
+															aria-hidden="true"
+														>
+														</i>
+													</c:otherwise>
+												</c:choose>
+												
+											</span>
+											<span class="opencps dossiermgt dossier-part-name <%=cssRequired %>">
+												<%=dossierPart.getPartName() + (Validator.isNotNull(dossierFile) ?  " - " + dossierFile.getDossierFileNo():StringPool.BLANK) + DossierMgtUtil.getLoaiGiayToLabel((Validator.isNotNull(dossierFile) ? dossierFile.getDossierFileMark() : -1), locale) %>
+											</span>
+										</span>
+									
+										<span class="opencps dossiermgt dossier-part-control">
+											<liferay-util:include 
+												page="/html/common/portlet/dossier_actions.jsp" 
+												servletContext="<%=application %>"
+											>
+												<portlet:param 
+													name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
+													value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0) %>"
+												/>
+												
+												<portlet:param 
+													name="isDynamicForm" 
+													value="<%=String.valueOf(isDynamicForm) %>"
+												/>
+												
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" 
+													value="<%=String.valueOf(dossierPart.getDossierpartId()) %>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.FILE_ENTRY_ID %>" 
+													value="<%=String.valueOf(dossierFile != null ? dossierFile.getFileEntryId() : 0) %>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" 
+													value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.LEVEL %>" 
+													value="<%=String.valueOf(level) %>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.GROUP_NAME %>" 
+													value="<%=StringPool.BLANK%>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
+													value="<%=String.valueOf(dossierPart.getPartType()) %>"
+												/>
+												<portlet:param 
+													name="isEditDossier" 
+													value="<%=String.valueOf(isEditDossier) %>"
+												/>
+												
+												<portlet:param 
+													name="isOnlineData" 
+													value="<%=String.valueOf(isOnlineData) %>"
+												/>
+												
+											</liferay-util:include>
+										</span>
+									</div>
+									
+								<%
+								index++;
+							}
+							%>
+							
+						</c:when>
+						
 						<c:otherwise>
 							<!--Nothing to show  -->
 						</c:otherwise>
@@ -404,56 +529,67 @@
 %>
 </div>
 
+<aui:script>
+	
+	AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
+		
+		//View attachment buttons
+		var viewAttachments = A.all('.view-attachment');
+		
+		if(viewAttachments){
+			viewAttachments.each(function(e){
+				e.on('click', function(){
+					
+					var instance = A.one(e);
+					var dossierFileId = instance.attr('dossier-file');
+					var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_BACKOFFICE_MANAGEMENT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+					portletURL.setParameter("javax.portlet.action", "previewAttachmentFile");
+					portletURL.setParameter("dossierFileId", dossierFileId);
+					portletURL.setPortletMode("view");
+					portletURL.setWindowState('<%=WindowState.NORMAL%>');
+					
+					viewDossierAttachment(this, portletURL.toString());
+				});
+			});
+		}
+		
+		
+		//View form
+		var viewForms = A.all('.view-form');
+		
+		if(viewForms){
+			viewForms.each(function(e){
+				e.on('click', function(){
+					
+					var instance = A.one(e);
+					var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_BACKOFFICE_MANAGEMENT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+					portletURL.setParameter("mvcPath", "/html/portlets/processmgt/backofficedossier/modal_dialog.jsp");
+					portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+					portletURL.setPortletMode("normal");
+					portletURL.setParameter("content", "declaration-online");
+					dynamicForm(this, portletURL.toString(), '<portlet:namespace/>');
+				});
+			});
+		}
+		
+		//View form
+		var viewVersions = A.all('.view-version');
+		
+		if(viewVersions){
+			viewVersions.each(function(e){
+				e.on('click', function(){
+					
+					var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_BACKOFFICE_MANAGEMENT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+					portletURL.setParameter("mvcPath", "/html/portlets/processmgt/backofficedossier/modal_dialog.jsp");
+					portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+					portletURL.setPortletMode("normal");
+					portletURL.setParameter("content", "view-version");
+					viewVersion(this, portletURL.toString(), '<portlet:namespace/>');
+				});
+			});
+		}
+		
+		
+	});
 
-<!-- <div id="myTreeView"></div>
-<script type="text/javascript">
-YUI().use(
-		  'aui-tree-view',
-		  function(Y) {
-		    new Y.TreeViewDD(
-		      {
-		        boundingBox: '#myTreeView',
-		        children: [
-		          {
-		            children: [
-		              {label: 'Watermelon', leaf: true, type: 'check'},
-		              {label: 'Apricot', leaf: true, type: 'check'},
-		              {label: 'Pineapple', leaf: true, type: 'check'},
-		              {label: 'Kiwi', leaf: true, type: 'check'},
-		              {label: 'Orange', leaf: true, type: 'check'},
-		              {label: 'Pomegranate', leaf: true, type: 'check'}
-		            ],
-		            expanded: true,
-		            label: 'Checkboxes'
-		          },
-		          {
-		            children: [
-		              {label: 'Watermelon', leaf: true, type: 'radio'},
-		              {label: 'Apricot', leaf: true, type: 'radio'},
-		              {label: 'Pineapple', leaf: true, type: 'radio'},
-		              {label: 'Kiwi', leaf: true, type: 'radio'},
-		              {label: 'Orange', leaf: true, type: 'radio'},
-		              {label: 'Pomegranate', leaf: true, type: 'radio'}
-		            ],
-		            expanded: true,
-		            label: 'Radio'
-		          },
-		          {
-		            children: [
-		              {label: 'Watermelon', leaf: true, type: 'task'},
-		              {label: 'Apricot', leaf: true, type: 'task'},
-		              {label: 'Pineapple', leaf: true,  type: 'task'},
-		              {label: 'Kiwi', leaf: true, type: 'task'},
-		              {label: 'Orange', leaf: true, type: 'task'},
-		              {label: 'Pomegranate', leaf: true,  type: 'task'}
-		            ],
-		            expanded: true,
-		            label: 'Task',
-		            type: 'task'
-		          }
-		        ]
-		      }
-		    ).render();
-		  }
-		);
-</script> -->
+</aui:script>

@@ -29,6 +29,14 @@
 	long serviceInfoId = (serviceInfo != null) ? serviceInfo.getServiceinfoId() : 0L;
 	long submitOnlinePlid = PortalUtil.getPlidFromPortletId(scopeGroupId, true,  WebKeys.P26_SUBMIT_ONLINE);
 	
+	DictCollection collectionDomain = null;
+	DictItem curDictItem = null;
+	try {
+		collectionDomain = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, WebKeys.SERVICE_DOMAIN);
+	} catch (Exception e) {
+		
+	}
+	
 	long plidResLong = 0;
 	
 	if(Long.valueOf(plidRes) ==0) {
@@ -38,11 +46,18 @@
 	}
 	
 	ServiceConfig serviceConfig = null;
+	
 
 	try {
 		serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfigByG_S(scopeGroupId, serviceInfoId);
 	} catch (Exception e) {
 		
+	}
+	
+	List<DictItem> dictItems = new ArrayList<DictItem>();
+	
+	if(Validator.isNotNull(collectionDomain)) {
+		dictItems = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(collectionDomain.getDictCollectionId());
 	}
 	
 	String backURL = ParamUtil.getString(request, "backURL");
@@ -132,7 +147,7 @@
 				</datamgt:ddr>
 			</aui:col>
 			
-			<aui:col width="50">
+			<%-- <aui:col width="50">
 				<datamgt:ddr 
 					cssClass="input100"
 					depthLevel="1" 
@@ -143,7 +158,30 @@
 					selectedItems="<%= Validator.isNotNull(serviceInfo) ? serviceInfo.getDomainCode() : StringPool.BLANK %>"
 				>
 				</datamgt:ddr>
-			</aui:col>
+			</aui:col> --%>
+			
+			<aui:select name="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>" label="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>">
+				<aui:option value=""></aui:option>
+				<%
+					if(dictItems != null){
+						for(DictItem dictItem : dictItems){
+							if((curDictItem != null && dictItem.getDictItemId() == curDictItem.getDictItemId())||
+									(curDictItem != null && dictItem.getTreeIndex().contains(curDictItem.getDictItemId() + StringPool.PERIOD))){
+								continue;
+							}
+							
+							int level = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
+							String index = "|";
+							for(int i = 0; i < level; i++){
+								index += "_";
+							}
+							%>
+								<aui:option value="<%=dictItem.getDictItemId() %>"><%=index + dictItem.getItemName(locale) %></aui:option>
+							<%
+						}
+					}
+				%>
+			</aui:select>
 			
 			
 		</aui:row>
@@ -218,3 +256,4 @@
 		</aui:col>
 	</aui:row>
 </aui:form>
+

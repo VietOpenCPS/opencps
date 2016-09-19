@@ -52,6 +52,8 @@ import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
  * @author khoavd
@@ -67,7 +69,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 	}
 	
 	private void _doRecevie(Message message) {
-				
+		
+		SendToEngineMsg toEngineMsg =
+					    (SendToEngineMsg) message.get("msgToEngine");
+
 		Date now = new Date();
 		String actionName = StringPool.BLANK;
 		String stepName = StringPool.BLANK;
@@ -75,13 +80,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 		long curStepId = 0;
 		long processStepId = 0;
 
-		SendToEngineMsg toEngineMsg =
-		    (SendToEngineMsg) message.get("msgToEngine");
-
-		SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
-		
-		toBackOffice.setSubmitDateTime(now);
-		toBackOffice.setReceiveDatetime(now);
+		long ownerUserId = 0;
+		long ownerOrganizationId = 0;
 
 		Dossier dossier = BackendUtils.getDossier(toEngineMsg.getDossierId());
 
@@ -91,7 +91,34 @@ public class BackOfficeProcessEngine implements MessageListener {
 		String govAgencyName = StringPool.BLANK;
 		long govAgencyOrganizationId = 0;
 		long serviceProcessId = 0;
+				
+		int actor = 0;
+		long actorId = 0;
+		String actorName = StringPool.BLANK;
 
+		long actionUserId = toEngineMsg.getActionUserId();
+		
+		// Set actor
+		//setActor(actor, actorId, actorName, actionUserId);
+		try {
+			if (actionUserId != 0) {
+				User user = UserLocalServiceUtil.fetchUser(actionUserId);
+				
+				actor = WebKeys.DOSSIER_ACTOR_EMPLOYEE;
+				
+				actorId = actionUserId;
+				
+				actorName = user.getFullName();
+			} else {
+				actor = 0;
+				actorId = 0;
+				actorName = WebKeys.DOSSIER_ACTOR_SYSTEM_NAME;
+			}
+        }
+        catch (Exception e) {
+	        _log.error(e);
+        }
+		
 		if (Validator.isNotNull(dossier)) {
 			serviceInfoId = dossier.getServiceInfoId();
 			dossierTemplateId = dossier.getDossierTemplateId();
@@ -99,25 +126,41 @@ public class BackOfficeProcessEngine implements MessageListener {
 			govAgencyName = dossier.getGovAgencyName();
 			govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
 			
+			
 			try {
-				
-				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfigByG_S_G(toEngineMsg.getGroupId(), serviceInfoId, govAgencyCode);
+
+				ServiceConfig serviceConfig =
+				    ServiceConfigLocalServiceUtil.getServiceConfigByG_S_G(
+				    	toEngineMsg.getGroupId(), serviceInfoId, govAgencyCode);
 				serviceProcessId = serviceConfig.getServiceProcessId();
+				
+
 			}
 			catch (Exception e) {
 				_log.error(e);
 			}
 		}
 
-
+		// Set Dossier
+		/*setExtraInfoDossier(
+		    serviceInfoId, dossierTemplateId, govAgencyCode, govAgencyName,
+		    govAgencyOrganizationId, serviceProcessId,
+		    toEngineMsg.getGroupId(), dossier);
+*/
+		SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
+		
+		toBackOffice.setSubmitDateTime(now);
+		toBackOffice.setReceiveDatetime(now);
+		toBackOffice.setActor(actor);
+		toBackOffice.setActorId(actorId);
+		toBackOffice.setActorName(actorName);
 		long processWorkflowId = toEngineMsg.getProcessWorkflowId();
 
 		long processOrderId = toEngineMsg.getProcessOrderId();
 
-
 		try {
 			if (Validator.isNull(processOrderId)) {
-
+				// Check processOrder
 				processOrder =
 				    BackendUtils.getProcessOrder(
 				        toEngineMsg.getDossierId(),
@@ -153,7 +196,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				curStepId = processOrder.getProcessStepId();
 			}
-
+			
+			
+			
 			ProcessWorkflow processWorkflow = null;
 
 			// Find workflow
@@ -161,10 +206,17 @@ public class BackOfficeProcessEngine implements MessageListener {
 				processWorkflow =
 				    ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
 				        serviceProcessId, toEngineMsg.getEvent(), curStepId);
+				
+				_log.info("#############################serviceProcessId " + serviceProcessId);
+				_log.info("#############################toEngineMsg.getEvent() " + toEngineMsg.getEvent());
+				_log.info("#############################curStepId " + curStepId);
+				
+				_log.info("######################## CREATE WORKFLOW ###############");
 			}
 			else {
 				processWorkflow =
 				    ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
+				_log.info("######################## GET WORKFLOW ###############");
 
 			}
 
@@ -215,7 +267,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				    toEngineMsg.getActionNote(),
 				    toEngineMsg.getAssignToUserId(), stepName, actionName, 0,
 				    0, PortletConstants.DOSSIER_STATUS_SYSTEM);
-
+				
 				toBackOffice.setProcessOrderId(processOrderId);
 				toBackOffice.setDossierId(toEngineMsg.getDossierId());
 				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
@@ -243,8 +295,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 					if (Validator.isNotNull(pattern) && StringUtil.trim(pattern).length() != 0) {
 						
 						toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(pattern, toEngineMsg.getDossierId())); 
+						
+						_log.info("################################## genaratorNoReception" +
+										+ System.currentTimeMillis());
 					} else {
 						toBackOffice.setReceptionNo(dossier.getReceptionNo());
+						_log.info("################################## genaratorNoReception" +
+										+ System.currentTimeMillis());
 					}
 				}
 				else {
@@ -261,10 +318,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setProcessWorkflowId(processWorkflowId);
 				toBackOffice.setCompanyId(toEngineMsg.getCompanyId());
 				toBackOffice.setGovAgencyCode(govAgencyCode);
+				
+				
 				toBackOffice.setUserActorAction(toEngineMsg.getActionUserId());
 
-				long ownerUserId = 0;
-				long ownerOrganizationId = 0;
 
 				if (dossier.getOwnerOrganizationId() != 0) {
 					ownerUserId = 0;
@@ -317,6 +374,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				else {
 					toBackOffice.setRequestPayment(0);
 				}
+				
+				
 				
 				Message sendToBackOffice = new Message();
 
@@ -381,6 +440,75 @@ public class BackOfficeProcessEngine implements MessageListener {
 		catch (Exception e) {
 
 		}
+	}
+	
+	/**
+	 * @param actor
+	 * @param actorId
+	 * @param actorName
+	 * @param userActionId
+	 */
+	private void setActor(int actor, long actorId, String actorName, long userActionId) {
+		
+		try {
+			if (userActionId != 0) {
+				User user = UserLocalServiceUtil.fetchUser(userActionId);
+				
+				actor = WebKeys.DOSSIER_ACTOR_EMPLOYEE;
+				
+				actorId = userActionId;
+				
+				actorName = user.getFullName();
+			} else {
+				actor = 0;
+				actorId = 0;
+				actorName = WebKeys.DOSSIER_ACTOR_SYSTEM_NAME;
+			}
+        }
+        catch (Exception e) {
+	        _log.error(e);
+        }
+		
+	}
+	
+	
+	/**
+	 * @param serviceInfoId
+	 * @param dossierTemplateId
+	 * @param govAgencyCode
+	 * @param govAgencyName
+	 * @param govAgencyOrganizationId
+	 * @param serviceProcessId
+	 * @param groupId
+	 * @param dossier
+	 */
+	private void setExtraInfoDossier(
+	    long serviceInfoId, long dossierTemplateId, String govAgencyCode,
+	    String govAgencyName, long govAgencyOrganizationId,
+	    long serviceProcessId, long groupId, Dossier dossier) {
+
+		if (Validator.isNotNull(dossier)) {
+			serviceInfoId = dossier.getServiceInfoId();
+			dossierTemplateId = dossier.getDossierTemplateId();
+			govAgencyCode = dossier.getGovAgencyCode();
+			govAgencyName = dossier.getGovAgencyName();
+			govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
+			
+			
+			try {
+
+				ServiceConfig serviceConfig =
+				    ServiceConfigLocalServiceUtil.getServiceConfigByG_S_G(
+				        groupId, serviceInfoId, govAgencyCode);
+				serviceProcessId = serviceConfig.getServiceProcessId();
+				
+
+			}
+			catch (Exception e) {
+				_log.error(e);
+			}
+		}
+
 	}
 
 	/**

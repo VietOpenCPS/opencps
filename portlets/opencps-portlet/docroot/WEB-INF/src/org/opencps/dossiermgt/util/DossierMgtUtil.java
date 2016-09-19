@@ -27,12 +27,18 @@ import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
+import org.opencps.servicemgt.model.TemplateFile;
+import org.opencps.servicemgt.service.TemplateFileLocalServiceUtil;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
 /**
  * @author trungnt
@@ -249,6 +255,35 @@ public class DossierMgtUtil {
 		}
 
 		return statusLabel;
+	}
+	
+	public static String getURLDownloadTemplateFile(ThemeDisplay themeDisplay, String templateFileNo) {
+		
+		String result = StringPool.BLANK;
+		
+		DLFileEntry dlFileEntry = null;
+		
+		TemplateFile templateFile = null;
+		
+		try {
+		
+			templateFile = TemplateFileLocalServiceUtil.getTemplateFileByNo(themeDisplay.getScopeGroupId(), templateFileNo);
+			
+			if(Validator.isNotNull(templateFile)){
+		
+				dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(templateFile.getFileEntryId());
+		
+				result = themeDisplay.getPortalURL()+"/c/document_library/get_file?uuid="+dlFileEntry.getUuid()+"&groupId="+themeDisplay.getScopeGroupId();
+		
+			}
+		
+		} catch (Exception e) {
+			
+			_log.error(e);
+			
+		}
+		
+		return result;
 	}
 	
 	private static Log _log =

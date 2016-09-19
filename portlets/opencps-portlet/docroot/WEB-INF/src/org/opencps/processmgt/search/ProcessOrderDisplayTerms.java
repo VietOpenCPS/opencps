@@ -35,6 +35,7 @@ public class ProcessOrderDisplayTerms extends DisplayTerms {
 	public static String PROCESS_ORDER_ID = "processOrderId";
 	public static String ASSIGN_TO_USER_ID = "assignToUserId";
 	public static String SERVICE_INFO_ID = "serviceInfoId";
+	public static String MODIFIEDDATE = "modifiedDate";
 	public static String DOSSIER_TEMPLATE_ID = "dossierTemplateId";
 	public static String GOV_AGENCY_ORGANIZATION_ID = "govAgencyOrganizationId";
 	public static String SERVICE_PROCESS_ID = "serviceProcessId";

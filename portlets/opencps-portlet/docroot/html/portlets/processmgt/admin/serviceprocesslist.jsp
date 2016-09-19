@@ -91,7 +91,7 @@
 				
 			%>
 		
-			<liferay-util:buffer var="no">
+			<liferay-util:buffer var="rowIndex">
 				<div class="row-fluid min-width10">
 					<div class="span12 bold">
 						<a href="<%=editURL%>"><%=row.getPos() + 1 %></a>
@@ -133,7 +133,7 @@
 			
 			<%
 				
-				row.addText(no);
+				row.addText(rowIndex);
 				
 				row.addText(processInfo);
 				

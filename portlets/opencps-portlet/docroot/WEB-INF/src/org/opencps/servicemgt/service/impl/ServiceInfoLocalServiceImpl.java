@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
-import com.sun.xml.internal.ws.util.ServiceFinder;
 
 /**
  * The implementation of the service info local service. <p> All custom service

@@ -11,6 +11,8 @@ public class APIServiceConstants {
 	
 	public static final String CODE_05 = "05";	//nextStep
 	
+	public static final String CODE_06 = "06";	//sms
+	
 	public static final String IN = "IN";	// message in
 	
 	public static final String OUT = "OUT";	// message out

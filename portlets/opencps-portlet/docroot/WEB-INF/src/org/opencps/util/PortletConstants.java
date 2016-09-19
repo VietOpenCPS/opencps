@@ -132,6 +132,9 @@ public class PortletConstants {
 	public static final String DOSSIER_STATUS_SYSTEM = "system";
 	public static final String DOSSIER_STATUS_ENDED = "ended";
 	public static final String DOSSIER_STATUS_ERROR = "error";
+	
+	public static final String DOSSIER_STATUS_UPDATE = "updated";
+
 
 	public static final int DOSSIER_LOG_NORMAL = 0;
 	public static final int DOSSIER_LOG_WARNING = 2;

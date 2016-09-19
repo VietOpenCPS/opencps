@@ -91,45 +91,52 @@ public class JMSHornetqContext {
 		Properties properties =
 			PortletUtil.getJMSContextProperties(
 				companyId, code, remote, channelName, queueName, lookup, mom);
-		
-		System.out.println("////////// " + properties.getProperty(WebKeys.JMS_PROVIDER_PORT));
-		System.out.println("////////// " + properties.getProperty(WebKeys.JMS_PROVIDER_URL));
-		System.out.println("////////// " + properties.getProperty(WebKeys.JMS_QUEUE));
-		System.out.println("////////// " + properties.getProperty(Context.SECURITY_PRINCIPAL));
-		System.out.println("////////// " + properties.getProperty(Context.SECURITY_CREDENTIALS));
 
-		Map<String, Object> connectionParams = new HashMap<String, Object>();
-		connectionParams.put(
-			TransportConstants.PORT_PROP_NAME,
-			properties.getProperty(WebKeys.JMS_PROVIDER_PORT));
-		connectionParams.put(
-			TransportConstants.HOST_PROP_NAME,
-			properties.getProperty(WebKeys.JMS_PROVIDER_URL));
-		TransportConfiguration transportConfiguration =
-			new TransportConfiguration(
-				NettyConnectorFactory.class.getName(), connectionParams);
-
-		HornetQConnectionFactory connectionFactory =
-			HornetQJMSClient.createConnectionFactoryWithoutHA(
-				JMSFactoryType.CF, transportConfiguration);
-
-		Queue queue =
-			HornetQJMSClient.createQueue(properties.getProperty(WebKeys.JMS_QUEUE));
-
-		Connection connection =
-			connectionFactory.createConnection(
-				properties.getProperty(Context.SECURITY_PRINCIPAL),
+		if (properties != null) {
+			System.out.println("////////// " +
+				properties.getProperty(WebKeys.JMS_PROVIDER_PORT));
+			System.out.println("////////// " +
+				properties.getProperty(WebKeys.JMS_PROVIDER_URL));
+			System.out.println("////////// " +
+				properties.getProperty(WebKeys.JMS_QUEUE));
+			System.out.println("////////// " +
+				properties.getProperty(Context.SECURITY_PRINCIPAL));
+			System.out.println("////////// " +
 				properties.getProperty(Context.SECURITY_CREDENTIALS));
 
-		Session session =
-			connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			Map<String, Object> connectionParams =
+				new HashMap<String, Object>();
+			connectionParams.put(
+				TransportConstants.PORT_PROP_NAME,
+				properties.getProperty(WebKeys.JMS_PROVIDER_PORT));
+			connectionParams.put(
+				TransportConstants.HOST_PROP_NAME,
+				properties.getProperty(WebKeys.JMS_PROVIDER_URL));
+			TransportConfiguration transportConfiguration =
+				new TransportConfiguration(
+					NettyConnectorFactory.class.getName(), connectionParams);
 
-		this.setConnectionFactory(connectionFactory);
-		this.setProperties(properties);
-		this.setConnection(connection);
-		this.setQueue(queue);
-		this.setSession(session);
+			HornetQConnectionFactory connectionFactory =
+				HornetQJMSClient.createConnectionFactoryWithoutHA(
+					JMSFactoryType.CF, transportConfiguration);
 
+			Queue queue =
+				HornetQJMSClient.createQueue(properties.getProperty(WebKeys.JMS_QUEUE));
+
+			Connection connection =
+				connectionFactory.createConnection(
+					properties.getProperty(Context.SECURITY_PRINCIPAL),
+					properties.getProperty(Context.SECURITY_CREDENTIALS));
+
+			Session session =
+				connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+			this.setConnectionFactory(connectionFactory);
+			this.setProperties(properties);
+			this.setConnection(connection);
+			this.setQueue(queue);
+			this.setSession(session);
+		}
 	}
 
 	/**

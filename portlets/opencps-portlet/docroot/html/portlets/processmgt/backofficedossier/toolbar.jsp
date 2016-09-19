@@ -105,7 +105,7 @@
 									</aui:col>
 									<aui:col width="30">
 										<aui:select label="" name="dossierStatusValue" style="width: 100%;">
-											<aui:option value="-1">
+											<aui:option value="">
 												<liferay-ui:message key="filter-by-dossier-status"></liferay-ui:message>
 											</aui:option>
 											<c:choose>

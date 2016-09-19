@@ -20,6 +20,6 @@
 <%@ include file="/init.jsp" %>
 
 <%  
-	String businessRegStep_cfg = GetterUtil.getString(portletPreferences.getValue("businessRegStep", StringPool.BLANK));
-	String citizenRegStep_cfg = GetterUtil.getString(portletPreferences.getValue("citizenRegStep", StringPool.BLANK));
+	String businessRegStep_cfg = GetterUtil.getString(portletPreferences.getValue("businessRegStep", "3"));
+	String citizenRegStep_cfg = GetterUtil.getString(portletPreferences.getValue("citizenRegStep", "3"));
 %>

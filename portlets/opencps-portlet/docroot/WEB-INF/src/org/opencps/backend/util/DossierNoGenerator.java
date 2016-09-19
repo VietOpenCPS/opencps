@@ -20,12 +20,9 @@ package org.opencps.backend.util;
 import java.util.Calendar;
 import java.util.Random;
 
-import org.opencps.dossiermgt.model.Dossier;
-import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
-
+import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 
 /**
@@ -36,7 +33,7 @@ public class DossierNoGenerator {
 	
 	public static void main(String[] args) {
 
-	    String numberString = genaratorNoReception("{yyyy}{dd}{mm}{%-ABC1111/%}{nnnnnnnnnnnnnnnn}", 43213);
+	    String numberString = genaratorNoReception("{yyyy}{dd}{mm}{%-ABC1111/%}{nnnnnnnnnnnnnnnn}", 1);
 	    
 	    System.out.println(numberString);
     }
@@ -48,9 +45,9 @@ public class DossierNoGenerator {
 	 */
 	public static String genaratorNoReception(String pattern, long dossierId) {
 		
-		String noReception = _genaratorNoReception(pattern, dossierId);
+		return StringUtil.upperCase(_genaratorNoReception(pattern, dossierId));
 		
-		Dossier dossier = null;
+/*		Dossier dossier = null;
 		
 		try {
 			dossier = DossierLocalServiceUtil.getDossierByReceptionNo(noReception);
@@ -64,7 +61,7 @@ public class DossierNoGenerator {
 		}
 		
 		return noReception;
-	}
+*/	}
 	
 	/**
 	 * Generate noReception with pattern
@@ -76,7 +73,7 @@ public class DossierNoGenerator {
 		
 		String noReception = StringPool.BLANK;
 		
-		//pattern = StringUtil.lowerCase(pattern);
+		pattern = StringUtil.lowerCase(pattern); 
 		pattern = StringUtil.trim(pattern, ' ');
 		
 		StringBuffer sbNoReception = new StringBuffer(pattern);
@@ -205,10 +202,20 @@ public class DossierNoGenerator {
 	 * @return
 	 */
 	private static String _serialNumberAutoIncrement(String pattern, long dossierId) {
-		dossierId  = dossierId + 2;
+		long dossierCounter = 0;
+		
+		try {
+			dossierCounter = CounterLocalServiceUtil.increment(DossierNoGenerator.class.getName());
+
+        }
+        catch (Exception e) {
+        	dossierCounter = dossierId;
+        }
+		
+		
 		int numberSerial = StringUtil.count(pattern, "n");
 		
-		String strNumSerial = intToString(dossierId, numberSerial);
+		String strNumSerial = intToString(dossierCounter, numberSerial);
 		
 		return strNumSerial;
 	}

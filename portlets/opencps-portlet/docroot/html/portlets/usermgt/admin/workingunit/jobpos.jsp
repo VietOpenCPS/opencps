@@ -54,7 +54,7 @@
 	
 	List<String> headerNames = new ArrayList<String>();
 	
-	headerNames.add("no");
+	headerNames.add("row-index");
 	headerNames.add("title");
 	headerNames.add("leader-name");
 	headerNames.add("action");

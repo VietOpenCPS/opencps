@@ -59,7 +59,7 @@
 	
 	List<String> headerNames = new ArrayList<String>();
 	
-	headerNames.add("no");
+	headerNames.add("row-index");
 	headerNames.add("working-unit-info");
 	headerNames.add("action");
 	
@@ -121,7 +121,7 @@
 			modelVar="workingUnit" 
 			keyProperty="workingunitId"
 		>
-			<liferay-util:buffer var="no">
+			<liferay-util:buffer var="rowIndex">
 				<div class="row-fluid min-width10">
 					<div class="span12 bold">
 						<%=row.getPos() + 1 %>
@@ -167,7 +167,7 @@
 		
 			<%
 				row.setClassName("opencps-searchcontainer-row");
-			    row.addText(no);
+			    row.addText(rowIndex);
 				row.addText(workingunitInfo);
 	
 				//row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath + "workingunit_action.jsp", config.getServletContext(), request, response);

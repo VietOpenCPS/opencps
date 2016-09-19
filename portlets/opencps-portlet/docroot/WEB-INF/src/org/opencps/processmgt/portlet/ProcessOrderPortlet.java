@@ -32,9 +32,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.opencps.accountmgt.NoSuchAccountException;
 import org.opencps.accountmgt.NoSuchAccountFolderException;
@@ -42,6 +40,8 @@ import org.opencps.accountmgt.NoSuchAccountOwnOrgIdException;
 import org.opencps.accountmgt.NoSuchAccountOwnUserIdException;
 import org.opencps.accountmgt.NoSuchAccountTypeException;
 import org.opencps.backend.message.SendToEngineMsg;
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.DuplicateFileGroupException;
 import org.opencps.dossiermgt.EmptyFileGroupException;
 import org.opencps.dossiermgt.NoSuchDossierException;
@@ -51,6 +51,7 @@ import org.opencps.dossiermgt.NoSuchDossierTemplateException;
 import org.opencps.dossiermgt.PermissionDossierException;
 import org.opencps.dossiermgt.RequiredDossierPartException;
 import org.opencps.dossiermgt.bean.AccountBean;
+import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
@@ -82,6 +83,7 @@ import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
+import org.opencps.processmgt.util.ProcessUtils;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.usermgt.model.Employee;
@@ -98,6 +100,8 @@ import org.opencps.util.WebKeys;
 
 import com.liferay.portal.RolePermissionsException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -105,7 +109,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.servlet.PortalSessionContext;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -2079,7 +2082,97 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			}
 		}
 	}
+	
+	public void menuCounterAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException, SystemException, IOException {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+        long groupId = themeDisplay.getScopeGroupId();
 
+        // now read your parameters, e.g. like this:
+        // long someParameter = ParamUtil.getLong(request, "someParameter");
+        
+        long serviceInfoId = ParamUtil.getLong(actionRequest, "serviceInfoId");
+        String tabs1 = ParamUtil.getString(actionRequest, "tabs1");
+        
+        List<ProcessOrderBean> processOrderSteps = new ArrayList<ProcessOrderBean>();
+        if(tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)){
+			if(serviceInfoId > 0){
+				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), serviceInfoId);
+			}
+		}else{
+			if(serviceInfoId > 0){
+				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStepJustFinished(themeDisplay.getUserId(), serviceInfoId);
+			}
+		}
+        
+		long counterVal = 0;
+		JSONObject obj = null;
+		for (ProcessOrderBean item : processOrderSteps){
+			obj = JSONFactoryUtil.createJSONObject();
+
+			if(tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)){
+				
+				counterVal = ProcessOrderLocalServiceUtil.countProcessOrder(serviceInfoId, item.getProcessStepId(), themeDisplay.getUserId(), themeDisplay.getUserId());
+
+			}else{
+				
+				counterVal =  ProcessOrderLocalServiceUtil.countProcessOrderJustFinished(serviceInfoId, item.getProcessStepId(), themeDisplay.getUserId());
+				
+			}
+			
+			obj.put("code", item.getProcessStepId());
+			obj.put("counter", String.valueOf(counterVal));
+			jsonArray.put(obj);
+		}
+		jsonObject.put("badge", jsonArray);
+		PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+
+	public void menuCounterServiceInfoIdAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException, SystemException, IOException {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+        long groupId = themeDisplay.getScopeGroupId();
+
+        // now read your parameters, e.g. like this:
+        // long someParameter = ParamUtil.getLong(request, "someParameter");
+        
+        long serviceInfoId = ParamUtil.getLong(actionRequest, "serviceInfoId");
+        String tabs1 = ParamUtil.getString(actionRequest, "tabs1");
+        
+        List<ProcessOrderBean> processOrderServices = new ArrayList<ProcessOrderBean>();
+        if(tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)){
+			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceByUser(themeDisplay.getUserId());
+		}else{
+			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceJustFinishedByUser(themeDisplay.getUserId());
+		}
+        
+		long counterVal = 0;
+		JSONObject obj = null;
+		for (ProcessOrderBean item : processOrderServices){
+			obj = JSONFactoryUtil.createJSONObject();
+
+			if(tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)){
+				
+				counterVal = ProcessOrderLocalServiceUtil.countProcessOrder(item.getServiceInfoId(), 0, themeDisplay.getUserId(), themeDisplay.getUserId());
+
+			}else{
+				
+				counterVal =  ProcessOrderLocalServiceUtil.countProcessOrderJustFinished(item.getServiceInfoId(), 0, themeDisplay.getUserId());
+				
+			}
+			
+			obj.put("code", item.getServiceInfoId());
+			obj.put("counter", String.valueOf(counterVal));
+			jsonArray.put(obj);
+		}
+		jsonObject.put("badge", jsonArray);
+		PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+	
 	private boolean _hasPermission = true;
 
 	public boolean hasPermission() {

@@ -14,18 +14,24 @@
  */
 --%>
 
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
 String key = (String)request.getAttribute("liferay-ui:success:key");
 String message = (String)request.getAttribute("liferay-ui:success:message");
 boolean translateMessage = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:success:translateMessage"));
+String successMessage = (String)SessionMessages.get(portletRequest, "message-x");
 %>
+
 <c:if test="<%= SessionMessages.contains(portletRequest, key) %>">
 	<div class="alert alert-success">
 		<c:choose>
-			<c:when test="<%= translateMessage %>">
+			<c:when test="<%= translateMessage && Validator.isNull(successMessage) %>">
 				<%= LanguageUtil.get(pageContext, message) %>
+			</c:when>
+			<c:when test="<%= Validator.isNotNull(successMessage) %>">
+				<%= successMessage %>
 			</c:when>
 			<c:otherwise>
 				<%= message %>

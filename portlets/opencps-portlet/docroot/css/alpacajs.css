@@ -279,3 +279,17 @@ tr.alpaca-field-tablerow > td.alpaca-container-item input{
 #_16_WAR_opencpsportlet_dossier-dynamic-form_iframe_ .portlet-body {
     background-color: #fff !important;
 }
+.alpaca-array-toolbar-action.btn.btn-default.btn-sm {
+    text-indent: -9999px;
+    line-height: 0;
+    padding: 5px 25px 5px 25px;
+}
+
+.alpaca-array-toolbar-action.btn.btn-default.btn-sm::after {
+    content: "New text";
+    text-indent: 0;
+    display: block;
+    line-height: 0;
+    position: relative;
+    top: -7px;
+}

@@ -36,6 +36,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String PAYMENT_MGT_PORTLET = "20_WAR_opencpsportlet";
 
 	public static final String PROCESS_ORDER_PORTLET = "16_WAR_opencpsportlet";
+	
+	public static final String DOSSIER_BACKOFFICE_MANAGEMENT_PORTLET = "18_WAR_opencpsportlet";
 
 	public static final String DICT_COLLECTION_ENTRY = "DICT_COLLECTION_ENTRY";
 
@@ -228,4 +230,13 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String JMS_MOM_HORNETQ = "hornetq";
 	public static final String JMS_CORE = "jmscore";
 	public static final String JMS_QUEUE = "JMS_QUEUE";
+	public static final String ORDER_BY_ASC = "asc";
+	public static final String ORDER_BY_DESC = "desc";
+	public static final String SERVICE_DOMAIN = "SERVICE_DOMAIN";
+	
+	
+	public static final int DOSSIER_ACTOR_SYSTEM = 0; 
+	public static final String DOSSIER_ACTOR_SYSTEM_NAME = "SYSTEM"; 
+	public static final int DOSSIER_ACTOR_CITIZEN = 1; 
+	public static final int DOSSIER_ACTOR_EMPLOYEE = 2;
 }

@@ -492,3 +492,8 @@ div.payment-ld:nth-child(2){
 	border-radius: 20px;
 	text-indent: 30px;
 }
+
+.opencps-theme.ux .opencps.dossiermgt.dossier-part-name.cssRequired:after{
+    content:"*";
+    color:red;
+}

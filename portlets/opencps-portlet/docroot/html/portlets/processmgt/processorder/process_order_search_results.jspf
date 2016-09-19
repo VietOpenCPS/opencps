@@ -23,5 +23,5 @@
 	totalCount = ProcessOrderLocalServiceUtil.countProcessOrder(serviceInfoId, processStepId, themeDisplay.getUserId(), assignToUserId);
 	processOrders = ProcessOrderLocalServiceUtil.searchProcessOrder(serviceInfoId, processStepId, themeDisplay.getUserId(), assignToUserId,
 		searchContainer.getStart(), searchContainer.getEnd(), 
-		searchContainer.getOrderByComparator());
+		ProcessOrderUtils.getProcessOrderByComparator(oderFieldToDo, oderByToDo));
 %>

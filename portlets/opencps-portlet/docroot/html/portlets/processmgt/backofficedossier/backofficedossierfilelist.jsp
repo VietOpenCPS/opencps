@@ -58,7 +58,7 @@
 	
 	List<String> headerNames = new ArrayList<String>();
 	
-	headerNames.add("no");
+	headerNames.add("row-index");
 	headerNames.add("dossierfile-filetype");
 	headerNames.add("dossierfile-fileno");
 	headerNames.add("dossierfile-filedate");

@@ -78,7 +78,20 @@
 	}
 	
 	List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
-	List<DossierTemplate> dossierTemplates = new ArrayList<DossierTemplate>();;
+	List<DossierTemplate> dossierTemplates = new ArrayList<DossierTemplate>();
+	
+	DictCollection collectionDomain = null;
+	DictItem curDictItem = null;
+	List<DictItem> dictItems = new ArrayList<DictItem>();
+	try {
+		collectionDomain = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, WebKeys.SERVICE_DOMAIN);
+	} catch (Exception e) {
+		
+	}
+	
+	if(Validator.isNotNull(collectionDomain)) {
+		dictItems = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(collectionDomain.getDictCollectionId());
+	}
 	
 	//govAgencyId as serviceAdmin
 	DictItem govAgencyItem = null;
@@ -199,7 +212,7 @@
 		<aui:model-context bean="<%=serviceConfig%>" model="<%=ServiceConfig.class%>" />
 		
 		<aui:row>
-			<aui:col>
+			<%-- <aui:col>
 				<datamgt:ddr
 					cssClass="input100"
 					depthLevel="1" 
@@ -208,8 +221,36 @@
 					itemsEmptyOption="true"	
 					selectedItems="<%=dictItemServiceDomainId%>"
 				/>	
-			</aui:col>
+			</aui:col> --%>
+			
+			<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>" 
+						label="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>" 
+						cssClass="input100"
+			>
+				<aui:option value=""></aui:option>
+				<%
+					if(dictItems != null){
+						for(DictItem dictItem : dictItems){
+							if((curDictItem != null && dictItem.getDictItemId() == curDictItem.getDictItemId())||
+									(curDictItem != null && dictItem.getTreeIndex().contains(curDictItem.getDictItemId() + StringPool.PERIOD))){
+								continue;
+							}
+							
+							int level = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
+							String index = "|";
+							for(int i = 0; i < level; i++){
+								index += "_";
+							}
+							%>
+								<aui:option value="<%=dictItem.getDictItemId()%>"><%=index + dictItem.getItemName(locale) %></aui:option>
+							<%
+						}
+					}
+				%>
+			</aui:select>
 		</aui:row>
+		
+		
 		
 		<div id = "<portlet:namespace />responseServiceConfig"></div>
 		

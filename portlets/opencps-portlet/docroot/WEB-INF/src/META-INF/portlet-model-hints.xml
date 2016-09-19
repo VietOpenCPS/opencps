@@ -43,6 +43,9 @@
 		<field name="itemName" type="String" localized="true">
 			<hint name="max-length">255</hint>
 		</field>
+		<field name="itemDescription" type="String" localized="true">
+			<hint-collection name="TEXTAREA" />
+		</field>
 		<field name="parentItemId" type="long" />
 		<field name="treeIndex" type="String" />
 		<field name="issueStatus" type="int" />
@@ -515,7 +518,9 @@
 		</field>
 		<field name="updateDatetime" type="Date" />
 		<field name="level" type="int" />
-		<field name="actor" type="String" />
+		<field name="actor" type="int" />
+		<field name="actorId" type="long" />
+		<field name="actorName" type="String" />
 		<field name="syncStatus" type="int" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierPart">

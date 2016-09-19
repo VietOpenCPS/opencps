@@ -17,6 +17,22 @@
 
 package org.opencps.processmgt.portlet;
 
+import java.io.IOException;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+
+import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
+import org.opencps.util.DLFileEntryUtil;
+import org.opencps.util.PortletUtil;
+import org.opencps.util.WebKeys;
+
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -24,4 +40,33 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class DossierMgtBackOfficePortlet extends MVCPortlet {
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 */
+	public void previewAttachmentFile(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		long dossierFileId =
+			ParamUtil.getLong(
+				actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		String url =
+			DLFileEntryUtil.getDossierFileAttachmentURL(
+				dossierFileId, themeDisplay);
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		// url = "http://docs.google.com/gview?url=" + url + "&embedded=true";
+		jsonObject.put("url", url);
+		try {
+			PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
+		}
+		catch (IOException e) {
+			_log.error(e);
+		}
+	}
+	
+	
+	private Log _log =
+			LogFactoryUtil.getLog(DossierMgtBackOfficePortlet.class.getName());
 }

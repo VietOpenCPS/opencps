@@ -24,7 +24,9 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -109,8 +111,10 @@ import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -121,15 +125,18 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.ServiceContextThreadLocal;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
@@ -274,10 +281,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				size, serviceContext);
 
 			updated = true;
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-			
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 			SessionErrors.clear(actionRequest);
 		}
 		catch (Exception e) {
@@ -374,9 +380,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				serviceContext.getUserId(), dossierId, dossierPartId, partName,
 				PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 				serviceContext);
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 		}
 		catch (Exception e) {
 			updated = false;
@@ -546,9 +551,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				PortletConstants.DOSSIER_FILE_TYPE_INPUT);
 
 			jsonObject.put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -569,7 +573,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param actionRequest
 	 * @param actionResponse
@@ -578,45 +582,63 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	public void cancelDossier(
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 		if (accountBean.isBusiness() || accountBean.isCitizen()) {
 			long dossierId =
-					ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+				ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 			try {
 				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
-				ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
-				ProcessWorkflow workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
+				ProcessOrder processOrder =
+					ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
+				ProcessWorkflow workFlow =
+					ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(
+						processOrder.getServiceProcessId(),
+						processOrder.getProcessStepId(),
+						PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
 				Message message = new Message();
 				if (Validator.isNotNull(workFlow.getAutoEvent())) {
-					message.put(ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());				
+					message.put(
+						ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());
 				}
 				else {
-					message.put(ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
-							workFlow.getProcessWorkflowId());				
+					message.put(
+						ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
+						workFlow.getProcessWorkflowId());
 				}
 
-				message.put(ProcessOrderDisplayTerms.ACTION_NOTE, PortletPropsValues.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
-				message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID,
-						processOrder.getProcessStepId());
+				message.put(
+					ProcessOrderDisplayTerms.ACTION_NOTE,
+					PortletPropsValues.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
+				message.put(
+					ProcessOrderDisplayTerms.PROCESS_STEP_ID,
+					processOrder.getProcessStepId());
 				message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID, 0);
-				message.put(ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
-						processOrder.getServiceProcessId());
+				message.put(
+					ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
+					processOrder.getServiceProcessId());
 				message.put(ProcessOrderDisplayTerms.PAYMENTVALUE, 0);
-				message.put(ProcessOrderDisplayTerms.GROUP_ID, serviceContext.getScopeGroupId());
-				message.put(ProcessOrderDisplayTerms.ACTION_USER_ID,
-				serviceContext.getUserId());
+				message.put(
+					ProcessOrderDisplayTerms.GROUP_ID,
+					serviceContext.getScopeGroupId());
+				message.put(
+					ProcessOrderDisplayTerms.ACTION_USER_ID,
+					serviceContext.getUserId());
 
-				message.put(ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
-						processOrder.getProcessOrderId());
+				message.put(
+					ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
+					processOrder.getProcessOrderId());
 				message.put(ProcessOrderDisplayTerms.FILE_GROUP_ID, 0);
-				message.put(ProcessOrderDisplayTerms.DOSSIER_ID,
-						dossier.getDossierId());
+				message.put(
+					ProcessOrderDisplayTerms.DOSSIER_ID, dossier.getDossierId());
 
-				message.put(ProcessOrderDisplayTerms.GROUP_ID, dossier.getGroupId());
+				message.put(
+					ProcessOrderDisplayTerms.GROUP_ID, dossier.getGroupId());
 
-				message.put(ProcessOrderDisplayTerms.COMPANY_ID,
-						dossier.getCompanyId());
+				message.put(
+					ProcessOrderDisplayTerms.COMPANY_ID, dossier.getCompanyId());
 
 				SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
 
@@ -627,35 +649,38 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				sendToEngineMsg.setFileGroupId(0);
 				sendToEngineMsg.setPaymentValue(GetterUtil.getDouble(0));
 				sendToEngineMsg.setProcessOrderId(processOrder.getProcessOrderId());
-				sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier
-						.getReceptionNo()) ? dossier.getReceptionNo()
-						: StringPool.BLANK);
+				sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier.getReceptionNo())
+					? dossier.getReceptionNo() : StringPool.BLANK);
 				sendToEngineMsg.setSignature(0);
 				if (Validator.isNotNull(workFlow.getAutoEvent())) {
-					sendToEngineMsg.setEvent(workFlow.getAutoEvent());				
+					sendToEngineMsg.setEvent(workFlow.getAutoEvent());
 				}
 				else {
-					sendToEngineMsg.setProcessWorkflowId(workFlow
-							.getProcessWorkflowId());				
-				}			
+					sendToEngineMsg.setProcessWorkflowId(workFlow.getProcessWorkflowId());
+				}
 				sendToEngineMsg.setGroupId(serviceContext.getScopeGroupId());
 				sendToEngineMsg.setUserId(serviceContext.getUserId());
 				message.put("msgToEngine", sendToEngineMsg);
-				MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
-						message);
+				MessageBusUtil.sendMessage(
+					"opencps/backoffice/engine/destination", message);
 				addProcessActionSuccessMessage = false;
 				SessionMessages.add(actionRequest, "cancel-dossier-success");
-			} catch (PortalException e) {
-				_log.error(e);
-				SessionErrors.add(actionRequest, "user-not-have-permission-cancel-dossier");
-			} catch (SystemException e) {
-				_log.error(e);
-				SessionErrors.add(actionRequest, "user-not-have-permission-cancel-dossier");
 			}
-			
+			catch (PortalException e) {
+				_log.error(e);
+				SessionErrors.add(
+					actionRequest, "user-not-have-permission-cancel-dossier");
+			}
+			catch (SystemException e) {
+				_log.error(e);
+				SessionErrors.add(
+					actionRequest, "user-not-have-permission-cancel-dossier");
+			}
+
 		}
 		else {
-			SessionErrors.add(actionRequest, "user-not-have-permission-cancel-dossier");
+			SessionErrors.add(
+				actionRequest, "user-not-have-permission-cancel-dossier");
 		}
 	}
 
@@ -744,8 +769,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			updated = true;
 
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 		}
 		catch (Exception e) {
 			updated = false;
@@ -820,11 +844,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		/*
-		 * ThemeDisplay themeDisplay = (ThemeDisplay)
-		 * actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		 */
-
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		long dossierFileId =
@@ -859,19 +878,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			Dossier dossier =
 				DossierLocalServiceUtil.getDossier(dossierFile.getDossierId());
-
-			// Get account folder
-			// DLFolder accountForlder = accountBean.getAccountFolder();
-
-			// Get dossier folder
-			/*
-			 * DLFolder dosserFolder = DLFolderUtil.addFolder(
-			 * themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
-			 * themeDisplay.getScopeGroupId(), false,
-			 * accountForlder.getFolderId(),
-			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
-			 * serviceContext);
-			 */
 
 			String formData = dossierFile.getFormData();
 			String jrxmlTemplate = dossierPart.getFormReport();
@@ -920,12 +926,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							serviceContext);
 					}
 				}
-				
+
 				SessionMessages.add(
-						actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-				
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 			}
-			
+
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierFileException) {
@@ -1003,9 +1009,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					dossierFileId, fileEntryId);
 				jsonObject.put("deleted", Boolean.TRUE);
 			}
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -1044,9 +1049,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				DossierLocalServiceUtil.deleteDossierByDossierId(dossierId);
 			}
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -1123,10 +1127,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					DossierFileLocalServiceUtil.deleteDossierFile(dossierFile);
 					jsonObject.put("deleted", Boolean.TRUE);
 				}
-				
+
 				SessionMessages.add(
-						actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-				
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 			}
 			catch (Exception e) {
 				_log.error(e);
@@ -1159,10 +1163,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		try {
 			DLAppServiceUtil.deleteFileEntry(fileEntryId);
 			jsonObject.put("deleted", Boolean.TRUE);
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-			
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			String errorMessage =
@@ -1299,7 +1302,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		return selectedItems;
 	}
-	
+
 	/**
 	 * @param path
 	 * @param renderRequest
@@ -1437,9 +1440,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 
 			jsonObject.put("deleted", Boolean.TRUE);
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -1481,9 +1483,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				jsonObject.put("deleted", Boolean.TRUE);
 			}
 
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-			
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			jsonObject.put("deleted", Boolean.FALSE);
@@ -1519,7 +1520,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		validatePermission(renderRequest, renderResponse);
 
 		if (_hasPermission) {
-			
+
 			ThemeDisplay themeDisplay =
 				(ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
@@ -1672,7 +1673,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		long govAgencyOrganizationId =
 			ParamUtil.getLong(
 				actionRequest, DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
-		
+
 		long ownerOrganizationId =
 			GetterUtil.getLong(session.getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));
 
@@ -2066,9 +2067,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				PortletConstants.DOSSIER_FILE_TYPE_INPUT);
 
 			jsonObject.put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -2141,13 +2141,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				actionMsg.setCompanyId(dossier.getCompanyId());
 
-				ProcessOrder processOrder =
-					ProcessOrderLocalServiceUtil.getProcessOrder(
-						dossierId, fileGroupId);
+				// Phan nay phai xu ly lay trong backend do phia cong trong mo
+				// hinh phan tan khong co ProcessOrder
+				// ProcessOrder processOrder =
+				// ProcessOrderLocalServiceUtil.getProcessOrder(
+				// dossierId, fileGroupId);
 
-				actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
+				// actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
 
 				actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
+
+				actionMsg.setDossierOId(dossier.getOid());
 
 				message.put("msgToEngine", actionMsg);
 
@@ -2181,22 +2185,35 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				break;
 			}
 
+			long actorId = actionMsg.getUserId();
+
+			String actorName = StringPool.BLANK;
+
+			User user = UserLocalServiceUtil.fetchUser(actorId);
+
+			if (Validator.isNotNull(user)) {
+				actorName = user.getFullName();
+			}
+
 			DossierLocalServiceUtil.updateDossierStatus(
 				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
-				WebKeys.ACTOR_ACTION_CITIZEN, StringPool.BLANK,
-				PortletUtil.getActionInfo(
+				WebKeys.DOSSIER_ACTOR_CITIZEN, actorId, actorName,
+				StringPool.BLANK, PortletUtil.getActionInfo(
 					PortletConstants.DOSSIER_STATUS_SYSTEM,
-					actionRequest.getLocale()), PortletUtil.getMessageInfo(
-					PortletConstants.DOSSIER_STATUS_SYSTEM,
-					actionRequest.getLocale()),
+					actionRequest.getLocale()), StringPool.BLANK,
 				PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
 				PortletConstants.DOSSIER_LOG_NORMAL);
 
 			MessageBusUtil.sendMessage(
 				"opencps/frontoffice/out/destination", message);
 
+			ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
+					.getAttribute(WebKeys.THEME_DISPLAY);
+
 			// add default message success
-			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+			SessionMessages.add(actionRequest, 
+					MessageKeys.DEFAULT_SUCCESS_KEY_X, 
+					LanguageUtil.format(themeDisplay.getLocale(), MessageKeys.DEFAULT_SUCCESS_KEY_X, String.valueOf(dossier.getDossierId())));
 
 		}
 		catch (Exception e) {
@@ -2325,10 +2342,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						dossierFileType, dossierFileNo, dossierFileDate,
 						original, syncStatus, serviceContext);
 			}
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-			
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierException) {
@@ -2408,9 +2424,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		actionResponse.setRenderParameter(
 			"mvcPath", "/html/portlets/dossiermgt/frontoffice/dynamic_form.jsp");
-		
-		SessionMessages.add(
-				actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+		SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 	}
 
@@ -3041,6 +3056,45 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 	}
 
+	public void menuCounterAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException, SystemException, IOException {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+        long groupId = themeDisplay.getScopeGroupId();
+
+        // now read your parameters, e.g. like this:
+        // long someParameter = ParamUtil.getLong(request, "someParameter");
+        
+        String keywords = ParamUtil.getString(actionRequest, "keywords");
+        long serviceDomainId = ParamUtil.getLong(actionRequest, "serviceDomainId");
+        
+        DictItem domainItem = null;
+		
+		if(serviceDomainId > 0){
+			domainItem = DictItemLocalServiceUtil.fetchDictItem(serviceDomainId);
+		}
+        
+		long counterVal = 0;
+		JSONObject obj = null;
+		for (DictItem item : PortletUtil.getDossierStatus(groupId)){
+			obj = JSONFactoryUtil.createJSONObject();
+			
+			counterVal = DossierLocalServiceUtil.countDossierByUser(groupId, 
+					themeDisplay.getUserId(), 
+					StringPool.BLANK, 
+					Validator.isNotNull(domainItem)? domainItem.getTreeIndex():StringPool.BLANK, 
+					item.getItemCode());
+
+			obj.put("code", item.getItemCode());
+			obj.put("counter", String.valueOf(counterVal));
+			jsonArray.put(obj);
+		}
+		jsonObject.put("badge", jsonArray);
+		PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+	
+	
 	private boolean _hasPermission = true;
 
 	public boolean hasPermission() {

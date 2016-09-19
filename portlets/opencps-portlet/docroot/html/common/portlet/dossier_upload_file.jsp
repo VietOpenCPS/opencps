@@ -1,4 +1,10 @@
 
+<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.service.TemplateFileLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.model.TemplateFile"%>
+<%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
@@ -73,9 +79,17 @@
 	
 	if(dossierFileId > 0){
 		try{
+			
 			dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+			
 		}catch(Exception e){}
 		
+	}
+	
+	String dossierPartName = StringPool.BLANK; 
+	if(dossierPartId > 0){
+		DossierPart dossierPart = DossierPartLocalServiceUtil.fetchDossierPart(dossierPartId);
+		dossierPartName = Validator.isNotNull(dossierPart)?dossierPart.getPartName():StringPool.BLANK;
 	}
 	
 	Date defaultDossierFileDate = dossierFile != null && dossierFile.getDossierFileDate() != null ? 
@@ -148,9 +162,10 @@
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL %>" type="hidden" value="<%=String.valueOf(PortletConstants.DOSSIER_FILE_ORIGINAL) %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_TYPE %>" type="hidden" value="<%=String.valueOf(renderResponse.getNamespace().equals(StringPool.UNDERLINE + WebKeys.DOSSIER_MGT_PORTLET + StringPool.UNDERLINE)  ? PortletConstants.DOSSIER_FILE_TYPE_INPUT : PortletConstants.DOSSIER_FILE_TYPE_OUTPUT) %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
+	
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text">
+			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" value="<%=dossierPartName %>">
 				<aui:validator name="required"/>
 			</aui:input>
 		</aui:col>

@@ -25,7 +25,6 @@ import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.util.PortletConstants;
-import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -33,10 +32,6 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.User;
-import com.liferay.portal.service.UserLocalServiceUtil;
 
 
 /**
@@ -64,7 +59,6 @@ public class SyncFromBackOffice implements MessageListener{
 
 		boolean statusUpdate = false;
 
-		String actor = _getActor(toBackOffice.getUserActorAction());
 
 		try {
 			statusUpdate =
@@ -75,7 +69,9 @@ public class SyncFromBackOffice implements MessageListener{
 			        toBackOffice.getEstimateDatetime(),
 			        toBackOffice.getSubmitDateTime(),
 			        toBackOffice.getReceiveDatetime(),
-			        toBackOffice.getFinishDatetime(), actor,
+			        toBackOffice.getFinishDatetime(), toBackOffice.getActor(),
+			        toBackOffice.getActorId(),
+			        toBackOffice.getActorName(),
 			        toBackOffice.getRequestCommand(),
 			        toBackOffice.getActionInfo(), toBackOffice.getMessageInfo());
 
@@ -105,27 +101,7 @@ public class SyncFromBackOffice implements MessageListener{
 	}    
     
 
-    /**
-     * @param userActionId
-     * @return
-     */
-    private String _getActor(long userActionId) {
-    	String actor = StringPool.BLANK;
-    	
-    	try {
-        	if (Validator.isNotNull(userActionId) && userActionId > 0) {
-        		User userActor = UserLocalServiceUtil.fetchUser(userActionId);
-        		
-        		actor = "[CB]" + StringPool.SPACE + userActor.getFullName();
-        	}
-        }
-        catch (Exception e) {
-	        actor = "system";
-        }
-    	
-    	return actor;
-    }
-    
+
     private Log _log = LogFactoryUtil.getLog(SyncFromBackOffice.class);
 
 }
