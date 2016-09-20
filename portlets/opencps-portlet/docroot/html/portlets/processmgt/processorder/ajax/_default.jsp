@@ -1,6 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
-<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,17 +29,8 @@
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@ include file="../init.jsp"%>
 
-<liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
 
 <%
-	boolean success = false;
-	
-	try{
-		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
-	}catch(Exception e){
-		
-	}
-	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "processordertodolist.jsp");
 	iteratorURL.setParameter("tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
@@ -59,11 +48,8 @@
 	headerNames.add("col3");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
-	
 %>
 
-<aui:form name="fm">
-	<div class="opencps-searchcontainer-wrapper" id="<portlet:namespace />processOrderSearchContainer"">
 		<liferay-ui:search-container 
 				searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
 				rowChecker="<%=rowChecker%>"
@@ -199,36 +185,6 @@
 				
 				<liferay-ui:search-iterator type="opencs_page_iterator"/>
 			</liferay-ui:search-container>
-	</div>
-</aui:form>
-
-<liferay-portlet:renderURL var="processOrderURL" portletName="<%=WebKeys.PROCESS_ORDER_PORTLET %>" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
-	<liferay-portlet:param name="mvcPath" value="/html/portlets/processmgt/processorder/ajax/_default.jsp" />
-	<liferay-portlet:param name="<%=ProcessOrderDisplayTerms.SERVICE_INFO_ID %>" value="{0}" />
-	<liferay-portlet:param name="<%=ProcessOrderDisplayTerms.PROCESS_STEP_ID %>" value="{1}" />
-</liferay-portlet:renderURL>
-
-<aui:script use="aui-base,aui-io-plugin">
-
-AUI().ready(function(A){
-	
-	var success = '<%=success%>';
-	
-	if(success == 'true'){
-		
-		var url = A.Lang.sub('<%= processOrderURL %>', ['<%=ParamUtil.getLong(request, ProcessOrderSearchTerms.SERVICE_INFO_ID) %>', '<%=ParamUtil.getLong(request, ProcessOrderSearchTerms.PROCESS_STEP_ID) %>']);
-		
-		$("#<portlet:namespace />processOrderSearchContainer").load( url, function () {
-			
-			selector: '#<portlet:namespace />processOrderSearchContainer > .lfr-search-container'
-			
-		});
-	
-	}
-	
-});
-</aui:script>
-
 <%!
-	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.processordertodolist.jsp");
+	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.ajax._default.jsp");
 %>
