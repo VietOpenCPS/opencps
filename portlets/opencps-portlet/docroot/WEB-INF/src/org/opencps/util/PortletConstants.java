@@ -209,4 +209,11 @@ public class PortletConstants {
 	public static final String REQUEST_COMMAND_PAYMENT = "paymentRequest";
 	
 	public static final String REQUEST_COMMAND_RESUBMIT = "resubmitRequest";
+	
+	public static final int DOSSIER_FILE_ADD = 1;
+	public static final int DOSSIER_FILE_DUPLICATE = 2;
+	public static final int DOSSIER_FILE_REMOVE = 3;
+	public static final int DOSSIER_FILE_EXPORT = 4;
+	
+	
 }

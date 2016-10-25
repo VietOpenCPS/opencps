@@ -41,14 +41,6 @@
 	
 	String[][] categorySections = {processOrderSections};
 %>
-<%-- <div class="ocps-custom-header">
-	<label class="opcps-label">
-		<liferay-ui:message key="process-order" />
-	</label>
-	<span class="ocps-span">
-		<a href="<%=backURL %>"><liferay-ui:message key="back"/></a>
-	</span>
-</div> --%>
 
 <liferay-ui:header
 	backURL="<%= backURL %>"

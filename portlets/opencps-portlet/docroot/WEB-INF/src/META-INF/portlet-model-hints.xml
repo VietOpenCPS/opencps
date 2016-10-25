@@ -507,6 +507,23 @@
 		<field name="version" type="int" />
 		<field name="signed" type="boolean" />
 	</model>
+	<model name="org.opencps.dossiermgt.model.DossierFileLog">
+		<field name="dossierFileLogId" type="long" />
+		<field name="modifiedDate" type="Date" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="dossierId" type="long" />
+		<field name="fileGroupId" type="long" />
+		<field name="stepId" type="long" />
+		<field name="isUpdate" type="boolean" />
+		<field name="fileName" type="String" />
+		<field name="fileVersion" type="int" />
+		<field name="fileLink" type="String" />
+		<field name="actionCode" type="int" />
+		<field name="count_" type="int" />
+		<field name="oId" type="String" />
+		<field name="fileEntryId" type="long" />
+	</model>
 	<model name="org.opencps.dossiermgt.model.DossierLog">
 		<field name="dossierLogId" type="long" />
 		<field name="companyId" type="long" />

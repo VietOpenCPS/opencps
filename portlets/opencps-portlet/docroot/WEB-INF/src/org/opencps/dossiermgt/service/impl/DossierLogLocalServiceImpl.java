@@ -26,11 +26,7 @@ import org.opencps.dossiermgt.NoSuchDossierLogException;
 import org.opencps.dossiermgt.comparator.DossierLogUpdateDatetimeComparator;
 import org.opencps.dossiermgt.model.DossierLog;
 import org.opencps.dossiermgt.service.base.DossierLogLocalServiceBaseImpl;
-import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
-import org.opencps.processmgt.model.impl.ProcessStepImpl;
-import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
-import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;

@@ -527,8 +527,65 @@
             <finder-column name="dossierPartId"></finder-column>
         </finder>
         
-	<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
+		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
+    </entity>
+    
+    <entity name="DossierFileLog" local-service="true" table="opencps_dossier_file_log">
+    
+   		<!-- PK fields -->
+    
+        <column name="dossierFileLogId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+
+		<column name="modifiedDate" type="Date" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		
+		<!-- Other fields -->
+		
+        <column name="dossierId" type="long"/>
+        <column name="fileGroupId" type="long"/>
+        <column name="stepId" type="long"/>
+        <column name="isUpdate" type="boolean"/>
+
+        <column name="fileName" type="String"/>
+        <column name="fileVersion" type="int"/>
+        <column name="fileLink" type="String"/>
+        <column name="actionCode" type="int"/>
+        <column name="count_" type="int"/>
+        <column name="oId" type="String"/>
+        <column name="fileEntryId" type="long"/>
+        
+        <finder name="D_F_S" return-type="Collection">
+            <finder-column name="dossierId"/>
+            <finder-column name="fileGroupId"/>
+            <finder-column name="stepId"/>
+        </finder>
+
+        <finder name="D_F_S_U" return-type="Collection">
+            <finder-column name="dossierId"/>
+            <finder-column name="fileGroupId"/>
+            <finder-column name="stepId"/>
+            <finder-column name="isUpdate"/>
+        </finder>
+
+        <finder name="D_F_S_U_C" return-type="Collection">
+            <finder-column name="dossierId"/>
+            <finder-column name="fileGroupId"/>
+            <finder-column name="stepId"/>
+            <finder-column name="isUpdate"/>
+            <finder-column name="count_"/>
+        </finder>
+
+        <finder name="D_F_S_A" return-type="Collection">
+            <finder-column name="dossierId"/>
+            <finder-column name="fileGroupId"/>
+            <finder-column name="stepId"/>
+            <finder-column name="actionCode"/>
+        </finder>
+
     </entity>
 
 	<exceptions>

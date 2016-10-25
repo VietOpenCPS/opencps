@@ -6,3 +6,4 @@
 /DossierTemplatePersistenceImpl.java
 /FileGroupPersistenceImpl.java
 /ServiceConfigPersistenceImpl.java
+/DossierFileLogPersistenceImpl.java

@@ -17,6 +17,7 @@
 
 package org.opencps.processmgt.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -30,6 +31,9 @@ import javax.portlet.WindowStateException;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.impl.DossierImpl;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.impl.DossierLocalServiceImpl;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.StepAllowance;
@@ -664,6 +668,66 @@ public class ProcessOrderUtils {
 			return jsonArrayRoot.toString();
 		}
 	
+	/**
+	 * Get Date of Dossier
+	 * 
+	 * @param dossierId
+	 * @param typeDate 1: receiveDate, 2: estimateDate, 3: finishedDate, 4: modifiedDate
+	 * @param patternDate Pattern of date output
+	 * @return
+	 */
+	public static String getDossierDate(
+	    long dossierId, int typeDate, String patternDate) {
+
+		String dossierDate = StringPool.BLANK;
+
+		Dossier dossier = new DossierImpl();
+
+		SimpleDateFormat df = new SimpleDateFormat(patternDate);
+
+		try {
+			dossier = DossierLocalServiceUtil.getDossier(dossierId);
+
+			switch (typeDate) {
+			case 1: {
+				if (Validator.isNotNull(dossier.getReceiveDatetime())) {
+					dossierDate = df.format(dossier.getReceiveDatetime());
+				}
+				break;
+			}
+			case 2: {
+				if (Validator.isNotNull(dossier.getEstimateDatetime())) {
+					dossierDate = df.format(dossier.getEstimateDatetime());
+				}
+				
+				break;
+
+			}
+			case 3: {
+				if (Validator.isNotNull(dossier.getFinishDatetime())) {
+					dossierDate = df.format(dossier.getFinishDatetime());
+				}
+				
+				break;
+
+			}
+			case 4: {
+				if (Validator.isNotNull(dossier.getModifiedDate())) {
+					dossierDate = df.format(dossier.getModifiedDate());
+				}
+				
+				break;
+			}
+			default:
+				break;
+			}
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+		return dossierDate;
+	}
 
 	private static Log _log =
     		LogFactoryUtil.getLog(ProcessOrderUtils.class.getName());
