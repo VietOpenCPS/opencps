@@ -21,6 +21,7 @@
 <%@page import="java.util.List"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
+<%@page import="com.liferay.portal.kernel.util.UnicodeFormatter"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -50,23 +51,32 @@
 		</aui:col>
 		<aui:col width="40"></aui:col>
 	</aui:row>
+	<aui:input
+		type="text"
+		name="emailConfirmToAdmin"
+		value="<%=emailConfirmToAdmin %>"
+		>
+	</aui:input>
+	<aui:input 
+		type="checkbox"
+		name="showLabelTaglibDatamgt" 
+		value="<%= showLabelTaglibDatamgt %>"
+	/>
+
+	<aui:row >
+		<aui:col>
+			<label class="pd_t20 pd_b10"><liferay-ui:message key="message-successfull-registration"/></label>
+			<liferay-ui:input-editor name="messageSuccessfullRegistration" initMethod="messageRegistration"/>
+		</aui:col>
+	</aui:row>
 	
-    <aui:input name="action" type="hidden" id="action"></aui:input>
-    
     <aui:button-row>
-        <aui:button type="button" id="save" name="save" value="save" />  
+        <aui:button type="submit" name="save" value="save" />  
     </aui:button-row>
 </aui:form>
 
 <aui:script>
-	AUI().ready(function(A) {
-		var btnSave = A.one('#<portlet:namespace />save');
-		
-		if(btnSave) {
-			btnSave.on('click',function() {
-				A.one('#<portlet:namespace />action').set('value', 'save');
-				document.getElementById('<portlet:namespace />fm').submit();
-			});
-		}
-	});
+	function <portlet:namespace />messageRegistration() {
+		return "<%= Validator.isNotNull(messageSuccessfullRegistration) ? UnicodeFormatter.toString(messageSuccessfullRegistration) : StringPool.BLANK %>";
+	}
 </aui:script>

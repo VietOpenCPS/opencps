@@ -60,7 +60,8 @@ public class ProcessOrderDisplayTerms extends DisplayTerms {
 	public static String ESTIMATE_DATETIME_DAY = "estimateDatetimeDay";
 	public static String ESTIMATE_DATETIME_MONTH = "estimateDatetimeMonth";
 	public static String ESTIMATE_DATETIME_YEAR = "estimateDatetimeYear";
-	public static String ESTIMATE_DATETIME = "estimateDatetime";
+	public static String ESTIMATE_DATE = "estimateDate";
+	public static String ESTIMATE_TIME = "estimateTime";
 	public static String SIGNATURE = "signature";
 	public static String REQUIRED = "required";
 	

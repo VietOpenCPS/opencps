@@ -442,6 +442,16 @@ public class ProcessOrderBean {
 	private String _actionUserName;
 	private String _dealine;
 
+	private String _actionNote;
+	
+	public String getActionNote() {
+		return _actionNote;
+	}
+
+	public void setActionNote(String _actionNote) {
+		this._actionNote = _actionNote;
+	}
+
 	private boolean _readOnly;
 
 	private Log _log = LogFactoryUtil

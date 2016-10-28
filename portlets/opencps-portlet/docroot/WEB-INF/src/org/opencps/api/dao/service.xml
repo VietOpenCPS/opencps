@@ -42,5 +42,6 @@
 		<reference entity="ServiceInfo" package-path="org.opencps.servicemgt.dao" />
 		<reference entity="ProcessWorkflow" package-path="org.opencps.processmgt.dao" />
 		<reference entity="ProcessOrder" package-path="org.opencps.processmgt.dao" />
+		<reference entity="ServiceConfig" package-path="org.opencps.dossiermgt.dao" />
 	</entity>
 </service-builder>

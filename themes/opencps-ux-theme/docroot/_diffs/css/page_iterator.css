@@ -1,6 +1,5 @@
 @CHARSET "UTF-8";
 .pagination {
-    padding-bottom: 10px;
     text-align: center;
 }
 .pagination ul {
@@ -35,23 +34,44 @@
 }
 .lfr-search-container .pagination{
   margin: 0 !important;
+  width: 100%;
 }
+
 .mrb25{
 	margin-bottom: 25px;
+    padding-bottom: 10px;
+    text-align: center;
 }
-/* ks 888 */
-.opencps-theme.ux .portlet-boundary_13_WAR_opencpsportlet_ .lfr-search-container .taglib-search-iterator-page-iterator-top .pagination >div.lfr-pagination-config{
-  margin-top: -55px;
-position: absolute;
-right: 0px;
-margin-right: 30px;
+
+.opencps-theme.ux .payment-ld .lfr-search-container .taglib-search-iterator-page-iterator-top .pagination>div.lfr-pagination-config {
+    position: absolute;
+    top: 15px;
+    right: 30px;
+    line-height: normal;
+ margin: 0;
 }
-.opencps-theme.ux .payment-ld .lfr-search-container .taglib-search-iterator-page-iterator-top .pagination >div.lfr-pagination-config{
-  margin-top: -55px;
-position: absolute;
-right: 0px;
-margin-right: 30px;
+.opencps-theme.ux .opencps-searchcontainer-wrapper .lfr-search-container .taglib-search-iterator-page-iterator-top .pagination>div.lfr-pagination-config {
+ position: absolute;
+    top: 10px;
+    right: 30px;
+    line-height: normal;
+ margin: 0;
 }
-.opcs-serviceinfo-list-label{
-	overflow: hidden;
+.taglib-page-iterator .search-results {
+    float: left;
+    line-height: 26px;
+    margin-left: 10px;
+}
+.opencps-theme.ux .taglib-page-iterator {
+    padding: 10px 20px;
+    min-height: 55px;
+    position: relative;
+}
+.opencps-theme.ux .opencps-searchcontainer-wrapper .taglib-page-iterator {
+    padding: 0px 20px;
+    min-height: 50px;
+    position: relative;
+}
+.opencps-theme.ux .opencps-searchcontainer-wrapper.default-box-shadow .alert.alert-info {
+    margin: 40px 10px 10px 10px !important;
 }

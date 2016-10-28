@@ -207,7 +207,7 @@
 			</aui:col>
 		</aui:row>
 		
-		<aui:row>
+		<%-- <aui:row>
 			<aui:col>
 				<c:choose>
 					<c:when test="<%=Validator.isNotNull(serviceInfo) && Validator.isNull(serviceInfo.getOnlineUrl())%>">
@@ -227,7 +227,7 @@
 					</c:otherwise>
 				</c:choose>	
 			</aui:col>
-		</aui:row>
+		</aui:row> --%>
 	</div>
 		
 	<div class="opencps-bound-wrapper pd20 mg-t-20 default-box-shadow">

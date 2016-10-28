@@ -15,7 +15,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-
 package org.opencps.backend.message;
 
 import java.util.Date;
@@ -25,8 +24,7 @@ import org.opencps.paymentmgt.model.PaymentFile;
 /**
  * @author khoavd
  */
-public class SendToBackOfficeMsg{
-	
+public class SendToBackOfficeMsg {
 
 	/**
 	 * @return the processOrderId
@@ -350,95 +348,267 @@ public class SendToBackOfficeMsg{
 
 		this.requestCommand = requestCommand;
 	}
+
+	/**
+	 * @return the userActorAction
+	 */
+	public long getUserActorAction() {
+
+		return userActorAction;
+	}
+
+	/**
+	 * @param userActorAction
+	 *            the userActorAction to set
+	 */
+	public void setUserActorAction(long userActorAction) {
+
+		this.userActorAction = userActorAction;
+	}
+
+	/**
+	 * @return the actor
+	 */
+	public int getActor() {
+
+		return actor;
+	}
+
+	/**
+	 * @param actor
+	 *            the actor to set
+	 */
+	public void setActor(int actor) {
+
+		this.actor = actor;
+	}
+
+	/**
+	 * @return the actorId
+	 */
+	public long getActorId() {
+
+		return actorId;
+	}
+
+	/**
+	 * @param actorId
+	 *            the actorId to set
+	 */
+	public void setActorId(long actorId) {
+
+		this.actorId = actorId;
+	}
+
+	/**
+	 * @return the actorName
+	 */
+	public String getActorName() {
+
+		return actorName;
+	}
+
+	/**
+	 * @param actorName
+	 *            the actorName to set
+	 */
+	public void setActorName(String actorName) {
+
+		this.actorName = actorName;
+	}
+
+	/**
+	 * @return the syncStatus
+	 */
+	public int getSyncStatus() {
+
+		return syncStatus;
+	}
+
+	/**
+	 * @param syncStatus
+	 *            the syncStatus to set
+	 */
+	public void setSyncStatus(int syncStatus) {
+
+		this.syncStatus = syncStatus;
+	}
+
+	public String getDossierLogOId() {
+
+		return dossierLogOId;
+	}
+
+	/**
+	 * @return the isPayment
+	 */
+	public boolean isPayment() {
+
+		return isPayment;
+	}
+
+	/**
+	 * @param isPayment
+	 *            the isPayment to set
+	 */
+	public void setPayment(boolean isPayment) {
+
+		this.isPayment = isPayment;
+	}
+
+	/**
+	 * @return the isResubmit
+	 */
+	public boolean isResubmit() {
+
+		return isResubmit;
+	}
+
+	/**
+	 * @param isResubmit
+	 *            the isResubmit to set
+	 */
+	public void setResubmit(boolean isResubmit) {
+
+		this.isResubmit = isResubmit;
+	}
+
+	public void setDossierLogOId(String dossierLogOId) {
+
+		this.dossierLogOId = dossierLogOId;
+	}
+
+	public String getActionHistoryOId() {
+
+		return actionHistoryOId;
+	}
+
+	public void setActionHistoryOId(String actionHistoryOId) {
+
+		this.actionHistoryOId = actionHistoryOId;
+	}
+
 	
     /**
-     * @return the userActorAction
+     * @return the isCreateProcessOrder
      */
-    public long getUserActorAction() {
+    public boolean isCreateProcessOrder() {
     
-    	return userActorAction;
+    	return isCreateProcessOrder;
     }
 
 	
     /**
-     * @param userActorAction the userActorAction to set
+     * @param isCreateProcessOrder the isCreateProcessOrder to set
      */
-    public void setUserActorAction(long userActorAction) {
+    public void setCreateProcessOrder(boolean isCreateProcessOrder) {
     
-    	this.userActorAction = userActorAction;
-    }
-	
-    /**
-     * @return the actor
-     */
-    public int getActor() {
-    
-    	return actor;
+    	this.isCreateProcessOrder = isCreateProcessOrder;
     }
 
 	
     /**
-     * @param actor the actor to set
+     * @return the isCreateReceptionNo
      */
-    public void setActor(int actor) {
+    public boolean isCreateReceptionNo() {
     
-    	this.actor = actor;
+    	return isCreateReceptionNo;
     }
 
 	
     /**
-     * @return the actorId
+     * @param isCreateReceptionNo the isCreateReceptionNo to set
      */
-    public long getActorId() {
+    public void setCreateReceptionNo(boolean isCreateReceptionNo) {
     
-    	return actorId;
+    	this.isCreateReceptionNo = isCreateReceptionNo;
     }
 
 	
     /**
-     * @param actorId the actorId to set
+     * @return the paymentDate
      */
-    public void setActorId(long actorId) {
+    public Date getPaymentDate() {
     
-    	this.actorId = actorId;
+    	return paymentDate;
     }
 
 	
     /**
-     * @return the actorName
+     * @param paymentDate the paymentDate to set
      */
-    public String getActorName() {
+    public void setPaymentDate(Date paymentDate) {
     
-    	return actorName;
+    	this.paymentDate = paymentDate;
     }
 
 	
     /**
-     * @param actorName the actorName to set
+     * @return the resubmitDate
      */
-    public void setActorName(String actorName) {
+    public Date getResubmitDate() {
     
-    	this.actorName = actorName;
-    }
-	
-    /**
-     * @return the syncStatus
-     */
-    public int getSyncStatus() {
-    
-    	return syncStatus;
+    	return resubmitDate;
     }
 
 	
     /**
-     * @param syncStatus the syncStatus to set
+     * @param resubmitDate the resubmitDate to set
      */
-    public void setSyncStatus(int syncStatus) {
+    public void setResubmitDate(Date resubmitDate) {
     
-    	this.syncStatus = syncStatus;
+    	this.resubmitDate = resubmitDate;
     }
+
+	
+    /**
+     * @return the createProcessOrderDate
+     */
+    public Date getCreateProcessOrderDate() {
+    
+    	return createProcessOrderDate;
+    }
+
+	
+    /**
+     * @param createProcessOrderDate the createProcessOrderDate to set
+     */
+    public void setCreateProcessOrderDate(Date createProcessOrderDate) {
+    
+    	this.createProcessOrderDate = createProcessOrderDate;
+    }
+
+	
+    /**
+     * @return the createRecptionDate
+     */
+    public Date getCreateRecptionDate() {
+    
+    	return createRecptionDate;
+    }
+
+	
+    /**
+     * @param createRecptionDate the createRecptionDate to set
+     */
+    public void setCreateRecptionDate(Date createRecptionDate) {
+    
+    	this.createRecptionDate = createRecptionDate;
+    }
+
+	
+    public String getStepName() {
+    
+    	return stepName;
+    }
+
+	
+    public void setStepName(String stepName) {
+    
+    	this.stepName = stepName;
+    }
+
 	protected String requestCommand;
-
 	protected long processOrderId;
 	protected long dossierId;
 	protected long fileGroupId;
@@ -462,5 +632,19 @@ public class SendToBackOfficeMsg{
 	protected long actorId;
 	protected String actorName;
 	protected int syncStatus;
+	protected String dossierLogOId;
+	protected String actionHistoryOId;
+	protected boolean isPayment;
+	protected boolean isResubmit;
+	protected boolean isCreateProcessOrder;
+	protected boolean isCreateReceptionNo;
+	
+	protected Date paymentDate;
+	protected Date resubmitDate;
+	protected Date createProcessOrderDate;
+	protected Date createRecptionDate;
+	
+	protected String stepName;
+	
 
 }

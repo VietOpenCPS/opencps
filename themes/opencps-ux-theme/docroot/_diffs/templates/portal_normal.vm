@@ -90,7 +90,7 @@
 	<footer>
 		<div class="content">
             <div class="span3 logo">
-                <p>Copyright © 2016 - OpenCPS v1.5</p>
+                <p>Copyright © 2016 - OpenCPS v1.6</p>
             </div>
             <div class="span2">
                 <p class="title">#language ("danhmuc-key")</p>

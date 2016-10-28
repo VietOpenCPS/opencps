@@ -230,6 +230,10 @@
 			<finder-column name="processWorkflowId"/>
 			<finder-column name="esign"/>
 		</finder>
+        <finder name="PWID_DPID" return-type="Collection">
+            <finder-column name="processWorkflowId"></finder-column>
+            <finder-column name="dossierPartId"></finder-column>
+        </finder>
 		
 	</entity>
 
@@ -306,6 +310,7 @@
 		<column name="actionUserId" type="long"/>
 		<column name="daysDoing" type="int"/>
 		<column name="daysDelay" type="int"/>
+        <column name="oId" type="String"></column>
 
         <order >
             <order-column name="createDate" order-by="desc"></order-column>
@@ -324,9 +329,12 @@
 			<finder-column name="processOrderId"/>
 		</finder>
 		
-		<finder return-type="Collection" name="ProcessOrderId" where="stepName != ''">
+		<finder return-type="Collection" name="ProcessOrderId">
 			<finder-column name="processOrderId"/>
 		</finder>
+        <finder name="OId" return-type="ActionHistory">
+            <finder-column name="oId"></finder-column>
+        </finder>
 		
 		
 	</entity>

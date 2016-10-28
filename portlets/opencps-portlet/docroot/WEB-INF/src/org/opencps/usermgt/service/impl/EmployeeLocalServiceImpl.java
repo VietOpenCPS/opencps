@@ -585,12 +585,12 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				}
 
 				// userLocalService.setRoleUsers
-
-				for (Long roleId : roleIds) {
-					userLocalService.setRoleUsers(roleId,
-							new long[]{mappingUser.getUserId()});
-				}
-				
+				//Comment tam de test, neu OK thi xoa luon
+//				for (Long roleId : roleIds) {
+//					userLocalService.setRoleUsers(roleId,
+//							new long[]{mappingUser.getUserId()});
+//				}
+				//Comment tam de test, neu OK thi xoa luon END
 				// delete all mapping user with multiply roles
 				List<Role> roles = new ArrayList<Role>();
 				try {

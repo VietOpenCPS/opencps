@@ -31,8 +31,13 @@
 <%
 
 	//String[] names = new String[]{DossierMgtUtil.TOP_TABS_DOSSIER, DossierMgtUtil.TOP_TABS_DOSSIER_FILE, DossierMgtUtil.TOP_TABS_EXTERNAL_DOSSIER};
-	String[] names = new String[]{DossierMgtUtil.TOP_TABS_DOSSIER, DossierMgtUtil.TOP_TABS_DOSSIER_FILE};
-
+	
+	String[] names = null;
+	if(!hideTabDossierFile) {
+		names =new String[]{DossierMgtUtil.TOP_TABS_DOSSIER, DossierMgtUtil.TOP_TABS_DOSSIER_FILE};	
+	} else {
+		names =new String[]{DossierMgtUtil.TOP_TABS_DOSSIER};
+	}
 	String value = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 
 	List<String> urls = new ArrayList<String>();
@@ -75,12 +80,23 @@
 
 <div class="opencps-toptabs">
 	<div class="container">
-		<liferay-ui:tabs  
-			names="<%= StringUtil.merge(names) %>"
-			param="tabs1"
-			url0="<%=urls != null && urls.size() > 0 ? urls.get(0): StringPool.BLANK %>"
-			url1="<%=urls != null && urls.size() > 1 ? urls.get(1): StringPool.BLANK %>"
-		/>
+		<c:choose>
+			<c:when test="<%= hideTabDossierFile %>">
+				<liferay-ui:tabs  
+					names="<%= StringUtil.merge(names) %>"
+					param="tabs1"
+					url0="<%=urls != null && urls.size() > 0 ? urls.get(0): StringPool.BLANK %>"
+				/>
+			</c:when>
+			<c:otherwise>
+				<liferay-ui:tabs  
+					names="<%= StringUtil.merge(names) %>"
+					param="tabs1"
+					url0="<%=urls != null && urls.size() > 0 ? urls.get(0): StringPool.BLANK %>"
+					url1="<%=urls != null && urls.size() > 1 ? urls.get(1): StringPool.BLANK %>"
+				/>
+			</c:otherwise>
+		</c:choose>
 	</div>
 </div>
 

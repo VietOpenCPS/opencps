@@ -13,12 +13,13 @@
 
 package org.opencps.servicemgt.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
-import org.opencps.servicemgt.model.ServiceFileTemplate;
+import org.opencps.servicemgt.NoSuchServiceInfoException;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.base.ServiceInfoLocalServiceBaseImpl;
 
@@ -27,6 +28,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
@@ -45,7 +47,7 @@ import com.liferay.portal.service.ServiceContext;
  * @see org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil
  */
 public class ServiceInfoLocalServiceImpl
-    extends ServiceInfoLocalServiceBaseImpl {
+	extends ServiceInfoLocalServiceBaseImpl {
 
 	/*
 	 * NOTE FOR DEVELOPERS: Never reference this interface directly. Always use
@@ -67,12 +69,12 @@ public class ServiceInfoLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<ServiceInfo> searchService(
-	    long groupId, String keywords, String administrationCode,
-	    String domainCode, int start, int end)
-	    throws PortalException, SystemException {
+		long groupId, String keywords, String administrationCode,
+		String domainCode, int start, int end)
+		throws PortalException, SystemException {
 
 		return serviceInfoFinder.searchService(
-		    groupId, keywords, administrationCode, domainCode, start, end);
+			groupId, keywords, administrationCode, domainCode, start, end);
 	}
 
 	/**
@@ -87,12 +89,12 @@ public class ServiceInfoLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public int countService(
-	    long groupId, String keywords, String administrationCode,
-	    String domainCode)
-	    throws PortalException, SystemException {
+		long groupId, String keywords, String administrationCode,
+		String domainCode)
+		throws PortalException, SystemException {
 
 		return serviceInfoFinder.countService(
-		    groupId, keywords, administrationCode, domainCode);
+			groupId, keywords, administrationCode, domainCode);
 
 	}
 
@@ -124,30 +126,32 @@ public class ServiceInfoLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public ServiceInfo addService(
-	    String serviceNo, String serviceName, String fullName,
-	    String serviceProcess, String serviceMethod, String serviceDossier,
-	    String serviceCondition, String serviceDuration, String serviceActors,
-	    String serviceResults, String serviceRecords, String serviceFee,
-	    String serviceInstructions, String administrationCode,
-	    String administrationIndex, String domainCode, String domainIndex,
-	    int activeStatus, String onlineUrl, long[] fileTemplateIds,
-	    ServiceContext context)
-	    throws PortalException, SystemException {
+		String serviceNo, String serviceName, String fullName,
+		String serviceProcess, String serviceMethod, String serviceDossier,
+		String serviceCondition, String serviceDuration, String serviceActors,
+		String serviceResults, String serviceRecords, String serviceFee,
+		String serviceInstructions, String administrationCode,
+		String administrationIndex, String domainCode, String domainIndex,
+		int activeStatus, String onlineUrl, long[] fileTemplateIds,
+		ServiceContext context)
+		throws PortalException, SystemException {
 
 		ServiceInfo service = null;
 
 		long serviceId =
-		    counterLocalService.increment(ServiceInfo.class.getName());
+			counterLocalService.increment(ServiceInfo.class.getName());
 
 		int hasTemplateFiles = 0;
 
 		if (fileTemplateIds.length != 0) {
 			hasTemplateFiles = 1;
 		}
-		
-		DictItem dictItemDomain = DictItemLocalServiceUtil.getDictItem(Long.valueOf(domainCode));
-		DictItem dictItemAdmin = DictItemLocalServiceUtil.getDictItem(Long.valueOf(administrationCode));
-		
+
+		DictItem dictItemDomain =
+			DictItemLocalServiceUtil.getDictItem(Long.valueOf(domainCode));
+		DictItem dictItemAdmin =
+			DictItemLocalServiceUtil.getDictItem(Long.valueOf(administrationCode));
+
 		Date now = new Date();
 
 		service = serviceInfoPersistence.create(serviceId);
@@ -157,7 +161,7 @@ public class ServiceInfoLocalServiceImpl
 		service.setUserId(context.getUserId());
 		service.setCreateDate(now);
 		service.setModifiedDate(now);
-		
+
 		service.setServiceNo(serviceNo);
 		service.setServiceName(serviceName);
 		service.setFullName(fullName);
@@ -198,22 +202,22 @@ public class ServiceInfoLocalServiceImpl
 		boolean sync = false;
 
 		serviceFileTemplateLocalService.addServiveFiles(
-		    serviceId, fileTemplateIds);
+			serviceId, fileTemplateIds);
 
 		assetEntryLocalService.updateEntry(
-		    context.getUserId(), context.getScopeGroupId(),
-		    ServiceInfo.class.getName(), service.getServiceinfoId(),
-		    service.getUuid(), classTypeId, context.getAssetCategoryIds(),
-		    context.getAssetTagNames(), visible, startDate, endDate,
-		    expirationDate, mimeType, title, description, summary, url,
-		    layoutUuid, height, width, priority, sync);
+			context.getUserId(), context.getScopeGroupId(),
+			ServiceInfo.class.getName(), service.getServiceinfoId(),
+			service.getUuid(), classTypeId, context.getAssetCategoryIds(),
+			context.getAssetTagNames(), visible, startDate, endDate,
+			expirationDate, mimeType, title, description, summary, url,
+			layoutUuid, height, width, priority, sync);
 
 		serviceInfoPersistence.update(service);
 
 		// Index ServiceInfo
 
 		Indexer indexer =
-		    IndexerRegistryUtil.nullSafeGetIndexer(ServiceInfo.class);
+			IndexerRegistryUtil.nullSafeGetIndexer(ServiceInfo.class);
 
 		indexer.reindex(service);
 
@@ -248,31 +252,31 @@ public class ServiceInfoLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public ServiceInfo updateService(
-	    long serviceInfoId, String serviceNo, String serviceName,
-	    String fullName, String serviceProcess, String serviceMethod,
-	    String serviceDossier, String serviceCondition, String serviceDuration,
-	    String serviceActors, String serviceResults, String serviceRecords,
-	    String serviceFee, String serviceInstructions,
-	    String administrationCode, String administrationIndex,
-	    String domainCode, String domainIndex, String onlineUrl,
-	    long[] fileTemplateIds, ServiceContext context)
-	    throws PortalException, SystemException {
+		long serviceInfoId, String serviceNo, String serviceName,
+		String fullName, String serviceProcess, String serviceMethod,
+		String serviceDossier, String serviceCondition, String serviceDuration,
+		String serviceActors, String serviceResults, String serviceRecords,
+		String serviceFee, String serviceInstructions,
+		String administrationCode, String administrationIndex,
+		String domainCode, String domainIndex, String onlineUrl,
+		long[] fileTemplateIds, ServiceContext context)
+		throws PortalException, SystemException {
 
 		ServiceInfo service = null;
 
 		long serviceId =
-		    counterLocalService.increment(ServiceInfo.class.getName());
+			counterLocalService.increment(ServiceInfo.class.getName());
 
 		int hasTemplateFiles = 0;
 
 		if (fileTemplateIds.length != 0) {
 			hasTemplateFiles = 1;
 		}
-		
-		DictItem dictItemDomain = DictItemLocalServiceUtil
-						.getDictItem(Long.valueOf(domainCode));
-		DictItem dictItemAdmin = DictItemLocalServiceUtil
-						.getDictItem(Long.valueOf(administrationCode));
+
+		DictItem dictItemDomain =
+			DictItemLocalServiceUtil.getDictItem(Long.valueOf(domainCode));
+		DictItem dictItemAdmin =
+			DictItemLocalServiceUtil.getDictItem(Long.valueOf(administrationCode));
 
 		Date now = new Date();
 
@@ -323,19 +327,19 @@ public class ServiceInfoLocalServiceImpl
 			serviceInfoId, fileTemplateIds);
 
 		assetEntryLocalService.updateEntry(
-		    context.getUserId(), context.getScopeGroupId(),
-		    ServiceInfo.class.getName(), service.getServiceinfoId(),
-		    service.getUuid(), classTypeId, context.getAssetCategoryIds(),
-		    context.getAssetTagNames(), visible, startDate, endDate,
-		    expirationDate, mimeType, title, description, summary, url,
-		    layoutUuid, height, width, priority, sync);
+			context.getUserId(), context.getScopeGroupId(),
+			ServiceInfo.class.getName(), service.getServiceinfoId(),
+			service.getUuid(), classTypeId, context.getAssetCategoryIds(),
+			context.getAssetTagNames(), visible, startDate, endDate,
+			expirationDate, mimeType, title, description, summary, url,
+			layoutUuid, height, width, priority, sync);
 
 		serviceInfoPersistence.update(service);
 
 		// Index ServiceInfo
 
 		Indexer indexer =
-		    IndexerRegistryUtil.nullSafeGetIndexer(ServiceInfo.class);
+			IndexerRegistryUtil.nullSafeGetIndexer(ServiceInfo.class);
 
 		indexer.reindex(service);
 
@@ -355,9 +359,9 @@ public class ServiceInfoLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public ServiceInfo updateServiceStatus(
-	    long serviceInfoId, int activeStatus, String onlineUrl,
-	    ServiceContext serviceContext)
-	    throws PortalException, SystemException {
+		long serviceInfoId, int activeStatus, String onlineUrl,
+		ServiceContext serviceContext)
+		throws PortalException, SystemException {
 
 		return null;
 	}
@@ -370,10 +374,11 @@ public class ServiceInfoLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public void deleteService(long serviceInfoId)
-	    throws PortalException, SystemException {
+		throws PortalException, SystemException {
+
 		serviceFileTemplatePersistence.removeByServiceinfoId(serviceInfoId);
 		serviceInfoPersistence.remove(serviceInfoId);
-	
+
 	}
 
 	/**
@@ -383,11 +388,11 @@ public class ServiceInfoLocalServiceImpl
 	 * @return
 	 */
 	public int countServiceInAdmin(
-	    long groupId, String administrationCode, int activateStatus) {
+		long groupId, String administrationCode, int activateStatus) {
 
 		try {
 			return serviceInfoPersistence.countByG_AC_S(
-			    groupId, administrationCode, activateStatus);
+				groupId, administrationCode, activateStatus);
 		}
 		catch (Exception e) {
 			return 0;
@@ -401,25 +406,121 @@ public class ServiceInfoLocalServiceImpl
 	 * @return
 	 */
 	public int countServiceInDomain(
-	    long groupId, String domainCode, int activateStatus) {
+		long groupId, String domainCode, int activateStatus) {
 
 		try {
 			return serviceInfoPersistence.countByG_DC_S(
-			    groupId, domainCode, activateStatus);
+				groupId, domainCode, activateStatus);
 		}
 		catch (Exception e) {
 			return 0;
 		}
 	}
-	
-	public List<ServiceInfo> getServiceInFosByG_DI (long groupId, 
-		String domainIndex) throws SystemException {
-		
-		String bufferDomainIndex = Validator.isNotNull(domainIndex) ?
-			StringPool.PERCENT + domainIndex + StringPool.PERCENT :
-				StringPool.PERCENT + StringPool.PERCENT;
+
+	public List<ServiceInfo> getServiceInFosByG_DI(
+		long groupId, String domainIndex)
+		throws SystemException {
+
+		String bufferDomainIndex =
+			Validator.isNotNull(domainIndex) ? StringPool.PERCENT +
+				domainIndex + StringPool.PERCENT : StringPool.PERCENT +
+				StringPool.PERCENT;
 		return serviceInfoPersistence.findByG_DI(groupId, bufferDomainIndex);
-		
+
 	}
 
+	public List<ServiceInfo> getServiceInFosByG_DI_Status(
+		long groupId, String treeIndex, String administrationIndex, int status,
+		String keyword, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+
+		List<ServiceInfo> results = new ArrayList<ServiceInfo>();
+
+		// TODO
+		// --> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
+		if (Validator.isNotNull(treeIndex) ||
+			Validator.isNotNull(administrationIndex)) {
+
+			results =
+				serviceInfoPersistence.findByG_DI_Status(groupId, treeIndex +
+					StringPool.PERCENT, StringPool.PERCENT + keyword +
+					StringPool.PERCENT, status, administrationIndex +
+					StringPool.PERCENT, start, end, orderByComparator);
+
+		}
+		else {
+
+			results =
+				getServiceInFosG_FullName_Status(
+					groupId, status, keyword, start, end, orderByComparator);
+
+		}
+
+		return results;
+	}
+
+	public int countServiceInFosByG_DI_Status(
+		long groupId, String treeIndex, String administrationIndex, int status,
+		String keyword)
+		throws SystemException {
+
+		int result = 0;
+
+		// TODO
+		// --> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
+		if (Validator.isNotNull(treeIndex) ||
+			Validator.isNotNull(administrationIndex)) {
+
+			result =
+				serviceInfoPersistence.countByG_DI_Status(groupId, treeIndex +
+					StringPool.PERCENT, StringPool.PERCENT + keyword +
+					StringPool.PERCENT, status, administrationIndex +
+					StringPool.PERCENT);
+
+		}
+		else {
+
+			result =
+				countServiceInFosG_FullName_Status(groupId, status, keyword);
+
+		}
+
+		return result;
+	}
+
+	private List<ServiceInfo> getServiceInFosG_FullName_Status(
+		long groupId, int status, String keyword, int start, int end,
+		OrderByComparator orderByComparator)
+		throws SystemException {
+
+		// TODO
+		// --> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
+		return serviceInfoPersistence.findByG_FullName_Status(
+			groupId, StringPool.PERCENT + keyword + StringPool.PERCENT, status,
+			start, end, orderByComparator);
+
+	}
+
+	private int countServiceInFosG_FullName_Status(
+		long groupId, int status, String keyword)
+		throws SystemException {
+
+		// TODO
+		// --> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
+		return serviceInfoPersistence.countByG_FullName_Status(
+			groupId, StringPool.PERCENT + keyword + StringPool.PERCENT, status);
+
+	}
+
+	/**
+	 * @param serviceNo
+	 * @return
+	 * @throws NoSuchServiceInfoException
+	 * @throws SystemException
+	 */
+	public ServiceInfo getServiceInfoByServiceNo(String serviceNo)
+		throws NoSuchServiceInfoException, SystemException {
+
+		return serviceInfoPersistence.findByServiceNo(serviceNo);
+	}
 }

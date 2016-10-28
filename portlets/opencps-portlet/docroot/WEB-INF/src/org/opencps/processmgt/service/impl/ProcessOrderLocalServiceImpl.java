@@ -148,10 +148,10 @@ public class ProcessOrderLocalServiceImpl
 		processOrder
 			.setServiceProcessId(serviceProcessId);
 
-		actionHistoryLocalService
+/*		actionHistoryLocalService
 			.addActionHistory(processOrderId, processWorkflowId, actionDatetime,
 				stepName, actionName, actionNote, actionUserId, daysDoing,
-				daysDelay, serviceContext);
+				daysDelay, serviceContext);*/
 
 		return processOrderPersistence
 			.update(processOrder);
@@ -248,13 +248,13 @@ public class ProcessOrderLocalServiceImpl
 		processOrder
 			.setServiceProcessId(serviceProcessId);
 
-		actionHistoryLocalService
-			.addActionHistory(userId, dossier
-				.getGroupId(), dossier
-					.getCompanyId(),
-				processOrderId, processWorkflowId, actionDatetime, stepName,
-				actionName, actionNote, actionUserId, daysDoing, daysDelay,
-				PortletConstants.DOSSIER_STATUS_RECEIVING);
+//		actionHistoryLocalService
+//			.addActionHistory(userId, dossier
+//				.getGroupId(), dossier
+//					.getCompanyId(),
+//				processOrderId, processWorkflowId, actionDatetime, stepName,
+//				actionName, actionNote, actionUserId, daysDoing, daysDelay,
+//				PortletConstants.DOSSIER_STATUS_RECEIVING);
 
 		return processOrderPersistence
 			.update(processOrder);
@@ -513,10 +513,10 @@ public class ProcessOrderLocalServiceImpl
 		processOrderPersistence
 			.update(order);
 
-		actionHistoryLocalService
-			.addActionHistory(userId, fileGroupId, companyId, processOrderId,
-				processWorkflowId, actionDatetime, stepName, actionName,
-				actionNote, actionUserId, daysDoing, daysDelay, dossierStatus);
+//		actionHistoryLocalService
+//			.addActionHistory(userId, fileGroupId, companyId, processOrderId,
+//				processWorkflowId, actionDatetime, stepName, actionName,
+//				actionNote, actionUserId, daysDoing, daysDelay, dossierStatus);
 
 		return order;
 	}
@@ -679,7 +679,7 @@ public class ProcessOrderLocalServiceImpl
 		processOrder
 			.setProcessWorkflowId(processWorkflowId);
 
-		actionHistoryLocalService
+/*		actionHistoryLocalService
 			.addActionHistory(processOrder
 				.getUserId(), processOrder
 					.getGroupId(),
@@ -687,7 +687,7 @@ public class ProcessOrderLocalServiceImpl
 					.getCompanyId(),
 				processOrderId, processWorkflowId, actionDatetime, stepName,
 				actionName, actionNote, actionUserId, daysDoing, daysDelay,
-				dossierStatus);
+				dossierStatus);*/
 		return processOrderPersistence
 			.update(processOrder);
 	}

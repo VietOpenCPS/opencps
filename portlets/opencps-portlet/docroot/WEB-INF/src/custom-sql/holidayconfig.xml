@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.opencps.holidayconfig.service.persistence.HolidayConfigFinder.getHolidayConfig">	
+		<![CDATA[
+			SELECT
+				*
+	    	FROM
+	    		opencps_holidayconfig
+	    	WHERE
+	    		(1 = 1)
+	    	AND 
+	    		(opencps_holidayconfig.remove = ?)
+		]]>
+	</sql>	
+</custom-sql>

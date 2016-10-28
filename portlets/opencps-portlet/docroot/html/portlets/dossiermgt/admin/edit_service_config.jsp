@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.UnicodeFormatter"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -332,7 +333,9 @@
 		
 		<aui:row>
 			<aui:col width="100">
-				<aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_INSTRUCTION%>" cssClass="input100"/>
+				<%-- <aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_INSTRUCTION%>" cssClass="input100"/> --%>
+				<liferay-ui:input-editor name="<%= ServiceConfigDisplayTerms.SERVICE_INSTRUCTION %>" 
+					initMethod="initInstructions"/>
 			</aui:col>
 		</aui:row>
 		
@@ -380,6 +383,10 @@
 </div>
 
 <aui:script use = "aui-base">
+
+function <portlet:namespace />initInstructions() {
+	return "<%= Validator.isNotNull(serviceConfig) ? UnicodeFormatter.toString(serviceConfig.getServiceInstruction()) : StringPool.BLANK %>";
+}
 	
 AUI().ready(function(A) {
 		

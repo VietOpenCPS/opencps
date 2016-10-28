@@ -147,7 +147,7 @@
 											<liferay-ui:message key="dossier-no"/>
 										</div>
 										
-										<div class="span9"><%= PortletUtil.intToString(dossier.getDossierId(), 0) %></div>
+										<div class="span9"><%= dossier.getDossierId() %></div>
 									</div>
 									
 									<div class="row-fluid">
@@ -332,7 +332,7 @@
 								<liferay-ui:message key="dossier-no"/>
 							</div>
 							
-							<div class="span9"><%= PortletUtil.intToString(dossier.getDossierId(), 0) %></div>
+							<div class="span9"><%= dossier.getDossierId() %></div>
 						</div>
 						
 						<div class="row-fluid">
@@ -427,7 +427,7 @@
 					
 					<div class='<%="span7 " + cssStatusColor %>'>
 						<%-- <%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %> --%>
-						<%= DictItemUtil.getDictItemName(dossier.getDossierStatus(), locale) %>
+						<%= DictItemUtil.getDictItemName(dossier.getDossierStatus(), locale)%>
 					</div>
 				</div>
 			</liferay-util:buffer>

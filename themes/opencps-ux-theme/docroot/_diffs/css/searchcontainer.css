@@ -147,7 +147,7 @@
     display: block;
     font-family: roboto-regular;
     height: 32px;
-    left: 0;
+    left: 0px;
     position: absolute;
     text-decoration: none;
     top: 0;
@@ -211,7 +211,8 @@
 
 .opencps-theme.ux .search-container-action > a > .taglib-text.hide-accessible {
     clip: auto !important;
-    position: absolute !important;
-    top: 8px;
-    transform: none;
+	position: absolute !important;
+	-webkit-transform: scale(1);
+	left: 20px;
+	line-height: 30px;
 }

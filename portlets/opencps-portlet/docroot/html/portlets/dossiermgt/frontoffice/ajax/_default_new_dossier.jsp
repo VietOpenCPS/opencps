@@ -119,7 +119,7 @@
 											<liferay-ui:message key="dossier-no"/>
 										</div>
 										
-										<div class="span9"><%= PortletUtil.intToString(dossier.getDossierId(), 15) %></div>
+										<div class="span9"><%= dossier.getDossierId() %></div>
 									</div>
 									
 									<div class="row-fluid">

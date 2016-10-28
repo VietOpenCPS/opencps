@@ -525,13 +525,11 @@ public class ServiceMgtPortlet extends MVCPortlet {
 					throws PortalException, SystemException, IOException {
 		long templateId = ParamUtil.getLong(actionRequest, "templateId");
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
-		TemplateFileLocalServiceUtil.deleteTemplateFile(templateId);
+		TemplateFileLocalServiceUtil.deleteServiceTemplateFile(templateId);
 		
 		if(Validator.isNotNull(redirectURL)) {
 			actionResponse.sendRedirect(redirectURL);
 		}
-		
-		
 	}
 	
 	/**

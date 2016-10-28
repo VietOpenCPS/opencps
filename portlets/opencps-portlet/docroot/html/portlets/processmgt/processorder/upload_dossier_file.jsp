@@ -128,7 +128,7 @@
 	<aui:row>
 		<aui:input 
 			name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" 
-			type="text"
+			type="textarea"
 		>
 			<aui:validator name="required"/>
 		</aui:input>

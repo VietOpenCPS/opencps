@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.liferay.portal.kernel.exception.SystemException;
 import org.opencps.dossiermgt.bean.DossierFileBean;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.impl.DossierFileImpl;
@@ -71,6 +72,10 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 	public static final String SEARCH_DOSSIER_FILE_TEMPLATE =
 		DossierFileFinder.class
 			.getName() + ".searchDossierFile";
+	
+	public static final String SEARCH_DOSSIER_FILE_RESULT =
+					DossierFileFinder.class
+						.getName() + ".searchDossierFileResult";
 
 	private Log _log = LogFactoryUtil
 		.getLog(DossierFileFinder.class
@@ -334,7 +339,7 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			if (fileEntryId < 0) {
 				sql = StringUtil
 					.replace(sql,
-						" AND (opencps_dossier_file.fileEntryId IS NOT NULL AND opencps_dossier_file.fileEntryId = ?)",
+						"AND (opencps_dossier_file.fileEntryId = ?)",
 						StringPool.BLANK);
 			}
 			else {
@@ -733,6 +738,76 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 
 		return null;
 	}
+	
+	
+	/**
+	 * @param removed
+	 * @param dossierId
+	 * @param syncStatus
+	 * @param dossierPartResultType
+	 * @param dossierPartMultiResultType
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<DossierFile> searchDossierFileResult(int removed, long dossierId,
+		int syncStatus,int dossierPartResultType, int dossierPartMultiResultType , 
+		int start, int end, OrderByComparator orderByComparator) throws SystemException {
+		
+		return _searchDossierFileResult(removed, dossierId, syncStatus,dossierPartResultType,
+			dossierPartMultiResultType,start, end, orderByComparator);
+	}
+	
+	
+	/**
+	 * @param removed
+	 * @param dossierId
+	 * @param syncStatus
+	 * @param dossierPartResultType
+	 * @param dossierPartMultiResultType
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return
+	 * @throws SystemException
+	 */
+	private List<DossierFile> _searchDossierFileResult (int removed, long dossierId,
+		int syncStatus,int dossierPartResultType, int dossierPartMultiResultType , 
+		int start, int end, OrderByComparator orderByComparator) throws SystemException {
+		
+		Session session = null;
+		
+		try {
+			session = openSession();
+			
+			String sql = CustomSQLUtil.get(SEARCH_DOSSIER_FILE_RESULT);
+			
+			sql = CustomSQLUtil.replaceOrderBy(sql, orderByComparator);
+			SQLQuery q = session.createSQLQuery(sql);
+			
+			q.setCacheable(false);
+			q.addEntity("DossierFile", DossierFileImpl.class);
+			
+			QueryPos qPos = QueryPos.getInstance(q);
+			
+			qPos.add(removed);
+			qPos.add(dossierId);
+			qPos.add(syncStatus);
+			qPos.add(dossierPartResultType);
+			qPos.add(dossierPartMultiResultType);
+			
+			return (List<DossierFile>) QueryUtil
+						.list(q, getDialect(), start, end);
+		}
+		catch (Exception e) {
+			_log.error(e);
+			throw new SystemException();
+		} finally {
+			closeSession(session);
+		}
+	}
 
 	/**
 	 * @param groupId
@@ -837,7 +912,7 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			if (fileEntryId < 0) {
 				sql = StringUtil
 					.replace(sql,
-						" AND (opencps_dossier_file.fileEntryId IS NOT NULL AND opencps_dossier_file.fileEntryId = ?)",
+						"AND (opencps_dossier_file.fileEntryId = ?)",
 						StringPool.BLANK);
 			}
 			else {

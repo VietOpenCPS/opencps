@@ -44,7 +44,7 @@
 		//
 	}
 	boolean serviceIsConfiged;
-	if(Validator.isNotNull(scf)){
+	if(Validator.isNotNull(scf) && scf.getServiceLevel() >= 3){
 		serviceIsConfiged = true;
 	} else {
 		serviceIsConfiged = false;

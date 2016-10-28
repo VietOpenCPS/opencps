@@ -14,8 +14,6 @@
 
 package org.opencps.api.service.impl;
 
-import org.opencps.api.service.base.ApiServiceServiceBaseImpl;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -27,8 +25,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.opencps.api.service.ApiServiceLocalServiceUtil;
+import org.opencps.api.service.base.ApiServiceServiceBaseImpl;
 import org.opencps.api.util.APIServiceConstants;
 import org.opencps.backend.message.SendToEngineMsg;
+import org.opencps.backend.message.UserActionMsg;
 import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.NoSuchDossierPartException;
@@ -36,6 +36,8 @@ import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
+import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.NoSuchProcessOrderException;
 import org.opencps.processmgt.NoSuchProcessWorkflowException;
 import org.opencps.processmgt.model.ProcessOrder;
@@ -44,6 +46,9 @@ import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.PortletUtil;
+import org.opencps.util.WebKeys;
+import org.opencps.util.PortletUtil.SplitDate;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -102,6 +107,175 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 		ApiServiceLocalServiceUtil.addLog(getUserId(), APIServiceConstants.CODE_06, 
 			serviceContext.getRemoteAddr(), phone, inputObj.toString(), 
 			APIServiceConstants.IN, serviceContext);
+	}
+	
+	@JSONWebService(value = "dossier", method = "POST")
+	public JSONObject addDossier(String event, String dossierInfo) 
+		throws SystemException, PortalException {
+		
+		JSONObject resultObj = JSONFactoryUtil.createJSONObject();
+		
+		ServiceContext serviceContext = getServiceContext();
+		
+		long userId = 0;
+		
+		try {
+			userId = getUserId();
+			
+			JSONObject input = JSONFactoryUtil.createJSONObject();
+			input.put("event", event);
+			input.put("dossierInfo", dossierInfo);
+
+			ApiServiceLocalServiceUtil.addLog(userId,
+				APIServiceConstants.CODE_07, serviceContext.getRemoteAddr(), event, 
+				input.toString(), APIServiceConstants.IN,
+				serviceContext);
+			
+			JSONObject dossierInfoObj = JSONFactoryUtil.createJSONObject(dossierInfo);
+			
+			String govAgencyCode = dossierInfoObj.getString("govAgencyCode");
+			String serviceNo = dossierInfoObj.getString("serviceNo");
+			//String serviceName = dossierInfoObj.getString("serviceName");
+			String receptionNo = dossierInfoObj.getString("receptionNo");
+			String receiveDatetime = dossierInfoObj.getString("receiveDatetime");
+			String estimateDatetime = dossierInfoObj.getString("estimateDatetime");
+			String subjectName = dossierInfoObj.getString("subjectName");
+			String address = dossierInfoObj.getString("address");
+			String cityCode = dossierInfoObj.getString("cityCode");
+			String cityName = dossierInfoObj.getString("cityName");
+			String districtCode = dossierInfoObj.getString("districtCode");
+			String districtName = dossierInfoObj.getString("districtName");
+			String wardCode = dossierInfoObj.getString("wardCode");
+			String wardName = dossierInfoObj.getString("wardName");
+			String contactName = dossierInfoObj.getString("contactName");
+			String contactTelNo = dossierInfoObj.getString("contactTelNo");
+			String contactEmail = dossierInfoObj.getString("contactEmail");
+			String note = dossierInfoObj.getString("note");
+			String dossierFiles = dossierInfoObj.getString("dossierFiles");
+			
+			ServiceInfo serviceInfo = serviceInfoPersistence.fetchByC_SN(
+				serviceContext.getCompanyId(), serviceNo);
+			
+			ServiceConfig serviceConfig = serviceConfigPersistence.findByG_S_G(
+				serviceContext.getScopeGroupId(), serviceInfo.getServiceinfoId(), govAgencyCode);
+			
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
+			long ownerOrganizationId = 0;
+			long dossierTemplateId = serviceConfig.getDossierTemplateId();
+			String templateFileNo = StringPool.BLANK;
+			long serviceConfigId = serviceConfig.getServiceConfigId();
+			long serviceInfoId = serviceInfo.getServiceinfoId();
+			String serviceDomainIndex = serviceConfig.getServiceDomainIndex();
+			long govAgencyOrganizationId = serviceConfig.getGovAgencyOrganizationId();
+			String govAgencyName = serviceConfig.getGovAgencyName();
+			int serviceMode = serviceConfig.getServiceMode();
+			String serviceAdministrationIndex = serviceConfig.getServiceAdministrationIndex();
+			String subjectId = StringPool.BLANK;
+			
+			String dossierDestinationFolder = StringPool.BLANK;
+
+			SplitDate splitDate = PortletUtil.splitDate(new Date());
+
+			dossierDestinationFolder =
+				PortletUtil.getDossierDestinationFolder(
+					serviceContext.getScopeGroupId(), splitDate.getYear(),
+					splitDate.getMonth(), splitDate.getDayOfMoth());
+
+			DLFolder dossierFolder =
+				DLFolderUtil.getTargetFolder(
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getScopeGroupId(), false, 0,
+					dossierDestinationFolder, StringPool.BLANK, false,
+					serviceContext);
+			
+			// tao moi ho so
+			Dossier dossier = DossierLocalServiceUtil.addDossier(
+				serviceContext.getUserId(), ownerOrganizationId,
+				dossierTemplateId, templateFileNo, serviceConfigId,
+				serviceInfoId, serviceDomainIndex,
+				govAgencyOrganizationId, govAgencyCode, govAgencyName,
+				serviceMode, serviceAdministrationIndex, cityCode,
+				cityName, districtCode, districtName, wardName,
+				wardCode, subjectName, subjectId, address, contactName,
+				contactTelNo, contactEmail, note,
+				PortletConstants.DOSSIER_SOURCE_DIRECT,
+				PortletConstants.DOSSIER_STATUS_NEW,
+				dossierFolder.getFolderId(), StringPool.BLANK,
+				serviceContext);
+			
+			dossier.setReceptionNo(receptionNo);
+			
+			if(Validator.isNotNull(receiveDatetime)) {
+				Date date_receiveDatetime = formatter.parse(receiveDatetime);
+				dossier.setReceiveDatetime(date_receiveDatetime);
+			}
+			
+			if(Validator.isNotNull(estimateDatetime)) {
+				Date date_estimateDatetime = formatter.parse(estimateDatetime);
+				dossier.setEstimateDatetime(date_estimateDatetime);
+			}
+			
+			//update ho so co ma tiep nhan
+			dossier = DossierLocalServiceUtil.updateDossier(dossier);
+			
+			//update ho so ve system
+			DossierLocalServiceUtil.updateDossierStatus(
+				dossier.getDossierId(), 0, PortletConstants.DOSSIER_STATUS_SYSTEM,
+				WebKeys.DOSSIER_ACTOR_CITIZEN, 0,
+				StringPool.BLANK, StringPool.BLANK, PortletUtil.getActionInfo(
+					PortletConstants.DOSSIER_STATUS_SYSTEM,
+					serviceContext.getLocale()), StringPool.BLANK,
+				PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
+				PortletConstants.DOSSIER_LOG_NORMAL);
+			
+			//chuyen ho so vao backend
+			UserActionMsg actionMsg = new UserActionMsg();
+
+			Message message = new Message();
+			
+			actionMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
+
+			actionMsg.setDossierId(dossier.getDossierId());
+
+			actionMsg.setFileGroupId(0);
+
+			actionMsg.setLocale(serviceContext.getLocale());
+
+			actionMsg.setUserId(serviceContext.getUserId());
+
+			actionMsg.setGroupId(serviceContext.getScopeGroupId());
+
+			actionMsg.setCompanyId(dossier.getCompanyId());
+
+			actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
+
+			actionMsg.setDossierOId(dossier.getOid());
+
+			actionMsg.setDossierStatus(PortletConstants.DOSSIER_STATUS_NEW);
+
+			message.put("msgToEngine", actionMsg);
+			
+			MessageBusUtil.sendMessage(
+				"opencps/frontoffice/out/destination", message);
+			
+			
+			resultObj.put("statusCode", "Success");
+			resultObj.put("oid", dossier.getOid());
+		} catch (Exception e) {
+			_log.error(e);
+			
+			resultObj = JSONFactoryUtil.createJSONObject();
+			resultObj.put("statusCode", "Error");
+			resultObj.put("message", e.getClass().getName());
+		}
+		
+		ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_07, 
+			serviceContext.getRemoteAddr(), "", resultObj.toString(), 
+			APIServiceConstants.OUT, serviceContext);
+		
+		return resultObj;
 	}
 	
 	@JSONWebService(value = "dossiers", method = "GET")
@@ -366,14 +540,16 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 				} else if (dossierFileContent.equals("") || dossierFileContent.equals("{}")) {
 					byte[] bytes = getFileFromURL(dossierFileURL);
 					
-					String extension = FileUtil.getExtension(dossierFileName);
+					String sourceFileName = dossierFileName;
+					
+					String extension = FileUtil.getExtension(sourceFileName);
 					
 					if(Validator.isNull(extension)) {
 						extension = StringUtil.replace(FileUtil.getExtension(dossierFileURL), 
 							StringPool.FORWARD_SLASH, StringPool.BLANK);
 						
 						if(Validator.isNotNull(extension)) {
-							dossierFileName = dossierFileName.concat(StringPool.UNDERLINE)
+							sourceFileName = dossierFileName.concat(StringPool.UNDERLINE)
 									.concat(String.valueOf(System.nanoTime()))
 									.concat(StringPool.PERIOD).concat(extension);
 						}
@@ -383,12 +559,10 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 					
 					serviceContext.setUserId(dossier.getUserId());
 					
-					DLFolder dossierFolder = DLFolderUtil
-							.getDossierFolder(
-									serviceContext.getScopeGroupId(),
-									dossier.getUserId(),
-									dossier.getCounter(),
-									serviceContext);
+					DLFolder dossierFolder = DLFolderUtil.getDossierFolder(
+							serviceContext.getScopeGroupId(),
+							null, dossier.getOid(),
+							serviceContext);
 					
 					dossierFileLocalService
 							.addDossierFile(
@@ -410,7 +584,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									1,
 									PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 									dossierFolder.getFolderId(),
-									dossierFileName, mimeType, dossierFileName,
+									sourceFileName, mimeType, dossierFileName,
 									StringPool.BLANK, StringPool.BLANK,
 									bytes, serviceContext);
 				}
@@ -444,14 +618,16 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 				} else {
 					byte[] bytes = getFileFromURL(dossierFileURL);
 					
-					String extension = FileUtil.getExtension(dossierFileName);
+					String sourceFileName = dossierFileName;
+					
+					String extension = FileUtil.getExtension(sourceFileName);
 					
 					if(Validator.isNull(extension)) {
 						extension = StringUtil.replace(FileUtil.getExtension(dossierFileURL), 
 							StringPool.FORWARD_SLASH, StringPool.BLANK);
 						
 						if(Validator.isNotNull(extension)) {
-							dossierFileName = dossierFileName.concat(StringPool.UNDERLINE)
+							sourceFileName = dossierFileName.concat(StringPool.UNDERLINE)
 									.concat(String.valueOf(System.nanoTime()))
 									.concat(StringPool.PERIOD).concat(extension);
 						}
@@ -465,7 +641,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 
 					DLFolder dossierFolder = DLFolderUtil.getDossierFolder(
 							serviceContext.getScopeGroupId(),
-							dossier.getUserId(), dossier.getCounter(),
+							null, dossier.getOid(),
 							serviceContext);
 					
 					dossierPart = dossierPartLocalService
@@ -489,9 +665,9 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									dossierFileNo,
 									new Date(),
 									1,
-									PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+									PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 									dossierFolder.getFolderId(),
-									dossierFileName, mimeType, dossierFileName,
+									sourceFileName, mimeType, dossierFileName,
 									StringPool.BLANK, StringPool.BLANK, bytes, serviceContext);
 				}
 			}
@@ -614,6 +790,8 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 					.getReceptionNo()) ? dossier.getReceptionNo()
 					: StringPool.BLANK);
 			sendToEngineMsg.setSignature(0);
+			sendToEngineMsg.setDossierStatus(dossier.getDossierStatus());
+			
 			if (Validator.isNotNull(processWorkflow.getAutoEvent())) {
 				sendToEngineMsg.setEvent(processWorkflow.getAutoEvent());
 			}

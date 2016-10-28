@@ -14,7 +14,7 @@
 }
 
 .opencps-theme.ux .opencps-accountinfo-wrapper .header p {
-	background: url(../images/custom/icon_thongtintaikhoan_blue.png) 0
+	background: url("../images/custom/icon_thongtintaikhoan_blue.png") 0
 		center no-repeat;
 	padding-left: 20px;
 	text-transform: uppercase;
@@ -36,17 +36,25 @@
 	vertical-align: top;
 }
 
-@media screen and (min-width: 760px) {
-	.opencps-theme.ux .opencps-accountinfo-wrapper .content {
-		display: flex;
-	}
-	.opencps-theme.ux .opencps-accountinfo-wrapper .content .left {
-		width: 43%;
-		border-right: 1px solid #ccc;
-	}
-	.opencps-theme.ux .opencps-accountinfo-wrapper .content .right {
-		width: 44%;
-	}
+
+/* .opencps-theme.ux .opencps-accountinfo-wrapper .content {
+	display: flex;
+} */
+.opencps-theme.ux .opencps-accountinfo-wrapper .content .left {
+	width: 43%;
+}
+.opencps-theme.ux .opencps-accountinfo-wrapper .content .right {
+	width: 44%;
+	position: relative;
+}
+.opencps-theme.ux .opencps-accountinfo-wrapper .content .right:BEFORE {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 100%;
+	background: #ccc;
 }
 
 @media screen and (max-width: 760px) {
@@ -116,7 +124,7 @@
 	position: absolute;
 	right: 0;
 	padding-left: 20px;
-	background: url(../images/custom/icon_edit_blue.png) 0 center no-repeat;
+	background: url("../images/custom/icon_edit_blue.png") 0 center no-repeat;
 	top: 0
 }
 
@@ -126,7 +134,7 @@
 	position: absolute;
 	right: 0;
 	padding-left: 20px;
-	background: url(../images/custom/icon_dangnhap_hover.png) 0 center
+	background: url("../images/custom/icon_dangnhap_hover.png") 0 center
 		no-repeat;
 	top: 0
 }
@@ -202,7 +210,7 @@
 .opencps-theme.ux .opencps-accountinfo-wrapper.account_company .left>div>p>label span
 	{
 	padding-left: 20px;
-	background: url(../images/icon_checked.png) 0 center no-repeat;
+	background: url("../images/icon_checked.png") 0 center no-repeat;
 	font-family: 'Roboto-Bold';
 	margin-bottom: 10px
 }

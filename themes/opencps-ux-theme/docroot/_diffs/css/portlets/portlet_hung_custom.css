@@ -25,7 +25,7 @@
 	text-transform: uppercase;
 	margin: 0;
 	/* padding-left: 25px;
-	background: url(../images/frame_1/icon_ngoinha_blue.png) 0 center no-repeat; */
+	background: url("../images/custom/icon_ngoinha_blue.png") 0 center no-repeat; */
 }
 /* Content */
 .opencps-theme .portlet-boundary_11_WAR_opencpsportlet_ .portlet .portlet-content {
@@ -96,7 +96,7 @@
 	width: 100%;
 	height: 41px;
 	overflow: hidden;
-	background: url(../images/frame_1/icon_select_gray.png) no-repeat right;
+	background: url("../images/custom/icon_select_gray.png") no-repeat right;
 	background-position: 325px center;
 	margin-bottom: 0;
 }
@@ -157,7 +157,7 @@
 	font-family: 'Roboto-Bold';
 	text-transform: uppercase;
 	padding-left: 25px;
-	background: url(../images/frame_1/icon_danhsachhoso_blue.png) 0 center no-repeat;
+	background: url("../images/custom/icon_danhsachhoso_blue.png") 0 center no-repeat;
 }
 /* Content */
 .opencps-theme .ocps-bound-service-infodirect .lfr-search-container {
@@ -287,6 +287,7 @@
 	position: absolute;
 	left: 50%;
 	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
 }
 /* Table */
 .opencps-theme .ocps-service-detal-bound-all .service-detail-wrapper {
@@ -343,7 +344,7 @@
     display: block;
     margin: 0 -30px 20px;
     padding: 0 30px 0 55px;
-    background: url(../images/frame_1/icon_dangnhap_hover.png) 30px center no-repeat;
+    background: url("../images/custom/icon_dangnhap_hover.png") 30px center no-repeat;
     text-transform: uppercase;
 }
 .ocps-update-service-bound-all .ocps-update-service-bound-general .ocps-edit-serviceinfo-col-only .control-label, 
@@ -437,8 +438,7 @@
 .opencps-theme .portlet-boundary_9_WAR_opencpsportlet_ form {
 	margin-bottom: 0;
 }
-Button
-.opencps-theme .portlet-boundary_9_WAR_opencpsportlet_ form > button {
+Bu.opencps-theme.ux 9_WAR_opencpsportlet_ form > button {
 	padding: 5px 50px;
 	position: relative;
     left: 50%;
@@ -446,6 +446,38 @@ Button
 }
  */
 
+/*---------- PortletID 9 ----------*/
+
+/*--- Header Porrtlet ---*/
+.portlet-boundary_9_WAR_opencpsportlet_ .portlet-topper h1 {
+	text-align: center; 
+	font-family: 'Roboto-Bold'; 
+	font-weight: normal;
+}
+
+/*--- Menu Tabs ---*/
+.opencps-theme.ux  ul.nav-tabs {
+	border-bottom: 2px solid #0174CD;
+}
+.opencps-theme.ux  ul.nav-tabs li {
+	margin-bottom: 0
+}
+.opencps-theme.ux  ul.nav-tabs li a {
+	border-color: transparent;
+    background-color: #05253E;
+    margin-right: 5px;
+    padding: 5px 10px;
+    color: white;
+}
+.opencps-theme.ux  ul.nav-tabs li.active a, 
+.opencps-theme.ux  ul.nav-tabs li.active a:focus, 
+.opencps-theme.ux  ul.nav-tabs li.active a:hover, 
+.opencps-theme.ux  ul.nav-tabs li:hover a {
+	border: 1px solid #0074cd;
+	position: relative;
+	background-color: #0074cd;
+    color: white;
+}
 
 /*---------- PortletID 85 ----------*/
 
@@ -470,9 +502,15 @@ Button
 	text-transform: uppercase;
 	margin: 0;
 }
+.opencps-theme .portlet-boundary_85_ .portlet header h1:before {
+	content: "\f085";
+	font-family: FontAwesome;
+	margin-right: 10px;
+	color: #0f97ff;
+}
 /* Content */
 .opencps-theme .portlet-boundary_85_ .portlet .portlet-content {
-	padding: 15px 25px;
+	padding: 0;
 }
 .opencps-theme .portlet-boundary_85_ .portlet .portlet-body {
 	background-color: transparent;
@@ -481,14 +519,173 @@ Button
 	margin: 0;
 }
 .opencps-theme .portlet-boundary_85_ .portlet .portlet-body .sitemap-class li {
-	padding: 5px 0 5px 20px;
+	padding: 10px 20px;
 	position: relative;
+	border-bottom: 1px solid #ddd;
 }
-.opencps-theme .portlet-boundary_85_ .portlet .portlet-body .sitemap-class li:before {
-	content: "\f111";
+.opencps-theme .portlet-boundary_85_ .portlet .portlet-body .sitemap-class li a {
+	padding-right: 10px;
+}
+.opencps-theme .portlet-boundary_85_ .portlet .portlet-body .sitemap-class li a.current{
+	color: #0f97ff !important;
+	font-family: 'Roboto-Bold';
+}
+.opencps-theme .portlet-boundary_85_ .portlet .portlet-body .sitemap-class li a.current:after {
+	content: "\f054";
 	position: absolute;
-	left: 0;
+	right: 20px;
 	font-family: FontAwesome;
 	color: #0f97ff;
 	font-size: 12px;
+	top: 11px;
+}
+
+/*---------- PortletID 73-Breadcrumb ----------*/
+
+.portlet-boundary_73_ .portlet-body ul {
+	background-color: transparent;
+	border-bottom: 1px solid #555;
+	padding: 5px 10px;
+	font-size: 14px;
+}
+ .portlet-boundary_73_ .portlet-body ul li .divider {
+ 	color: #555;
+ }
+ .portlet-boundary_73_ .portlet-body ul li:last-child .divider {
+ 	display: none;
+ }
+ 
+/*---------- CSS th table ----------*/
+
+.opencps-theme .searchcontainer-content table {
+	border-radius: 0;
+	border-width: 1px 0;
+}
+.opencps-theme .searchcontainer-content table th {
+	border-radius: 0;
+}
+.opencps-theme .searchcontainer-content table th:first-child {
+	border-left: 0;
+}
+
+/*---------- Tree view ----------*/
+ul.tree-root-container > li:first-child > div.tree-node-content > span {
+  font-size: 18px;
+  text-transform: uppercase;
+}
+.openCPSTree > ul {margin:0}
+.openCPSTree ul li {border-bottom: 1px solid #ccc; position: relative;}
+.openCPSTree > ul > li {padding-bottom: 0; border-bottom: 0; padding-top: 15px;}
+.openCPSTree > ul > li > div {border-bottom: 1px solid #ccc;padding: 0 40px 10px 20px;display: inherit;position: relative;}
+
+.openCPSTree > ul > li:before {content: ""}
+.openCPSTree > ul > li ul {margin: 0}
+.openCPSTree li.current {
+  font-family: "Roboto-Bold";
+  color: rgb(255, 255, 255);
+}
+.openCPSTree li.current > div > i.icon-ok-sign {opacity: 1; color: #444}
+.openCPSTree li .badge {
+	font-weight: normal;
+	position: absolute;
+    top: 0;
+    right: 0;
+}
+.openCPSTree .tree-node-leaf.tree-node-radio {
+     margin-left: 0;
+     display: block;
+	  padding: 10px 30px 10px 45px;
+}
+.openCPSTree li.current .badge{
+  background-color: #444;
+}
+.openCPSTree li .badge{
+  background-color: #0090FF;
+  margin: 10px 10px;
+}
+.tree-node-leaf {
+      margin-left: 15px;
+      display: inline-block;
+}
+.openCPSTree > ul > li .tree-node li  {border-bottom: 0}
+.openCPSTree > ul > li .tree-node li:last-child  {padding-bottom: 0}
+.openCPSTree > ul > li ul li > div {
+  padding: 10px 15px;
+}
+.openCPSTree > ul > li ul li.current > div {
+  background-color: #0090ff;
+  padding: 10px 30px;
+}
+.openCPSTree > ul > li ul li.current ul {
+  color: #444;
+  font-family: 'Roboto-Regular'
+}
+
+.tree-node-content .tree-hitarea:after {
+    content: "";
+    position: absolute;
+    padding: 18px;
+    top: -15px;
+    left: -15px;
+}
+
+.tree-node-content .tree-hitarea {
+    color: #999;
+    font-size: 10px;
+    padding-right: 6px;
+    position: relative;
+}
+
+.tree-node-content .tree-hitarea:before {
+    font-size: 16px;
+}
+
+.openCPSTree.scrollable > ul > li > ul {
+    overflow-y: auto;
+    height: 50vh;
+}
+
+.openCPSTree li.current > .tree-node-content > .tree-hitarea {
+    color: #fff;
+}
+.openCPSTree>ul>li>ul>li ul li div {padding-left: 40px}
+
+/*----- Icon download -----*/
+.opencps-theme.ux .opencps-form-navigator-container .opencps.dossiermgt.dossier-part-row .dossier-part-control .opencps.dossiermgt.part-file-ctr.download-dossier-file {
+    background: transparent url("../images/custom/icon_download.png") no-repeat scroll left center;
+}
+
+
+
+.openCPSTree .tree-node-content:hover span {
+	color: #2EA4FF;
+	text-decoration: underline;
+}
+.openCPSTree .icon-folder-close {
+	display: none;
+}
+.openCPSTree > ul > li > div > .icon-folder-close {display: inline-block;}
+.openCPSTree > ul > li > div > .icon-folder-open:before, 
+.openCPSTree > ul > li > div > .icon-folder-close:before {
+	content: "";
+	background: url("../images/custom/icon_dossierpart_blue.png") 0 0 no-repeat;
+	width: 14px;
+	height: 16px;
+}
+
+ 
+.openCPSTree .tree-hitarea.icon-plus:before {
+	content: "\f0da";
+	color: #2EA4FF;
+}
+.openCPSTree .tree-hitarea.icon-minus:before {
+	content: "\f0d7";
+	color: #2EA4FF;
+}
+.openCPSTree .icon-file:before {
+	content: "\f0f6";
+}
+
+.ui-helper-hidden-accessible{
+	display: none !important;
 }

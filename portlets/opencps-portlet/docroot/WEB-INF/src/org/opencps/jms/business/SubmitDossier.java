@@ -26,6 +26,7 @@ import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.FileGroup;
+import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.DossierMsgBody;
@@ -95,28 +96,31 @@ public class SubmitDossier {
 		if (syncDossier != null && syncDossierFiles != null &&
 			syncDLFileEntries != null && data != null &&
 			syncDossierTemplate != null && serviceContext != null) {
-			
+
 			boolean isNew = false;
-			
+
 			Dossier dossierBackend = null;
-			
+
 			try {
-				dossierBackend = DossierLocalServiceUtil.getByoid(syncDossier.getOid());
-            }
-            catch (Exception e) {
-	            
-            }
-			
+				dossierBackend =
+					DossierLocalServiceUtil.getDossierByOId(syncDossier.getOid());
+			}
+			catch (Exception e) {
+
+			}
+
 			if (Validator.isNull(dossierBackend)) {
 				isNew = true;
 			}
-			
+
 			if (isNew) {
 				dossier =
 					DossierLocalServiceUtil.syncDossier(
 						syncDossier, syncDossierFiles, syncFileGroups,
 						syncFileGroupDossierParts, syncDLFileEntries, data,
-						syncDossierTemplate, serviceContext);
+						syncDossierTemplate, dossierMsgBody.getServiceConfig(),
+						dossierMsgBody.getServiceInfo(), serviceContext);
+				// TODO add log
 			}
 			else {
 				dossier =
@@ -124,10 +128,20 @@ public class SubmitDossier {
 						syncDossier, syncDossierFiles, syncFileGroups,
 						syncFileGroupDossierParts, syncDLFileEntries, data,
 						syncDossierTemplate, serviceContext);
+				// TODO add log
 			}
 
+			// Dong bo trang thai giay to
+
+			DossierFileLocalServiceUtil.updateDossierFileSyncStatus(
+				dossier.getUserId(), dossier.getDossierId(),
+				PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
+				PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS, 0);
+
+			// TODO add log
+
 			sendToBackend(
-				dossier.getDossierId(),0, dossier.getDossierStatus(),
+				dossier.getDossierId(), 0, dossier.getDossierStatus(),
 				serviceContext, isNew);
 		}
 
@@ -150,7 +164,7 @@ public class SubmitDossier {
 		Message message = new Message();
 
 		SendToEngineMsg engineMsg = new SendToEngineMsg();
-		
+
 		if (!isNew) {
 			engineMsg.setAction(WebKeys.ACTION_RESUBMIT_VALUE);
 
@@ -164,14 +178,18 @@ public class SubmitDossier {
 
 			engineMsg.setCompanyId(serviceContext.getCompanyId());
 
+			engineMsg.setDossierStatus(dossierStatus);
+
 			ProcessOrder processOrder =
 				ProcessOrderLocalServiceUtil.getProcessOrder(
 					dossierId, fileGroupId);
 
 			engineMsg.setProcessOrderId(processOrder.getProcessOrderId());
 
-			
-		} else {
+			engineMsg.setEvent(WebKeys.ACTION_CHANGE_VALUE);
+
+		}
+		else {
 			engineMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
 
 			engineMsg.setDossierId(dossierId);
@@ -187,7 +205,9 @@ public class SubmitDossier {
 			engineMsg.setGroupId(serviceContext.getScopeGroupId());
 
 			engineMsg.setUserId(serviceContext.getUserId());
-			
+
+			engineMsg.setDossierStatus(dossierStatus);
+
 		}
 
 		message.put("msgToEngine", engineMsg);

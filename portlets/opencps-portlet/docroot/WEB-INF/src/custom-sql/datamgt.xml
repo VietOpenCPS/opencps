@@ -7,7 +7,7 @@
 			on opencps_dictitem.dictCollectionId = opencps_dictcollection.dictCollectionId
 			WHERE 
 			
-			1 = 1
+			opencps_dictitem.issueStatus = 1
 			
 			and opencps_dictcollection.collectionCode = ?
 			
@@ -18,6 +18,25 @@
 			and opencps_dictitem.groupId = ?
 			
 			and (lower(ExtractValue(itemName, '//ItemName')) LIKE ? [$AND_OR_NULL_CHECK$])
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.datamgt.service.persistence.DictItemFinder.findDictItemsByG_DC_S">
+		<![CDATA[
+			SELECT 
+				* 
+			FROM 
+				opencps_dictitem 
+			LEFT JOIN 
+				opencps_dictcollection 
+			ON 
+				opencps_dictitem.dictcollectionid = opencps_dictcollection.dictcollectionid
+			WHERE 
+				(opencps_dictcollection.groupid = ?)
+			AND 
+				(opencps_dictcollection.collectionCode = ?)
+			AND	
+				(opencps_dictitem.issueStatus = ?)
 		]]>
 	</sql>
 </custom-sql>

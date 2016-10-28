@@ -131,3 +131,20 @@
     background-color: transparent !important;
     color: white;
 }
+
+level-0 opencps dossiermgt dossier-part .row-icon {
+    display: table-cell;
+    vertical-align: top;
+    width: 25px;
+}
+.dossier-part-stt {
+  margin-right: 3px;
+}
+.row-icon-stt-new {
+    width: auto;
+    text-align: right;
+}
+
+.dossierPartRequired.dossierPartRequired-error .dossier-part-name{
+	color:red;
+}

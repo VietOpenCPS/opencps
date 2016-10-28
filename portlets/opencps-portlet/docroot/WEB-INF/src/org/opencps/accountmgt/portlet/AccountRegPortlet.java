@@ -204,6 +204,10 @@ public class AccountRegPortlet extends MVCPortlet {
 					    Validator.isNotNull(contentType)
 					        ? MimeTypesUtil.getContentType(contentType) : StringPool.BLANK;
 		String title = "Business File";
+		
+		String emailConfirmToAdmin = ParamUtil.getString(uploadPortletRequest, "emailConfirmToAdmin");
+		
+		String adminEmailUserAddedBody = ParamUtil.getString(uploadPortletRequest, "adminEmailUserAddedBody");
 
 		DictItem city = null;
 
@@ -269,11 +273,15 @@ public class AccountRegPortlet extends MVCPortlet {
 					}
 					SessionMessages.add(
 					    actionRequest,
-					    MessageKeys.ACCOUNT_UPDATE_CUCCESS);
-					
+							MessageKeys.ACCOUNT_UPDATE_CUCCESS);
+					// Gui email thong bao toi quan tri sau khi thuc hien dang ky thanh cong
+						MessageBusUtil.sendEmailConfirmToAdmin(business.getUuid(),
+								mappingUser, email, emailConfirmToAdmin,
+								PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS, business,
+								serviceContext);
+					// Gui email thong bao toi quan tri sau khi thuc hien dang ky thanh cong -----END-----
 				}
-			}
-			else {
+			} else {
 
 			}
 			
@@ -369,7 +377,6 @@ public class AccountRegPortlet extends MVCPortlet {
 				    MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED);
 				_log.error(e);
 			}
-			
 			
 		}finally {
 			if(registered){

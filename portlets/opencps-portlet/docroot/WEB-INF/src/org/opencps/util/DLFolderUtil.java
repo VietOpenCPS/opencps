@@ -355,4 +355,29 @@ public class DLFolderUtil {
 
 		return dlFolder;
 	}
+
+	public static DLFolder getSyncPaymentFolder(
+		long groupId, Date date, String oId, ServiceContext serviceContext) {
+
+		DLFolder dlFolder = null;
+
+		String destination = StringPool.BLANK;
+		SplitDate splitDate = PortletUtil.splitDate(new Date());
+
+		destination =
+			PortletUtil.getSyncPaymentDestinationFolder(
+				groupId, splitDate.getYear(), splitDate.getMonth(),
+				splitDate.getDayOfMoth(), oId);
+
+		if (Validator.isNotNull(destination)) {
+			dlFolder =
+				DLFolderUtil.getTargetFolder(
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getScopeGroupId(), false, 0, destination,
+					StringPool.BLANK, false, serviceContext);
+		}
+
+		return dlFolder;
+	}
 }

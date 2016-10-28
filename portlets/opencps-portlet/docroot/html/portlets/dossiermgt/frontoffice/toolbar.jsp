@@ -45,7 +45,7 @@
 	
 	long govAgencyId = ParamUtil.getLong(request, "govAgencyId");
 	
-	String dossierStatus = ParamUtil.getString(request, "dossierStatus", PortletConstants.DOSSIER_STATUS_NEW);
+	String dossierStatus = ParamUtil.getString(request, "dossierStatus", StringPool.BLANK);
 
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	
@@ -65,6 +65,11 @@
 	} else {
 		searchURL.setParameter("mvcPath", templatePath + "frontofficedossierfilelist.jsp");
 		searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_FILE);
+	}
+	
+	if(isListServiceConfig && templatesToDisplay_cfg.equals("20_80")){
+		searchURL.setParameter("mvcPath", templatePath + "display/20_80_servicelist_05.jsp");
+		searchURL.setParameter("backURL", currentURL);
 	}
 	
 	DictCollection collectionDomain = null;
@@ -105,7 +110,7 @@
 						href="<%=addDossierURL %>"
 						cssClass="action-button"
 					/> --%>
-					<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="add-dossier-online"/>
+					<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="select-service-info"/>
 				</c:if>
 			</aui:nav>
 		</c:otherwise>

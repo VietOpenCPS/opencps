@@ -80,5 +80,10 @@
 			<aui:option selected="<%= templatesToDisplay_cfg.equals(\"20_80\") %>" value="20_80">20_80</aui:option>
 	
 	</aui:select>
+	<aui:input 
+		type="checkbox"
+		name="hiddenTreeNodeEqualNone" 
+		value="<%=hiddenTreeNodeEqualNone %>"
+	/>
 	<aui:button type="submit" name="Save" value="save"/>
 </aui:form>

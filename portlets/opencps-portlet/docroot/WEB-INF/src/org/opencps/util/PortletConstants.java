@@ -139,9 +139,14 @@ public class PortletConstants {
 	public static final String DOSSIER_ACTION_RESEND = "resend-dossier";
 	public static final String DOSSIER_ACTION_REVICE = "revice-dossier";
 	public static final String DOSSIER_ACTION_CANCEL_DOSSER_REQUEST = "cancel-dossier-request";
+	public static final String DOSSIER_ACTION_CHANGE_DOSSER_REQUEST = "change-dossier-request";
+
 	public static final String DOSSIER_ACTION_REPAIR_DOSSIER = "repair";
 	public static final String DOSSIER_ACTION_CANCEL_DOSSIER = "cancel";
 	public static final String DOSSIER_ACTION_REQUEST_PAYMENT = "request-payment";
+	public static final String DOSSIER_ACTION_CONFIRM_PAYMENT = "confirm-payment";
+	public static final String DOSSIER_ACTION_CONFIRM_CASH_PAYMENT = "confirm-payment-cash";
+	public static final String DOSSIER_ACTION_ONLINE_PAYMENT = "online-payment";
 
 
 	public static final String DOSSIER_ACTION_CREATE_PROCESS_ORDER = "create-process-order";
@@ -194,6 +199,10 @@ public class PortletConstants {
 	public static final int TREE_VIEW_LEVER_1 = 1;
 	
 	public static final int TREE_VIEW_LEVER_2 = 2;
+	
+	public static final int TREE_VIEW_LEVER_3 = 3;
+	
+	public static final String TREE_VIEW_ALL_ITEM = "-1";
 	
 	public static final String TREE_VIEW_DEFAULT_ITEM_CODE = "0";
 	

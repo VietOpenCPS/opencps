@@ -307,8 +307,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 						StringPool.BLANK);
 			}
 			else {
-				if (StringUtil
-					.contains(serviceDomainIndex, StringPool.PERIOD)) {
+				if (serviceDomainIndex.contains(StringPool.PERIOD)) {
 					serviceDomainIndex = serviceDomainIndex
 						.substring(0, serviceDomainIndex
 							.indexOf(StringPool.PERIOD) + 1);
@@ -329,8 +328,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 						StringPool.BLANK);
 			}
 			else {
-				if (StringUtil
-					.contains(govAgencyIndex, StringPool.PERIOD)) {
+				if (govAgencyIndex.contains(StringPool.PERIOD)) {
 					govAgencyIndex = govAgencyIndex
 						.substring(0, govAgencyIndex
 							.indexOf(StringPool.PERIOD) + 1);
@@ -412,15 +410,13 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			}
 
 			if (Validator
-				.isNotNull(serviceDomainIndex) && StringUtil
-					.contains(serviceDomainIndex, StringPool.PERIOD)) {
+				.isNotNull(serviceDomainIndex) && serviceDomainIndex.contains(StringPool.PERIOD)) {
 				qPos
 					.add(serviceDomainIndex + StringPool.PERCENT);
 
 			}
 			else if (Validator
-				.isNotNull(serviceDomainIndex) && !StringUtil
-					.contains(serviceDomainIndex, StringPool.PERIOD)) {
+				.isNotNull(serviceDomainIndex) && !serviceDomainIndex.contains(StringPool.PERIOD)) {
 				qPos
 					.add(serviceDomainIndex + StringPool.PERIOD +
 						StringPool.PERCENT);
@@ -429,15 +425,13 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			}
 
 			if (Validator
-				.isNotNull(govAgencyIndex) && StringUtil
-					.contains(govAgencyIndex, StringPool.PERIOD)) {
+				.isNotNull(govAgencyIndex) && govAgencyIndex.contains(StringPool.PERIOD)) {
 				qPos
 					.add(govAgencyIndex + StringPool.PERCENT);
 
 			}
 			else if (Validator
-				.isNotNull(govAgencyIndex) && !StringUtil
-					.contains(govAgencyIndex, StringPool.PERIOD)) {
+				.isNotNull(govAgencyIndex) && !govAgencyIndex.contains(StringPool.PERIOD)) {
 				qPos
 					.add(govAgencyIndex + StringPool.PERIOD +
 						StringPool.PERCENT);
@@ -694,8 +688,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 						StringPool.BLANK);
 			}
 			else {
-				if (StringUtil
-					.contains(serviceDomainIndex, StringPool.PERIOD)) {
+				if (serviceDomainIndex.contains(StringPool.PERIOD)) {
 					serviceDomainIndex = serviceDomainIndex
 						.substring(0, serviceDomainIndex
 							.indexOf(StringPool.PERIOD) + 1);
@@ -717,8 +710,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 						StringPool.BLANK);
 			}
 			else {
-				if (StringUtil
-					.contains(govAgencyIndex, StringPool.PERIOD)) {
+				if (govAgencyIndex.contains(StringPool.PERIOD)) {
 					govAgencyIndex = govAgencyIndex
 						.substring(0, govAgencyIndex
 							.indexOf(StringPool.PERIOD) + 1);
@@ -807,15 +799,13 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			}
 
 			if (Validator
-				.isNotNull(serviceDomainIndex) && StringUtil
-					.contains(serviceDomainIndex, StringPool.PERIOD)) {
+				.isNotNull(serviceDomainIndex) && serviceDomainIndex.contains(StringPool.PERIOD)) {
 				qPos
 					.add(serviceDomainIndex + StringPool.PERCENT);
 
 			}
 			else if (Validator
-				.isNotNull(serviceDomainIndex) && !StringUtil
-					.contains(serviceDomainIndex, StringPool.PERIOD)) {
+				.isNotNull(serviceDomainIndex) && !serviceDomainIndex.contains(StringPool.PERIOD)) {
 				qPos
 					.add(serviceDomainIndex + StringPool.PERIOD +
 						StringPool.PERCENT);
@@ -824,15 +814,13 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			}
 
 			if (Validator
-				.isNotNull(govAgencyIndex) && StringUtil
-					.contains(govAgencyIndex, StringPool.PERIOD)) {
+				.isNotNull(govAgencyIndex) && govAgencyIndex.contains(StringPool.PERIOD)) {
 				qPos
 					.add(govAgencyIndex + StringPool.PERCENT);
 
 			}
 			else if (Validator
-				.isNotNull(govAgencyIndex) && !StringUtil
-					.contains(govAgencyIndex, StringPool.PERIOD)) {
+				.isNotNull(govAgencyIndex) && !govAgencyIndex.contains(StringPool.PERIOD)) {
 				qPos
 					.add(govAgencyIndex + StringPool.PERIOD +
 						StringPool.PERCENT);

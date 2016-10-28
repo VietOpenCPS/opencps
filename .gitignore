@@ -192,6 +192,11 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/model/impl
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/base
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/http
 
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/impl
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/base
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/persistence/HolidayConfigPersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/persistence/HolidayConfigExtendPersistenceImpl.java
+
 hooks/opencps-hook/docroot/WEB-INF/classes/.gitignore
 
 portlets/opencps-sample-portlet/
@@ -276,6 +281,8 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/model/impl/ApiServi
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/model/impl/
 themes/opencps-ux-theme/docroot/WEB-INF/liferay-look-and-feel.xml
 
+
+
 portlets/portal-vbpq-portlet/
 
 portlets/opencps-portlet/ivy.xml.MD5
@@ -283,3 +290,4 @@ portlets/opencps-portlet/docroot/WEB-INF/lib/jasperreports-fonts-6.2.2.jar
 
 portlets/StudentLiferayMVC-portlet/
 portlets/vidu-portlet/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/model/impl/

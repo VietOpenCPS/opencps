@@ -1,4 +1,5 @@
 
+<%@page import="java.util.LinkedHashMap"%>
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
@@ -92,6 +93,8 @@
 	
 	List<ProcessOrderBean> processOrderSteps = new ArrayList<ProcessOrderBean>();
 	
+	
+	
 	long serviceInfoId = ParamUtil.getLong(request, "serviceInfoId");
 	
 	long processStepId = ParamUtil.getLong(request, "processStepId");
@@ -100,11 +103,21 @@
 		
 		if(tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)){
 			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceByUser(themeDisplay.getUserId());
+			
+			for(ProcessOrderBean ett : processOrderServices){
+				processOrderSteps.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), ett.getServiceInfoId()));
+			}
+			
 			if(serviceInfoId > 0){
 				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), serviceInfoId);
 			}
 		}else{
 			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceJustFinishedByUser(themeDisplay.getUserId());
+			
+			for(ProcessOrderBean ett : processOrderServices){
+				processOrderSteps.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), ett.getServiceInfoId()));
+			}
+			
 			if(serviceInfoId > 0){
 				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStepJustFinished(themeDisplay.getUserId(), serviceInfoId);
 			}
@@ -113,6 +126,13 @@
 		
 		
 	}catch(Exception e){}
+	
+	//remove duplicates process orders
+	Map<String, ProcessOrderBean> cleanMap = new LinkedHashMap<String, ProcessOrderBean>();
+	for (int i = 0; i < processOrderSteps.size(); i++) {
+	     cleanMap.put(processOrderSteps.get(i).getProcessStepId()+"", processOrderSteps.get(i));
+	}
+	processOrderSteps = new ArrayList<ProcessOrderBean>(cleanMap.values());
 	
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
@@ -129,13 +149,11 @@
 <aui:row>
 	<aui:col width="25">
 	
-	<c:if test="<%=serviceInfoId > 0 %>">
 		<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 		
 			<div id="processStepIdTree" class="openCPSTree"></div>
-		
+			
 		</div>
-	</c:if>
 	
 	<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 		
@@ -171,7 +189,8 @@
 				'normal',
 				'<%=menuCounterServiceInfoIdUrl.toString() %>',
 				serviceInfoId,
-				'<%=renderResponse.getNamespace() %>');
+				'<%=renderResponse.getNamespace() %>',
+				'<%=hiddenTreeNodeEqualNone%>');
 		buildTreeView("processStepIdTree", 
 				'processStepId', 
 				processStepIdJsonData, 
@@ -182,7 +201,8 @@
 				'normal',
 				'<%=menuCounterUrl.toString() %>',
 				processStepId,
-				'<%=renderResponse.getNamespace() %>');
+				'<%=renderResponse.getNamespace() %>',
+				'<%=hiddenTreeNodeEqualNone%>');
 		
 	});
 	

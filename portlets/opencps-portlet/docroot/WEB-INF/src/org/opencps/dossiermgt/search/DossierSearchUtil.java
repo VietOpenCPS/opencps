@@ -16,6 +16,7 @@
  */
 package org.opencps.dossiermgt.search;
 
+import org.opencps.dossiermgt.comparator.DossierFileDossierFileDateComparator;
 import org.opencps.dossiermgt.portlet.DossierMgtFrontOfficePortlet;
 
 import com.liferay.portal.kernel.log.Log;
@@ -24,6 +25,7 @@ import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.BooleanQueryFactoryUtil;
 import com.liferay.portal.kernel.search.ParseException;
 import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
 
 /**
@@ -59,58 +61,26 @@ public class DossierSearchUtil {
 			// TODO Auto-generated catch block
 			_log.error(e);
 		}
-		/*
-		for (String term : terms) {
-			TermQuery termReceptionNo = TermQueryFactoryUtil.create(
-					searchContext, DossierDisplayTerms.RECEPTION_NO, term);
-			TermQuery termCityName = TermQueryFactoryUtil.create(searchContext,
-					DossierDisplayTerms.CITY_NAME, term);
-			TermQuery termExternalRefNo = TermQueryFactoryUtil.create(
-					searchContext, DossierDisplayTerms.EXTERNALREF_NO, term);
-			TermQuery termExternalRef = TermQueryFactoryUtil.create(
-					searchContext, DossierDisplayTerms.EXTERNALREF_URL, term);
-			TermQuery termGovAgencyName = TermQueryFactoryUtil.create(
-					searchContext, DossierDisplayTerms.GOVAGENCY_NAME, term);
-			TermQuery termSubjectName = TermQueryFactoryUtil.create(
-					searchContext, DossierDisplayTerms.SUBJECT_NAME, term);
-			TermQuery termAddress = TermQueryFactoryUtil.create(searchContext,
-					DossierDisplayTerms.ADDRESS, term);
-			TermQuery termDistrictName = TermQueryFactoryUtil.create(
-					searchContext, DossierDisplayTerms.DISTRICT_NAME, term);
-			TermQuery termWardName = TermQueryFactoryUtil.create(searchContext,
-					DossierDisplayTerms.WARD_NAME, term);
-			TermQuery termContactName = TermQueryFactoryUtil.create(
-					searchContext, DossierDisplayTerms.CONTACT_NAME, term);
-			TermQuery termContactTelNo = TermQueryFactoryUtil.create(
-					searchContext, DossierDisplayTerms.CONTACT_TEL_NO, term);
-			TermQuery termContactEmail = TermQueryFactoryUtil.create(
-					searchContext, DossierDisplayTerms.CONTACT_EMAIL, term);
-			TermQuery termNote = TermQueryFactoryUtil.create(searchContext,
-					DossierDisplayTerms.NOTE, term);
-			TermQuery termDossierId = TermQueryFactoryUtil.create(
-					searchContext, DossierDisplayTerms.DOSSIER_ID, term);
-
-			try {
-				query.add(termReceptionNo, BooleanClauseOccur.SHOULD);
-				query.add(termCityName, BooleanClauseOccur.SHOULD);
-				query.add(termExternalRefNo, BooleanClauseOccur.SHOULD);
-				query.add(termExternalRef, BooleanClauseOccur.SHOULD);
-				query.add(termGovAgencyName, BooleanClauseOccur.SHOULD);
-				query.add(termSubjectName, BooleanClauseOccur.SHOULD);
-				query.add(termAddress, BooleanClauseOccur.SHOULD);
-				query.add(termDistrictName, BooleanClauseOccur.SHOULD);
-				query.add(termWardName, BooleanClauseOccur.SHOULD);
-				query.add(termContactName, BooleanClauseOccur.SHOULD);
-				query.add(termContactEmail, BooleanClauseOccur.SHOULD);
-				query.add(termContactTelNo, BooleanClauseOccur.SHOULD);
-				query.add(termNote, BooleanClauseOccur.SHOULD);
-				query.add(termDossierId, BooleanClauseOccur.SHOULD);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		*/
+		
 		return query;
+	}
+	
+	public static OrderByComparator getDossierFileOrderByComparator(
+		String orderByCol, String orderByType) {
+		
+
+		boolean orderByAsc = false;
+
+		if (orderByType.equals("asc")) {
+			orderByAsc = true;
+		}
+
+		OrderByComparator orderByComparator = null;
+		
+		if (orderByCol.equals(DossierFileDisplayTerms.DOSSIER_FILE_DATE)) {
+			orderByComparator = new DossierFileDossierFileDateComparator(orderByAsc);
+		}
+		
+		return orderByComparator;
 	}
 }

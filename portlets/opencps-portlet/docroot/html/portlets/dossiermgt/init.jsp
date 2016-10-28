@@ -32,10 +32,24 @@
 	
 	String redirectPaymentURL = preferences.getValue("redirectPaymentURL",StringPool.BLANK);
 	
+	String orderFieldDossierFile = preferences.getValue("orderFieldDossierFile",StringPool.BLANK);
+	
+	String orderBydDossierFile = preferences.getValue("orderBydDossierFile",StringPool.BLANK);
+	
 	boolean displayRecentlyResultWhenSearch = GetterUtil.getBoolean(preferences.getValue("displayRecentlyResultWhenSearch", "false"), false);
 	
 	boolean displayDossierNo =  GetterUtil.getBoolean(preferences.getValue("displayDossierNo", "false"), false);
 			
 	boolean showVersionItem = GetterUtil.getBoolean(preferences.getValue("showVersionItem", "true"), true);
+	
+	boolean showBackToListButton = GetterUtil.getBoolean(preferences.getValue("showBackToListButton", "true"), true);
+	
+	boolean showServiceDomainIdTree = GetterUtil.getBoolean(preferences.getValue("showServiceDomainIdTree", "true"), true);
+	
+	boolean hideTabDossierFile = GetterUtil.getBoolean(preferences.getValue("hideTabDossierFile", "false"), false);
+	
+	boolean showTabDossierResultFirst = GetterUtil.getBoolean(preferences.getValue("showTabDossierResultFirst", "false"), false);
+	
+	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
 %>
 

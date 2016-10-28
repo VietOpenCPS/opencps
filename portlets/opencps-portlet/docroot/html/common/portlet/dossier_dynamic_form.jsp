@@ -174,7 +174,7 @@
 
 <aui:form 
 	name="fm" action="<%=updateDynamicFormDataURL.toString() %>" 
-	method="post"
+	method="post" onSubmit='<%= "event.preventDefault();" %>'
 >
 	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
 	<aui:input name="<%=DossierDisplayTerms.DOSSIER_ID %>" type="hidden" value="<%=dossierId %>"/>
@@ -201,11 +201,11 @@
 				</c:if>
 			</c:when>
 		</c:choose>
-		
 	</aui:fieldset>
 </aui:form>
 
 <aui:script>
+
 	var alpacaSchema = <%=Validator.isNotNull(alpacaSchema) ? alpacaSchema : PortletConstants.UNKNOW_ALPACA_SCHEMA%>;
 	var formData = '<%=formData%>';
 	var dossierFileId = '<%=dossierFileId%>';
@@ -226,19 +226,29 @@
 					
 					//Validate form submit
 					var errorMessage = '';
-					$('div[class*="has-error"] > label').each(function( index ) {
+// 					$('div[class*="has-error"] > label').each(function( index ) {
 						
-						errorMessage += ( index + 1 ) + ': ' + $( this ).text() + '\n';
+// 						errorMessage += ( index + 1 ) + ': ' + $( this ).text() + '\n';
 						  
-					});
+// 					});
 
+					$('div[class*="has-error"] :input').each(function( index ) {
+						
+						if($(this).val() != null){
+							errorMessage += ( index + 1 ) + '\n';
+						}
+					  
+					});
+					
+					console.log("Alpacajs-required: "+errorMessage);
+					
 					if(errorMessage.length == 0){
 					
 						$("#<portlet:namespace />fm" ).submit();
 					
 					}else{
 						
-						alert( '<%=LanguageUtil.get(pageContext, "fields-required") %> :' + "\n" + errorMessage);
+						alert( '<%=LanguageUtil.get(pageContext, "fields-required") %>');
 						
 					}
 					
@@ -360,16 +370,19 @@
 	}
 	
 	function openCPSSelectedbildDataSource(controlId,dictCollectionId, parentItemId) {
+		var comboTarget = document.getElementById(controlId);
+		comboTarget.innerHTML = "";
+		var optionBlank = comboTarget.appendChild(document.createElement('option'));
+		optionBlank.value = "";
+		optionBlank.text = "<%=LanguageUtil.get(pageContext, "select-combo-blank") %>";
 		Liferay.Service(
 				  '/opencps-portlet.dictitem/get-dictitems_itemCode_datasource',
 				  {
 					  collectionCode: dictCollectionId,
 					  itemCode: parentItemId,
-					  groupId: Liferay.ThemeDisplay.getScopeGroupId()
+					  groupId: themeDisplay.getScopeGroupId()
 				  },
 				  function(obj) {
-					var comboTarget = document.getElementById(controlId); 
-					comboTarget.innerHTML = "";
 				    for(j in obj){
 	                    var sub_key = j;
 	                    var sub_val = obj[j];
@@ -381,61 +394,228 @@
 				);
 	}
 	
-	function openCPSAutoCompletebildDataSource(controlId, minLength, dictCollectionId, parentItemId, keywords) {
-		if(keywords.length >= minLength){
-			Liferay.Service(
-					  '/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource',
-					  {
-						  collectionCode: dictCollectionId,
-						  itemCode: parentItemId,
-						  keywords: keywords,
-						  groupId: Liferay.ThemeDisplay.getScopeGroupId()
-					  },
-					  function(obj) {
-							
-						  var arrayParam = $.map(obj, function (value, key) {         
-							  return {                
-							 		label: value,                                                
-							 		value:  key                                            
-							 	}                                        
-							 });
-							  
-						  $("#"+controlId).autocomplete({
-									
-								delay: 200,
-									
-								source: arrayParam,
-									
-								focus: function(event, ui) {
-										// prevent autocomplete from updating the textbox
-									event.preventDefault();
-								},
-									
-								select: function(event, ui) {
-									// prevent autocomplete from updating the textbox
-									event.preventDefault();
-									// binding value to control
-									$("#"+controlId).val(ui.item.label);
-									$("#"+controlId+"Id").val(ui.item.value);
-									$("#"+controlId+"Text").val(ui.item.label);
-								},
-									
-								change: function(event, ui) {
-									// prevent autocomplete from updating the textbox
-									event.preventDefault();
-									// binding value to control
-									if($("#"+controlId).val() != $("#"+controlId+"Text").val()){ 
-										$("#"+controlId).val('');
-										$("#"+controlId+"Id").val('');
-										$("#"+controlId+"Text").val('');
-									}
-								}
-									
-							});
-				  });
-		}else{
-			console.log(" more character -->");
+	function openCPSAutoCompletebildDataSource(controlId, minLength, dictCollectionId, parentItemId, keywords, bildingControlId, iconFa) {
+			
+		var iconFaObj = '<i class="fa '+iconFa+'"></i> &nbsp;&nbsp;';
+		
+		var myTemplateDisplay = '<div>{{value}}</div>';
+		
+		if(iconFa != null){
+			myTemplateDisplay = '<div>'+iconFaObj+'{{value}}</div>';
 		}
+		
+		var dataSource = new Bloodhound({
+			  datumTokenizer: function (datum) {
+			        return Bloodhound.tokenizers.whitespace(datum.value);
+			  },
+			  queryTokenizer: Bloodhound.tokenizers.whitespace,
+			  prefetch: {
+					  	url: '/api/jsonws/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource/collection-code/'+dictCollectionId
+		  				+'/item-code/'+parentItemId
+		  				+'/-keywords'
+		  				+'/group-id/'+themeDisplay.getScopeGroupId()
+		  				+'?p_auth='+Liferay.authToken,
+		  			wildcard: '%QUERY',
+				  	filter: function (item) {
+	   		           return $.map(item, function (data) {
+			                return {
+			                    value: data.itemNameCurrentValue,
+			                    code: data.itemCode,
+			                    desc: data.itemDescriptionCurrentValue
+			                };
+			            });
+				  	}
+			  },
+			  remote: {
+				  	url: '/api/jsonws/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource/collection-code/'+dictCollectionId
+		  				+'/item-code/'+parentItemId
+		  				+'/keywords/%QUERY'
+		  				+'/group-id/'+themeDisplay.getScopeGroupId()
+		  				+'?p_auth='+Liferay.authToken,
+		  			wildcard: '%QUERY',
+				  	filter: function (item) {
+	   		           return $.map(item, function (data) {
+			                return {
+			                    value: data.itemNameCurrentValue,
+			                    code: data.itemCode,
+			                    desc: data.itemDescriptionCurrentValue
+			                };
+			            });
+				  	}
+			  },
+		});
+		
+		// Initialize the Bloodhound suggestion engine
+		dataSource.initialize();
+		console.log(dataSource);
+		$('#'+controlId).typeahead({
+			
+			  minLength: minLength,
+			
+			  highlight: true
+			
+			},
+			{
+				
+				name: 'dataSource-typeahead',
+				
+				display: 'value',
+				
+				source: dataSource.ttAdapter(),
+
+				limit: 20,
+				
+				templates: {
+					empty: [
+			      	   '<div class="empty-message">',
+			     	   '<%=LanguageUtil.get(pageContext, "empty-message") %>',
+			    	   '</div>'
+			     	  ].join('\n'),
+			 		suggestion: Handlebars.compile(myTemplateDisplay)
+				}
+			}
+			).on(
+					{
+				        'typeahead:select': function(e, datum) {
+				        	$("#"+controlId).val(datum.value);
+							$("#"+controlId+"Id").val(datum.code);
+							$("#"+controlId+"Text").val(datum.value);
+							
+							if(bildingControlId != null){
+								$("#"+bildingControlId).val(datum.desc);
+							}
+				            console.log(datum);
+				            console.log('selected');
+				        },
+				        'typeahead:change': function(e, datum) {
+				        	if($("#"+controlId).val() != $("#"+controlId+"Text").val()){ 
+								$("#"+controlId).val('');
+								$("#"+controlId+"Id").val('');
+								$("#"+controlId+"Text").val('');
+								if(bildingControlId != null){
+									$("#"+bildingControlId).val('');
+								}
+							}
+				            console.log(datum);
+				            console.log('change');
+				        }
+					}
+			);
+		
+	}
+	
+	//paging
+	function openCPSAutoCompletebildDataSource(controlId, minLength, dictCollectionId, parentItemId, keywords, bildingControlId, iconFa, start, end) {
+		
+		var iconFaObj = '<i class="fa '+iconFa+'"></i> &nbsp;&nbsp;';
+		
+		var myTemplateDisplay = '<div>{{value}}</div>';
+		
+		if(iconFa != null){
+			myTemplateDisplay = '<div>'+iconFaObj+'{{value}}</div>';
+		}
+		
+		var dataSource = new Bloodhound({
+			  datumTokenizer: function (datum) {
+			        return Bloodhound.tokenizers.whitespace(datum.value);
+			  },
+			  queryTokenizer: Bloodhound.tokenizers.whitespace,
+			  prefetch: {
+					  	url: '/api/jsonws/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource/collection-code/'+dictCollectionId
+		  				+'/item-code/'+parentItemId
+		  				+'/-keywords'
+		  				+'/group-id/'+themeDisplay.getScopeGroupId()
+		  				+'/start/'+start
+		  				+'/end/'+end
+		  				+'?p_auth='+Liferay.authToken,
+		  			wildcard: '%QUERY',
+				  	filter: function (item) {
+	   		           return $.map(item, function (data) {
+			                return {
+			                    value: data.itemNameCurrentValue,
+			                    code: data.itemCode,
+			                    desc: data.itemDescriptionCurrentValue
+			                };
+			            });
+				  	}
+			  },
+			  remote: {
+				  	url: '/api/jsonws/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource/collection-code/'+dictCollectionId
+		  				+'/item-code/'+parentItemId
+		  				+'/keywords/%QUERY'
+		  				+'/group-id/'+themeDisplay.getScopeGroupId()
+		  				+'/start/'+start
+		  				+'/end/'+end
+		  				+'?p_auth='+Liferay.authToken,
+		  			wildcard: '%QUERY',
+				  	filter: function (item) {
+	   		           return $.map(item, function (data) {
+			                return {
+			                    value: data.itemNameCurrentValue,
+			                    code: data.itemCode,
+			                    desc: data.itemDescriptionCurrentValue
+			                };
+			            });
+				  	}
+			  },
+		});
+		
+		// Initialize the Bloodhound suggestion engine
+		dataSource.initialize();
+		console.log(dataSource);
+		$('#'+controlId).typeahead({
+			
+			  minLength: minLength,
+			
+			  highlight: true
+			
+			},
+			{
+				
+				name: 'dataSource-typeahead',
+				
+				display: 'value',
+				
+				source: dataSource.ttAdapter(),
+
+				limit: 20,
+				
+				templates: {
+					empty: [
+			      	   '<div class="empty-message">',
+			     	   '<%=LanguageUtil.get(pageContext, "empty-message") %>',
+			    	   '</div>'
+			     	  ].join('\n'),
+			 		suggestion: Handlebars.compile(myTemplateDisplay)
+				}
+			}
+			).on(
+					{
+				        'typeahead:select': function(e, datum) {
+				        	$("#"+controlId).val(datum.value);
+							$("#"+controlId+"Id").val(datum.code);
+							$("#"+controlId+"Text").val(datum.value);
+							
+							if(bildingControlId != null){
+								$("#"+bildingControlId).val(datum.desc);
+							}
+				            console.log(datum);
+				            console.log('selected');
+				        },
+				        'typeahead:change': function(e, datum) {
+				        	if($("#"+controlId).val() != $("#"+controlId+"Text").val()){ 
+								$("#"+controlId).val('');
+								$("#"+controlId+"Id").val('');
+								$("#"+controlId+"Text").val('');
+								if(bildingControlId != null){
+									$("#"+bildingControlId).val('');
+								}
+							}
+				            console.log(datum);
+				            console.log('change');
+				        }
+					}
+			);
 		
 	}
 </script>

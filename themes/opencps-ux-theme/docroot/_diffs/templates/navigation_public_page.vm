@@ -15,7 +15,7 @@
 		            #else
 		                <li>
 		            #end
-						<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName()</span></a>
+						<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName($locale)</span></a>
 		
 					</li>
 				#end
@@ -39,7 +39,7 @@
 		            #else
 		                <li>
 		            #end
-						<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName()</span></a>
+						<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName($locale)</span></a>
 		
 					</li>
 				#end

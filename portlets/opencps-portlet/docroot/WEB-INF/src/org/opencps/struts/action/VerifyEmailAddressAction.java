@@ -125,7 +125,7 @@ public class VerifyEmailAddressAction extends Action {
 					    .setModifiedDate(new Date());
 					BusinessLocalServiceUtil
 					    .updateBusiness(business);
-
+					
 					MessageBusUtil
 					    .sendEmailActiveAccount(
 					        mappingUser, password, serviceContext);

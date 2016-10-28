@@ -58,6 +58,8 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction{
 
 		String templatesToDisplay = ParamUtil.getString(actionRequest, "templatesToDisplay", "default");
 		
+		boolean hiddenTreeNodeEqualNone = ParamUtil.getBoolean(actionRequest, "hiddenTreeNodeEqualNone");
+		
 		PortletPreferences preferences =
 		    PortletPreferencesFactoryUtil.getPortletSetup(
 		        actionRequest, portletResource);
@@ -67,6 +69,8 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction{
 		preferences.setValue("oderFieldToDo", oderFieldToDo);
 		preferences.setValue("oderFieldJustFinish", oderFieldJustFinish);
 		preferences.setValue("templatesToDisplay", String.valueOf(templatesToDisplay));
+		
+		preferences.setValue("hiddenTreeNodeEqualNone", String.valueOf(hiddenTreeNodeEqualNone));
 		
 		preferences.store();
 

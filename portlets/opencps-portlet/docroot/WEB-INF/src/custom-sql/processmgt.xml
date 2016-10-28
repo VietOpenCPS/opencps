@@ -154,13 +154,16 @@
 			INNER JOIN
 			(
 				SELECT
-					opencps_stepallowance.processStepId,opencps_stepallowance.readOnly
+					opencps_stepallowance.processStepId,
+					opencps_stepallowance.readOnly,
+					role.userId
 				FROM 
 					opencps_stepallowance
                 INNER JOIN 
 					(
 						SELECT 
-							role_.roleId 
+							role_.roleId,
+							users_roles.userId
 						FROM role_ 
 						INNER JOIN 
 							users_roles 
@@ -174,6 +177,17 @@
             ) AS stepallowance
             ON
             	stepallowance.processStepId = opencps_processstep.processStepId
+            WHERE 
+            (
+                opencps_processorder.assignToUserId = 0 
+                
+                OR 
+                (
+                    opencps_processorder.assignToUserId != 0 
+                    AND stepallowance.userId != opencps_processorder.assignToUserId 
+                    AND stepallowance.readOnly = TRUE
+                )
+            )
             OR
 				opencps_processorder.assignToUserId = ?
 		]]>
@@ -215,13 +229,16 @@
 			INNER JOIN
 			(
 				SELECT
-					opencps_stepallowance.processStepId,opencps_stepallowance.readOnly
+					opencps_stepallowance.processStepId,
+					opencps_stepallowance.readOnly,
+					role.userId
 				FROM 
 					opencps_stepallowance
                 INNER JOIN 
 					(
 						SELECT 
-							role_.roleId 
+							role_.roleId, 
+							users_roles.userId
 						FROM role_ 
 						INNER JOIN 
 							users_roles 
@@ -232,12 +249,26 @@
 					) AS role
                 ON
 					opencps_stepallowance.roleId = role.roleId
-            ) AS stepallowance
-            ON
-            	stepallowance.processStepId = opencps_processstep.processStepId
-            OR
+			) AS stepallowance
+			ON
+				stepallowance.processStepId = opencps_processstep.processStepId
+			WHERE 
+			(
+				opencps_processorder.assignToUserId = 0 
+				
+				OR 
+				(
+					opencps_processorder.assignToUserId != 0 
+					AND stepallowance.userId != opencps_processorder.assignToUserId 
+					AND stepallowance.readOnly = TRUE
+				)
+			)
+	
+			OR
 				opencps_processorder.assignToUserId = ?
-			ORDER BY opencps_processorder.modifiedDate DESC, opencps_processorder.actionDatetime DESC
+			ORDER BY 
+				opencps_processorder.modifiedDate DESC, 
+				opencps_processorder.actionDatetime DESC
 		]]>
 	</sql>
 	

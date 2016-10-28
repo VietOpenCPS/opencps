@@ -31,6 +31,7 @@ public class ProcessDisplayTerms extends DisplayTerms{
 	public static final String PROCESS_DOMAINCODE = "domainCode";
 	public static final String PROCESS_DOSSIERSTATUS = "dossierStatus";
 	public static final String PROCESS_DOSSIERTEMPLATE_ID = "dossierTemplateId";
+	public static final String PROCESS_DOSSIER_TYPE = "dossierType";
 	/**
      * @param request
      */

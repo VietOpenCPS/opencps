@@ -84,7 +84,7 @@
 	<liferay-ui:search-container 
 		emptyResultsMessage="no-action-history-were-found"
 		iteratorURL="<%=iteratorURL %>"
-		delta="<%=20 %>"
+		delta="<%= NUMBER_DELTA_PADDING %>"
 		deltaConfigurable="true"
 		>
 		<liferay-ui:search-container-results>
@@ -134,7 +134,7 @@
 							</span>
 							
 							<span class="span8">
-								<%=actionHistory.getStepName()%>
+								<%= actionHistory.getStepName() %>
 							</span>
 						</aui:row>
 						
@@ -145,6 +145,16 @@
 							
 							<span class="span8">
 								<%=date%>
+							</span>
+						</aui:row>
+						
+						<aui:row>
+							<span class="span4 bold">
+								<liferay-ui:message key="action-date-over" />
+							</span>
+							
+							<span class="span8">
+								<%=String.valueOf(actionHistory.getDaysDelay())%>
 							</span>
 						</aui:row>
 					</aui:col>
@@ -187,3 +197,8 @@
 		<liferay-ui:search-iterator type="opencs_page_iterator"/>
 	</liferay-ui:search-container>
 </div>
+
+
+<%!
+	private int NUMBER_DELTA_PADDING = 100;
+%>

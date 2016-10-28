@@ -17,6 +17,7 @@
 
 package org.opencps.datamgt.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -25,17 +26,21 @@ import java.util.Map;
 import org.opencps.datamgt.NoSuchDictCollectionException;
 import org.opencps.datamgt.NoSuchDictItemException;
 import org.opencps.datamgt.NoSuchDictVersionException;
+import org.opencps.datamgt.model.AdministrationServicedomain;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.model.DictVersion;
 import org.opencps.datamgt.service.base.DictItemLocalServiceBaseImpl;
+import org.opencps.datamgt.util.DataMgtUtil;
 import org.opencps.util.PortletConstants;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -337,6 +342,19 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.findByC_C_I(dictCollectionId, itemCode);
 	}
 
+
+	/**
+	 * @param dictCollectionId
+	 * @param groupId
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<DictItem> findDictItemsByG_DC_S(long groupId, String dictCollectionCode)
+		throws SystemException {
+		
+		return dictItemFinder.findDictItemsByG_DC_S(groupId, dictCollectionCode, DataMgtUtil.ISSUE_STATUS_INUSE);
+	}
+	
 	/**
 	 * @param groupId
 	 * @param dictCollectionCode
@@ -645,4 +663,14 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 		
 	}
 
+	public List<DictItem> getDictItemsByTreeIndex(long dictItemId, long dictParentItemId, int status, int start, int end, OrderByComparator orderByComparator)
+			throws SystemException, NoSuchDictItemException{
+
+		//TODO
+		//--> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
+		String treeIndex = getTreeIndex(dictItemId, dictParentItemId);
+		return dictItemPersistence
+				.findByF_TreeIndex_Status(treeIndex + StringPool.PERCENT, status, start, end, orderByComparator);
+	}
+	
 }

@@ -46,12 +46,15 @@ PortletPreferences preferences = PrefsPropsUtil.getPreferences(company.getCompan
 String adminEmailWelcomeSubject = GetterUtil.getString(preferences.getValue("WELCOME_NEW_USER_SUBJECT", StringPool.BLANK));
 String adminEmailWelcomeBody = GetterUtil.getString(preferences.getValue("WELCOME_NEW_USER_BODY", StringPool.BLANK));
 
+String adminEmailConfirmToAdminSubject = GetterUtil.getString(preferences.getValue("EMAIL_CONFIRM_TO_ADMIN_SUBJECT", StringPool.BLANK));
+String adminEmailConfirmToAdminBody = GetterUtil.getString(preferences.getValue("EMAIL_CONFIRM_TO_ADMIN_BODY", StringPool.BLANK));
+
 %>
 
 <liferay-ui:error-marker key="errorSection" value="email_notifications" />
 
 <liferay-ui:tabs
-	names="sender,account-created-notification,email-verification-notification,password-changed-notification,password-reset-notification,welcome-new-user"
+	names="sender,account-created-notification,email-verification-notification,password-changed-notification,password-reset-notification,welcome-new-user,email-to-admin"
 	refresh="<%= false %>"
 >
 	<liferay-ui:section>
@@ -93,7 +96,7 @@ String adminEmailWelcomeBody = GetterUtil.getString(preferences.getValue("WELCOM
 				<%@ include file="/html/portlet/portal_settings/definition_of_terms.jspf" %>
 			</div>
 		</aui:fieldset>
-	</liferay-ui:section>
+	</liferay-ui:section>	
 	<liferay-ui:section>
 		<aui:fieldset>
 			<liferay-ui:error key="emailVerificationSubject" message="please-enter-a-valid-subject" />
@@ -170,6 +173,25 @@ String adminEmailWelcomeBody = GetterUtil.getString(preferences.getValue("WELCOM
 			</div>
 		</aui:fieldset>
 	</liferay-ui:section>
+	<liferay-ui:section>
+		<aui:fieldset>
+			<liferay-ui:error key="emailConfirmToAdminSubject" message="please-enter-a-valid-subject" />
+
+			<aui:input cssClass="lfr-input-text-container" label="subject" name='<%= "settings--" + "EMAIL_CONFIRM_TO_ADMIN_SUBJECT" + "--" %>' type="text" value="<%= adminEmailConfirmToAdminSubject %>" />
+
+			<liferay-ui:error key="emailConfirmToAdminBody" message="please-enter-a-valid-body" />
+
+			<aui:field-wrapper label="body">
+				<liferay-ui:input-editor editorImpl="<%= EDITOR_WYSIWYG_IMPL_KEY %>" initMethod='<%= "initEmailConfirmToAdminBodyEditor" %>' name="emailConfirmToAdminBody" toolbarSet="email" width="470" />
+
+				<aui:input name='<%= "settings--" + "EMAIL_CONFIRM_TO_ADMIN_BODY" + "--" %>' type="hidden" value="<%= adminEmailConfirmToAdminBody %>" />
+			</aui:field-wrapper>
+
+			<div class="terms email-verification definition-of-terms">
+				<%@ include file="/html/portlet/portal_settings/definition_of_terms.jspf" %>
+			</div>
+		</aui:fieldset>
+	</liferay-ui:section>
 </liferay-ui:tabs>
 
 <aui:script>
@@ -195,6 +217,10 @@ String adminEmailWelcomeBody = GetterUtil.getString(preferences.getValue("WELCOM
 	
 	function <portlet:namespace />initEmailWelcomeBodyEditor() {
 		return "<%= UnicodeFormatter.toString(adminEmailWelcomeBody) %>";
+	}
+	
+	function <portlet:namespace />initEmailConfirmToAdminBodyEditor() {
+		return "<%= UnicodeFormatter.toString(adminEmailConfirmToAdminBody) %>";
 	}
 
 	function <portlet:namespace />saveEmails() {
@@ -224,6 +250,12 @@ String adminEmailWelcomeBody = GetterUtil.getString(preferences.getValue("WELCOM
 
 		try {
 			document.<portlet:namespace />fm['<portlet:namespace />settings--<%= PropsKeys.ADMIN_EMAIL_VERIFICATION_BODY %>--'].value = window['<portlet:namespace />emailVerificationBody'].getHTML();
+		}
+		catch (e) {
+		}
+		
+		try {
+			document.<portlet:namespace />fm['<portlet:namespace />settings--EMAIL_CONFIRM_TO_ADMIN_BODY--'].value = window['<portlet:namespace />emailConfirmToAdminBody'].getHTML();
 		}
 		catch (e) {
 		}

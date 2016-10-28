@@ -1,4 +1,7 @@
 
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -24,12 +27,13 @@
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
-<%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@ include file="../init.jsp"%>
 
 <liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
+
+<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <%
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -40,7 +44,7 @@
 	
 	int totalCount = 0;
 	
-	RowChecker rowChecker = new RowChecker(liferayPortletResponse);
+// 	RowChecker rowChecker = new RowChecker(liferayPortletResponse);
 	
 	List<String> headerNames = new ArrayList<String>();
 	
@@ -55,7 +59,6 @@
 	<div class="opencps-searchcontainer-wrapper">
 		<liferay-ui:search-container 
 				searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
-				rowChecker="<%=rowChecker%>"
 				headerNames="<%= headers%>"
 			>
 			
@@ -71,7 +74,7 @@
 						try{
 							
 							%>
-								<%@include file="/html/portlets/processmgt/processorder/process_order_search_results.jspf" %>
+								<%@include file="/html/portlets/processmgt/processorder/processorder_justfinished_searchresults.jspf" %>
 							<%
 						}catch(Exception e){
 							_log.error(e);
@@ -114,9 +117,9 @@
 									<div class="span2 bold">
 										<liferay-ui:message key="reception-no"/>
 									</div>
-									<div class="span9">
+									<span class="span9">
 										<%=processOrder.getReceptionNo() %>
-									</div>
+									</span>
 								</div>
 								
 								<div class="row-fluid">
@@ -125,9 +128,9 @@
 									<div class="span2 bold">
 										<liferay-ui:message key="service-name"/>
 									</div>
-									<div class="span9">
+									<span class="span9">
 										<%=processOrder.getServiceName() %>
-									</div>
+									</span>
 								</div>
 							</div>
 						</liferay-util:buffer>
@@ -145,11 +148,13 @@
 						
 						<div class="row-fluid" >
 							<div class="span5 bold">
-								 <liferay-ui:message key="assign-to-user"/>
+								 <liferay-ui:message key="action-date"/>
 							</div>
 							
 							<div class="span7">
-								<%=processOrder.getAssignToUserName() %>
+								<%=Validator.isNotNull(processOrder.getActionDatetime())? 
+										DateTimeUtil.convertDateToString(processOrder.getActionDatetime(), DateTimeUtil._VN_DATE_FORMAT)
+										:StringPool.BLANK %>
 							</div>
 						</div>
 						
@@ -164,11 +169,11 @@
 						
 						<div class="row-fluid min-width340">
 								<div class="span5 bold">
-									<liferay-ui:message key="dealine"/>
+									<liferay-ui:message key="y-kien"/>
 								</div>
 								
 								<div class='<%="span7"%>'>
-									<%= deadlineVal %>
+									<%= processOrder.getActionNote() %>
 								</div>
 							</div>
 						</liferay-util:buffer>

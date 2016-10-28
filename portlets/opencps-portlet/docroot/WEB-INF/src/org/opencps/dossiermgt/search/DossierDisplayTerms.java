@@ -136,7 +136,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 		groupId = setGroupId(portletRequest);
 		
 		serviceDomainIndex = ParamUtil
-				.getString(portletRequest, SERVICE_DOMAIN_ID);
+				.getString(portletRequest, SERVICE_DOMAIN_INDEX);
 	}
 
 	public long setGroupId(PortletRequest portletRequest) {

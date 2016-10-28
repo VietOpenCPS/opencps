@@ -42,7 +42,11 @@ public class BookingDateGenerator {
 		
 		Calendar cal = Calendar.getInstance();
 		
+		
+		
 		cal.setTime(receiveDate);
+		
+		System.out.println("REVICE DATE ****************************************************" + receiveDate);
 		
 		String [] splitPattern = StringUtil.split(pattern, StringPool.SPACE);
 		
@@ -71,9 +75,13 @@ public class BookingDateGenerator {
 	}
 	
 	public static void main(String[] args) {
+		
+		Date now = new Date();
 
-	    Date bookingDate = dateGenerator(new Date(), "+29 7:33");
+	    Date bookingDate = dateGenerator(now, "+1 7:33");
 	    
+	    System.out.println(now);
+
 	    System.out.println(bookingDate);
     }
 	

@@ -960,6 +960,8 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 						.setUserId(processOrder
 							.getUserId());
 
+					processOrderBean.setActionNote(processOrder.getActionNote());
+					
 					processOrderBeans
 						.add(processOrderBean);
 				}

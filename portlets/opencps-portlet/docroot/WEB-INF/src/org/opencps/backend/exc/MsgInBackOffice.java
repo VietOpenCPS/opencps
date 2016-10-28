@@ -45,7 +45,7 @@ public class MsgInBackOffice implements MessageListener {
 
 	private void _doReceive(Message message) {
 
-		System.out.println("doRevice MsgInBackOffice/////////////////////////");
+		_log.info("####################MsgInBackOffice: Started receive jms message");
 
 		long[] companyIds = PortalUtil.getCompanyIds();
 
@@ -62,11 +62,12 @@ public class MsgInBackOffice implements MessageListener {
 		}
 
 		if (companyId > 0) {
-			/*
-			 * JMSContext context = JMSMessageUtil.createConsumer( companyId,
-			 * StringPool.BLANK, true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
-			 * WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local", "jmscore");
-			 */
+
+			// JMSContext context =
+			// JMSMessageUtil.createConsumer(
+			// companyId, StringPool.BLANK, true,
+			// WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+			// WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local", "jmscore");
 
 			JMSHornetqContext context =
 				JMSMessageUtil.createHornetqConsumer(

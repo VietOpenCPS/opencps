@@ -1,7 +1,8 @@
 .opencps-theme.ux footer {
-    background: rgba(0, 0, 0, 0) url("../images/custom/bg_footer.png") no-repeat scroll center center / cover ;
+    background: rgba(0, 0, 0, 0) url("../images/custom/bg_footer.png") no-repeat;
     min-height: 228px;
     padding-top: 25px;
+    background-size: cover;
 }
 
 .opencps-theme.ux footer .content{
@@ -30,7 +31,7 @@
 }
 
 .opencps-theme.ux footer .content .logo {
-    background: rgba(0, 0, 0, 0) url("../images/custom/logo_footer.png") no-repeat scroll 0 0 / 215px 57px;
+    background: rgba(0, 0, 0, 0) url("../images/custom/logo_footer.png") no-repeat;
     margin-left: 0;
     padding-left: 0;
     padding-top: 65px;

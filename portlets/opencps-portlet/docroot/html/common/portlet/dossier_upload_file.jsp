@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.RolePermissionsException"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -142,6 +143,11 @@
 	message="<%= MessageKeys.DOSSIER_FILE_DUPLICATE_NAME %>"
 />
 
+<liferay-ui:error 
+    exception="<%= RolePermissionsException.class %>" 
+    message="<%= RolePermissionsException.class.getName() %>"
+/>
+
 <aui:form 
 	name="fm" 
 	method="post" 
@@ -160,7 +166,7 @@
 	
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" value="<%=dossierPartName %>">
+			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="textarea" value="<%=dossierPartName %>">
 				<aui:validator name="required"/>
 			</aui:input>
 		</aui:col>

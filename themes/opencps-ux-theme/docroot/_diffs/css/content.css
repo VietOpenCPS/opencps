@@ -1,14 +1,14 @@
 /* ---------------------- Container  ------------*/
 
 .opencps-theme.ux #wrapper {
-    background-color: #fff;
+/*     background-color: #fff; */
     padding: 0;
     position: relative;
     width: 100%;
 }
 
 .opencps-theme.ux #wrapper > div {
-	background-color: #f5f5f5;
+/* 	background-color: #fff; */
     width: 100%;
 }
 
@@ -20,15 +20,17 @@
 	width: 100% !important;
 }
 
-.opencps-theme.ux .container .home-ux-layout .screen{
-	background: transparent url("../images/custom/bg_home.jpg") no-repeat scroll center center / cover;
-	display: flex;
+.opencps-theme.ux .container .home-ux-layout .screen {
+	background: transparent url("../images/custom/bg_home.jpg") no-repeat;
+	/* display: flex; */
     height: 525px;
     justify-content: center;
+    background-size: cover;
+    background-position: center center;
 }	
 
-.opencps-theme.ux .container .home-ux-layout .screen > div{
-	margin: auto;
+.opencps-theme.ux .container .home-ux-layout .screen > div {
+	margin: 190px auto 0;
 	text-align: center;
 }	
 
@@ -66,7 +68,7 @@
 	font-family: 'Roboto-Bold';
 	font-size: 17px;
 	text-transform: uppercase;
-	background: url(../images/custom/icon_helper.png) 16px 19px
+	background: url("../images/custom/icon_helper.png") 16px 19px
 		no-repeat;
 	color: #0090ff;
 }
@@ -76,51 +78,51 @@
 }
 
 .opencps-theme.ux .container .home-ux-layout .site-map ul li:nth-child(2){
-	background: url(../images/custom/icon_dangky.png) 14px center no-repeat
+	background: url("../images/custom/icon_dangky.png") 14px center no-repeat
 }
 
 .opencps-theme.ux .container .home-ux-layout .site-map ul li:nth-child(2):hover{
-	background: url(../images/custom/icon_dangky_hover.png) 14px center
+	background: url("../images/custom/icon_dangky_hover.png") 14px center
 		no-repeat
 }
 
 .opencps-theme.ux .container .home-ux-layout .site-map ul li:nth-child(3){
-	background: url(../images/custom/icon_dangnhap.png) 11px center
+	background: url("../images/custom/icon_dangnhap.png") 11px center
 		no-repeat
 }
 
 .opencps-theme.ux .container .home-ux-layout .site-map ul li:nth-child(3):hover{
-	background: url(../images/custom/icon_dangnhap_hover.png) 11px center
+	background: url("../images/custom/icon_dangnhap_hover.png") 11px center
 		no-repeat
 }
 
 .opencps-theme.ux .container .home-ux-layout .site-map ul li:nth-child(4){
-	background: url(../images/custom/icon_nophosott.png) 9px center
+	background: url("../images/custom/icon_nophosott.png") 9px center
 		no-repeat
 }
 
 .opencps-theme.ux .container .home-ux-layout .site-map ul li:nth-child(4):hover{
-	background: url(../images/custom/icon_nophosott_hover.png) 9px center
+	background: url("../images/custom/icon_nophosott_hover.png") 9px center
 		no-repeat
 }
 
 .opencps-theme.ux .container .home-ux-layout .site-map ul li:nth-child(5){
-	background: url(../images/custom/icon_tracuukq.png) 10px center
+	background: url("../images/custom/icon_tracuukq.png") 10px center
 		no-repeat
 }
 
 .opencps-theme.ux .container .home-ux-layout .site-map ul li:nth-child(5):hover{
-	background: url(../images/custom/icon_tracuukq_hover.png) 10px center
+	background: url("../images/custom/icon_tracuukq_hover.png") 10px center
 		no-repeat
 }
 
 .opencps-theme.ux .container .home-ux-layout .site-map ul li:nth-child(6){
-	background: url(../images/custom/icon_canboxulyhs.png) 10px center
+	background: url("../images/custom/icon_canboxulyhs.png") 10px center
 		no-repeat
 }
 
 .opencps-theme.ux .container .home-ux-layout .site-map ul li:nth-child(6):hover{
-	background: url(../images/custom/icon_canboxulyhs_hover.png) 10px
+	background: url("../images/custom/icon_canboxulyhs_hover.png") 10px
 		center no-repeat
 }
 
@@ -174,9 +176,15 @@
     text-shadow: 2px 2px 10px #000;
 }
 
-.opencps-theme.ux .container .home-search{
-	display: flex;
-	justify-content: center;
+.opencps-theme.ux .container .home-search {
+	/* display: flex; */
+	/* justify-content: center; */
+	margin: auto;
+    display: inline-block;
+}
+
+.opencps-theme.ux .home-search .input-append > .btn-group {
+	margin-left: -4px;
 }
 
 .opencps-theme.ux .home-search .input-append > button.btn {
@@ -190,7 +198,8 @@
 	width: 90px;
 	color: white;
 	border: 1px solid #0074cd;
-	margin-left: 0px;
+	margin-left: -4px;
+	z-index: 9999;
 }
 
 .opencps-theme.ux .home-search .input-append > button.btn:before {
@@ -202,6 +211,7 @@
 	left: 50%;
 	text-indent: 0;
 	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
 	font-size: 26px;
 }
 

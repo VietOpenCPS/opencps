@@ -322,6 +322,17 @@ public class SendToEngineMsg {
     
     	this.dossierStatus = dossierStatus;
     }
+	
+    public int getActorType() {
+    
+    	return actorType;
+    }
+
+	
+    public void setActorType(int actorType) {
+    
+    	this.actorType = actorType;
+    }
 	protected long dossierId;
 	protected long fileGroupId;
 	protected String event;
@@ -341,4 +352,5 @@ public class SendToEngineMsg {
 	protected long groupId;
 	protected long companyId;
 	protected Date actionDatetime;
+	protected int actorType;
 }

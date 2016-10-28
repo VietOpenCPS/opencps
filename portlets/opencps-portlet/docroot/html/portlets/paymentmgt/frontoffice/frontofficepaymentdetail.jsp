@@ -114,7 +114,7 @@
                              <p><span><liferay-ui:message key="payment-name"></liferay-ui:message>:</span></p><%= paymentFile != null ? paymentFile.getPaymentName() : LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="ngay-yeu-cau"></liferay-ui:message>:</span></p><%=paymentFile != null ? HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT)): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+                            <p><span><liferay-ui:message key="confirm-datetime"></liferay-ui:message>:</span></p><%=paymentFile != null ? HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT)): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                         </div>
                         <div>
                             <p><span><liferay-ui:message key="amount"></liferay-ui:message>: </span></p><span class="black bold"><%= NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount()) %> <liferay-ui:message key="vnd"></liferay-ui:message></span>
@@ -182,7 +182,7 @@
                             	</c:choose>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="request-datetime"></liferay-ui:message>:</span> </p><%= Validator.isNotNull(paymentFile) ? DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+                            <p><span><liferay-ui:message key="request-datetime"></liferay-ui:message>:</span> </p><%= Validator.isNotNull(paymentFile) ? DateTimeUtil.convertDateToString(paymentFile.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                         </div>
                         <div>
                             <p><span><liferay-ui:message key="confirm-file-entry-id"></liferay-ui:message>:</span> 
@@ -217,7 +217,10 @@
 								</c:choose>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="confirm-datetime"></liferay-ui:message>:</span></p> <%= Validator.isNotNull(paymentFile) ? DateTimeUtil.convertDateToString(paymentFile.getConfirmDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : LanguageUtil.get(pageContext, "monitoring-chua-co")  %>
+                            <p><span><liferay-ui:message key="approve-datetime-payment"></liferay-ui:message>:</span></p> <%= Validator.isNotNull(paymentFile.getApproveDatetime()) ? DateTimeUtil.convertDateToString(paymentFile.getApproveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : LanguageUtil.get(pageContext, "monitoring-chua-co")  %>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="approve-payment-notes"></liferay-ui:message>:</span></p> <%= Validator.isNotNull(paymentFile.getApproveNote()) ? paymentFile.getApproveNote() : LanguageUtil.get(pageContext, "monitoring-chua-co")  %>
                         </div>
                     </div>
             

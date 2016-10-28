@@ -54,7 +54,7 @@ public class MsgInFrontOffice implements MessageListener {
 
 	private void _doReceive(Message message) {
 
-		System.out.println("MsgInFrontOffice/////////////////////////////////");
+		_log.info("####################MsgInFrontOffice: Started receive jms message");
 
 		long[] companyIds = PortalUtil.getCompanyIds();
 
@@ -91,10 +91,10 @@ public class MsgInFrontOffice implements MessageListener {
 				int count = 1;
 
 				while (count <= receiveNumber) {
-					// _log.info("Start receive message/////////////////////////////////////");
+
 					javax.jms.Message jsmMessage =
 						context.getMessageConsumer().receive(1000);
-					// _log.info("Received message/////////////////////////////////////");
+
 					if (jsmMessage != null) {
 						JMSMessageBodyUtil.receiveMessage(context, jsmMessage);
 					}
@@ -110,7 +110,7 @@ public class MsgInFrontOffice implements MessageListener {
 			finally {
 				try {
 					context.destroy();
-					_log.info("Destroy Received message/////////////////////////////////////");
+
 				}
 				catch (JMSException e) {
 					_log.error(e);

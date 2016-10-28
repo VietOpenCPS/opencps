@@ -22,75 +22,88 @@ import javax.jms.JMSException;
 import javax.naming.NamingException;
 
 import org.opencps.jms.SyncServiceContext;
-import org.opencps.jms.business.SubmitDossier;
 import org.opencps.jms.business.SubmitPaymentFile;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.context.JMSLocalContext;
-import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.jms.message.body.PaymentFileMsgBody;
 import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 
-
 /**
- * @author khoavd
- *
+ * @author trungnt
  */
 public class SubmitPaymentFileMessage {
-	
+
 	public SubmitPaymentFileMessage(JMSContext context) {
+
 		this.setContext(context);
 	}
-	
+
 	public SubmitPaymentFileMessage(JMSLocalContext context) {
+
 		this.setLocalContext(context);
 	}
-	
-	public SubmitPaymentFileMessage(JMSHornetqContext hornetqContext){
+
+	public SubmitPaymentFileMessage(JMSHornetqContext hornetqContext) {
+
 		this.setHornetqContext(hornetqContext);
 	}
-	
-	public void sendHornetMessage(PaymentFile paymentFile)
-	    throws JMSException, NamingException {
+
+	/**
+	 * @param paymentFile
+	 * @param typeUpdate
+	 * @throws JMSException
+	 * @throws NamingException
+	 */
+	public void sendMessageByHornetq(PaymentFile paymentFile, String typeUpdate)
+		throws JMSException, NamingException {
 
 		try {
 			BytesMessage bytesMessage =
-			    JMSMessageUtil.createByteMessage(_hornetqContext);
+				JMSMessageUtil.createByteMessage(_hornetqContext);
 			long companyId =
-			    GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
-			        WebKeys.JMS_COMPANY_ID));
+				GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
+					WebKeys.JMS_COMPANY_ID));
 
 			long groupId =
-			    GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
-			        WebKeys.JMS_GROUP_ID));
+				GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
+					WebKeys.JMS_GROUP_ID));
 
 			long userId =
-			    GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
-			        WebKeys.JMS_USER_ID));
+				GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
+					WebKeys.JMS_USER_ID));
 
 			if (companyId > 0 && groupId > 0 && userId > 0) {
 				SyncServiceContext syncServiceContext =
-				    new SyncServiceContext(
-				        companyId, groupId, userId, true, true);
+					new SyncServiceContext(
+						companyId, groupId, userId, true, true);
 
-				PaymentFileMsgBody paymentBody =
-				    JMSMessageBodyUtil.getPaymentFileMsgBody(paymentFile);
+				PaymentFileMsgBody paymentFileMsgBody =
+					JMSMessageBodyUtil.getPaymentFileMsgBody(paymentFile);
 
-				paymentBody.setServiceContext(syncServiceContext.getServiceContext());
+				paymentFileMsgBody.setServiceContext(syncServiceContext.getServiceContext());
+
+				paymentFileMsgBody.setTypeUpdate(typeUpdate);
 
 				byte[] sender =
-				    JMSMessageUtil.convertObjectToByteArray(paymentBody);
+					JMSMessageUtil.convertObjectToByteArray(paymentFileMsgBody);
+
+				_log.info("####################SubmitPaymentFileMessage: Sending byte message");
 
 				bytesMessage.writeBytes(sender);
 
 				_hornetqContext.getMessageProducer().send(bytesMessage);
+
+				_log.info("####################SubmitPaymentFileMessage: Finished sending byte message");
 			}
 		}
 		catch (Exception e) {
@@ -98,22 +111,30 @@ public class SubmitPaymentFileMessage {
 		}
 	}
 
+	/**
+	 * @throws JMSException
+	 * @throws NamingException
+	 */
 	public void receiveMessageByHornetq()
-	    throws JMSException, NamingException {
+		throws JMSException, NamingException {
 
 		try {
 			BytesMessage bytesMessage =
-			    (BytesMessage) _hornetqContext.getMessageConsumer().receive();
+				(BytesMessage) _hornetqContext.getMessageConsumer().receive();
 
 			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
 
 			bytesMessage.readBytes(result);
 
 			Object object = JMSMessageUtil.convertByteArrayToObject(result);
-			
+
 			PaymentFileMsgBody paymentFileBody = (PaymentFileMsgBody) object;
-			
-			
+
+			setPaymentFileMsgBody(paymentFileBody);
+
+			SubmitPaymentFile submitPaymentFile = new SubmitPaymentFile();
+
+			submitPaymentFile.syncPaymentFile(paymentFileBody);
 
 		}
 		catch (Exception e) {
@@ -121,42 +142,51 @@ public class SubmitPaymentFileMessage {
 		}
 
 	}
-	
+
+	/**
+	 * @param paymentFile
+	 * @throws JMSException
+	 * @throws NamingException
+	 */
 	public void sendMessage(PaymentFile paymentFile)
-	    throws JMSException, NamingException {
+		throws JMSException, NamingException {
 
 		try {
 			BytesMessage bytesMessage =
-			    JMSMessageUtil.createByteMessage(_context);
+				JMSMessageUtil.createByteMessage(_context);
 
 			long companyId =
-			    GetterUtil.getLong(_context.getProperties().getProperty(
-			        WebKeys.JMS_COMPANY_ID));
+				GetterUtil.getLong(_context.getProperties().getProperty(
+					WebKeys.JMS_COMPANY_ID));
 			long groupId =
-			    GetterUtil.getLong(
-			        _context.getProperties().getProperty(WebKeys.JMS_GROUP_ID),
-			        0L);
+				GetterUtil.getLong(
+					_context.getProperties().getProperty(WebKeys.JMS_GROUP_ID),
+					0L);
 			long userId =
-			    GetterUtil.getLong(
-			        _context.getProperties().getProperty(WebKeys.JMS_USER_ID),
-			        0L);
+				GetterUtil.getLong(
+					_context.getProperties().getProperty(WebKeys.JMS_USER_ID),
+					0L);
 
 			if (companyId > 0 && groupId > 0 && userId > 0) {
 				SyncServiceContext syncServiceContext =
-				    new SyncServiceContext(
-				        companyId, groupId, userId, true, true);
+					new SyncServiceContext(
+						companyId, groupId, userId, true, true);
 
 				PaymentFileMsgBody paymentBody =
-				    JMSMessageBodyUtil.getPaymentFileMsgBody(paymentFile);
+					JMSMessageBodyUtil.getPaymentFileMsgBody(paymentFile);
 
 				paymentBody.setServiceContext(syncServiceContext.getServiceContext());
 
 				byte[] sender =
-				    JMSMessageUtil.convertObjectToByteArray(paymentBody);
+					JMSMessageUtil.convertObjectToByteArray(paymentBody);
+
+				_log.info("####################SubmitPaymentFileMessage: Sending byte message");
 
 				bytesMessage.writeBytes(sender);
 
 				_context.getMessageProducer().send(bytesMessage);
+
+				_log.info("####################SubmitPaymentFileMessage: Finished sending byte message");
 			}
 
 		}
@@ -164,128 +194,106 @@ public class SubmitPaymentFileMessage {
 			_log.error(e);
 		}
 	}
-	
-	public void reviceLocalMessage(PaymentFileMsgBody body) {
-		setPaymentFileMsgBody(body);
-		
+
+	/**
+	 * @param paymentFileMsgBody
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
+	public void reviceLocalMessage(PaymentFileMsgBody paymentFileMsgBody)
+		throws SystemException, PortalException {
+
+		setPaymentFileMsgBody(paymentFileMsgBody);
+
 		SubmitPaymentFile submitPayment = new SubmitPaymentFile();
-		
-		submitPayment.syncPaymentFile(body);
-	}
-	
-	public void reviceMessage()
-	    throws JMSException, NamingException {
 
-		try {
-			BytesMessage bytesMessage =
-			    (BytesMessage) _context.getMessageConsumer().receive();
-
-			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
-
-			bytesMessage.readBytes(result);
-
-			Object object = JMSMessageUtil.convertByteArrayToObject(result);
-			
-			PaymentFileMsgBody paymentFileBody = (PaymentFileMsgBody) object;
-
-			DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
-
-
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
+		submitPayment.syncPaymentFile(paymentFileMsgBody);
 	}
 
-    /**
-     * @return the _context
-     */
-    public JMSContext getontext() {
-    
-    	return _context;
-    }
+	/**
+	 * @return the _context
+	 */
+	public JMSContext getontext() {
 
-	
-    /**
-     * @param _context the _context to set
-     */
-    public void setContext(JMSContext _context) {
-    
-    	this._context = _context;
-    }
+		return _context;
+	}
 
-	
-    /**
-     * @return the _localContext
-     */
-    public JMSLocalContext getLocalContext() {
-    
-    	return _localContext;
-    }
+	/**
+	 * @param _context
+	 *            the _context to set
+	 */
+	public void setContext(JMSContext _context) {
 
-	
-    /**
-     * @param _localContext the _localContext to set
-     */
-    public void setLocalContext(JMSLocalContext _localContext) {
-    
-    	this._localContext = _localContext;
-    }
+		this._context = _context;
+	}
 
-	
-    /**
-     * @return the _paymentFileMsgBody
-     */
-    public PaymentFileMsgBody getPaymentFileMsgBody() {
-    
-    	return _paymentFileMsgBody;
-    }
+	/**
+	 * @return the _localContext
+	 */
+	public JMSLocalContext getLocalContext() {
 
-	
-    /**
-     * @param _paymentFileMsgBody the _paymentFileMsgBody to set
-     */
-    public void setPaymentFileMsgBody(PaymentFileMsgBody _paymentFileMsgBody) {
-    
-    	this._paymentFileMsgBody = _paymentFileMsgBody;
-    }
+		return _localContext;
+	}
 
-	
-    /**
-     * @return the _serviceContext
-     */
-    public SyncServiceContext getServiceContext() {
-    
-    	return _serviceContext;
-    }
+	/**
+	 * @param _localContext
+	 *            the _localContext to set
+	 */
+	public void setLocalContext(JMSLocalContext _localContext) {
 
-	
-    /**
-     * @param _serviceContext the _serviceContext to set
-     */
-    public void setServiceContext(SyncServiceContext _serviceContext) {
-    
-    	this._serviceContext = _serviceContext;
-    }
+		this._localContext = _localContext;
+	}
 
-	
-    /**
-     * @return the _hornetqContext
-     */
-    public JMSHornetqContext getHornetqContext() {
-    
-    	return _hornetqContext;
-    }
+	/**
+	 * @return the _paymentFileMsgBody
+	 */
+	public PaymentFileMsgBody getPaymentFileMsgBody() {
 
-	
-    /**
-     * @param _hornetqContext the _hornetqContext to set
-     */
-    public void setHornetqContext(JMSHornetqContext _hornetqContext) {
-    
-    	this._hornetqContext = _hornetqContext;
-    }
+		return _paymentFileMsgBody;
+	}
+
+	/**
+	 * @param _paymentFileMsgBody
+	 *            the _paymentFileMsgBody to set
+	 */
+	public void setPaymentFileMsgBody(PaymentFileMsgBody _paymentFileMsgBody) {
+
+		this._paymentFileMsgBody = _paymentFileMsgBody;
+	}
+
+	/**
+	 * @return the _serviceContext
+	 */
+	public SyncServiceContext getServiceContext() {
+
+		return _serviceContext;
+	}
+
+	/**
+	 * @param _serviceContext
+	 *            the _serviceContext to set
+	 */
+	public void setServiceContext(SyncServiceContext _serviceContext) {
+
+		this._serviceContext = _serviceContext;
+	}
+
+	/**
+	 * @return the _hornetqContext
+	 */
+	public JMSHornetqContext getHornetqContext() {
+
+		return _hornetqContext;
+	}
+
+	/**
+	 * @param _hornetqContext
+	 *            the _hornetqContext to set
+	 */
+	public void setHornetqContext(JMSHornetqContext _hornetqContext) {
+
+		this._hornetqContext = _hornetqContext;
+	}
 
 	private JMSHornetqContext _hornetqContext;
 

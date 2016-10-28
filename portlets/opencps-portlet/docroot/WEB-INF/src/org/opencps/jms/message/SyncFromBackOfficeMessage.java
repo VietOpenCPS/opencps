@@ -67,8 +67,6 @@ public class SyncFromBackOfficeMessage {
 
 		SyncFromBackOffice syncFromBackOffice = new SyncFromBackOffice();
 
-		_log.info("SyncFromBackOfficeMessage ReceiveLocalMessage//////////////////////////");
-
 		try {
 			syncFromBackOffice.syncDossierStatus(syncFromBackOfficeMsgBody);
 		}
@@ -163,10 +161,13 @@ public class SyncFromBackOfficeMessage {
 				byte[] sender =
 					JMSMessageUtil.convertObjectToByteArray(msgBody);
 
+				_log.info("####################SyncFromBackOfficeMessage: Sending byte message");
+
 				bytesMessage.writeBytes(sender);
-				_log.info("SyncFromBackOfficeMessage Send Message////////////////////////////////");
+
 				_context.getMessageProducer().send(bytesMessage);
-				_log.info("SyncFromBackOfficeMessage Finish Send Message////////////////////////////////");
+
+				_log.info("####################SyncFromBackOfficeMessage: Finished sending byte message");
 
 			}
 
@@ -176,6 +177,11 @@ public class SyncFromBackOfficeMessage {
 		}
 	}
 
+	/**
+	 * @param msgBody
+	 * @throws JMSException
+	 * @throws NamingException
+	 */
 	public void sendMessageByHornetq(SyncFromBackOfficeMsgBody msgBody)
 		throws JMSException, NamingException {
 
@@ -206,11 +212,12 @@ public class SyncFromBackOfficeMessage {
 					JMSMessageUtil.convertObjectToByteArray(msgBody);
 
 				bytesMessage.writeBytes(sender);
-				_log.info("SyncFromBackOfficeMessage Send Message////////////////////////////////");
 				
+				_log.info("####################SyncFromBackOfficeMessage: Sending byte message");
+
 				_hornetqContext.getMessageProducer().send(bytesMessage);
-				
-				_log.info("SyncFromBackOfficeMessage Finish Send Message////////////////////////////////");
+
+				_log.info("####################SyncFromBackOfficeMessage: Finished sending byte message");
 
 			}
 

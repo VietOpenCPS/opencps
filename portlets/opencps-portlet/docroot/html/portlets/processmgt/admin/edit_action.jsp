@@ -214,7 +214,7 @@
 		<aui:col width="50">
 			<aui:input name="requestPayment" ></aui:input>
 			
-			<aui:input name="paymentFee"></aui:input>
+			<aui:input name="paymentFee" label=""></aui:input>
 		</aui:col>	
 	</aui:row>
 
@@ -232,7 +232,7 @@
 	</aui:row>
 	
 	
-	<label class="bold"><liferay-ui:message key="result-action"/></label>
+	<label class="bold"><liferay-ui:message key="results-values"/></label>
 	
 	<div id="workflow-output">
 		<%

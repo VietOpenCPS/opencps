@@ -4,41 +4,43 @@
 		<![CDATA[
 			SELECT
 				count(*) AS COUNT_VALUE
-	    	FROM
-	    		opencps_payment_file
-	    		LEFT JOIN opencps_dossier
+			FROM
+				opencps_payment_file
+				LEFT JOIN opencps_dossier
 				ON opencps_payment_file.dossierId = opencps_dossier.dossierId
 				LEFT JOIN opencps_acc_citizen 
 				ON opencps_payment_file.ownerUserId = opencps_acc_citizen.mappingUserId
 				LEFT JOIN opencps_acc_business
 				ON opencps_payment_file.ownerOrganizationId = opencps_acc_business.mappingOrganizationId
-	    	WHERE
-	    		(1 = 1)
-	    	AND
-	    		((lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
-	    	AND
+			WHERE
+				(1 = 1)
+			AND ((lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
+			AND
 				(opencps_payment_file.paymentStatus = ?)
+			AND
+				opencps_payment_file.govAgencyOrganizationId = ?
 		]]>
 	</sql>	
 	
 	<sql id="org.opencps.paymentmgt.service.persistence.PaymentFileFinder.searchPaymentFile">	
 		<![CDATA[
-	    	SELECT 
-	    		*
-	    	FROM
-	    		opencps_payment_file
-	    		LEFT JOIN opencps_dossier
+			SELECT
+				*
+			FROM
+				opencps_payment_file
+				LEFT JOIN opencps_dossier
 				ON opencps_payment_file.dossierId = opencps_dossier.dossierId
 				LEFT JOIN opencps_acc_citizen 
 				ON opencps_payment_file.ownerUserId = opencps_acc_citizen.mappingUserId
 				LEFT JOIN opencps_acc_business
 				ON opencps_payment_file.ownerOrganizationId = opencps_acc_business.mappingOrganizationId
-	    	WHERE
-	    		1 = 1
-	    	AND
-	    		((lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
-	    	AND
+			WHERE
+				1 = 1
+			AND ((lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
+			AND
 				(opencps_payment_file.paymentStatus = ?)
+			AND 
+				opencps_payment_file.govAgencyOrganizationId = ?
 			ORDER BY opencps_payment_file.modifiedDate DESC
 		]]>
 	</sql>
@@ -46,48 +48,48 @@
 		<![CDATA[
 			SELECT
 				count(*) AS COUNT_VALUE
-	    	FROM
-	    		opencps_payment_file
-	    	LEFT JOIN
-	    		opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
-	    	WHERE
-	    		(1 = 1)
-	    	AND
-	    		(opencps_payment_file.ownerUserId=?)
-	    	AND
-	    		(opencps_payment_file.ownerOrganizationId=?)
-	    	AND
-	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	OR
-	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	OR
-	    		(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	AND
+		FROM
+			opencps_payment_file
+		LEFT JOIN
+			opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
+		WHERE
+			(1 = 1)
+		AND
+			(opencps_payment_file.ownerUserId=?)
+		AND
+			(opencps_payment_file.ownerOrganizationId=?)
+		AND
+			(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
+		OR
+			(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+		OR
+			(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
+		AND
 				(opencps_payment_file.paymentStatus = ?)
 		]]>
 	</sql>	
 	
 	<sql id="org.opencps.paymentmgt.service.persistence.PaymentFileFinder.searchCustomerPaymentFile">	
 		<![CDATA[
-	    	SELECT 
-	    		*
-	    	FROM
-	    		opencps_payment_file
-	    	LEFT JOIN
-	    		opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
-	    	WHERE
-	    		(1 = 1)
-	    	AND
-	    		(opencps_payment_file.ownerUserId=?)
-	    	AND
-	    		(opencps_payment_file.ownerOrganizationId=?)
-	    	AND
-	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	OR
-	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	OR
-	    		(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	AND
+		SELECT 
+			*
+		FROM
+			opencps_payment_file
+		LEFT JOIN
+			opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
+		WHERE
+			(1 = 1)
+		AND
+			(opencps_payment_file.ownerUserId=?)
+		AND
+			(opencps_payment_file.ownerOrganizationId=?)
+		AND
+			(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
+		OR
+			(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+		OR
+			(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
+		AND
 				(opencps_payment_file.paymentStatus = ?)
 			ORDER BY opencps_payment_file.modifiedDate DESC
 		]]>
@@ -97,48 +99,48 @@
 		<![CDATA[
 			SELECT
 				count(*) AS COUNT_VALUE
-	    	FROM
-	    		opencps_payment_file
-	    	LEFT JOIN
-	    		opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
-	    	WHERE
-	    		(1 = 1)
-	    	AND
-	    		(opencps_payment_file.ownerUserId=?)
-	    	AND
-	    		(opencps_payment_file.ownerOrganizationId=?)
-	    	AND
-	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	OR
-	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	OR
-	    		(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	AND
+		FROM
+			opencps_payment_file
+		LEFT JOIN
+			opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
+		WHERE
+			(1 = 1)
+		AND
+			(opencps_payment_file.ownerUserId=?)
+		AND
+			(opencps_payment_file.ownerOrganizationId=?)
+		AND
+			(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
+		OR
+			(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+		OR
+			(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
+		AND
 				(opencps_payment_file.paymentStatus IN (?) )
 		]]>
 	</sql>	
 	
 	<sql id="org.opencps.paymentmgt.service.persistence.PaymentFileFinder.searchCustomerPaymentFileNewRequest">	
 		<![CDATA[
-	    	SELECT 
-	    		*
-	    	FROM
-	    		opencps_payment_file
-	    	LEFT JOIN
-	    		opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
-	    	WHERE
-	    		(1 = 1)
-	    	AND
-	    		(opencps_payment_file.ownerUserId=?)
-	    	AND
-	    		(opencps_payment_file.ownerOrganizationId=?)
-	    	AND
-	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	OR
-	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	OR
-	    		(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
-	    	AND
+		SELECT 
+			*
+		FROM
+			opencps_payment_file
+		LEFT JOIN
+			opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
+		WHERE
+			(1 = 1)
+		AND
+			(opencps_payment_file.ownerUserId=?)
+		AND
+			(opencps_payment_file.ownerOrganizationId=?)
+		AND
+			(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
+		OR
+			(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+		OR
+			(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
+		AND
 				(opencps_payment_file.paymentStatus IN (?) )
 			ORDER BY opencps_payment_file.modifiedDate DESC
 		]]>

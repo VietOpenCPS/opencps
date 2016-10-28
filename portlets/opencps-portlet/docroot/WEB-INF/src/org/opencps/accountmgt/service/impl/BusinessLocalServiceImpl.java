@@ -405,7 +405,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			if (isChangePassword) {
 				mappingUser =
 					userLocalService.updatePassword(
-						mappingUser.getUserId(), password, rePassword, false);
+						mappingUser.getUserId(), rePassword, rePassword, false);
 			}
 
 			if ((cityCode != business.getCityCode() ||

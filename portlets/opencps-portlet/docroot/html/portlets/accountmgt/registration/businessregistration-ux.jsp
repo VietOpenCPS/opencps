@@ -1,5 +1,3 @@
-
-<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -159,9 +157,17 @@
 		message="<%= OutOfSizeFileUploadException.class.getName() %>" 
 	/>
 
+	<%
+		String ACCOUNT_UPDATE_CUCCESS = StringPool.BLANK;
+		if (Validator.isNotNull(messageSuccessfullRegistration)){
+			ACCOUNT_UPDATE_CUCCESS = messageSuccessfullRegistration;
+		} else {
+			ACCOUNT_UPDATE_CUCCESS = MessageKeys.ACCOUNT_UPDATE_CUCCESS;
+		}
+	%>
 	<liferay-ui:success 
 		key="<%=MessageKeys.ACCOUNT_UPDATE_CUCCESS %>" 
-		message="<%=MessageKeys.ACCOUNT_UPDATE_CUCCESS %>"
+		message="<%=ACCOUNT_UPDATE_CUCCESS %>"
 	/>
 	
 	<portlet:actionURL var="updateBusinessURL" name="updateBusiness">
@@ -182,6 +188,8 @@
 		<aui:model-context bean="<%=businessValidate%>" model="<%=Business.class%>" />
 		
 		<aui:input name="businessRegStep_cfg" value="<%=businessRegStep_cfg %>" type="hidden"></aui:input>
+		
+		<aui:input name="emailConfirmToAdmin" value="<%=emailConfirmToAdmin %>" type="hidden"></aui:input>
 		
 		<div class="register-content">
 			<div class="opencps accountmgt fm-registration header">
@@ -313,30 +321,61 @@
 				</aui:row>
 			
 				<aui:row>
-					<datamgt:ddr 
-						cssClass="input100"
-						depthLevel="3" 
-						dictCollectionCode="ADMINISTRATIVE_REGION"
-						itemNames="cityId,districtId,wardId"
-						itemsEmptyOption="true,true,true"	
-						displayStyle="vertical"
-						emptyOptionLabels="cityId,districtId,wardId"
-						showLabel="false"
-						selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
-					/>	
+					<c:choose>
+						<c:when test="<%=!showLabelTaglibDatamgt %>">
+							<datamgt:ddr 
+								cssClass="input100"
+								depthLevel="3" 
+								dictCollectionCode="ADMINISTRATIVE_REGION"
+								itemNames="cityId,districtId,wardId"
+								itemsEmptyOption="true,true,true"	
+								displayStyle="vertical"
+								emptyOptionLabels="cityId,districtId,wardId"
+								showLabel="false"
+								selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
+							/>
+						</c:when>
+						<c:otherwise>
+							<datamgt:ddr 
+								cssClass="input100"
+								depthLevel="3" 
+								dictCollectionCode="ADMINISTRATIVE_REGION"
+								itemNames="cityId,districtId,wardId"
+								itemsEmptyOption="true,true,true"	
+								displayStyle="vertical"
+								showLabel="true"
+								selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
+							/>
+						</c:otherwise>
+					</c:choose>
 				</aui:row>
 				
 				<aui:row>
-					<datamgt:ddr
-						cssClass="input100"
-						depthLevel="1" 
-						dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
-						itemNames="businessType"
-						itemsEmptyOption="true"	
-						emptyOptionLabels="business-type"
-						showLabel="false"
-						selectedItems="<%= typeID %>"
-					/>
+					<c:choose>
+						<c:when test="<%=!showLabelTaglibDatamgt %>">
+							<datamgt:ddr
+								cssClass="input100"
+								depthLevel="1" 
+								dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
+								itemNames="businessType"
+								itemsEmptyOption="true"	
+								emptyOptionLabels="business-type"
+								showLabel="false"
+								selectedItems="<%= typeID %>"
+							/>
+						</c:when>
+						<c:otherwise>
+							<datamgt:ddr
+								cssClass="input100"
+								depthLevel="1" 
+								dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
+								itemNames="businessType"
+								itemsEmptyOption="true"	
+								showLabel="true"
+								selectedItems="<%= typeID %>"
+							/>
+						</c:otherwise>
+					</c:choose>
 				</aui:row>
 				
 				<aui:row>

@@ -74,9 +74,8 @@ public class SyncFromBackOffice {
 			syncDLFileEntries = analyzeDossierFile.getSyncDLFileEntries();
 			data = analyzeDossierFile.getData();
 		}
-		
-		System.out.println("########################################################" +
-			"syncFromBackOfficeMsgBody.getReceptionNo() " + syncFromBackOfficeMsgBody.getReceptionNo());
+
+		System.out.println("####################SyncFromBackOffice: Starting synchronize DossierStatus");
 
 		DossierLocalServiceUtil.syncDossierStatus(
 			syncFromBackOfficeMsgBody.getOid(),
@@ -94,5 +93,7 @@ public class SyncFromBackOffice {
 			syncFromBackOfficeMsgBody.getMessageInfo(), syncDossierFiles,
 			syncFileGroups, syncFileGroupDossierParts, syncDLFileEntries, data,
 			syncFromBackOfficeMsgBody.getPaymentFile(), serviceContext);
+
+		// TODO add log
 	}
 }

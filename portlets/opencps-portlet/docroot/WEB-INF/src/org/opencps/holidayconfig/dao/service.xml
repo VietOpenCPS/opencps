@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.holidayconfig">
+	<author>nhanhoang</author>
+	<namespace>holidayconfig</namespace>
+
+	<entity name="HolidayConfig" table="opencps_holidayconfig" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="holidayId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="holiday" type="Date"></column>
+		<column name="description"  type="String" />
+		<column name="createdDate"  type="Date" />
+		<column name="modifiedDate"  type="Date" />
+		<column name="remove"  type="int" />
+
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="holidayId" />
+		</order>
+		
+		<finder return-type="Collection" name="holiday">
+			<finder-column name="holiday"></finder-column>
+		</finder>
+	</entity>
+	
+	<entity name="HolidayConfigExtend" table="opencps_holidayconfig_extend" local-service="true" remote-service="false">
+
+	<!-- PK fields -->
+
+	<column name="holidayExtendId" type="long" primary="true" />
+
+	<!-- Group instance -->
+
+	<column name="key" type="String"></column>
+	<column name="description"  type="String" />
+	<column name="active"  type="int" />
+
+
+	<!-- Order -->
+
+	<order by="asc">
+		<order-column name="holidayExtendId" />
+	</order>
+	
+</entity>
+</service-builder>

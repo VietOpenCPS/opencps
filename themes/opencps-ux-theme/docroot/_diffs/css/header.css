@@ -1,5 +1,6 @@
 .opencps-theme.ux header.opencps-header-wrapper {
-    background: rgba(0, 0, 0, 0) url("../images/custom/bg_header.png") no-repeat scroll center center / cover ;
+    background: rgba(0, 0, 0, 0) url("../images/custom/bg_header.png") no-repeat;
+    background-size: cover;
 }
 
 

@@ -1,3 +1,4 @@
+
 /**
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
@@ -18,21 +19,15 @@
 package org.opencps.datamgt.service.persistence;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.model.impl.DictItemImpl;
-import org.opencps.dossiermgt.bean.DossierBean;
-import org.opencps.dossiermgt.model.Dossier;
-import org.opencps.dossiermgt.model.impl.DossierImpl;
-import org.opencps.dossiermgt.service.persistence.DossierFinder;
 
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
-import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -51,6 +46,9 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 	
 	public static final String SEARCH_DICT_ITEM_BY_NAME_LIKE = DictItemFinder.class
 			.getName() + ".searchDictItemByNameLike";
+	
+	public static final String FIND_DICTITEMS_BY_G_DC_S = DictItemFinder.class
+			.getName() + ".findDictItemsByG_DC_S";
 	
 	/**
 	 * @param collectionCode
@@ -175,6 +173,57 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 
 	}
 	
-	private Log _log = LogFactoryUtil.getLog(DictItemFinderImpl.class.getName());
+
+	public List<DictItem> findDictItemsByG_DC_S(long groupId, String dictCollectionCode , int issueStatus) throws SystemException{
+		
+		return _findDictItemsByG_DC_S(groupId, dictCollectionCode, issueStatus);
+	}
+	
+	private List<DictItem> _findDictItemsByG_DC_S(long groupId, String dictCollectionCode, Integer issueStatus) throws SystemException{
+		
+		Session session = null;
+		
+		try{
+			session = openSession();
+			
+			String sql = CustomSQLUtil
+					.get(FIND_DICTITEMS_BY_G_DC_S);
+						
+			if(Validator.isNull(dictCollectionCode)){
+				sql = StringUtil.replace(sql, "AND (opencps_dictcollection.collectionCode = ?)", StringPool.BLANK);
+			}
+			
+			if(issueStatus == null){
+				sql = StringUtil.replace(sql, "AND (opencps_dictitem.issueStatus = ?)", StringPool.BLANK);
+			}
+			
+			SQLQuery queryObject = session.createSQLQuery(sql);
+			queryObject.setCacheable(false);
+			queryObject.addEntity("DictItem", DictItemImpl.class);
+			
+			QueryPos qPos = QueryPos.getInstance(queryObject);
+			qPos.add(groupId);
+			
+			if(Validator.isNotNull(dictCollectionCode)){
+				qPos.add(dictCollectionCode);
+			}
+			
+			if(issueStatus != null){
+				qPos.add(issueStatus);
+			}
+			
+			return (List<DictItem>) queryObject.list();
+			
+		}catch (Exception e) {
+			throw new SystemException(e);
+			
+		} finally {
+			
+			closeSession(session);
+		}
+	}
+			
+	
+	private static Log _log = LogFactoryUtil.getLog(DictItemFinderImpl.class.getName());
 	
 }

@@ -1,5 +1,3 @@
-
-<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -34,6 +32,7 @@
 <%@page import="org.opencps.processmgt.model.ServiceProcess"%>
 <%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
 <%@page import="org.opencps.processmgt.model.ProcessStep"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -155,7 +154,9 @@
 	
 	if(step != null) {
 		itemStatus = PortletUtil.getDictItem("DOSSIER_STATUS", step.getDossierStatus(), scopeGroupId);
-		dictStatusId = itemStatus.getDictItemId();
+		if(Validator.isNotNull(itemStatus)) {
+			dictStatusId = itemStatus.getDictItemId();
+		}
 	}
 %>
 

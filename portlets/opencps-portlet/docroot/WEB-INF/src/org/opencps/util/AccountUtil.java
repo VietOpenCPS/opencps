@@ -54,6 +54,7 @@ import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
 /**
@@ -62,16 +63,32 @@ import com.liferay.portal.util.PortalUtil;
 public class AccountUtil {
 
 	private static AccountBean _accountBean;
-	
-	public static void initAccount(HttpServletRequest request) {
-		
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	public static AccountBean initAccount(HttpServletRequest request) {
+
+		HttpSession session = request.getSession();
+
 		try {
 			initAccount(request, null);
-		} catch (Exception e) {
+
+		}
+		catch (Exception e) {
 			_log.error(e);
 		}
+
+		return (AccountBean) session.getAttribute(org.opencps.util.WebKeys.ACCOUNT_BEAN);
 	}
 
+	/**
+	 * @param request
+	 * @param response
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
 	public static void initAccount(
 		HttpServletRequest request, HttpServletResponse response)
 		throws PortalException, SystemException {
@@ -79,6 +96,15 @@ public class AccountUtil {
 		HttpSession session = request.getSession();
 
 		User user = (User) session.getAttribute(WebKeys.USER);
+
+		if (user == null) {
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+
+			if (themeDisplay != null) {
+				user = themeDisplay.getUser();
+			}
+		}
 
 		// long companyId = PortalUtil.getCompanyId(request);
 
@@ -272,6 +298,7 @@ public class AccountUtil {
 		session.removeAttribute(WebKeys.CITIZEN_ENTRY);
 		session.removeAttribute(WebKeys.BUSINESS_ENTRY);
 		session.removeAttribute(WebKeys.EMPLOYEE_ENTRY);
+		session.removeAttribute(WebKeys.ACCOUNT_BEAN);
 
 		request.removeAttribute(WebKeys.ACCOUNT_FOLDER);
 		request.removeAttribute(WebKeys.ACCOUNT_TYPE);
@@ -282,6 +309,7 @@ public class AccountUtil {
 		request.removeAttribute(WebKeys.CITIZEN_ENTRY);
 		request.removeAttribute(WebKeys.BUSINESS_ENTRY);
 		request.removeAttribute(WebKeys.EMPLOYEE_ENTRY);
+		request.removeAttribute(WebKeys.ACCOUNT_BEAN);
 
 		setAccountBean(null);
 
@@ -320,6 +348,7 @@ public class AccountUtil {
 		request.removeAttribute(WebKeys.CITIZEN_ENTRY);
 		request.removeAttribute(WebKeys.BUSINESS_ENTRY);
 		request.removeAttribute(WebKeys.EMPLOYEE_ENTRY);
+		request.removeAttribute(WebKeys.ACCOUNT_BEAN);
 
 		setAccountBean(null);
 
@@ -458,13 +487,17 @@ public class AccountUtil {
 		HttpSession session = request.getSession();
 
 		AccountBean accountBean = null;
-		
+
 		try {
-			accountBean = (AccountBean) session.getAttribute(WebKeys.ACCOUNT_BEAN);
-		} catch(Exception e) {
-			_log.error(e);
-			
-			initAccount(request);
+			accountBean =
+				(AccountBean) session.getAttribute(WebKeys.ACCOUNT_BEAN);
+		}
+		catch (Exception e) {
+
+			//_log.error(e);
+			AccountUtil.destroy(request, false);
+			// reInitAccount
+			accountBean = initAccount(request);
 		}
 
 		return accountBean;
@@ -482,8 +515,19 @@ public class AccountUtil {
 		HttpSession session =
 			PortalSessionContext.get(request.getRequestedSessionId());
 
-		AccountBean accountBean =
-			(AccountBean) session.getAttribute(WebKeys.ACCOUNT_BEAN);
+		AccountBean accountBean = null;
+
+		try {
+			accountBean =
+				(AccountBean) session.getAttribute(WebKeys.ACCOUNT_BEAN);
+		}
+		catch (Exception e) {
+
+			//_log.error(e);
+			AccountUtil.destroy(request, false);
+			// reInitAccount
+			accountBean = initAccount(request);
+		}
 
 		return accountBean;
 	}
@@ -499,8 +543,20 @@ public class AccountUtil {
 			PortalUtil.getHttpServletRequest(actionRequest);
 
 		ServletContext servletContext = request.getServletContext();
-		AccountBean accountBean =
-			(AccountBean) servletContext.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		AccountBean accountBean = null;
+
+		try {
+			accountBean =
+				(AccountBean) servletContext.getAttribute(WebKeys.ACCOUNT_BEAN);
+		}
+		catch (Exception e) {
+
+			//_log.error(e);
+			AccountUtil.destroy(request, false);
+			// reInitAccount
+			accountBean = initAccount(request);
+		}
 
 		return accountBean;
 	}
@@ -516,8 +572,20 @@ public class AccountUtil {
 			PortalUtil.getHttpServletRequest(renderRequest);
 
 		ServletContext servletContext = request.getServletContext();
-		AccountBean accountBean =
-			(AccountBean) servletContext.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		AccountBean accountBean = null;
+
+		try {
+			accountBean =
+				(AccountBean) servletContext.getAttribute(WebKeys.ACCOUNT_BEAN);
+		}
+		catch (Exception e) {
+
+			//_log.error(e);
+			AccountUtil.destroy(request, false);
+			// reInitAccount
+			accountBean = initAccount(request);
+		}
 
 		return accountBean;
 	}

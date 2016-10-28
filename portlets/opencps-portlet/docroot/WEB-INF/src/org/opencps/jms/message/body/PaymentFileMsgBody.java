@@ -17,14 +17,20 @@
 
 package org.opencps.jms.message.body;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.liferay.portal.service.ServiceContext;
 
 /**
- * @author khoavd
+ * @author trungnt
  */
-public class PaymentFileMsgBody {
+public class PaymentFileMsgBody implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @return the paymentMethod
@@ -331,46 +337,52 @@ public class PaymentFileMsgBody {
 
 		this.mimeType = mimeType;
 	}
-	
 
-	
-    /**
-     * @return the oid
-     */
-    public String getOid() {
-    
-    	return oid;
-    }
+	/**
+	 * @return the oid
+	 */
+	public String getOid() {
 
-	
-    /**
-     * @param oid the oid to set
-     */
-    public void setOid(String oid) {
-    
-    	this.oid = oid;
-    }
+		return oid;
+	}
 
+	/**
+	 * @param oid
+	 *            the oid to set
+	 */
+	public void setOid(String oid) {
 
-	
-    /**
-     * @return the typeUpdate
-     */
-    public String getTypeUpdate() {
-    
-    	return typeUpdate;
-    }
+		this.oid = oid;
+	}
 
-	
-    /**
-     * @param typeUpdate the typeUpdate to set
-     */
-    public void setTypeUpdate(String typeUpdate) {
-    
-    	this.typeUpdate = typeUpdate;
-    }
+	/**
+	 * @return the typeUpdate
+	 */
+	public String getTypeUpdate() {
 
+		return typeUpdate;
+	}
 
+	/**
+	 * @param typeUpdate
+	 *            the typeUpdate to set
+	 */
+	public void setTypeUpdate(String typeUpdate) {
+
+		this.typeUpdate = typeUpdate;
+	}
+
+	public int getPaymentStatus() {
+
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(int paymentStatus) {
+
+		this.paymentStatus = paymentStatus;
+	}
+
+	private int paymentStatus;
 	private int paymentMethod;
 	private Date confirmDatetime;
 	private byte[] confirmFileEntry;
@@ -394,9 +406,9 @@ public class PaymentFileMsgBody {
 	private String fileTitle;
 
 	private String mimeType;
-	
+
 	private String oid;
-	
+
 	private String typeUpdate;
 
 }

@@ -1,4 +1,5 @@
 
+<%@page import="java.util.LinkedHashMap"%>
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
@@ -76,7 +77,7 @@
 	
 	int totalCount = 0;
 	
-	RowChecker rowChecker = new RowChecker(liferayPortletResponse);
+// 	RowChecker rowChecker = new RowChecker(liferayPortletResponse);
 	
 	List<String> headerNames = new ArrayList<String>();
 	
@@ -114,6 +115,14 @@
 		
 	}catch(Exception e){}
 	
+	//remove duplicates process orders
+		Map<String, ProcessOrderBean> cleanMap = new LinkedHashMap<String, ProcessOrderBean>();
+		for (int i = 0; i < processOrderSteps.size(); i++) {
+		     cleanMap.put(processOrderSteps.get(i).getProcessStepId()+"", processOrderSteps.get(i));
+		}
+		processOrderSteps = new ArrayList<ProcessOrderBean>(cleanMap.values());
+		
+		
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
 	arrayParam.put("serviceInfoId", (serviceInfoId > 0) ? String.valueOf(serviceInfoId):StringPool.BLANK);
@@ -171,7 +180,8 @@
 				'normal',
 				'<%=menuCounterServiceInfoIdUrl.toString() %>',
 				serviceInfoId,
-				'<%=renderResponse.getNamespace() %>');
+				'<%=renderResponse.getNamespace() %>',
+				'<%=hiddenTreeNodeEqualNone%>');
 		buildTreeView("processStepIdTree", 
 				'processStepId', 
 				processStepIdJsonData, 
@@ -182,7 +192,8 @@
 				'normal',
 				'<%=menuCounterUrl.toString() %>',
 				processStepId,
-				'<%=renderResponse.getNamespace() %>');
+				'<%=renderResponse.getNamespace() %>',
+				'<%=hiddenTreeNodeEqualNone%>');
 		
 	});
 	
@@ -244,9 +255,9 @@
 													<div class="span2 bold-label">
 														<liferay-ui:message key="reception-no"/>
 													</div>
-													<div class="span9">
+													<span class="span9">
 														<%=processOrder.getReceptionNo() %>
-													</div>
+													</span>
 												</div>
 			
 												<div class="row-fluid">
@@ -255,51 +266,55 @@
 													<div class="span2 bold-label">
 														<liferay-ui:message key="service-name"/>
 													</div>
-													<div class="span9">
+													<span class="span9">
 														<%=processOrder.getServiceName() %>
-													</div>
+													</span>
 												</div>
 											</div>
 										</liferay-util:buffer>
 										
 										
 										<liferay-util:buffer var="boundcol2">
-										<div class="row-fluid min-width340">
-											<div class="span5 bold-label"><liferay-ui:message key="subject-name"/></div>
-											<div class="span6">
-												<%=processOrder.getSubjectName() %>
-											</div>
-										</div>
-										
-										<div class="row-fluid min-width340">
-											<div class="span5 bold-label">
-												 <liferay-ui:message key="assign-to-user"/>
-											</div>
-											
-											<div class="span7">
-												<%=processOrder.getAssignToUserName() %>
-											</div>
-										</div>
-										
-										<div class="row-fluid min-width340">
-											<div class="span5 bold-label">
-												<liferay-ui:message key="step-name"/>
-											</div>
-											<div class="span7">
-												<%=processOrder.getStepName() %>
-											</div>
-										</div>
-										
-										<div class="row-fluid min-width340">
-												<div class="span5 bold-label">
-													<liferay-ui:message key="dealine"/>
-												</div>
-												
-												<div class='<%="span7"%>'>
-													<%= deadlineVal %>
-												</div>
-											</div>
-										</liferay-util:buffer>
+						<div class="row-fluid min-width340">
+							<div class="span5 bold">
+								<liferay-ui:message key="subject-name"/>	
+							</div>
+							<div class="span7">
+								<%=processOrder.getSubjectName() %>
+							</div>
+						</div>
+						
+						<div class="row-fluid" >
+							<div class="span5 bold">
+								 <liferay-ui:message key="action-date"/>
+							</div>
+							
+							<div class="span7">
+								<%=Validator.isNotNull(processOrder.getActionDatetime())? 
+										DateTimeUtil.convertDateToString(processOrder.getActionDatetime(), DateTimeUtil._VN_DATE_FORMAT)
+										:StringPool.BLANK %>
+							</div>
+						</div>
+						
+						<div class="row-fluid min-width340">
+							<div class="span5 bold">
+								<liferay-ui:message key="step-name"/>
+							</div>
+							<div class='<%="span7 " + cssStatusColor %>'>
+								<%=processOrder.getStepName() %>
+							</div>
+						</div>
+						
+						<div class="row-fluid min-width340">
+								<div class="span5 bold">
+									<liferay-ui:message key="y-kien"/>
+								</div>
+								
+								<div class='<%="span7"%>'>
+									<%= processOrder.getActionNote() %>
+								</div>
+							</div>
+						</liferay-util:buffer>
 							
 								<%
 									row.setClassName("opencps-searchcontainer-row");

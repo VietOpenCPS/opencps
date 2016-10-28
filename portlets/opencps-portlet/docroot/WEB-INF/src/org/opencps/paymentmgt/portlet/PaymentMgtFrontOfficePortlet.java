@@ -28,6 +28,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
+import org.opencps.backend.message.UserActionMsg;
+import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.model.Dossier;
@@ -60,6 +62,8 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
@@ -138,13 +142,12 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 			// TODO Auto-generated catch block
 			_log.error(e);
 		}
-		System.out.println("----REDIRECT KEYPAY----");
 		if (paymentConfig != null) {
 			Date curDate = new Date();
 			boolean updatePaymentFile = false;
 			String merchant_trans_id =
 				String.valueOf(paymentFile.getKeypayTransactionId());
-			if (paymentFile.getKeypayTransactionId() == 0) {
+			if (Validator.isNull(paymentFile.getKeypayTransactionId())) {
 				SimpleDateFormat transFormat = new SimpleDateFormat("HHmmss");
 				paymentFile.setKeypayTransactionId(Integer.parseInt(transFormat.format(curDate)));
 				updatePaymentFile = true;
@@ -337,6 +340,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 				ServiceContextFactory.getInstance(actionRequest);
 			serviceContext.setAddGroupPermissions(true);
 			serviceContext.setAddGuestPermissions(true);
+
 			DLFolder dlFolder =
 				DLFolderUtil.getPaymentFolder(
 					themeDisplay.getScopeGroupId(),
@@ -351,8 +355,35 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 					dlFolder.getFolderId(), actionRequest, serviceContext);
 
 			if (paymentFileId > 0) {
+
+				Message message = new Message();
+				
 				paymentFile =
-				    PaymentFileLocalServiceUtil.getPaymentFile(paymentFileId);
+					PaymentFileLocalServiceUtil.getPaymentFile(paymentFileId);
+
+				boolean trustServiceMode =
+					BackendUtils.checkServiceMode(paymentFile.getDossierId());
+
+				if (!trustServiceMode) {
+					Dossier dossier =
+						DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
+
+					UserActionMsg actionMsg = new UserActionMsg();
+
+					actionMsg.setAction(org.opencps.util.WebKeys.ACTION_PAY_VALUE);
+
+					actionMsg.setPaymentFileId(paymentFileId);
+
+					actionMsg.setDossierId(paymentFile.getDossierId());
+
+					actionMsg.setCompanyId(dossier.getCompanyId());
+
+					actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
+
+					message.put("msgToEngine", actionMsg);
+
+				}
+
 				paymentFile.setConfirmFileEntryId(fileEntry.getFileEntryId());
 				paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED);
 				paymentFile.setPaymentMethod(PaymentMgtUtil.PAYMENT_METHOD_BANK);
@@ -361,14 +392,14 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 
 				ActorBean actorBean =
-				    new ActorBean(1, serviceContext.getUserId());
+					new ActorBean(1, serviceContext.getUserId());
 
 				// Add log baonop
 				StringBuffer msgInforSb = new StringBuffer();
 
 				msgInforSb.append(LanguageUtil.get(
-				    serviceContext.getLocale(),
-				    PortletConstants.DOSSIER_ACTION_REQUEST_PAYMENT));
+					serviceContext.getLocale(),
+					PortletConstants.DOSSIER_ACTION_REQUEST_PAYMENT));
 				msgInforSb.append(StringPool.SPACE);
 				msgInforSb.append(StringPool.COLON);
 				msgInforSb.append(StringPool.SPACE);
@@ -377,22 +408,28 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 				msgInforSb.append(StringPool.CLOSE_PARENTHESIS);
 				msgInforSb.append(StringPool.SPACE);
 				msgInforSb.append(LanguageUtil.get(
-				    serviceContext.getLocale(), "for-dossier"));
+					serviceContext.getLocale(), "for-dossier"));
 				msgInforSb.append(StringPool.SPACE);
 				msgInforSb.append(DossierMgtUtil.getServiceName(paymentFile.getDossierId()));
-				
+
+				Dossier dossier =
+					DossierLocalServiceUtil.fetchDossier(paymentFile.getDossierId());
+
 				DossierLogLocalServiceUtil.addDossierLog(
-				    serviceContext.getUserId(),
-				    serviceContext.getScopeGroupId(),
-				    serviceContext.getCompanyId(), paymentFile.getDossierId(),
-				    paymentFile.getFileGroupId(), null,
-				    PortletConstants.DOSSIER_ACTION_REQUEST_PAYMENT,
-				    msgInforSb.toString(), new Date(), 1, 2,
-				    actorBean.getActor(), actorBean.getActorId(),
-				    actorBean.getActorName(),
-				    PaymentMgtFrontOfficePortlet.class.getName() +
-				        ".requestBankPayment()");
-				
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getCompanyId(), paymentFile.getDossierId(),
+					paymentFile.getFileGroupId(), dossier.getDossierStatus(),
+					PortletConstants.DOSSIER_ACTION_REQUEST_PAYMENT,
+					msgInforSb.toString(), new Date(), 1, 2,
+					actorBean.getActor(), actorBean.getActorId(),
+					actorBean.getActorName(),
+					PaymentMgtFrontOfficePortlet.class.getName() +
+						".requestBankPayment()");
+
+				MessageBusUtil.sendMessage(
+					"opencps/frontoffice/out/destination", message);
+
 				SessionMessages.add(
 					actionRequest,
 					MessageKeys.PAYMENT_FILE_CONFIRM_BANK_SUCCESS);
@@ -424,7 +461,6 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 		}
 
 	}
-
 
 	/**
 	 * @param actionRequest

@@ -34,7 +34,7 @@
 	String oderFieldToDo = preferences1.getValue("oderFieldToDo", ProcessOrderDisplayTerms.MODIFIEDDATE);
 	String oderFieldJustFinish = preferences1.getValue("oderFieldJustFinish", ProcessOrderDisplayTerms.MODIFIEDDATE);
 	
-	
+	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
 	
 	
 %>

@@ -59,7 +59,7 @@ public class ServiceFileTemplateLocalServiceImpl
 
 		List<ServiceFileTemplate> currentFileTemplates =
 		    new ArrayList<ServiceFileTemplate>();
-		currentFileTemplates = serviceFileTemplatePersistence.findByTemplatefileId(serviceId);
+		currentFileTemplates = serviceFileTemplatePersistence.findByServiceinfoId(serviceId);
 		// Remove current fileTemplate
 
 		for (ServiceFileTemplate sft : currentFileTemplates) {

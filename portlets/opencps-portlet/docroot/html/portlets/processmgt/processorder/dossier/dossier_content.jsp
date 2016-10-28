@@ -73,12 +73,10 @@
 	}
 	
 	int index = 0; 
-	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 	
 			int partType = dossierPartLevel1.getPartType();
-			
 			List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
 			
 			if(dossierParts != null){
@@ -113,7 +111,7 @@
 								if(dossier != null){
 									try{
 										dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), 
-												dossierPart.getDossierpartId());
+                                            dossierPart.getDossierpartId(), PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
 										if(dossierFile.getFormData().length() > 0){
 											isOnlineData = 1;
 										}else{
@@ -127,14 +125,16 @@
 								%>
 									<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
-											<span class="row-icon">
+											<span class="row-icon row-icon-stt-new">
 												<c:choose>
 													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
 													>
+														<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
 														<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
 													</c:when>
 														<c:otherwise>
+														<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
 														<i 
 															id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
 															class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
@@ -210,8 +210,8 @@
 							
 							<c:if test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && dossier != null%>">
 								<%
-									List<DossierFile> dossierFiles = DossierFileLocalServiceUtil.
-										getDossierFileByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
+								List<DossierFile> dossierFiles = DossierFileLocalServiceUtil.
+									getDossierFileByDID_SS_DPID_R(dossier.getDossierId(), PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS, dossierPartLevel1.getDossierpartId(), 0);
 								
 									if(dossierFiles != null){
 										for(DossierFile dossierFileOther : dossierFiles){
@@ -219,7 +219,7 @@
 											%>
 											<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 												<span class='<%="level-1 opencps dossiermgt dossier-part"%>'>
-													<span class="row-icon">
+													<span class="row-icon ">
 														<i 
 															id='<%="rowcheck" + dossierFileOther.getDossierPartId() + StringPool.DASH + index %>' 
 															class='<%=dossierFileOther.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 

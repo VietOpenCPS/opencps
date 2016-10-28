@@ -121,9 +121,17 @@
 		message="<%= OutOfSizeFileUploadException.class.getName() %>" 
 	/>
 	
+	<%
+		String ACCOUNT_UPDATE_CUCCESS = StringPool.BLANK;
+		if (Validator.isNotNull(messageSuccessfullRegistration)){
+			ACCOUNT_UPDATE_CUCCESS = messageSuccessfullRegistration;
+		} else {
+			ACCOUNT_UPDATE_CUCCESS = MessageKeys.ACCOUNT_UPDATE_CUCCESS;
+		}
+	%>
 	<liferay-ui:success 
 		key="<%=MessageKeys.ACCOUNT_UPDATE_CUCCESS %>" 
-		message="<%=MessageKeys.ACCOUNT_UPDATE_CUCCESS %>"
+		message="<%=ACCOUNT_UPDATE_CUCCESS %>"
 	/>
 	
 	<portlet:actionURL var="updateCitizenURL" name="updateCitizen">
@@ -216,7 +224,7 @@
 				
 				<aui:row>
 					<label class="control-label custom-lebel" for='<portlet:namespace/><%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>'>
-	 					<liferay-ui:message key="birth-date"/>
+	 					<liferay-ui:message key="birth-date-full"/>
 	 				</label>
 	 				<liferay-ui:input-date 
 	 					nullable="true"
@@ -292,17 +300,34 @@
 				</aui:row>
 				
 				<aui:row>
-					<datamgt:ddr 
-						cssClass="input100"
-						depthLevel="3" 
-						dictCollectionCode="ADMINISTRATIVE_REGION"
-						itemNames="cityId,districtId,wardId"
-						itemsEmptyOption="true,true,true"
-						displayStyle="vertical"
-						emptyOptionLabels="cityId,districtId,wardId"
-						showLabel="false"
-						selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
-					/>	
+				
+					<c:choose>
+						<c:when test="<%=!showLabelTaglibDatamgt %>">
+							<datamgt:ddr 
+								cssClass="input100"
+								depthLevel="3" 
+								dictCollectionCode="ADMINISTRATIVE_REGION"
+								itemNames="cityId,districtId,wardId"
+								itemsEmptyOption="true,true,true"
+								displayStyle="vertical"
+								emptyOptionLabels="cityId,districtId,wardId"
+								showLabel="false"
+								selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
+							/>	
+						</c:when>
+						<c:otherwise>
+							<datamgt:ddr 
+								cssClass="input100"
+								depthLevel="3" 
+								dictCollectionCode="ADMINISTRATIVE_REGION"
+								itemNames="cityId,districtId,wardId"
+								itemsEmptyOption="true,true,true"
+								displayStyle="vertical"
+								showLabel="true"
+								selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
+							/>
+						</c:otherwise>
+					</c:choose>
 				</aui:row>
 				<div class="term-user">
 					<aui:row>

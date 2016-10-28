@@ -18,6 +18,7 @@
 package org.opencps.backend.engine;
 
 import org.opencps.backend.message.SendToCallbackMsg;
+import org.opencps.processmgt.service.ActionHistoryLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -49,11 +50,26 @@ public class BackOfficeProcessCallback implements MessageListener{
 
 		SendToCallbackMsg msgToCalback =
 		    (SendToCallbackMsg) message.get("toCallback");
+		
+		long processOrderId = msgToCalback.getProcessOrderId();
 
 		try {
+			// Update processOrder
 			ProcessOrderLocalServiceUtil.updateProcessOrderStatus(
 			    msgToCalback.getProcessOrderId(),
 			    msgToCalback.getDossierStatus());
+			
+			// Update action History
+			
+			ActionHistoryLocalServiceUtil.addActionHistory(
+			    msgToCalback.getUserId(), msgToCalback.getGroupId(),
+			    msgToCalback.getCompanyId(), processOrderId,
+			    msgToCalback.getProcessWorkflowId(),
+			    msgToCalback.getActionDatetime(), msgToCalback.getStepName(),
+			    msgToCalback.getActionName(), msgToCalback.getActionNote(),
+			    msgToCalback.getActionUserId(), msgToCalback.getDaysDoing(),
+			    msgToCalback.getDaysDelay(), msgToCalback.getDossierStatus());
+			
 		}
 		catch (Exception e) {
 			_log.error(e);

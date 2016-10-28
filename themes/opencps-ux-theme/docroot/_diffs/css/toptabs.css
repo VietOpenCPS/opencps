@@ -1,4 +1,5 @@
-.opencps-theme.ux  .portlet-boundary_13_WAR_opencpsportlet_ .opencps-toptabs {
+.opencps-theme.ux  .portlet-boundary_13_WAR_opencpsportlet_ .opencps-toptabs,
+.opencps-theme.ux  .portlet-boundary_16_WAR_opencpsportlet_ .opencps-toptabs {
 	background-color: #2ea4ff;
 	height: 39px;
 	color: white;
@@ -72,7 +73,7 @@
 	color: white;
 	font-family: 'Roboto-Bold';
 	margin-bottom: 30px;
-	margin-top: -25px;
+/* 	margin-top: -25px; */
 }
 
 .opencps-theme.ux  .portlet-boundary_16_WAR_opencpsportlet_ .opencps-toptabs ul {
@@ -140,7 +141,7 @@
 	color: white;
 	font-family: 'Roboto-Bold';
 	margin-bottom: 30px;
-	margin-top: -25px;
+/* 	margin-top: -25px; */
 }
 
 .opencps-theme.ux  .portlet-boundary_18_WAR_opencpsportlet_ .opencps-toptabs ul {

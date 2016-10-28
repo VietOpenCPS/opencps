@@ -1,11 +1,7 @@
 
 .opencps-theme.ux .opencps-register-wrapper {
-    background-color: #f5f5f5;
     display: table;
     margin: auto;
-}
-.opencps-theme.ux .portlet-boundary_5_WAR_opencpsportlet_ .portlet-body{
-	background-color: #f5f5f5;
 }
 .opencps-theme.ux .register-content .accountmgt{
     margin-top: 50px;
@@ -182,7 +178,7 @@
 	text-decoration: none !important;
 }
 .opencps-theme.ux  .content-part .lfr-input-date .control-group {position: relative;margin-bottom: 20px;}
-.opencps-theme.ux  .content-part .lfr-input-date .control-group:before {content:"\f073"; position: absolute; font-family: FontAwesome; right: 10px; top:50%;width: 100%;text-align: right;font-size: 16px;color: #4b4b4b;transform: translateY(-50%); pointer-events: none}
+.opencps-theme.ux  .content-part .lfr-input-date .control-group:before {content:"\f073"; position: absolute; font-family: FontAwesome; right: 10px; top:50%;width: 100%;text-align: right;font-size: 16px;color: #4b4b4b;transform: translateY(-50%);-webkit-transform: translateY(-50%); pointer-events: none}
 .opencps-theme.ux  .content-part .lfr-input-date .control-group input {margin-bottom: 0}
 
 .span4.login-redirect a{

@@ -11,10 +11,16 @@
 }
 
 .opencps-theme.ux .ux-sign-in-wrapper input[type="text"], .opencps-theme.ux .ux-sign-in-wrapper input[type="password"] {
-	height: 32px;
-	border-left: 0 none;
+	height: 42px;
+    border-left: 0 none;
     border-radius: 0 4px 4px 0;
-    flex-grow: 1;
+    /* flex-grow: 1; */
+    width: 100%;
+    padding-left: 60px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    max-width: 370px;
+
 }
 
 .opencps-theme.ux .default-sign-in {
@@ -39,17 +45,25 @@
 }
 
 .opencps-theme.ux .ux-sign-in-wrapper .input-prepend {
-    display: flex;
+    /* display: flex; */
     width: 100% !important;
+    position: relative;
 }
 
 .opencps-theme.ux .ux-sign-in-wrapper .add-on {
-    background: transparent none repeat scroll 0 0 !important;
+      /* background: transparent none repeat scroll 0 0!important; */
     border-right: 0 none;
     color: #0090ff;
     height: 32px;
     line-height: 32px;
     width: 40px;
+    float: left;
+    position: absolute;
+    z-index: 5;
+    left: 0;
+    top: 0;
+    background-color: white;
+
 }
 
 .opencps-theme.ux .ux-sign-in-wrapper .success-field {
@@ -58,9 +72,9 @@
 }
 
 .opencps-theme.ux .ux-sign-in-wrapper .input-prepend .control-group {
-    display: flex;
-    flex-grow: 1;
-    margin-bottom: 0 !important;
+    width: 100%!important;
+    position: relative;
+
 }
 
 .opencps-theme.ux .ux-sign-in-wrapper .error {

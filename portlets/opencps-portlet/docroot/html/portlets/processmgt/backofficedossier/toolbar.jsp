@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.dossiermgt.search.DossierPartDisplayTerms"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -38,204 +40,140 @@
 <%@ include file="../init.jsp"%>
 
 <%
-	PortletURL searchURL = renderResponse.createRenderURL();	
-
 	String tabs1 = ParamUtil.getString(request, "tabs1", ProcessMgtUtil.TOP_TABS_DOSSIERLIST);	
-%>
+	
+	String dossierStatus = ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS, StringPool.BLANK);
+	
+	PortletURL searchURL = renderResponse.createRenderURL();	
+	searchURL.setParameter("tabs1", tabs1);
 
+	if(tabs1.equals(ProcessMgtUtil.TOP_TABS_DOSSIERLIST)){
+		searchURL.setParameter("mvcPath", templatePath + "backofficedossierlist.jsp");
+	}else{
+		searchURL.setParameter("mvcPath", templatePath + "backofficedossierfilelist.jsp");
+	}
+	
+	DictItem curDictItem = null;
+	
+	DictCollection dictCollection = DictCollectionLocalServiceUtil.
+			getDictCollection(themeDisplay.getScopeGroupId(), PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN);
+	
+	List<DictItem> dictItems = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
+	
+%>
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
-	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
-		
-	</aui:nav>
-	
-	<c:choose>
-		<c:when test="<%= tabs1.equals(ProcessMgtUtil.TOP_TABS_DOSSIERLIST)%>">
-			<%
-				String administrationCode = ParamUtil.getString(request, ProcessDisplayTerms.PROCESS_ADMINISTRATIONCODE);
-				
-				request.setAttribute(ProcessDisplayTerms.PROCESS_ADMINISTRATIONCODE, administrationCode);
+	<aui:nav-bar-search cssClass="pull-right front-custom-select-search" style="width: 98%;">
+		<div class="form-search">
+			<aui:form 
+				action="<%= searchURL %>"
+				name="fmSearch" 
+			>
+				<c:choose>
+					<c:when test="<%=tabs1.equals(ProcessMgtUtil.TOP_TABS_DOSSIERLIST) %>">
+						<aui:row>
+							<aui:col width="30" cssClass="search-col">
+										
+								<aui:select name="<%=DossierDisplayTerms.SERVICE_DOMAIN_CODE %>" label="" cssClass="search-input select-box input100" >
+									<aui:option value="">
+										<liferay-ui:message key="filter-by-service-domain"/>
+									</aui:option>
+									<%
+										if(dictItems != null){
+											for(DictItem dictItem : dictItems){
+												if((curDictItem != null && dictItem.getDictItemId() == curDictItem.getDictItemId())||
+													(curDictItem != null && dictItem.getTreeIndex().contains(curDictItem.getDictItemId() + StringPool.PERIOD))){
+													continue;
+											}
+															
+											int level = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
+											String index = "|";
+											for(int i = 0; i < level; i++){
+												index += "_";
+											}
+									%>
+										<aui:option value="<%=dictItem.getDictItemId() %>"><%=index + dictItem.getItemName(locale) %></aui:option>
+									<%
+											}
+										}
+									%>
+								</aui:select>
+							</aui:col>
+							<aui:col width="30" cssClass="search-col">
+									
+								<datamgt:ddr 
+									depthLevel="1" 
+									dictCollectionCode="DOSSIER_STATUS" 
+									showLabel="<%=false%>"
+									emptyOptionLabels="dossier-status"
+									itemsEmptyOption="true"
+									itemNames="<%=DossierDisplayTerms.DOSSIER_STATUS %>"
+									selectedItems="<%=dossierStatus%>"
+									optionValueType="code"
+									cssClass="search-input select-box input100"
+									
+								/>
+											
+							</aui:col>
+							<aui:col width="30" cssClass="search-col">
+								<liferay-ui:input-search 
+									id="keywords"
+									name="keywords"
+									title='<%= LanguageUtil.get(locale, "keywords") %>'
+									placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
+									cssClass="search-input input-keyword"
+								/>
+							</aui:col>
+						</aui:row>
+					</c:when>
+					<c:otherwise>
+						<%
+							long dossierTemplateId = ParamUtil.getLong(request, ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID, -1);
 						
-				int domainCode = ParamUtil.getInteger(request, DossierDisplayTerms.SERVICE_DOMAIN_CODE, 0);
-				
-				String dossierStatus = ParamUtil.getString(request, "dossierStatusValue", StringPool.BLANK);	
-				
-				request.setAttribute(DossierDisplayTerms.SERVICE_DOMAIN_CODE, domainCode);
-				request.setAttribute(DossierDisplayTerms.DOSSIER_STATUS, dossierStatus);
-				
-				DictCollection dc = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, ServiceUtil.SERVICE_DOMAIN);
-				
-				List<DictItem> ls = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(dc.getDictCollectionId());
-		
-				searchURL.setParameter("tabs1", ProcessMgtUtil.TOP_TABS_DOSSIERLIST);
-				searchURL.setParameter("mvcPath", templatePath + "backofficedossierlist.jsp");
-			%>
-				<aui:nav-bar-search cssClass="pull-left" style="width: 98%;">
-					<div class="form-search">
-						<aui:form action="<%= searchURL %>" method="post" name="fm">
-							<div class="toolbar_search_input">
-								<aui:row>
-									<aui:col width="30">
-										<liferay-ui:input-search 
-											id="keywords"
-											name="keywords"
-											title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-											placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
-										/>
-									</aui:col>
-									<aui:col width="30">
-										<aui:select label="" name="<%= DossierDisplayTerms.SERVICE_DOMAIN_CODE %>" style="width: 100%;">
-											<aui:option value="">
-												<liferay-ui:message key="filter-by-service-domain"></liferay-ui:message>
-											</aui:option>
-											<%
-												for (DictItem di : ls ) {	
-													if (di.getDictItemId() == domainCode) {
-											%>
-											<aui:option selected="<%= true %>" value="<%= di.getDictItemId() %>"><%= di.getItemName(locale) %></aui:option>							
-											<%
-													}
-													else {
-											%>
-											<aui:option selected="<%= false %>" value="<%= di.getDictItemId() %>"><%= di.getItemName(locale) %></aui:option>							
-											<%
-													}
-												}
-											%>	
-										</aui:select>						
-									</aui:col>
-									<aui:col width="30">
-										<aui:select label="" name="dossierStatusValue" style="width: 100%;">
-											<aui:option value="">
-												<liferay-ui:message key="filter-by-dossier-status"></liferay-ui:message>
-											</aui:option>
-											<c:choose>
-												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
-													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_NEW %>"><liferay-ui:message key="dossier-status-new"></liferay-ui:message></aui:option>
-												</c:when>
-												<c:otherwise>
-													<aui:option selected="<%= false %>" value="<%= PortletConstants.DOSSIER_STATUS_NEW %>"><liferay-ui:message key="dossier-status-new"></liferay-ui:message></aui:option>
-												</c:otherwise>
-											</c:choose>
-											<c:choose>
-												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_RECEIVING) %>">
-													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_RECEIVING %>"><liferay-ui:message key="dossier-status-receiving"></liferay-ui:message></aui:option>
-												</c:when>
-												<c:otherwise>
-													<aui:option selected="<%= false %>" value="<%= PortletConstants.DOSSIER_STATUS_RECEIVING %>"><liferay-ui:message key="dossier-status-receiving"></liferay-ui:message></aui:option>
-												</c:otherwise>
-											</c:choose>
-											<c:choose>
-												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_WAITING) %>">
-													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_WAITING %>"><liferay-ui:message key="dossier-status-waiting"></liferay-ui:message></aui:option>
-												</c:when>
-												<c:otherwise>
-													<aui:option selected="<%= false %>" value="<%= PortletConstants.DOSSIER_STATUS_WAITING %>"><liferay-ui:message key="dossier-status-waiting"></liferay-ui:message></aui:option>
-												</c:otherwise>
-											</c:choose>
-											<c:choose>
-												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_PAYING) %>">
-													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_PAYING %>"><liferay-ui:message key="dossier-status-paying"></liferay-ui:message></aui:option>
-												</c:when>
-												<c:otherwise>
-													<aui:option selected="<%= false %>" value="<%= PortletConstants.DOSSIER_STATUS_PAYING %>"><liferay-ui:message key="dossier-status-paying"></liferay-ui:message></aui:option>
-												</c:otherwise>
-											</c:choose>
-											<c:choose>
-												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_PROCESSING) %>">
-													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_PROCESSING %>"><liferay-ui:message key="dossier-status-processing"></liferay-ui:message></aui:option>
-												</c:when>
-												<c:otherwise>
-													<aui:option selected="<%= false %>" value="<%= PortletConstants.DOSSIER_STATUS_PROCESSING %>"><liferay-ui:message key="dossier-status-processing"></liferay-ui:message></aui:option>
-												</c:otherwise>
-											</c:choose>
-											<c:choose>
-												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_DONE) %>">
-													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_DONE %>"><liferay-ui:message key="dossier-status-done"></liferay-ui:message></aui:option>
-												</c:when>
-												<c:otherwise>
-													<aui:option selected="<%= false %>" value="<%= PortletConstants.DOSSIER_STATUS_DONE %>"><liferay-ui:message key="dossier-status-done"></liferay-ui:message></aui:option>
-												</c:otherwise>
-											</c:choose>
-											<c:choose>
-												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_SYSTEM) %>">
-													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_SYSTEM %>"><liferay-ui:message key="dossier-status-system"></liferay-ui:message></aui:option>
-												</c:when>
-												<c:otherwise>
-													<aui:option selected="<%= false %>" value="<%= PortletConstants.DOSSIER_STATUS_SYSTEM %>"><liferay-ui:message key="dossier-status-system"></liferay-ui:message></aui:option>
-												</c:otherwise>
-											</c:choose>
-											<c:choose>
-												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_ERROR) %>">
-													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_ERROR %>"><liferay-ui:message key="dossier-status-error"></liferay-ui:message></aui:option>
-												</c:when>
-												<c:otherwise>
-													<aui:option selected="<%= false %>" value="<%= PortletConstants.DOSSIER_STATUS_ERROR %>"><liferay-ui:message key="dossier-status-error"></liferay-ui:message></aui:option>
-												</c:otherwise>
-											</c:choose>
-										</aui:select>						
-									</aui:col>
-								</aui:row>
-							</div>
-						</aui:form>
-					</div>			
-				</aui:nav-bar-search>
-	
-		</c:when>
-		<c:when test="<%= tabs1.equals(ProcessMgtUtil.TOP_TABS_DOSSIERFILELIST)%>">
-			<%
-				List<DossierTemplate> lsTemplates = DossierTemplateLocalServiceUtil.getAll();
-				searchURL.setParameter("tabs1", ProcessMgtUtil.TOP_TABS_DOSSIERFILELIST);
-				searchURL.setParameter("mvcPath", templatePath + "backofficedossierfilelist.jsp");
-				long dossierTemplateId = ParamUtil.getLong(request, ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID);
-				boolean onlyViewFileResult = ParamUtil.getBoolean(request, "onlyViewFileResult");
-			%>
-				<aui:nav-bar-search cssClass="pull-left" style="width: 98%;">
-					<div class="form-search">
-						<aui:form action="<%= searchURL %>" method="post" name="fm">
-							<div class="toolbar_search_input">
-								<aui:row>
-									<aui:col width="50">
-										<liferay-ui:input-search 
-											id="keywords"
-											name="keywords"
-											title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-											placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
-										/>
-									</aui:col>
-									<aui:col width="50">
-										<aui:select label="" name="<%= ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID %>" style="width: 100%;">
+							List<DossierTemplate> lsTemplates = DossierTemplateLocalServiceUtil.getAll();
+									
+							boolean onlyViewFileResult = ParamUtil.getBoolean(request, "onlyViewFileResult");
+						%>
+						<aui:row>
+							<aui:col width="30" cssClass="search-col">
+										
+								<aui:input checked="<%= onlyViewFileResult %>" name="onlyViewFileResult" value="false" type="checkbox" 
+									label="<%=LanguageUtil.get(pageContext, \"only-view-file-result\") %>" 
+									inlineField="<%=true %>"
+									inlineLabel="true" />
+								
+							</aui:col>
+							<aui:col width="30" cssClass="search-col">
+									
+								<aui:select label="" name="<%= ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID %>" style="width: 100%;">
 											<aui:option value="<%= DossierMgtUtil.DOSSIERFILETYPE_ALL %>">
 												<liferay-ui:message key="filter-by-dossier-template"></liferay-ui:message>
 											</aui:option>
 											<%
 												for (DossierTemplate template : lsTemplates) {
-													if (dossierTemplateId == template.getDossierTemplateId()) {
 											%>
-														<aui:option selected="true" value="<%= template.getDossierTemplateId() %>"><%= template.getTemplateName() %></aui:option>
-											<%
-													}
-													else {
-											%>
-														<aui:option selected="false" value="<%= template.getDossierTemplateId() %>"><%= template.getTemplateName() %></aui:option>
+														<aui:option selected="<%=dossierTemplateId == template.getDossierTemplateId()?true:false %>" value="<%= template.getDossierTemplateId() %>"><%= template.getTemplateName() %></aui:option>
 											<% 
-													}
 												}
 											%>
-										</aui:select>						
-									</aui:col>
-								</aui:row>
-								<aui:row>
-									<aui:col>
-										<aui:input checked="<%= onlyViewFileResult %>" name="onlyViewFileResult" value="false" type="checkbox" label=""><liferay-ui:message key="only-view-file-result"/></aui:input>
-									</aui:col>
-								</aui:row>
-							</div>
-						</aui:form>
-					</div>			
-				</aui:nav-bar-search>
-		</c:when>
-	</c:choose>
+										</aui:select>	
+							</aui:col>
+							<aui:col width="30" cssClass="search-col">
+								<liferay-ui:input-search 
+									id="keywords"
+									name="keywords"
+									title='<%= LanguageUtil.get(locale, "keywords") %>'
+									placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
+									cssClass="search-input input-keyword"
+								/>
+							</aui:col>
+						</aui:row>
+					</c:otherwise>
+				</c:choose>
+			</aui:form>
+		</div>
+	</aui:nav-bar-search>
 </aui:nav-bar>
+
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.backofficedossier.toolbar.jsp");
 %>

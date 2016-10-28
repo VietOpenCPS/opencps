@@ -47,6 +47,7 @@
     	<span class="account-name">
     		<img id="img1" alt="image user" src= "$images_folder/custom/welcome_new.png"></img>
     		<img id="img2" alt="image user" src= "$images_folder/custom/welcome_h.png"></img>
+    		<span style="padding-left: 10px;">$user_email_address</span>
 			<span class="tooltiptext">#language ("welcome-key") $user_name</span>
 		</span>
 		<span class="logout"><a href="$sign_out_url" class="btn-dn">#language ("logout-key")</a></span>

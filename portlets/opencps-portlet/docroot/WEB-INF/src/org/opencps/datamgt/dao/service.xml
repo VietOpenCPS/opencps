@@ -158,8 +158,37 @@
             <finder-column name="parentItemId"></finder-column>
         </finder>
 
+		<finder name="F_TreeIndex_Status" return-type="Collection">
+			<finder-column name="treeIndex" comparator="LIKE" />
+			<finder-column name="issueStatus" />
+		</finder>
+		
 	</entity>
 
+
+	<entity name="AdministrationServicedomain" local-service="true"
+		remote-service="false" table="opencps_administration_servicedomain">
+
+		<!-- PK fields -->
+
+		<column name="administrationCode" type="String" primary="true"/>
+		<column name="administrationCollectionCode" type="String" primary="true"/>
+		<column name="serviceDomainCode" type="String" primary="true"/>
+		<column name="serviceDomainCollectionCode" type="String" primary="true"/>
+		
+		<!-- Audit fields -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Finder methods -->
+		<finder return-type="Collection" name="F_AC_ACC" >
+			<finder-column name="groupId" />
+			<finder-column name="administrationCode" />
+			<finder-column name="administrationCollectionCode" />
+		</finder>
+		
+	</entity>
+	
 	<exceptions>
 		<exception>EmptyDictCollectionName</exception>
 		<exception>EmptyDictItemName</exception>

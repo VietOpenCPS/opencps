@@ -87,8 +87,8 @@
 		try{			
 			if(dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER &&
 				dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT){
-				dossierFiles = DossierFileLocalServiceUtil.getDossierFileByD_DP(dossierId, dossierPartId);
-				totalCount = DossierFileLocalServiceUtil.countDossierFile(dossierId, dossierPartId);
+				dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDID_DP(dossierId, dossierPartId);
+				totalCount = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
 			}else{
 				
 				if(dossierFileId > 0){

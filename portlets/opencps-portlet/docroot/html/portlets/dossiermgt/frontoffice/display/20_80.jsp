@@ -104,23 +104,25 @@
 <aui:row>
 	<aui:col width="25">
 	
-	<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
-		
-		<div id="serviceDomainIdTree" class="openCPSTree scrollable"></div>
-		
-		<%
-		
-		String serviceDomainJsonData = ProcessOrderUtils.generateTreeView(
-				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
-				PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE, 
-				LanguageUtil.get(locale, "filter-by-service-domain-left") , 
-				PortletConstants.TREE_VIEW_LEVER_2, 
-				"radio",
-				false,
-				renderRequest);
-		%>
-		
-	</div>
+	<%
+		String serviceDomainJsonData = StringPool.BLANK;
+	%>
+	<c:if test="<%=showServiceDomainIdTree %>">
+		<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+			<div id="serviceDomainIdTree" class="openCPSTree scrollable"></div>
+			<%
+			serviceDomainJsonData = ProcessOrderUtils.generateTreeView(
+					PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+					PortletConstants.TREE_VIEW_ALL_ITEM, 
+					LanguageUtil.get(locale, "filter-by-service-domain-left") , 
+					PortletConstants.TREE_VIEW_LEVER_2, 
+					"radio",
+					false,
+					renderRequest);
+			%>
+		</div>
+	</c:if>
+	
 	<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 		
 		<div id="dossierStatusTree" class="openCPSTree"></div>
@@ -146,18 +148,8 @@
 	var serviceDomainJsonData = '<%=serviceDomainJsonData%>';
 	var dossierStatusJsonData = '<%=dossierStatusJsonData%>';
 	var arrayParam = '<%=arrayParam.toString() %>';
+	var showServiceDomainIdTree = <%=showServiceDomainIdTree %>
 	AUI().ready(function(A){
-		buildTreeView("serviceDomainIdTree", 
-				"<%=DossierDisplayTerms.SERVICE_DOMAIN_ID %>", 
-				serviceDomainJsonData, 
-				arrayParam, 
-				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
-				'<%=templatePath + "frontofficedossierlist.jsp" %>', 
-				'<%=LiferayWindowState.NORMAL.toString() %>', 
-				'normal',
-				null,
-				serviceDomainId,
-				'<%=renderResponse.getNamespace() %>');
 		buildTreeView("dossierStatusTree", 
 				'<%=DossierDisplayTerms.DOSSIER_STATUS %>', 
 				dossierStatusJsonData, 
@@ -168,8 +160,22 @@
 				'normal',
 				'<%=menuCounterUrl.toString() %>',
 				dossierStatus,
-				'<%=renderResponse.getNamespace() %>');
-		
+				'<%=renderResponse.getNamespace() %>',
+				'<%=hiddenTreeNodeEqualNone%>');
+		if (showServiceDomainIdTree){
+			buildTreeView("serviceDomainIdTree", 
+					"<%=DossierDisplayTerms.SERVICE_DOMAIN_ID %>", 
+					serviceDomainJsonData, 
+					arrayParam, 
+					'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
+					'<%=templatePath + "frontofficedossierlist.jsp" %>', 
+					'<%=LiferayWindowState.NORMAL.toString() %>', 
+					'normal',
+					null,
+					serviceDomainId,
+					'<%=renderResponse.getNamespace() %>',
+					'<%=hiddenTreeNodeEqualNone%>');
+		}
 	});
 	
 </aui:script>
@@ -208,9 +214,7 @@
 							}
 							
 							%>
-								<c:if test="<%=!dossierStatusCHKInit.equals(\"-1\") %>">
 									<%@include file="/html/portlets/dossiermgt/frontoffice/dosier_search_results.jspf" %>
-								</c:if>
 							<%
 						}catch(Exception e){
 							_log.error(e);
@@ -242,21 +246,21 @@
 									<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 										<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 									</div>
-									<div class="span2 bold-label">
+									<div class="span3 bold-label">
 										<liferay-ui:message key="dossier-no"/>
 									</div>
 									
-									<div class="span9"><%= PortletUtil.intToString(dossier.getDossierId(), 0) %></div>
+									<div class="span8"><%= dossier.getDossierId() %></div>
 								</div>
 								
 								<div class="row-fluid">
 									<div class="span1"></div>
 									
-									<div class="span2 bold-label">
+									<div class="span3 bold-label">
 										<liferay-ui:message key="reception-no"/>
 									</div>
 									
-									<div class="span9"><%=dossier.getReceptionNo() %></div>
+									<div class="span8"><%=dossier.getReceptionNo() %></div>
 								</div>
 							</c:when>
 							
@@ -276,17 +280,11 @@
 						<div class="row-fluid">
 							<div class="span1"></div>
 							
-							<div class="span2 bold-label">
-								<liferay-ui:message key="service-name"/>
-							</div>
-							
 							<div class="span9"><%=dossierBean.getServiceName() %></div>
 						</div>
 						
 						<div class="row-fluid">
 							<div class="span1"></div>
-							
-							<div class="span2 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 							
 							<div class="span9"><%=dossier.getGovAgencyName() %></div>
 						</div>

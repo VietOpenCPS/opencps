@@ -16,6 +16,8 @@
 */
 package org.opencps.paymentmgt.util;
 
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 
@@ -116,6 +118,29 @@ public class PaymentMgtUtil {
 		}
 
 		return paymentMethodName;
+	}
+	
+	/**
+	 * Get dossierStatus by PaymentFile
+	 * 
+	 * @param paymentFile
+	 * @return String (DossierStatus)
+	 */
+	public static String getDossierStatus(PaymentFile paymentFile) {
+		String dossierStatus = StringPool.BLANK;
+		
+		try {
+			Dossier dossier = DossierLocalServiceUtil.fetchDossier(paymentFile.getDossierId());
+			
+			dossierStatus = dossier.getDossierStatus();
+			
+        }
+        catch (Exception e) {
+	        _log.error(e);
+        }
+		
+		return dossierStatus;
+		
 	}
 	
 	public static Log _log = LogFactoryUtil.getLog(PaymentMgtUtil.class);

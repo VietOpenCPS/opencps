@@ -186,3 +186,11 @@
     color: #455677;
     cursor: pointer;
 }
+
+.dossier-part-stt {
+  margin-right: 3px; }
+
+.row-icon-stt-new {
+    width: auto;
+    text-align: right; 
+ }

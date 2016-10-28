@@ -1,4 +1,15 @@
 
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileVersion"%>
+<%@page import="com.liferay.portlet.documentlibrary.NoSuchFileEntryException"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="com.liferay.portal.service.ServiceContextFactory"%>
+<%@page import="com.liferay.portal.service.ServiceContext"%>
+<%@page import="org.opencps.util.AccountUtil"%>
+<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,7 +42,6 @@
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="java.text.Format"%>
-<%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
@@ -43,19 +53,17 @@
 <liferay-util:include page="/html/portlets/processmgt/backofficedossier/toolbar.jsp" servletContext="<%=application %>" />
 
 <%
-	String backURL = ParamUtil.getString(request, "backURL");
-	User mappingUser = (User)request.getAttribute(WebKeys.USER_MAPPING_ENTRY);
+	
+	long dossierTemplateId = ParamUtil.getLong(request, ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID);
+	
+	boolean onlyViewFileResult = ParamUtil.getBoolean(request, "onlyViewFileResult");
+	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "backofficedossierfilelist.jsp");
 	iteratorURL.setParameter("tab1", ProcessMgtUtil.TOP_TABS_DOSSIERFILELIST);
-	
-	long dossierTemplateId = ParamUtil.getLong(request, ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID);
-	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
-	
-	boolean onlyViewFileResult = ParamUtil.getBoolean(request, "onlyViewFileResult");
-	request.setAttribute(ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID, dossierTemplateId);
-	request.setAttribute("onlyViewFileResult", onlyViewFileResult);
-	
+	iteratorURL.setParameter(ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID, (dossierTemplateId > 0)?String.valueOf(dossierTemplateId):StringPool.BLANK);
+	iteratorURL.setParameter("onlyViewFileResult", String.valueOf(onlyViewFileResult));
+
 	List<String> headerNames = new ArrayList<String>();
 	
 	headerNames.add("row-index");
@@ -69,103 +77,112 @@
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 	
 %>
-
-<liferay-ui:search-container searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" headerNames="<%= headers %>">
-
-	<liferay-ui:search-container-results>
-		<%
-			DossierFileSearchTerms searchTerms = (DossierFileSearchTerms)searchContainer.getSearchTerms();
-						
-				List<DossierFile> dossierFiles = null;
-				Integer totalCount = 0;
-				try {
-					dossierFiles = DossierFileLocalServiceUtil.searchDossierFile(scopeGroupId, searchTerms.getKeywords(), dossierTemplateId, -1, onlyViewFileResult, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-					totalCount = DossierFileLocalServiceUtil.countDossierFile(scopeGroupId, searchTerms.getKeywords(), dossierTemplateId, -1, onlyViewFileResult);
-				} catch(Exception e){
-					_log.error(e);
-				}
-			
-				total = totalCount;
-				results = dossierFiles;
-				
-				pageContext.setAttribute("results", results);
-				pageContext.setAttribute("total", total);				
-		%>
-	</liferay-ui:search-container-results>	
-		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.model.DossierFile" 
-			modelVar="dossierFile" 
-			keyProperty="dossierFileId"
-		>
-			<%				
-			    // no column
-				row.addText(String.valueOf(row.getPos() + 1));
-				
-				// dossier file type column
-				String dossierFileTypeText = StringPool.BLANK;
-				
-				switch (dossierFile.getDossierFileType()) {
-				case DossierMgtUtil.DOSSIERFILETYPE_INPUT:
-					dossierFileTypeText = LanguageUtil.get(pageContext, "dossier-filetype-input");
-					break;
-				case DossierMgtUtil.DOSSIERFILETYPE_OUTPUT:
-					dossierFileTypeText = LanguageUtil.get(pageContext, "dossier-filetype-output");
-					break;
-				default:
-					dossierFileTypeText = StringPool.BLANK;
-					break;
-				}
-				row.addText(dossierFileTypeText);
-				
-				// dossier file no column
-				row.addText(dossierFile.getDossierFileNo());
+<div class="payment-ld">
+	<div class="content">
+	<div class="opcs-serviceinfo-list-label">
+		<div class="title_box">
+	           <p class="file_manage_title"><liferay-ui:message key="danh-sach-giay-to" /></p>
+	           <p class="count"></p>
+	    </div>
+	</div>
+		<liferay-ui:search-container searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
+			headerNames="<%=headers %>">
+		
+			<liferay-ui:search-container-results>
+				<%
+					DossierFileSearchTerms searchTerms = (DossierFileSearchTerms)searchContainer.getSearchTerms();
 								
-				// dossier file date column
-				if (Validator.isNotNull(dossierFile.getDossierFileDate())) {
-					row.addText(dateFormatDate.format(dossierFile.getDossierFileDate()));					
-				}
-				else {
-					row.addText(StringPool.BLANK);
-				}
-				
-				// dossier display name column
-				row.addText(dossierFile.getDisplayName());
-				
-				// reception no column
-				Dossier dossier = null;
-				try {
-					dossier = DossierLocalServiceUtil.getDossier(dossierFile.getDossierId());
-				}
-				catch (NoSuchDossierException e) {
-					
-				}
-				row.addText(dossier != null ? dossier.getReceptionNo() : StringPool.BLANK);
-
-				// owner name column
-				Citizen citizenOwner = null;
-				Business businessOwner = null;
-				try {
-					if (dossier != null) {
-						if (dossier.getOwnerOrganizationId() == 0) {
-							citizenOwner = CitizenLocalServiceUtil.getByMappingUserId(dossier.getUserId());							
+						List<DossierFile> dossierFiles = null;
+						
+						int totalCount = 0;
+						
+						try {
+							dossierFiles = DossierFileLocalServiceUtil.searchDossierFile(scopeGroupId, searchTerms.getKeywords(), dossierTemplateId, -1, onlyViewFileResult, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+							totalCount = DossierFileLocalServiceUtil.countDossierFile(scopeGroupId, searchTerms.getKeywords(), dossierTemplateId, -1, onlyViewFileResult);
+						} catch(Exception e){
+							_log.error(e);
 						}
-						else {
-							businessOwner = BusinessLocalServiceUtil.getBymappingOrganizationId(dossier.getOwnerOrganizationId());
-						}
-					}
-					else
-						citizenOwner = CitizenLocalServiceUtil.getByMappingUserId(dossierFile.getOwnerUserId());
-				}
-				catch (SystemException e) {
 					
-				}
-				row.addText(citizenOwner != null ? citizenOwner.getFullName() : (businessOwner != null ? businessOwner.getName() : StringPool.BLANK));
-			%>	
-		</liferay-ui:search-container-row> 
-	
-	<liferay-ui:search-iterator type="opencs_page_iterator"/>
-</liferay-ui:search-container>
-
+						total = totalCount;
+						results = dossierFiles;
+						
+						pageContext.setAttribute("results", results);
+						pageContext.setAttribute("total", total);				
+				%>
+			</liferay-ui:search-container-results>	
+				<liferay-ui:search-container-row 
+					className="org.opencps.dossiermgt.model.DossierFile" 
+					modelVar="dossierFile" 
+					keyProperty="dossierFileId"
+				>
+					<%				
+						// dossier file type column
+						String dossierFileTypeText = DossierMgtUtil.getNameOfPartType(dossierFile.getDossierFileType(), themeDisplay.getLocale());
+		
+						// owner name column
+						String ownerName = StringPool.BLANK;
+						
+						if(dossierFile.getOwnerOrganizationId()> 0){
+							
+							Business owner = BusinessLocalServiceUtil.getBymappingOrganizationId(dossierFile.getOwnerOrganizationId());
+							
+							if(Validator.isNotNull(owner)){
+								ownerName = owner.getName();
+							}
+								
+						}else{
+							
+							Citizen owner = CitizenLocalServiceUtil.getByMappingUserId(dossierFile.getOwnerUserId());
+		
+							if(Validator.isNotNull(owner)){
+								ownerName = owner.getFullName();
+							}
+								
+						} 
+						
+						Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierFile.getDossierId());
+						//url file download
+						FileEntry fileEntry = null;
+							try {
+								fileEntry = DLAppLocalServiceUtil.getFileEntry(dossierFile.getFileEntryId());
+							}
+						catch (NoSuchFileEntryException e) {
+									
+						}
+						String urlDownload = null;
+							if (fileEntry != null) {
+								FileVersion fileVersion = fileEntry.getFileVersion();
+										 
+								String queryString = "";							 
+								boolean appendFileEntryVersion = true;
+										 
+								boolean useAbsoluteURL = true;
+												 
+								urlDownload = DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, queryString, appendFileEntryVersion, useAbsoluteURL);							
+							}
+						
+						// no column
+						row.addText(String.valueOf(row.getPos() + 1));
+						
+						row.addText(dossierFileTypeText);
+						
+						// dossier file no column
+						row.addText(dossierFile.getDossierFileNo());
+						
+						row.addText(Validator.isNotNull(dossierFile.getDossierFileDate())?DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_FORMAT):StringPool.BLANK);
+						
+						row.addText("<a target=\"_blank\" href=\""+urlDownload+"\" >" + dossierFile.getDisplayName() + "</a>");
+						
+						row.addText(dossierFile.getDossierId() + "/" +(Validator.isNotNull(dossier) ? "<a target=\"_blank\" href=\""+urlDownload+"\" >" + dossier.getReceptionNo() + "</a>" : StringPool.BLANK));
+						
+						row.addText(ownerName);
+					%>	
+				</liferay-ui:search-container-row> 
+			
+			<liferay-ui:search-iterator type="opencs_page_iterator"/>
+		</liferay-ui:search-container>
+	</div>
+</div>
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.backofficedossier.backofficedossierfilelist.jsp");
 %>

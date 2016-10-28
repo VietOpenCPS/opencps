@@ -94,9 +94,13 @@ public class SubmitDossierMessage {
 				byte[] sender =
 					JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);
 
+				_log.info("####################SubmitDossierMessage: Sending byte message");
+
 				bytesMessage.writeBytes(sender);
 
 				_context.getMessageProducer().send(bytesMessage);
+
+				_log.info("####################SubmitDossierMessage: Finished sending byte message");
 			}
 
 		}
@@ -140,9 +144,13 @@ public class SubmitDossierMessage {
 				byte[] sender =
 					JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);
 
+				_log.info("####################SubmitDossierMessage: Sending byte message");
+
 				bytesMessage.writeBytes(sender);
 
 				_hornetqContext.getMessageProducer().send(bytesMessage);
+
+				_log.info("####################SubmitDossierMessage: Finished sending byte message");
 			}
 
 		}
@@ -186,9 +194,13 @@ public class SubmitDossierMessage {
 				byte[] sender =
 					JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);
 
+				_log.info("####################SubmitDossierMessage: Sending byte message");
+
 				bytesMessage.writeBytes(sender);
 
 				_context.getMessageProducer().send(bytesMessage);
+
+				_log.info("####################SubmitDossierMessage: Finished sending byte message");
 			}
 
 		}

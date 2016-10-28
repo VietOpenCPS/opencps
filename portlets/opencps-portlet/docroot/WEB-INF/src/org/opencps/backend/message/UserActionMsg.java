@@ -254,6 +254,18 @@ public class UserActionMsg {
 
 
 
+	
+    public String getActionNote() {
+    
+    	return actionNote;
+    }
+
+	
+    public void setActionNote(String actionNote) {
+    
+    	this.actionNote = actionNote;
+    }
+
 	protected long paymentFileId;
 	protected String noReceptionNo;
 	protected long groupId;
@@ -267,5 +279,6 @@ public class UserActionMsg {
 	protected long processOrderId;
 	protected String dossierOId;
 	protected String dossierStatus;
+	protected String actionNote;
 
 }

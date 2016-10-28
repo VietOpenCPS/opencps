@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="org.opencps.paymentmgt.util.comparator.PaymentFileCreateDateComparator"%>
@@ -169,28 +170,7 @@
 					}
 					request.setAttribute("chuHoSo", chuHoSo);
 						// payment status column
-						String paymentStatusText = "";
-						switch (paymentFile.getPaymentStatus()) {
-						case PaymentMgtUtil.PAYMENT_STATUS_REQUESTED:
-							paymentStatusText =
-							    LanguageUtil.get(pageContext, "requested");
-							break;
-						case PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED:
-							paymentStatusText =
-							    LanguageUtil.get(pageContext, "confirmed");
-							break;
-						case PaymentMgtUtil.PAYMENT_STATUS_APPROVED:
-							paymentStatusText =
-							    LanguageUtil.get(pageContext, "approved");
-							break;
-						case PaymentMgtUtil.PAYMENT_STATUS_REJECTED:
-							paymentStatusText =
-							    LanguageUtil.get(pageContext, "rejected");
-							break;
-						default:
-							paymentStatusText =  LanguageUtil.get(pageContext, "requested");
-							break;
-						}
+						String paymentStatusText = LanguageUtil.get(pageContext, PortletUtil.getPaymentStatusLabel(paymentFile.getPaymentStatus(), locale));
 
 						PortletURL detailURLXem = renderResponse.createRenderURL();
 						detailURLXem.setParameter("mvcPath", templatePath + "frontofficepaymentdetail.jsp");
