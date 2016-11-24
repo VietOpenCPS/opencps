@@ -2,6 +2,9 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 	var A = AUI();
 	if(A.one("#"+boundingBox) != "undefined" &&
 			A.one("#"+boundingBox) != null){
+		if(isHidden == 'true'){
+			A.one("#"+boundingBox).addClass('loading-lemon-tree');
+    	}
 		var json = JSON.parse(arrayParam);
 		var portletURL = Liferay.PortletURL.createURL(portletURL);
 		portletURL.setParameter("mvcPath", mvcPath);
@@ -68,6 +71,7 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 			                            	
 			                            }
 			                        }
+			                    	A.one("#"+boundingBox).removeClass('loading-lemon-tree');
 								}
 							},
 						    end: function() {
@@ -88,8 +92,9 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 						taskNode.removeClass("current");
 					}
 	             });
+				A.one("#"+boundingBox).removeClass('loading-lemon-tree');
 			}
-		}, 1000);	
+		}, 500);	
 		
 		treeView.after('lastSelectedChange', function(event) {
 			var newCode = event.newVal.get('id');
