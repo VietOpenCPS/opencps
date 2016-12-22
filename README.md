@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/VietOpenCPS/opencps.svg?branch=rc-1.8-unit-test)](https://travis-ci.org/VietOpenCPS/opencps)
 
-# Giới thiệu
+# Giới thiệu 
 OpenCPS là phần mềm lõi dịch vụ công trực tuyến nguồn mở đầu tiên và duy nhất tại Việt Nam tính đến thời điểm này.
 
 # Giấy phép
