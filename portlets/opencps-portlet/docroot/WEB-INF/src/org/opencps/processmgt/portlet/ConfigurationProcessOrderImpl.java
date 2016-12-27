@@ -71,6 +71,9 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction {
 			updateDigitalSignature(preferences, actionRequest, actionResponse);
 		}
 
+		boolean hiddenTreeNodeEqualNone = ParamUtil.getBoolean(actionRequest, "hiddenTreeNodeEqualNone");
+		preferences.setValue("hiddenTreeNodeEqualNone", String.valueOf(hiddenTreeNodeEqualNone));
+		
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");
@@ -82,9 +85,14 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction {
 			throws ReadOnlyException {
 		String[] reportTypes = ParamUtil.getParameterValues(actionRequest,
 				"reportType", new String[] { ".pdf" });
+		
+		String processOrderViewer = ParamUtil.getString(actionRequest,
+				"processOrderViewer", "default");
 
 		preferences.setValue("reportTypes",
 				String.valueOf(StringUtil.merge(reportTypes)));
+		
+		preferences.setValue("processOrderViewer", processOrderViewer);
 
 	}
 

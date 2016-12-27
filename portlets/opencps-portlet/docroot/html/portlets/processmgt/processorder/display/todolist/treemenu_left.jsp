@@ -1,7 +1,4 @@
 
-<%@page import="java.util.Set"%>
-<%@page import="java.util.HashSet"%>
-<%@page import="org.opencps.util.PortletConstants"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,6 +17,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="java.util.Date"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
@@ -57,7 +59,7 @@
 	
 	int totalCount = 0;
 	
-	RowChecker rowChecker = new RowChecker(liferayPortletResponse);
+	RowChecker rowChecker = null;
 	
 	List<String> headerNames = new ArrayList<String>();
 	
@@ -74,15 +76,32 @@
 	long processStepId = ParamUtil.getLong(request, "processStepId");
 	
 	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
+
+	String processOrderStage = ParamUtil.getString(request, "processOrderStage", "false");
 	
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
 	arrayParam.put("serviceInfoId", (serviceInfoId > 0) ? String.valueOf(serviceInfoId):StringPool.BLANK);
 	arrayParam.put("processStepId", (processStepId > 0) ? String.valueOf(processStepId):StringPool.BLANK);
 	arrayParam.put("dossierSubStatus", Validator.isNotNull(dossierSubStatus) ? dossierSubStatus:StringPool.BLANK);
+	arrayParam.put("processOrderStage", Validator.isNotNull(processOrderStage) ? processOrderStage:StringPool.BLANK);
 	arrayParam.put("tabs1", tabs1);
 	String keySearch = ParamUtil.getString(request, "keywords");
+	
+	iteratorURL.setParameter("serviceInfoId", String.valueOf(serviceInfoId));
+	iteratorURL.setParameter("processStepId", String.valueOf(processStepId));
+	iteratorURL.setParameter("dossierSubStatus", dossierSubStatus);
+	iteratorURL.setParameter("processOrderStage", processOrderStage);
+	
+	if(ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
+			tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS) &&
+			serviceInfoId > 0 && processStepId > 0){
+		
+		rowChecker = new RowChecker(liferayPortletResponse);
+		
+	}
 %>
+
 <aui:row>
 	<aui:col width="25">
 	<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
@@ -100,7 +119,9 @@
 			%>
 		</div>
 	
-		<liferay-portlet:actionURL var="menuCounterSubStatusUrl" name="menuCounterSubStatus"/>
+		<liferay-portlet:actionURL var="menuCounterSubStatusUrl" name="menuCounterSubStatus">
+			<liferay-portlet:param name="processOrderStage" value="<%=processOrderStage %>"/>
+		</liferay-portlet:actionURL>
 		
 		<aui:script use="liferay-util-window,liferay-portlet-url">
 		
@@ -132,9 +153,20 @@
 		<aui:form name="fm">
 			
 			<div class="opencps-searchcontainer-wrapper">
+			
+				<div class="opcs-serviceinfo-list-label">
+					<div class="title_box">
+				           <p class="file_manage_title ds"><liferay-ui:message key="title-danh-sach-process-order" /></p>
+				           <p class="count"></p>
+				    </div>
+				</div>
+				<c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
+				serviceInfoId > 0 && processStepId > 0 %>">
+					<aui:button name="multiAssignToUserBtn" value="multiAssignToUserBtn"/>
+				</c:if>
 				<liferay-ui:search-container 
 					searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
-					rowChecker="<%=rowChecker%>"
+					
 					headerNames="<%= headers%>"
 				>
 				
@@ -156,28 +188,30 @@
 								_log.error(e);
 							}
 						
-							Set<String> setToReturn = new HashSet<String>();
-							Set<String> set1 = new HashSet<String>();
-							//remove duplicates process orders
-							Map<String, ProcessOrderBean> cleanMapList = new LinkedHashMap<String, ProcessOrderBean>();
-							for (int i = 0; i < processOrders.size(); i++) {
-									if (!set1.add(processOrders.get(i).getProcessOrderId()+"")) {
-										setToReturn.add(processOrders.get(i).getProcessOrderId()+"");
-									}
-								
-									ProcessOrderBean aasb = processOrders.get(i);
-									aasb.set_testDuplicate((String[])setToReturn.toArray(new String[setToReturn.size()]));
-									cleanMapList.put(processOrders.get(i).getProcessOrderId()+"", aasb);
-							}
-							
-							processOrders = new ArrayList<ProcessOrderBean>(cleanMapList.values());
-							
-							int aso = totalCount - cleanMapList.size();
-							total = totalCount - aso;
+							total = totalCount;
 							results = processOrders;
 							
 							pageContext.setAttribute("results", results);
 							pageContext.setAttribute("total", total);
+							
+							try {
+								
+								long processWorkFlowId = ProcessOrderLocalServiceUtil
+										.getProcessOrder(processOrders.get(0).getProcessOrderId()).getProcessWorkflowId();
+								
+								if(processWorkFlowId > 0) {
+									ProcessWorkflow processWorkflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkFlowId);
+									
+									if(Validator.isNotNull(processWorkflow) && processWorkflow.getIsMultipled()) {
+										isMultiAssign = true;
+									}
+								}
+								
+							} catch(Exception e) {}
+							
+							if(isMultiAssign) {
+								searchContainer.setRowChecker(rowChecker);
+							}
 						%>
 					</liferay-ui:search-container-results>	
 						<liferay-ui:search-container-row 
@@ -272,6 +306,9 @@
 								
 								
 								String actionButt = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "action");
+								if((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId()))){
+									actionButt = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "view");
+								}
 								row.setClassName("opencps-searchcontainer-row");
 								row.addText(boundcol1);
 								row.addText(boundcol2);
@@ -292,3 +329,59 @@
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.display.default.jsp");
 %>
+
+<aui:script use="liferay-util-list-fields,liferay-portlet-url">
+
+AUI().ready(function(A){
+	
+	var processDossier = A.one("#<portlet:namespace />multiAssignToUserBtn");
+	var isMultiAssignvar = '<%= isMultiAssign %>';
+	
+	console.log(isMultiAssignvar);
+	console.log(processDossier);
+	processDossier.hide();
+	if(isMultiAssignvar == 'true' && processDossier) {
+		
+		processDossier.show();
+		
+		processDossier.on('click', function() {
+			
+			var currentURL = '<%=currentURL.toString()%>';
+			
+			var processOrderIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
+			
+			processOrderIds = processOrderIds.split(",");
+			
+			if(processOrderIds != ''){
+				if(processOrderIds.length > 1){
+					// alert('<%= UnicodeLanguageUtil.get(pageContext, "multiple-process-order-handle-is-developing") %>');
+					var multiAssignURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+					multiAssignURL.setParameter("mvcPath","/html/portlets/processmgt/processorder/assign_multil_process_order.jsp");
+					multiAssignURL.setParameter("processOrderIds",processOrderIds.toString());
+					multiAssignURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
+					multiAssignURL.setPortletMode("normal");
+					openDialog(multiAssignURL.toString(), "assign-multi-dossier", "assign-multi-dossier");
+					return;
+				}else if(processOrderIds.length == 0){
+					alert('<%= UnicodeLanguageUtil.get(pageContext, "you-need-select-any-process-order-to-process") %>');
+					return;
+				}else{
+					var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+					portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/process_order_detail.jsp");
+					portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>"); 
+					portletURL.setPortletMode("normal");
+				
+					portletURL.setParameter("processOrderId", processOrderIds[0]);
+					portletURL.setParameter("backURL", currentURL);
+					window.location.href = portletURL.toString();
+				}
+			}else{
+				alert('<%= UnicodeLanguageUtil.get(pageContext, "you-need-select-any-process-order-to-process") %>');
+				return;
+			}
+		});
+	}
+	
+});
+
+</aui:script>

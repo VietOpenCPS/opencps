@@ -128,7 +128,7 @@
 			<div id = "<portlet:namespace />showOrHidePasswordsField" >
 				<aui:row>
 					<aui:col width="30">
-						<aui:input name="<%= EmployeeDisplayTerm.OLD_PASS_WORD%>" type="password" cssClass="input100"/>
+						<aui:input name="<%= EmployeeDisplayTerm.OLD_PASS_WORD%>" value="<%=StringPool.BLANK %>" type="password" cssClass="input100"/>
 					</aui:col>
 					
 					<aui:col width="30">

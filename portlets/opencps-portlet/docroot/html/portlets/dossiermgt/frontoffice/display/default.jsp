@@ -151,7 +151,8 @@
 							<c:choose>
 								<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo %>'>
 
-									<div class="row-fluid">
+									<!--hot fix moit  -->
+									<%-- <div class="row-fluid">
 										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 											<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 										</div>										
@@ -165,6 +166,17 @@
 									<div class="row-fluid">
 										<div class="span1"></div>
 										
+										<div class="span2 bold-label">
+											<liferay-ui:message key="reception-no"/>
+										</div>
+										
+										<div class="span9"><%=dossier.getReceptionNo() %></div>
+									</div> --%>
+									
+									<div class="row-fluid">
+										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+											<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+										</div>
 										<div class="span2 bold-label">
 											<liferay-ui:message key="reception-no"/>
 										</div>
@@ -214,7 +226,7 @@
 									<%=
 										Validator.isNotNull(dossier.getCreateDate()) ? 
 										DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
-										StringPool.DASH 
+										DateTimeUtil._EMPTY_DATE_TIME  
 									%>
 								</div>
 							</div>
@@ -228,7 +240,7 @@
 									<%=
 										Validator.isNotNull(dossier.getReceiveDatetime()) ? 
 										DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): 
-										StringPool.DASH 
+										DateTimeUtil._EMPTY_DATE_TIME  
 									%>
 								</div>
 							</div>

@@ -127,7 +127,7 @@
 					<liferay-ui:search-container-column-text 
 						title="#"
 						name="#"
-						value="<%=String.valueOf(row.getPos() + searchContainer.getStart() + 1) %>"
+						value="<%=String.valueOf(dossierFile.getVersion()) %>"
 					/>
 					<liferay-ui:search-container-column-text 
 						title="create-date"
@@ -150,11 +150,11 @@
 						value="<%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.DASH %>"
 					/>
 					
-					<liferay-ui:search-container-column-text 
+					<%-- <liferay-ui:search-container-column-text 
 						title="version"
 						name="version"
 						value="<%=String.valueOf(dossierFile.getVersion()) %>"
-					/>
+					/> --%>
 					
 					<liferay-ui:search-container-column-button href='<%="viewAttachment(" + dossierFile.getDossierFileId() + ")" %>' name="view" valign="center" cssClass="view-attachment"/>
 		

@@ -62,11 +62,11 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 			                            	
 			                            	if(isHidden == 'true'){
 			                            		
-			                            		if(sub_val === '0'){
-				                            		elementOBJ.setStyle('display', 'none');
+			                            		if(sub_val != '0'){
+				                            		elementOBJ.setStyle('display', 'block');
 				                            	}
 			                            	}else{
-			                            		
+			                            		elementOBJ.setStyle('display', 'block');
 			                            	}
 			                            	
 			                            }
@@ -91,6 +91,7 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 					}else{
 						taskNode.removeClass("current");
 					}
+					taskNode.setStyle('display', 'block');
 	             });
 				A.one("#"+boundingBox).removeClass('loading-lemon-tree');
 			}

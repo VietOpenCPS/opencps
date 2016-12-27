@@ -16,16 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../init.jsp"%>
-<%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
+
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.dossiermgt.search.DossierPartDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.dossiermgt.DuplicateDossierPartNumberException"%>
@@ -33,6 +30,8 @@
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierPartNumberException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierPartNameException"%>
 <%@page import="org.opencps.dossiermgt.DuplicateDossierPartSiblingException"%>
+
+<%@ include file="../init.jsp"%>
 <%
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);

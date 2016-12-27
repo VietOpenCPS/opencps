@@ -78,3 +78,35 @@
 	color: #fff !important;
     background-color: #f44336 !important;
 }
+.portlet-boundary_13_WAR_opencpsportlet_ .taglib-header,
+.portlet-boundary_16_WAR_opencpsportlet_ .taglib-header{
+	margin-bottom: 35px !important;
+}
+
+.header-title.custom-title{
+	text-transform: uppercase;
+font-size: 20px;
+line-height: normal;
+font-weight: normal;
+font-family: 'Roboto-Bold';
+position: absolute;
+top: 12px;
+}
+.pdl30{
+	padding-left: 30px;
+}
+.pdl20{
+	padding-left: 20px;
+}
+.div100 > div{
+	width: 100%;
+}
+.div100{
+	margin-left: 0 !important;
+}
+.action-button-csv{
+	margin-top: 0 !important;
+}
+.action-button-csv > i{
+	margin-right: 10px !important;
+}

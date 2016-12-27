@@ -61,7 +61,7 @@ public class WorkflowOutputLocalServiceImpl
 	 */
 	public WorkflowOutput updateWorkflowOutput(
 		long workflowOutputId, long dossierPartId, long processWorkflowId,
-		boolean required, boolean esign, boolean postback)
+		boolean required, boolean esign, boolean postback, String pattern)
 		throws PortalException, SystemException {
 
 		WorkflowOutput output = null;
@@ -74,7 +74,7 @@ public class WorkflowOutputLocalServiceImpl
 			output.setEsign(esign);
 			output.setPostback(postback);
 			output.setRequired(required);
-
+			output.setPattern(pattern);
 			workflowOutputPersistence.update(output);
 		}
 
@@ -92,7 +92,7 @@ public class WorkflowOutputLocalServiceImpl
 	 */
 	public WorkflowOutput addWorkflowOutput(
 		long dossierPartId, long processWorkflowId, boolean required,
-		boolean esign, boolean postback)
+		boolean esign, boolean postback, String pattern)
 		throws PortalException, SystemException {
 
 		WorkflowOutput output = null;
@@ -108,7 +108,7 @@ public class WorkflowOutputLocalServiceImpl
 			output.setEsign(esign);
 			output.setPostback(postback);
 			output.setRequired(required);
-
+			output.setPattern(pattern);
 			workflowOutputPersistence.update(output);
 		}
 

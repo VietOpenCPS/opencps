@@ -18,7 +18,6 @@
  */
 %>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletURL"%>

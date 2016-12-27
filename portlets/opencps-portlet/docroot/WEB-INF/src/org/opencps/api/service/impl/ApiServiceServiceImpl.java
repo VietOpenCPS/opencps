@@ -50,6 +50,7 @@ import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 import org.opencps.util.PortletUtil.SplitDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat.Value;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -70,6 +71,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.ac.AccessControlled;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
@@ -1224,6 +1226,65 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 		return resultObj;
 	}
 
+	//DK
+	//TODO
+	@JSONWebService(value = "alpacadklaprap", method = "GET")
+	public JSONObject alpacaGenerateDKLapRap(String currentKey, String dependency, String dossierNo) 
+		throws SystemException, PortalException {
+		
+		ServiceContext serviceContext = getServiceContext();
+		
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		
+		String [] dependencies = null;
+	
+		if(Validator.isNotNull(dependency)){
+			dependencies = dependency.split(",");
+		}
+		
+		switch (currentKey) {
+			case "ghichu":
+				result = JSONFactoryUtil.createJSONObject();
+				break;
+	
+			default:
+				result = JSONFactoryUtil.createJSONObject();
+				break;
+		}
+		
+		return result;
+	}
+	
+	@JSONWebService(value = "alpacadklaprapsupdatasource", method = "GET")
+	public JSONObject alpacadklaprapSubDataSource(String code) 
+		throws SystemException, PortalException {
+		
+		ServiceContext serviceContext = getServiceContext();
+		
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		
+		switch (code) {
+			case "code1":
+				result = JSONFactoryUtil.createJSONObject();
+				break;
+	
+			default:
+				result = JSONFactoryUtil.createJSONObject();
+				break;
+		}
+		
+		return result;
+	}
+	
+	@JSONWebService(value = "updatedklaprap", method = "POST")
+	public JSONObject updateDKLapRap(String oid, String receptionno) {
+		
+		JSONObject resultObj = JSONFactoryUtil.createJSONObject();
+		
+		ServiceContext serviceContext = getServiceContext();
+		
+		return resultObj;
+	}
 	
 	private static Log _log = LogFactoryUtil.getLog(ApiServiceServiceImpl.class.getName());	
 }

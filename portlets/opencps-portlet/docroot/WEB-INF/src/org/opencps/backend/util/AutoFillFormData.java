@@ -71,12 +71,16 @@ public class AutoFillFormData {
 	 	String _shortName = StringPool.BLANK;
 	 	String _representativeName = StringPool.BLANK;
 	 	String _representativeRole = StringPool.BLANK;
-
+	 	
+	 	String _idNumber = StringPool.BLANK;
+	 	String _ngayCapGiayCNDNLanDau = StringPool.BLANK;
+	 	
 	 	if(Validator.isNotNull(ownerCitizen)){
 	 		_subjectName = ownerCitizen.getFullName();
 	 		_subjectId = String.valueOf(ownerCitizen.getCitizenId());
 	 		_address = ownerCitizen.getAddress();
 	 		_cityCode = ownerCitizen.getCityCode();
+	 		_idNumber = ownerCitizen.getPersonalId();
 	 		try {
 	 			_cityName = DictItemLocalServiceUtil.getDictItemInuseByItemCode(1, ownerCitizen.getCityCode()).getItemName(Locale.getDefault());
 			} catch (Exception e) {
@@ -106,6 +110,12 @@ public class AutoFillFormData {
 	 		_subjectId = String.valueOf(ownerBusiness.getBusinessId());
 	 		_address = ownerBusiness.getAddress();
 	 		_cityCode = ownerBusiness.getCityCode();
+	 		_idNumber = ownerBusiness.getIdNumber();
+	 		
+	 		if(Validator.isNotNull(ownerBusiness.getDateOfIdNumber())) {
+	 			_ngayCapGiayCNDNLanDau = getStringFromDate(ownerBusiness.getDateOfIdNumber());
+	 		}
+	 		
 	 		try {
 	 			_cityName = DictItemLocalServiceUtil.getDictItemInuseByItemCode(1, ownerBusiness.getCityCode()).getItemName(Locale.getDefault());
 			} catch (Exception e) {
@@ -182,7 +192,11 @@ public class AutoFillFormData {
 						jsonMap.put(entry.getKey(), _representativeRole);
 
 					}else if(value.equals("_ngayNopDon")){
-						jsonMap.put(entry.getKey(), ngayNopDon());
+						jsonMap.put(entry.getKey(), getStringFromDate(new Date()));
+					} else if(value.equals("_ngayCapGiayCNDNLanDau")) {
+						jsonMap.put(entry.getKey(), _ngayCapGiayCNDNLanDau);
+					}else if(value.equals("_idNumber")) {
+						jsonMap.put(entry.getKey(), _idNumber);
 					}else if(value.equals("_donViThucHien")){
 						if(dossierId > 0){
 							try {
@@ -214,7 +228,7 @@ public class AutoFillFormData {
 								_log.error(e);
 							}
 						}
-					}
+					}	
 					
 				}else if(value.startsWith("_") && value.contains(":")){
 					String resultBinding = StringPool.BLANK;
@@ -253,9 +267,12 @@ public class AutoFillFormData {
 							resultBinding += ", " +  _representativeName;
 						}else if(string.equals("_representativeRole")){
 							resultBinding += ", " +  _representativeRole;
-
+						}else if(string.equals("_ngayCapGiayCNDNLanDau")) {
+							resultBinding += ", " +  _ngayCapGiayCNDNLanDau;
 						}else if(string.equals("_ngayNopDon")){
-							resultBinding += ", " + ngayNopDon();
+							resultBinding += ", " + getStringFromDate( new Date());
+						}else if (string.equals("_idNumber")) {
+							resultBinding += ", " +  _idNumber;
 						}else if(string.equals("_donViThucHien")){
 							if(dossierId > 0){
 								try {
@@ -362,8 +379,8 @@ public class AutoFillFormData {
 		return result;
 	}
 	
-	public static String ngayNopDon() {
-		Date date = new Date();
+	public static String getStringFromDate(Date date) {
+		//Date date = new Date();
 		try {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);

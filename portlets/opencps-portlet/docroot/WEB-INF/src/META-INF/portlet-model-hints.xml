@@ -408,6 +408,7 @@
 		<field name="required" type="boolean" />
 		<field name="esign" type="boolean" />
 		<field name="postback" type="boolean" />
+		<field name="pattern" type="String" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.Dossier">
 		<field name="dossierId" type="long" />
@@ -511,6 +512,8 @@
 		<field name="syncStatus" type="int" />
 		<field name="version" type="int" />
 		<field name="signed" type="boolean" />
+		<field name="signCheck" type="int" />
+		<field name="signInfo" type="String" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierFileLog">
 		<field name="dossierFileLogId" type="long" />
@@ -785,5 +788,63 @@
 		<field name="companyId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="userId" type="long" />
+	</model>
+	<model name="org.opencps.statistics.portlet.dao.model.DossiersStatistics">
+		<field name="dossierStatisticId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="remainingNumber" type="int" />
+		<field name="receivedNumber" type="int" />
+		<field name="ontimeNumber" type="int" />
+		<field name="overtimeNumber" type="int" />
+		<field name="processingNumber" type="int" />
+		<field name="delayingNumber" type="int" />
+		<field name="month" type="int" />
+		<field name="year" type="int" />
+		<field name="govAgencyCode" type="String" />
+		<field name="domainCode" type="String" />
+		<field name="administrationLevel" type="int" />
+	</model>
+	<model name="org.opencps.statistics.portlet.dao.model.GovagencyLevel">
+		<field name="govagencylevel" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="govAgencyCode" type="String" />
+		<field name="administrationLevel" type="int" />
+	</model>
+	<model name="org.opencps.statisticsmgt.model.DossiersStatistics">
+		<field name="dossierStatisticId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="remainingNumber" type="int" />
+		<field name="receivedNumber" type="int" />
+		<field name="ontimeNumber" type="int" />
+		<field name="overtimeNumber" type="int" />
+		<field name="processingNumber" type="int" />
+		<field name="delayingNumber" type="int" />
+		<field name="month" type="int" />
+		<field name="year" type="int" />
+		<field name="govAgencyCode" type="String" />
+		<field name="domainCode" type="String" />
+		<field name="administrationLevel" type="int" />
+	</model>
+	<model name="org.opencps.statisticsmgt.model.GovagencyLevel">
+		<field name="govagencylevel" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="govAgencyCode" type="String" />
+		<field name="administrationLevel" type="int" />
 	</model>
 </model-hints>

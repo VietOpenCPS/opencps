@@ -50,6 +50,7 @@ import org.opencps.processmgt.util.ProcessMgtUtil;
 import org.opencps.processmgt.util.ProcessUtils;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -59,9 +60,18 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.expando.model.ExpandoColumn;
+import com.liferay.portlet.expando.model.ExpandoColumnConstants;
+import com.liferay.portlet.expando.model.ExpandoTable;
+import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
+import com.liferay.portlet.expando.service.ExpandoRowLocalServiceUtil;
+import com.liferay.portlet.expando.service.ExpandoTableLocalServiceUtil;
+import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -245,7 +255,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 					WorkflowOutputLocalServiceUtil.addWorkflowOutput(
 					    output.getDossierPartId(),
 					    output.getProcessWorkflowId(), output.getRequired(),
-					    output.getEsign(), output.getPostback());
+					    output.getEsign(), output.getPostback(), output.getPattern());
 				}
 
 			}
@@ -284,14 +294,16 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 						    output.getDossierPartId(),
 						    output.getProcessWorkflowId(),
 						    output.getRequired(), output.getEsign(),
-						    output.getPostback());
+						    output.getPostback(),
+						    output.getPattern());
 					}
 					else {
 						WorkflowOutputLocalServiceUtil.addWorkflowOutput(
 						    output.getDossierPartId(),
 						    output.getProcessWorkflowId(),
 						    output.getRequired(), output.getEsign(),
-						    output.getPostback());
+						    output.getPostback(),
+							output.getPattern());
 					}
 				}
 
@@ -765,6 +777,102 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 		
 		super.render(renderRequest, renderResponse);
 
+	}
+	
+	public void updateRequiedActionNote(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+			throws IOException {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.
+				getAttribute(WebKeys.THEME_DISPLAY);
+		
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+		
+		long processWorkflowId = ParamUtil.getLong(actionRequest, "processWorkflowId");
+		boolean requiedActionNote = ParamUtil.getBoolean(actionRequest, "requiedActionNote");
+		
+		ProcessWorkflow processWorkflow = null;
+		
+		try {
+			processWorkflow = ProcessWorkflowLocalServiceUtil.
+					getProcessWorkflow(processWorkflowId);
+		} catch (Exception e) {
+			//
+		}
+		
+		if (Validator.isNotNull(processWorkflow)){
+			boolean isAutoEvent = false;
+			if (Validator.isNotNull(processWorkflow.getAutoEvent())){
+				isAutoEvent = true;
+			}
+			
+			if (!isAutoEvent){
+				try {
+					addExpandoProcessWorkFlow(themeDisplay, 
+							processWorkflowId, requiedActionNote);
+					
+					actionResponse.sendRedirect(returnURL);
+				} catch (Exception e) {
+					SessionErrors.add(actionRequest, "yeu-cau-thuc-hien-khong-thanh-cong");
+					actionResponse.sendRedirect(returnURL);
+				}
+			} else {
+				SessionErrors.add(actionRequest, "hanh-dong-duoc-kich-hoat-tu-dong");
+				actionResponse.sendRedirect(returnURL);
+			}
+		}
+	}
+	
+	private void addExpandoProcessWorkFlow(ThemeDisplay themeDisplay,
+			long processWorkflowId, boolean requiedActionNote) 
+			throws PortalException, SystemException {
+		
+		long classNameId = ClassNameLocalServiceUtil.getClassNameId(ProcessStep.class.getName());
+		
+		ExpandoTable expandoTable = null;
+		ExpandoColumn expandoColumn = null;
+		
+		try {
+			expandoTable = 
+					ExpandoTableLocalServiceUtil.getTable(
+							themeDisplay.getCompanyId(), 
+							classNameId, 
+							ProcessStep.class.getName());
+		} catch (Exception e) {
+			//
+		}
+		try {
+			expandoColumn = 
+					ExpandoColumnLocalServiceUtil.getColumn(
+							expandoTable.getTableId(), 
+							"requiedProcessActionNote");
+		} catch (Exception e) {
+			//
+		}
+		
+		if (Validator.isNull(expandoTable)){
+			expandoTable = 
+					ExpandoTableLocalServiceUtil.addTable(
+							themeDisplay.getCompanyId(), 
+							classNameId, 
+							ProcessStep.class.getName());
+		}
+		if (Validator.isNull(expandoColumn)){
+			expandoColumn = 
+					ExpandoColumnLocalServiceUtil.addColumn(
+							expandoTable.getTableId(), 
+							"requiedProcessActionNote", 
+							ExpandoColumnConstants.BOOLEAN);
+		}
+		
+		ExpandoValueLocalServiceUtil.addValue(
+				themeDisplay.getCompanyId(), 
+				ProcessStep.class.getName(), 
+				expandoTable.getName(), 
+				expandoColumn.getName(), 
+				processWorkflowId, 
+				requiedActionNote);
+		
 	}
 
 	private Log _log = LogFactoryUtil.getLog(ProcessMgtAdminPortlet.class);

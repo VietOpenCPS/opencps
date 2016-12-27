@@ -57,3 +57,12 @@
 		portletPreferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 	}
 %>
+
+<script type="text/javascript">
+	Liferay.on('turnOnOverlaymask',function(event) {
+		$('iframe').parent().find('div.overlaymask-hidden').removeClass('overlaymask-hidden');
+	});
+	Liferay.on('turnOffOverlaymask',function(event) {
+		$('iframe').parent().find('div.overlaymask-hidden').addClass('overlaymask-hidden');
+	});
+</script>

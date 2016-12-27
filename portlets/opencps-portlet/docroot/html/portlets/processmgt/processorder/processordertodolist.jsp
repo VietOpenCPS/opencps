@@ -20,7 +20,9 @@
 
 <%@ include file="init.jsp"%>
 
+
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 
-
 <liferay-util:include page='<%=templatePath + "display/todolist/" + todolistDisplayStyle + ".jsp" %>' servletContext="<%=application %>" />
+
+

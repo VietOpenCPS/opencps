@@ -71,6 +71,7 @@ import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -141,6 +142,7 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 
 				if (confirmHopLe == 1) {
 					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
+					paymentFile.setApproveNote(lyDo);
 				}
 				else if (confirmHopLe == 0) {
 					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REJECTED);
@@ -148,6 +150,10 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 				}
 
 				paymentFile.setModifiedDate(new Date());
+				paymentFile.setApproveDatetime(new Date());
+				
+				User user = (User) actionRequest.getAttribute(com.liferay.portal.kernel.util.WebKeys.USER);
+				paymentFile.setAccountUserName(user.getFullName());
 
 				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 

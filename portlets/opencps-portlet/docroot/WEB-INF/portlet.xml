@@ -1060,6 +1060,7 @@
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
+
 		<resource-bundle>content.Language_1001</resource-bundle>
 		<portlet-info>
 			<title>dashboard_custom</title>
@@ -1079,11 +1080,192 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>30</portlet-name>
+		<display-name>re-assign</display-name>
+		<portlet-class>
+			org.opencps.processmgt.portlet.ReAssignPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/processmgt/reassign/reassignlist.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/processmgt/reassign/</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>re-assign</title>
+			<short-title>re-assign</short-title>
+			<keywords>re-assign</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>32</portlet-name>
+		<display-name>Statistics Admin</display-name>
+		<portlet-class>
+			org.opencps.statisticsmgt.portlet.StatisticsMgtAdminPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/statisticsmgt/admin/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language_32</resource-bundle>
+		<portlet-info>
+			<title>Statistics Admin</title>
+			<short-title>32</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>33</portlet-name>
+		<display-name>Yearly Dashboard</display-name>
+		<portlet-class>
+			org.opencps.statisticsmgt.dashboard.portlet.DashBoardPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/statisticsmgt/dashboards/yearly/view.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/portlets/statisticsmgt/dashboards/yearly/configuration.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language_33</resource-bundle>
+		<portlet-info>
+			<title>Yearly Dashboard</title>
+			<short-title>33</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>34</portlet-name>
+		<display-name>Monthly Dashboard</display-name>
+		<portlet-class>
+			org.opencps.statisticsmgt.dashboard.portlet.DashBoardPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/statisticsmgt/dashboards/monthly/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language_34</resource-bundle>
+		<portlet-info>
+			<title>Monthly Dashboard</title>
+			<short-title>34</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>35</portlet-name>
+		<display-name>Tree Dashboard</display-name>
+		<portlet-class>
+			org.opencps.statisticsmgt.dashboard.portlet.DashBoardPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/statisticsmgt/dashboards/tree/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language_35</resource-bundle>
+		<portlet-info>
+			<title>Tree Dashboard</title>
+			<short-title>35</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	 
 	<public-render-parameter>
-    	<identifier>active</identifier>
-   		<qname>active</qname>
-    </public-render-parameter>
-
-
+		<identifier>active</identifier>
+		<qname>active</qname>
+	</public-render-parameter>
 
 </portlet-app>

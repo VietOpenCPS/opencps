@@ -5,7 +5,7 @@
 	<category name="org.opencps.backend">
 		<portlet id="1" />
 	</category>
-	
+
 	<category name="org.opencps.backoffice">
 		<portlet id="2" />
 		<portlet id="4"/>
@@ -20,6 +20,7 @@
 		<portlet id="22"/>
 		<portlet id="27"/>
 		<portlet id="28"/>
+		<portlet id="30"/>
 	</category>	
 
 	<category name="org.opencps.frontoffice">
@@ -41,4 +42,11 @@
 	<category name="org.opencps.dashboard">
 		<portlet id="1001"></portlet>
 	</category>
+	<category name="org.opencps.statistics.dashboard">
+		<portlet id="32"></portlet>
+		<portlet id="33"></portlet>
+		<portlet id="34"></portlet>
+		<portlet id="35"></portlet>
+	</category>
+	
 </display>

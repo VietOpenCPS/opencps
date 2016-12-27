@@ -253,26 +253,22 @@
 				
 				<aui:row>
 					<label class="control-label custom-lebel" for='<portlet:namespace/><%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>'>
-	 					<liferay-ui:message key="birth-date-full"/>
+	 					<liferay-ui:message key="birth-date-full"/> <span style="color:red">*</span>
 	 				</label>
-	 				<liferay-ui:input-date 
-	 					nullable="true"
-	 					dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
-	 					dayValue="<%= spd.getDayOfMoth() %>"
-	 					monthParam="<%=CitizenDisplayTerms.BIRTH_DATE_MONTH %>"
-	 					monthValue="<%= spd.getMonth() %>"
-	 					name="<%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>"
-	 					yearParam="<%=CitizenDisplayTerms.BIRTH_DATE_YEAR %>"
-	 					yearValue="<%= spd.getYear() %>"
-	 					formName="fm"
-	 					autoFocus="<%=true %>"
-	 					cssClass="input100"
-	 					
-	 				>
-	 				</liferay-ui:input-date>
-	 				<div  id="<portlet:namespace/>defErrBirthDate" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
-						<liferay-ui:message key="required-field"/>
-					</div>
+	 				<aui:input name="<%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>" type="text" label=" " cssClass="input100" placeholder="<%=LanguageUtil.get(pageContext, \"ngay-sinh-placehoder\") %>" >
+	 					<aui:validator name="required" />
+	 					<aui:validator name="custom" errorMessage="<%=LanguageUtil.get(pageContext, \"ngay-sinh-pattern\") %>">
+							function (val, fieldNode, ruleValue) {
+								var result = false;
+								if (new Date(val) == 'Invalid Date') {
+									result = false;
+								}else{
+									result = true;
+								}
+								return result;
+							}
+						</aui:validator>
+	 				</aui:input>
 				</aui:row>
 				
 				<aui:row cssClass="input-file">
@@ -419,7 +415,6 @@
 				}
 			});
 		}
-		A.one('#<portlet:namespace />birthDate').setAttribute("placeholder", '<%=LanguageUtil.get(pageContext, "ngay-sinh-placehoder") %>');
 	
 	
 	});

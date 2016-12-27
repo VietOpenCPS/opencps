@@ -27,7 +27,6 @@
 <%@page import="org.opencps.dossiermgt.permissions.ServiceConfigPermission"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearch"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>

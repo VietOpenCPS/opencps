@@ -227,30 +227,19 @@
 				<liferay-ui:panel 
 					collapsible="<%= true %>" 
 					extended="<%= true %>" 
-					id="justfinishedlistOrderPanel" 
+					id="processOrderViewerPanel" 
 					persistState="<%= true %>" 
-					title="order-by"
+					title="process-order-viewer-panel"
 				>
 					<aui:row>
-						<aui:col width="50">
-							<aui:select name="justfinishedlistOrderByField">
-								<aui:option value='<%=ProcessOrderDisplayTerms.MODIFIEDDATE %>' selected='<%= justfinishedlistOrderByField.equals(ProcessOrderDisplayTerms.MODIFIEDDATE) %>'>
-									<liferay-ui:message key="order-by-modified-date"/>
-								</aui:option>
-							</aui:select>
-						</aui:col>
-						
-						<aui:col width="50">
-							<aui:select name="justfinishedlistOrderByType">
-								<aui:option value="<%= WebKeys.ORDER_BY_ASC %>" selected='<%= justfinishedlistOrderByType.equals(WebKeys.ORDER_BY_ASC) %>'>
-									<liferay-ui:message key="order-by-old-dossier"/>
-								</aui:option>
-								
-								<aui:option value="<%= WebKeys.ORDER_BY_DESC %>" selected='<%= justfinishedlistOrderByType.equals(WebKeys.ORDER_BY_DESC) %>'>
-									<liferay-ui:message key="order-by-new-dossier"/>
-								</aui:option>
-							</aui:select>
-						</aui:col>
+						<aui:select name="processOrderViewer" id="processOrderViewer">
+							<aui:option value="default"
+								selected='<%=processOrderDetailPage.equals("default") %>'
+							><%=LanguageUtil.get(pageContext, "default") %></aui:option>
+							<aui:option value="process_order_detail"
+								selected='<%=processOrderDetailPage.equals("process_order_detail") %>'
+							><%=LanguageUtil.get(pageContext, "process_order_detail") %></aui:option>
+						</aui:select>
 					</aui:row>
 				</liferay-ui:panel>
 			</liferay-ui:panel-container>

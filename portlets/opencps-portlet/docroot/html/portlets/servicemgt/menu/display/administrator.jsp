@@ -23,7 +23,10 @@
 <%
 	DictCollection dc = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, ServiceUtil.SERVICE_ADMINISTRATION);
 	
-	List<DictItem> ls = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(dc.getDictCollectionId());
+	List<DictItem> ls = new ArrayList<DictItem>();	
+		if (Validator.isNotNull(dc))	{
+			ls = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(dc.getDictCollectionId());
+	} 
 %>
 
 <liferay-portlet:renderURL varImpl="filter" portletName="<%= ServiceUtil.SERVICE_PUBLIC_PORTLET_NAME %>">

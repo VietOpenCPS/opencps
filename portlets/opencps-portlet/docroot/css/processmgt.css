@@ -193,4 +193,9 @@
 .row-icon-stt-new {
     width: auto;
     text-align: right; 
+    white-space: nowrap;
  }
+.modal-body .loadingmask.component.overlay.overlaymask {
+	top: 0px !important;
+left: 0px !important;
+}

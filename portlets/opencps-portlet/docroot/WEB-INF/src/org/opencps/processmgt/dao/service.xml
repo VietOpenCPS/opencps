@@ -89,6 +89,10 @@
 			<finder-column name="groupId"/>
 			<finder-column name="processStepId" arrayable-operator="OR"/>
 		</finder>
+		
+		<finder return-type="Collection" name="F_dossierSubStatus">
+			<finder-column name="dossierSubStatus"/>
+		</finder>
 	</entity>
 
 	<entity name="ProcessStepDossierPart" local-service="true" remote-service="true"
@@ -225,6 +229,7 @@
 		<column name="required" type="boolean"/>
 		<column name="esign" type="boolean"/>
 		<column name="postback" type="boolean"/>
+		<column name="pattern" type="String"/>
 		
 		<finder return-type="Collection" name="P_W_ID">
 			<finder-column name="processWorkflowId"/>
@@ -288,6 +293,9 @@
 		
 		<finder return-type="Collection" name="ServiceInfoId">
 			<finder-column name="serviceInfoId"/>
+		</finder>
+		<finder return-type="Collection" name="actionUserId">
+			<finder-column name="actionUserId" />
 		</finder>
 	</entity>
 

@@ -60,6 +60,7 @@
 	
 	List<DictItem> dictItems = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
 	
+	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
 %>
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav-bar-search cssClass="pull-right front-custom-select-search">
@@ -71,9 +72,26 @@
 				<c:choose>
 					<c:when test="<%=tabs1.equals(ProcessMgtUtil.TOP_TABS_DOSSIERLIST) %>">
 						<aui:row>
-							<aui:col width="30" cssClass="search-col">
+							<aui:col width="25" cssClass="search-col">
+								<datamgt:ddr 
+									depthLevel="1" 
+									dictCollectionCode="DOSSIER_SUB_STATUS" 
+									showLabel="<%=false%>"
+									emptyOptionLabels="filter-by-subStatus-left"
+									itemsEmptyOption="true"
+									itemNames="dossierSubStatus"
+									optionValueType="code"
+									selectedItems="<%=dossierSubStatus %>"
+									cssClass="search-input select-box"
+								/>
+							</aui:col>
+							
+							<aui:col width="25" cssClass="search-col">
 										
-								<aui:select name="<%=DossierDisplayTerms.SERVICE_DOMAIN_CODE %>" label="" cssClass="search-input select-box input100" >
+								<aui:select name="<%=DossierDisplayTerms.SERVICE_DOMAIN_CODE %>" 
+								label="" 
+								cssClass="search-input select-box input100" 
+								onChange='<%=renderResponse.getNamespace() + "doSearch(this)"%>' >
 									<aui:option value="">
 										<liferay-ui:message key="filter-by-service-domain"/>
 									</aui:option>
@@ -98,7 +116,7 @@
 									%>
 								</aui:select>
 							</aui:col>
-							<aui:col width="30" cssClass="search-col">
+							<aui:col width="25" cssClass="search-col">
 									
 								<datamgt:ddr 
 									depthLevel="1" 
@@ -114,7 +132,7 @@
 								/>
 											
 							</aui:col>
-							<aui:col width="30" cssClass="search-col">
+							<aui:col width="25" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords"
 									name="keywords"
@@ -173,7 +191,21 @@
 		</div>
 	</aui:nav-bar-search>
 </aui:nav-bar>
+<aui:script use="liferay-util-list-fields,liferay-portlet-url">
+	
+	A.one('#<portlet:namespace />dossierSubStatus').on('change', function(){
+		submitForm(document.<portlet:namespace />fmSearch);
+	});
 
+	A.one('#<portlet:namespace />dossierStatus').on('change', function(){
+		submitForm(document.<portlet:namespace />fmSearch);
+	});
+
+	Liferay.provide(window, '<portlet:namespace/>doSearch', function(e) {
+		submitForm(document.<portlet:namespace />fmSearch);
+	},['liferay-portlet-url']);
+	
+</aui:script>
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.backofficedossier.toolbar.jsp");
 %>

@@ -1,4 +1,4 @@
-<%@page import="org.opencps.dossiermgt.permissions.DossierPartPermission"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,6 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.dossiermgt.permissions.DossierPartPermission"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
@@ -24,8 +25,8 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.dossiermgt.search.DossierPartDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
+
 <%@ include file="../init.jsp"%>
 
 <%

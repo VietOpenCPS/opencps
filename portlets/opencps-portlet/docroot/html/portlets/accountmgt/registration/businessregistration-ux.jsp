@@ -334,6 +334,7 @@
 						cssClass="input100"
 						placeholder="address-place-holder"
 					>
+						<aui:validator name="required" />
 						<aui:validator name="maxLength">500</aui:validator>
 					</aui:input>
 				</aui:row>
@@ -426,6 +427,7 @@
 						name="attachFile" 
 						label="<%= LanguageUtil.format(pageContext, \"business-attach-file-x\", attachFileX) %>"
 					>
+						<aui:validator name="required" />
 						<aui:validator name="acceptFiles">
 							'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
 						</aui:validator>

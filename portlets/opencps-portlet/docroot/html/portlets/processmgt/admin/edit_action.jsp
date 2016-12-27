@@ -22,17 +22,15 @@
 <%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.impl.WorkflowOutputImpl"%>
 <%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
-<%@page import="org.opencps.processmgt.service.StepAllowanceLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
-<%@page import="com.liferay.portal.model.Role"%>
-<%@page import="org.opencps.processmgt.model.impl.StepAllowanceImpl"%>
 <%@page import="java.util.Collections"%>
-<%@page import="org.opencps.processmgt.model.StepAllowance"%>
 <%@page import="org.opencps.processmgt.model.ServiceProcess"%>
 <%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
 <%@page import="org.opencps.processmgt.model.ProcessStep"%>
+<%@page import="com.liferay.portlet.expando.model.ExpandoValue"%>
+<%@page import="com.liferay.portal.service.ClassNameLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil"%>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -115,6 +113,9 @@
 	}
 	
 %>
+
+<liferay-ui:error key="hanh-dong-duoc-kich-hoat-tu-dong" message="hanh-dong-duoc-kich-hoat-tu-dong" />
+<liferay-ui:error key="yeu-cau-thuc-hien-khong-thanh-cong" message="yeu-cau-thuc-hien-khong-thanh-cong" />
 
 <portlet:actionURL name="updateAction" var="updateActionURL"/>
 <portlet:renderURL var="getAssignUsersURL" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
@@ -250,7 +251,7 @@
 			<div class="lfr-form-row lfr-form-row-inline">
 				<div class="row-fields">
 					<aui:input name='<%= "workflowOutputId" + outputIndex %>' type="hidden" value="<%= output.getWorkflowOutputId() %>"/>
-					
+					<aui:input name='<%="wfOutputPattern" + outputIndex %>' id='<%="wfOutputPattern" + outputIndex %>' type="text" value="<%=output.getPattern() %>" label="" placeholder="pattern"/>
 					<aui:select id='<%= "dossierPartId" + outputIndex %>' inlineField="<%= true %>" name='<%= "dossierPartId" + outputIndex %>' label="" showEmptyOption="true">
 						<%							
 							for (DossierPart dossier : dossiersResults) {
@@ -329,5 +330,44 @@
 		<aui:button type="cancel" name="cencel" />
 	</aui:button-row>
 	
+</aui:form>
+
+<portlet:actionURL var="updateRequiedActionNoteURL" name="updateRequiedActionNote" />
+
+<aui:form action="<%=updateRequiedActionNoteURL.toString() %>" method="post" name="updateRequiedActionNoteFm">
+	<liferay-ui:panel-container 
+		id="requiedActionNotePanelContainer" 
+	>
+		<liferay-ui:panel 
+			id="requiedActionNotePanel" 
+			title="update-requied-process-action-note"
+		>
+			<aui:input name="returnURL" type="hidden" value="<%= currentURL %>"/>
+			<aui:input name="processWorkflowId" type="hidden" 
+				value="<%= Validator.isNotNull(workflow) ? workflow.getProcessWorkflowId() : StringPool.BLANK %>"
+			/>
+			
+			<%
+				ExpandoValue requiedActionNote = null;
+				try {
+					requiedActionNote = 
+							ExpandoValueLocalServiceUtil.getValue(
+								themeDisplay.getCompanyId(), 
+								ClassNameLocalServiceUtil.getClassNameId(ProcessStep.class.getName()), 
+								ProcessStep.class.getName(), 
+								"requiedProcessActionNote", 
+								processWorkflowId);
+				} catch (Exception e){
+					//
+				}
+			%>
+			
+			<aui:input name="requiedActionNote" type="checkbox" 
+				checked="<%=requiedActionNote != null ? requiedActionNote.getBoolean() : false %>"
+			/>
+			
+			<aui:button type="submit" name="Save" value="save"/>
+		</liferay-ui:panel>
+	</liferay-ui:panel-container>
 </aui:form>
 

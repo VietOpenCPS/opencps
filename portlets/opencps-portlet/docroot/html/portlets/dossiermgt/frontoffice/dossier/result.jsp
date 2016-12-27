@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,13 +18,6 @@
 %>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearchUtil"%>
-<%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
-<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
-<%@page import="org.opencps.util.DLFileEntryUtil"%>
-<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="java.util.ArrayList"%>
@@ -36,11 +28,10 @@
 <%@page import="org.opencps.dossiermgt.service.DossierLogLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierLog"%>
 <%@page import="java.util.List"%>
-<%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="com.liferay.portal.kernel.util.OrderByComparator"%>
+
 
 <%@ include file="../../init.jsp"%>
 
@@ -48,6 +39,11 @@
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 %>
+<aui:row cssClass="header-title custom-title">
+	<aui:col width="100">
+		<liferay-ui:message key="result"/>
+	</aui:col>
+</aui:row>
 
 <c:choose>
 	<c:when test="<%=dossier != null && dossier.getDossierStatus() != PortletConstants.DOSSIER_STATUS_NEW %>">
@@ -246,7 +242,7 @@
 										</span>
 									</aui:col>
 									<aui:col width="30">
-										<span class="span4 bold">
+										<span class="span4 bold status-color-denied">
 											<liferay-ui:message key="message-info"/>
 										</span>
 										<span class="span8">
@@ -265,7 +261,7 @@
 		
 		<!-- cau hinh hien thi sap xep giay to ket qua -->
 		<c:choose>
-			<c:when test="<%=Validator.isNotNull(orderFieldDossierFile) %>">
+			<c:when test="<%=Validator.isNotNull(dossierFileListOrderByField) %>">
 			<%-- 	<%@ include file="/html/portlets/dossiermgt/frontoffice/dossier/result_display/result_order.jsp" %>
 			 --%>
 			 

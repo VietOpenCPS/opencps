@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.User;
@@ -484,9 +485,10 @@ public class PaymentFileLocalServiceImpl
 
 		if (Validator.isNotNull(approveNote)) {
 			paymentFile.setApproveNote(approveNote);
+		} else {
+			paymentFile.setApproveNote(StringPool.BLANK);
 		}
 
-		paymentFile.setApproveNote(approveNote);
 
 		User user = UserLocalServiceUtil.getUser(serviceContext.getUserId());
 

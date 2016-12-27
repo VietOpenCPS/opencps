@@ -19,7 +19,6 @@
 %>
 
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
-<%@page import="com.liferay.portal.kernel.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="org.opencps.util.ActionKeys"%>

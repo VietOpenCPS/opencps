@@ -100,12 +100,37 @@
 					&& tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)%>">
 					
 					<portlet:renderURL var="addDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
-						<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
 						<portlet:param name="isListServiceConfig" value="<%=String.valueOf(true) %>"/>
+						<portlet:param name="tabs1" value="<%=DossierMgtUtil.TOP_TABS_DOSSIER %>"/>
 						<portlet:param name="backURL" value="<%=currentURL %>"/>
+						<%
+							if(Validator.isNotNull(itemCode_cfg) && itemCode_cfg.length() > 0){
+								
+							DictItem dictItem_cfg = DictItemLocalServiceUtil.getDictItemInuseByItemCode(themeDisplay.getScopeGroupId(), PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, itemCode_cfg);
+								
+							if(Validator.isNotNull(dictItem_cfg)){
+							
+						%>
+							<portlet:param name="mvcPath" value="<%=templatePath + \"display/20_80_servicelist_04.jsp\" %>"/>
+							<portlet:param name="serviceDomainId" value="<%=String.valueOf(dictItem_cfg.getDictItemId()) %>"/>
+							<portlet:param name="dictItemCode" value="<%=dictItem_cfg.getItemCode() %>"/>
+						<%
+							}
+							}else{
+						%>		
+							<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
+						<%
+							}
+						%>
 						<portlet:param name="backURLFromList" value="<%=currentURL %>"/>
 					</portlet:renderURL>
-
+					<%-- <aui:nav-item 
+						id="addDictItem" 
+						label="add-dossier" 
+						iconCssClass="icon-plus"  
+						href="<%=addDossierURL %>"
+						cssClass="action-button"
+					/> --%>
 					<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="select-service-info"/>
 				</c:if>
 			</aui:nav>

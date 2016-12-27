@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,6 +21,7 @@
 <%@page import="javax.portlet.WindowState"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
@@ -133,8 +133,10 @@
 						}
 					%>
 					<liferay-ui:search-container-column-text 
+
 						title="version-stt"
 						name="version-stt"
+
 						value="<%=String.valueOf(dossierFile.getVersion()) + (access  ? StringPool.BLANK : StringPool.OPEN_PARENTHESIS +  LanguageUtil.get(locale, \"updating\") + StringPool.CLOSE_PARENTHESIS)%>"
 					/>
 					<liferay-ui:search-container-column-text 
@@ -157,6 +159,13 @@
 						name="display-name"
 						value="<%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.DASH %>"
 					/>
+					
+
+					<%-- <liferay-ui:search-container-column-text 
+						title="version"
+						name="version"
+						value="<%=String.valueOf(dossierFile.getVersion()) + (access  ? StringPool.BLANK : StringPool.OPEN_PARENTHESIS +  LanguageUtil.get(locale, \"updating\") + StringPool.CLOSE_PARENTHESIS)%>"
+					/> --%>
 					
 					<%
 					   if(access){

@@ -16,11 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../../init.jsp"%>
-<%@page import="org.opencps.util.WebKeys"%>
+
+
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
-<%@page import="org.opencps.util.MessageKeys"%>
+
+<%@ include file="../../init.jsp"%>
 <%
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;

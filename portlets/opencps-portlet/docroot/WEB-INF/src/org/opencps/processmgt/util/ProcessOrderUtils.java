@@ -29,6 +29,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.WindowStateException;
 
 import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.impl.DossierImpl;
@@ -75,27 +76,25 @@ import com.liferay.portal.theme.ThemeDisplay;
  */
 public class ProcessOrderUtils {
 
-	public static final String TOP_TABS_PROCESSORDER_TODO =
-		"top_tabs_processorder_todo";
-	public static final String TOP_TABS_PROCESSORDER_DONE =
-		"top_tabs_processorder_done";
+	public static final String TOP_TABS_PROCESSORDER_TODO = "top_tabs_processorder_todo";
+	public static final String TOP_TABS_PROCESSORDER_DONE = "top_tabs_processorder_done";
 
 	public static OrderByComparator getProcessOrderByComparator(
-		String orderByCol, String orderByType) {
+			String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
 
-		if (orderByType
-			.equals("asc")) {
+		if (orderByType.equals("asc")) {
 			orderByAsc = true;
 		}
 
 		OrderByComparator orderByComparator = null;
-		
-		if(orderByCol.equals(ProcessOrderDisplayTerms.MODIFIEDDATE)) {
-			orderByComparator = new ProcessOrderModifiedDateComparator(orderByAsc);
+
+		if (orderByCol.equals(ProcessOrderDisplayTerms.MODIFIEDDATE)) {
+			orderByComparator = new ProcessOrderModifiedDateComparator(
+					orderByAsc);
 		}
-		
+
 		// if(orderByCol.equals(ProcessOrderDisplayTerms.MA_TIEP_NHAN)) {
 		// orderByComparator = new MaTiepNhanComparator(orderByAsc);
 		// } else if(orderByCol.equals(ProcessOrderDisplayTerms.CHU_HO_SO)) {
@@ -130,10 +129,10 @@ public class ProcessOrderUtils {
 
 		}
 
-		public CustomDisPlay(
-			long id, String maTiepNhan, String chuHoSo, String thuTuc,
-			String buocXuLy, String nguoiPhuTrach, String hanXuLy,
-			String thaoTac, String ngayThucHien, String trangThaiHoSo) {
+		public CustomDisPlay(long id, String maTiepNhan, String chuHoSo,
+				String thuTuc, String buocXuLy, String nguoiPhuTrach,
+				String hanXuLy, String thaoTac, String ngayThucHien,
+				String trangThaiHoSo) {
 
 			super();
 			this.id = id;
@@ -254,30 +253,26 @@ public class ProcessOrderUtils {
 	 * @param roleIds
 	 * @return
 	 */
-	public static List<ProcessStep> getProcessSteps(
-		long groupId, long[] roleIds) {
+	public static List<ProcessStep> getProcessSteps(long groupId, long[] roleIds) {
 
 		List<ProcessStep> results = null;
 
 		try {
-			List<StepAllowance> listStepAllowance =
-				StepAllowanceLocalServiceUtil
+			List<StepAllowance> listStepAllowance = StepAllowanceLocalServiceUtil
 					.findByRoleIds(roleIds);
 
-			long[] processStepIds = new long[listStepAllowance
-				.size()];
+			long[] processStepIds = new long[listStepAllowance.size()];
 
 			int index = 0;
 
 			for (StepAllowance stepAllowance : listStepAllowance) {
 
-				processStepIds[index++] = stepAllowance
-					.getStepAllowanceId();
+				processStepIds[index++] = stepAllowance.getStepAllowanceId();
 
 			}
 
-			results = ProcessStepLocalServiceUtil
-				.findByProcessStepIds(groupId, processStepIds);
+			results = ProcessStepLocalServiceUtil.findByProcessStepIds(groupId,
+					processStepIds);
 
 		}
 
@@ -297,390 +292,371 @@ public class ProcessOrderUtils {
 	 * @throws WindowStateException
 	 * @throws PortletModeException
 	 */
-	public static String generateMenuBuocXuLy(
-		RenderRequest renderRequest, long[] roleIds, String active,
-		boolean counter, String renderURL)
-		throws WindowStateException, PortletModeException {
+	public static String generateMenuBuocXuLy(RenderRequest renderRequest,
+			long[] roleIds, String active, boolean counter, String renderURL)
+			throws WindowStateException, PortletModeException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
-			.getAttribute(WebKeys.THEME_DISPLAY);
+				.getAttribute(WebKeys.THEME_DISPLAY);
 
-		long groupId = themeDisplay
-			.getScopeGroupId();
+		long groupId = themeDisplay.getScopeGroupId();
 
 		// now read your parameters, e.g. like this:
 		// long someParameter = ParamUtil.getLong(request, "someParameter");
 
 		StringBuilder sbHtml = new StringBuilder();
 
-		sbHtml
-			.append("<ul class=\"menu-opencps\">");
+		sbHtml.append("<ul class=\"menu-opencps\">");
 
 		for (ProcessStep ett : getProcessSteps(groupId, roleIds)) {
-			String mnClass = (Validator
-				.isNotNull(active) && active
-					.equalsIgnoreCase(String
-						.valueOf(ett
+			String mnClass = (Validator.isNotNull(active)
+					&& active.equalsIgnoreCase(String.valueOf(ett
 							.getProcessStepId())) ? "active-menu" : "");
 
-			sbHtml
-				.append("<li class=\"menu-opencps-li " + mnClass +
-					"\" onclick=\"openCPS_menu_submit('" + renderURL + "','" +
-					ett
-						.getProcessStepId() +
-					"')\" >");
+			sbHtml.append("<li class=\"menu-opencps-li " + mnClass
+					+ "\" onclick=\"openCPS_menu_submit('" + renderURL + "','"
+					+ ett.getProcessStepId() + "')\" >");
 
-			sbHtml
-				.append("<a>");
+			sbHtml.append("<a>");
 
 			if (counter)
-				sbHtml
-					.append("<span id=\"" + "badge_" + ett
-						.getProcessStepId() + "\" class=\"badge\">0</span>");
+				sbHtml.append("<span id=\"" + "badge_" + ett.getProcessStepId()
+						+ "\" class=\"badge\">0</span>");
 
-			sbHtml
-				.append(HtmlUtil
-					.escape(ett
-						.getStepName()));
+			sbHtml.append(HtmlUtil.escape(ett.getStepName()));
 
-			sbHtml
-				.append("</a>");
+			sbHtml.append("</a>");
 
-			sbHtml
-				.append("</li>");
+			sbHtml.append("</li>");
 
 		}
 
-		sbHtml
-			.append("</ul>");
+		sbHtml.append("</ul>");
 
-		return sbHtml
-			.toString();
+		return sbHtml.toString();
 	}
 
 	public static List<CustomDisPlay> searchProcessOrder(List list) {
 
-		List<CustomDisPlay> customDisPlays =
-			new ArrayList<ProcessOrderUtils.CustomDisPlay>();
+		List<CustomDisPlay> customDisPlays = new ArrayList<ProcessOrderUtils.CustomDisPlay>();
 
-		Iterator<Object[]> itr = list
-			.iterator();
-		while (itr
-			.hasNext()) {
+		Iterator<Object[]> itr = list.iterator();
+		while (itr.hasNext()) {
 
-			Object[] object = (Object[]) itr
-				.next();
+			Object[] object = (Object[]) itr.next();
 			ProcessOrder processOrder = (ProcessOrder) object[0];
 			String tenThuTuc = (String) object[1];
 			Dossier dossier = (Dossier) object[2];
 			String stepName = (String) object[3];
 			String actionName = (String) object[4];
-			long id = processOrder
-				.getProcessOrderId();
-			String maTiepNhan = StringPool.BLANK + dossier
-				.getReceptionNo();
-			String chuHoSo = StringPool.BLANK + dossier
-				.getSubjectName();
+			long id = processOrder.getProcessOrderId();
+			String maTiepNhan = StringPool.BLANK + dossier.getReceptionNo();
+			String chuHoSo = StringPool.BLANK + dossier.getSubjectName();
 			String thuTuc = StringPool.BLANK + tenThuTuc;
 			String buocXuLy = StringPool.BLANK + stepName;
 			String nguoiPhuTrach = StringPool.BLANK;
 			try {
-				nguoiPhuTrach = UserLocalServiceUtil
-					.fetchUser(processOrder
-						.getAssignToUserId()).getFullName();
-			}
-			catch (SystemException e) {
+				nguoiPhuTrach = UserLocalServiceUtil.fetchUser(
+						processOrder.getAssignToUserId()).getFullName();
+			} catch (SystemException e) {
 				// TODO Auto-generated catch block
-				e
-					.printStackTrace();
+				e.printStackTrace();
 			}
 			long diff = 0;
-			if (Validator
-				.isNotNull(dossier
-					.getFinishDatetime())) {
-				diff = dossier
-					.getFinishDatetime().getTime() - new Date()
-						.getTime();
+			if (Validator.isNotNull(dossier.getFinishDatetime())) {
+				diff = dossier.getFinishDatetime().getTime()
+						- new Date().getTime();
 			}
 
-			String hanXuLy = StringPool.BLANK + TimeUnit.MILLISECONDS
-				.toDays(diff);
+			String hanXuLy = StringPool.BLANK
+					+ TimeUnit.MILLISECONDS.toDays(diff);
 			String thaoTac = StringPool.BLANK + actionName;
-			String ngayThucHien = StringPool.BLANK + processOrder
-				.getActionDatetime();
-			String trangThaiHoSo = StringPool.BLANK + dossier
-				.getDossierStatus();
-			CustomDisPlay customDisPlay = new CustomDisPlay(
-				id, maTiepNhan, chuHoSo, thuTuc, buocXuLy, nguoiPhuTrach,
-				hanXuLy, thaoTac, ngayThucHien, trangThaiHoSo);
-			customDisPlays
-				.add(customDisPlay);
+			String ngayThucHien = StringPool.BLANK
+					+ processOrder.getActionDatetime();
+			String trangThaiHoSo = StringPool.BLANK
+					+ dossier.getDossierStatus();
+			CustomDisPlay customDisPlay = new CustomDisPlay(id, maTiepNhan,
+					chuHoSo, thuTuc, buocXuLy, nguoiPhuTrach, hanXuLy, thaoTac,
+					ngayThucHien, trangThaiHoSo);
+			customDisPlays.add(customDisPlay);
 		}
 
 		return customDisPlays;
 
 	}
 
-	public static String generateTreeView(String collectionCode, String itemCode,
-			String myLabel, int level, String type,
-			boolean isCode ,RenderRequest renderRequest)		
-					throws SystemException, PortalException {
-		
-			ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
+	public static String generateTreeView(String collectionCode,
+			String itemCode, String myLabel, int level, String type,
+			boolean isCode, RenderRequest renderRequest)
+			throws SystemException, PortalException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
 				.getAttribute(WebKeys.THEME_DISPLAY);
 
-			long groupId = themeDisplay
-				.getScopeGroupId();
-			
-			//get chirentDataSource
-			List<DictItem> result = PortletUtil.getDictItemInUseByCode(groupId, collectionCode, itemCode);
-			
-			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
-			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-			
-			JSONObject jsonObjectRoot = JSONFactoryUtil
-					.createJSONObject();
-			JSONObject jsonObject = null;
-			
-			int countPeriod = 0;
-			
-				for (DictItem dictItem : result) {
-					
-					jsonObject = JSONFactoryUtil
-							.createJSONObject();
-					String[] treeIn = dictItem.getTreeIndex().split(StringPool.BACK_SLASH+StringPool.PERIOD);
-					
-					countPeriod = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
-					
-					if(countPeriod <= level){
-						
-						jsonObject.put("label",
-								dictItem.getItemName(themeDisplay.getLocale()));
-						
-						jsonObject.put("type", type);
-						
-						if(isCode){
-							jsonObject.put("id", dictItem.getItemCode());
-						}else{
-							jsonObject.put("id", StringUtil.valueOf(dictItem.getDictItemId()));
-						}
-						
-						jsonObject.put("expanded", true);
-						
-						if(countPeriod < level){
-							
-							jsonObject.put("leaf", false);
-							
-						}else{
-							jsonObject.put("leaf", true);
-						}
-						
-						
-						jsonObject.put("children", JSONFactoryUtil.createJSONArray());
-						
-						if(countPeriod > 0){
-							
-							jsonObject.put("parentId", StringUtil.valueOf(treeIn[countPeriod-1]));
-							
-							for (int y = 0; y < jsonArray.length(); y++) {
-								
-								buildChildJsonTreeData(jsonObject, 0, jsonArray.getJSONObject(y));
-								
-							}
-						}else{
-							
-							jsonArray.put(jsonObject);
-							
-						}
-						
-					}
-				}
-			
-			jsonObjectRoot.put("children", jsonArray);
-			
-			jsonObjectRoot.put("expanded", true);
-			
-			jsonObjectRoot.put("label", myLabel);
-			
-			jsonArrayRoot.put(jsonObjectRoot);
-			
-			return jsonArrayRoot.toString();
-		}
-	
-	public static String generateTreeViewMappingAdminCode(String collectionCode, String itemCode,
-			String myLabel, int level, String type,
-			boolean isCode ,RenderRequest renderRequest)		
-					throws SystemException, PortalException {
-		
-			ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
-				.getAttribute(WebKeys.THEME_DISPLAY);
+		long groupId = themeDisplay.getScopeGroupId();
 
-			long groupId = themeDisplay
-				.getScopeGroupId();
-			
-			//get chirentDataSource
-			List<DictItem> result = PortletUtil.getDictItemInUseByCodeMappingAdminCode(groupId, collectionCode, itemCode);
-			
-			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
-			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-			
-			JSONObject jsonObjectRoot = JSONFactoryUtil
-					.createJSONObject();
-			JSONObject jsonObject = null;
-			
-			int countPeriod = 0;
-			
-				for (DictItem dictItem : result) {
-					
-					jsonObject = JSONFactoryUtil
-							.createJSONObject();
-					String[] treeIn = dictItem.getTreeIndex().split(StringPool.BACK_SLASH+StringPool.PERIOD);
-					
-					countPeriod = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
-					
-					if(countPeriod <= level){
-						
-						jsonObject.put("label",
-								dictItem.getItemName(themeDisplay.getLocale()));
-						
-						jsonObject.put("type", type);
-						
-						if(isCode){
-							jsonObject.put("id", dictItem.getItemCode());
-						}else{
-							jsonObject.put("id", StringUtil.valueOf(dictItem.getDictItemId()));
-						}
-						
-						jsonObject.put("expanded", true);
-						
-						if(countPeriod < level){
-							
-							jsonObject.put("leaf", false);
-							
-						}else{
-							jsonObject.put("leaf", true);
-						}
-						
-						
-						jsonObject.put("children", JSONFactoryUtil.createJSONArray());
-						
-						if(countPeriod > 0){
-							
-							jsonObject.put("parentId", StringUtil.valueOf(treeIn[countPeriod-1]));
-							
-							for (int y = 0; y < jsonArray.length(); y++) {
-								
-								buildChildJsonTreeData(jsonObject, 0, jsonArray.getJSONObject(y));
-								
-							}
-						}else{
-							
-							jsonArray.put(jsonObject);
-							
-						}
-						
-					}
-				}
-			
-			jsonObjectRoot.put("children", jsonArray);
-			
-			jsonObjectRoot.put("expanded", true);
-			
-			jsonObjectRoot.put("label", myLabel);
-			
-			jsonArrayRoot.put(jsonObjectRoot);
-			
-			return jsonArrayRoot.toString();
-		}
-	
-	public static void buildChildJsonTreeData(JSONObject newJsonObject, int i, JSONObject compareJsonObject) {
-		
-			JSONObject childObj = compareJsonObject;
-			
-			if(Validator.isNotNull(compareJsonObject.getJSONArray("children").getJSONObject(i)) && i > 0){
-				childObj = compareJsonObject.getJSONArray("children").getJSONObject(i);
-			}
-			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-			
-			if(childObj != null){
+		// get chirentDataSource
+		List<DictItem> result = PortletUtil.getDictItemInUseByCode(groupId,
+				collectionCode, itemCode);
 
-				jsonArray = childObj.getJSONArray("children");
-				
-				if(newJsonObject.getString("parentId").equals(childObj.getString("id"))){
-	
-					jsonArray.put(newJsonObject);
-					
-					childObj.put("children", jsonArray);
-				}
-				
-				i++;
-					
-				JSONObject objChk = compareJsonObject.getJSONArray("children").getJSONObject(i);
-					
-				if(Validator.isNotNull(objChk)){
-					
-					buildChildJsonTreeData(newJsonObject, i, compareJsonObject);
-				}
-				
-			}		
-	}
-	
-	public static String generateTreeView(List<ProcessOrderBean> dataSource, String myLabel , String type)		
-					throws SystemException, PortalException {
-		
-			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
-			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-			
-			JSONObject jsonObjectRoot = JSONFactoryUtil
-					.createJSONObject();
-			JSONObject jsonObject = null;
-			
-			for (ProcessOrderBean item : dataSource) {
-				jsonObject = JSONFactoryUtil
-						.createJSONObject();
-				
-				if(item.getServiceInfoId() > 0){
+		JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
-					jsonObject.put("id", String.valueOf(item.getServiceInfoId()));
-					
-					jsonObject.put("label", item.getServiceName());
-				
-				}else if(item.getProcessStepId() > 0){
+		JSONObject jsonObjectRoot = JSONFactoryUtil.createJSONObject();
+		JSONObject jsonObject = null;
 
-					jsonObject.put("id", String.valueOf(item.getProcessStepId()));
-					
-					jsonObject.put("label", item.getStepName());
-				
-				}
-				
+		int countPeriod = 0;
+
+		for (DictItem dictItem : result) {
+
+			jsonObject = JSONFactoryUtil.createJSONObject();
+			String[] treeIn = dictItem.getTreeIndex().split(
+					StringPool.BACK_SLASH + StringPool.PERIOD);
+
+			countPeriod = StringUtil.count(dictItem.getTreeIndex(),
+					StringPool.PERIOD);
+
+			if (countPeriod <= level) {
+
+				jsonObject.put("label",
+						dictItem.getItemName(themeDisplay.getLocale()));
+
 				jsonObject.put("type", type);
-				
-				jsonObject.put("leaf", true);
-				
-				jsonArray.put(jsonObject);
+
+				if (isCode) {
+					jsonObject.put("id", dictItem.getItemCode());
+				} else {
+					jsonObject.put("id",
+							StringUtil.valueOf(dictItem.getDictItemId()));
+				}
+
+				jsonObject.put("expanded", true);
+
+				if (countPeriod < level) {
+
+					jsonObject.put("leaf", false);
+
+				} else {
+					jsonObject.put("leaf", true);
+				}
+
+				jsonObject.put("children", JSONFactoryUtil.createJSONArray());
+
+				if (countPeriod > 0) {
+
+					jsonObject.put("parentId",
+							StringUtil.valueOf(treeIn[countPeriod - 1]));
+
+					for (int y = 0; y < jsonArray.length(); y++) {
+
+						buildChildJsonTreeData(jsonObject, 0,
+								jsonArray.getJSONObject(y));
+
+					}
+				} else {
+
+					jsonArray.put(jsonObject);
+
+				}
+
 			}
-			
-			jsonObjectRoot.put("children", jsonArray);
-			
-			jsonObjectRoot.put("expanded", true);
-			
-			jsonObjectRoot.put("label", myLabel);
-			
-			jsonArrayRoot.put(jsonObjectRoot);
-			
-			return jsonArrayRoot.toString();
 		}
-	
+
+		jsonObjectRoot.put("children", jsonArray);
+
+		jsonObjectRoot.put("expanded", true);
+
+		jsonObjectRoot.put("label", myLabel);
+
+		jsonArrayRoot.put(jsonObjectRoot);
+
+		return jsonArrayRoot.toString();
+	}
+
+	public static String generateTreeViewMappingAdminCode(
+			String collectionCode, String itemCode, String myLabel, int level,
+			String type, boolean isCode, RenderRequest renderRequest)
+			throws SystemException, PortalException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
+				.getAttribute(WebKeys.THEME_DISPLAY);
+
+		long groupId = themeDisplay.getScopeGroupId();
+
+		// get chirentDataSource
+		List<DictItem> result = PortletUtil
+				.getDictItemInUseByCodeMappingAdminCode(groupId,
+						collectionCode, itemCode);
+
+		JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		JSONObject jsonObjectRoot = JSONFactoryUtil.createJSONObject();
+		JSONObject jsonObject = null;
+
+		int countPeriod = 0;
+
+		for (DictItem dictItem : result) {
+
+			jsonObject = JSONFactoryUtil.createJSONObject();
+			String[] treeIn = dictItem.getTreeIndex().split(
+					StringPool.BACK_SLASH + StringPool.PERIOD);
+
+			countPeriod = StringUtil.count(dictItem.getTreeIndex(),
+					StringPool.PERIOD);
+
+			if (countPeriod <= level) {
+
+				jsonObject.put("label",
+						dictItem.getItemName(themeDisplay.getLocale()));
+
+				jsonObject.put("type", type);
+
+				if (isCode) {
+					jsonObject.put("id", dictItem.getItemCode());
+				} else {
+					jsonObject.put("id",
+							StringUtil.valueOf(dictItem.getDictItemId()));
+				}
+
+				jsonObject.put("expanded", true);
+
+				if (countPeriod < level) {
+
+					jsonObject.put("leaf", false);
+
+				} else {
+					jsonObject.put("leaf", true);
+				}
+
+				jsonObject.put("children", JSONFactoryUtil.createJSONArray());
+
+				if (countPeriod > 0) {
+
+					jsonObject.put("parentId",
+							StringUtil.valueOf(treeIn[countPeriod - 1]));
+
+					for (int y = 0; y < jsonArray.length(); y++) {
+
+						buildChildJsonTreeData(jsonObject, 0,
+								jsonArray.getJSONObject(y));
+
+					}
+				} else {
+
+					jsonArray.put(jsonObject);
+
+				}
+
+			}
+		}
+
+		jsonObjectRoot.put("children", jsonArray);
+
+		jsonObjectRoot.put("expanded", true);
+
+		jsonObjectRoot.put("label", myLabel);
+
+		jsonArrayRoot.put(jsonObjectRoot);
+
+		return jsonArrayRoot.toString();
+	}
+
+	public static void buildChildJsonTreeData(JSONObject newJsonObject, int i,
+			JSONObject compareJsonObject) {
+
+		JSONObject childObj = compareJsonObject;
+
+		if (Validator.isNotNull(compareJsonObject.getJSONArray("children")
+				.getJSONObject(i)) && i > 0) {
+			childObj = compareJsonObject.getJSONArray("children")
+					.getJSONObject(i);
+		}
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		if (childObj != null) {
+
+			jsonArray = childObj.getJSONArray("children");
+
+			if (newJsonObject.getString("parentId").equals(
+					childObj.getString("id"))) {
+
+				jsonArray.put(newJsonObject);
+
+				childObj.put("children", jsonArray);
+			}
+
+			i++;
+
+			JSONObject objChk = compareJsonObject.getJSONArray("children")
+					.getJSONObject(i);
+
+			if (Validator.isNotNull(objChk)) {
+
+				buildChildJsonTreeData(newJsonObject, i, compareJsonObject);
+			}
+
+		}
+	}
+
+	public static String generateTreeView(List<ProcessOrderBean> dataSource,
+			String myLabel, String type) throws SystemException,
+			PortalException {
+
+		JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		JSONObject jsonObjectRoot = JSONFactoryUtil.createJSONObject();
+		JSONObject jsonObject = null;
+
+		for (ProcessOrderBean item : dataSource) {
+			jsonObject = JSONFactoryUtil.createJSONObject();
+
+			if (item.getServiceInfoId() > 0) {
+
+				jsonObject.put("id", String.valueOf(item.getServiceInfoId()));
+
+				jsonObject.put("label", item.getServiceName());
+
+			} else if (item.getProcessStepId() > 0) {
+
+				jsonObject.put("id", String.valueOf(item.getProcessStepId()));
+
+				jsonObject.put("label", item.getStepName());
+
+			}
+
+			jsonObject.put("type", type);
+
+			jsonObject.put("leaf", true);
+
+			jsonArray.put(jsonObject);
+		}
+
+		jsonObjectRoot.put("children", jsonArray);
+
+		jsonObjectRoot.put("expanded", true);
+
+		jsonObjectRoot.put("label", myLabel);
+
+		jsonArrayRoot.put(jsonObjectRoot);
+
+		return jsonArrayRoot.toString();
+	}
+
 	/**
 	 * Get Date of Dossier
 	 * 
 	 * @param dossierId
-	 * @param typeDate 1: receiveDate, 2: estimateDate, 3: finishedDate, 4: modifiedDate
-	 * @param patternDate Pattern of date output
+	 * @param typeDate
+	 *            1: receiveDate, 2: estimateDate, 3: finishedDate, 4:
+	 *            modifiedDate
+	 * @param patternDate
+	 *            Pattern of date output
 	 * @return
 	 */
-	public static String getDossierDate(
-	    long dossierId, int typeDate, String patternDate) {
+	public static String getDossierDate(long dossierId, int typeDate,
+			String patternDate) {
 
 		String dossierDate = StringPool.BLANK;
 
@@ -702,7 +678,7 @@ public class ProcessOrderUtils {
 				if (Validator.isNotNull(dossier.getEstimateDatetime())) {
 					dossierDate = df.format(dossier.getEstimateDatetime());
 				}
-				
+
 				break;
 
 			}
@@ -710,7 +686,7 @@ public class ProcessOrderUtils {
 				if (Validator.isNotNull(dossier.getFinishDatetime())) {
 					dossierDate = df.format(dossier.getFinishDatetime());
 				}
-				
+
 				break;
 
 			}
@@ -718,28 +694,27 @@ public class ProcessOrderUtils {
 				if (Validator.isNotNull(dossier.getModifiedDate())) {
 					dossierDate = df.format(dossier.getModifiedDate());
 				}
-				
+
 				break;
 			}
 			default:
 				break;
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			_log.error(e);
 		}
 
 		return dossierDate;
 	}
-	
+
 	/**
 	 * @param dossierId
 	 * @param processWorkflowId
 	 * @param processStepId
 	 * @return
 	 */
-	public static Date getRecevieDate(
-	    long dossierId, long processWorkflowId, long processStepId) {
+	public static Date getRecevieDate(long dossierId, long processWorkflowId,
+			long processStepId) {
 
 		Date recevieDate = null;
 
@@ -749,137 +724,242 @@ public class ProcessOrderUtils {
 
 			if (Validator.isNotNull(dossier.getReceiveDatetime())) {
 				recevieDate = dossier.getReceiveDatetime();
-			}
-			else {
-//				ProcessWorkflow processWorkflow =
-//				    ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
-//
-//				ProcessStep currStep =
-//				    ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPreProcessStepId());
-//
-//				ProcessStep nextStep =
-//				    ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPostProcessStepId());
-//				
-//				if (currStep.getDossierStatus().contains(
-//				    PortletConstants.DOSSIER_STATUS_RECEIVING) &&
-//				    nextStep.getDossierStatus().contains(
-//				        PortletConstants.DOSSIER_STATUS_PROCESSING)) {
-//					recevieDate = new Date();
-//				}
+			} else {
+				// ProcessWorkflow processWorkflow =
+				// ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
+				//
+				// ProcessStep currStep =
+				// ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPreProcessStepId());
+				//
+				// ProcessStep nextStep =
+				// ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPostProcessStepId());
+				//
+				// if (currStep.getDossierStatus().contains(
+				// PortletConstants.DOSSIER_STATUS_RECEIVING) &&
+				// nextStep.getDossierStatus().contains(
+				// PortletConstants.DOSSIER_STATUS_PROCESSING)) {
+				// recevieDate = new Date();
+				// }
 				recevieDate = new Date();
 
 			}
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			_log.error(e);
 		}
 		return recevieDate;
 
 	}
-	
-	public static String generateComboboxTree(String collectionCode, String itemCode,
-			int level, boolean isCode ,RenderRequest renderRequest)		
-					throws SystemException, PortalException {
-		
-			ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
+
+	public static String generateComboboxTree(String collectionCode,
+			String itemCode, int level, boolean isCode,
+			RenderRequest renderRequest) throws SystemException,
+			PortalException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
 				.getAttribute(WebKeys.THEME_DISPLAY);
 
-			long groupId = themeDisplay
-				.getScopeGroupId();
-			
-			//get chirentDataSource
-			List<DictItem> result = PortletUtil.getDictItemInUseByCode(groupId, collectionCode, itemCode);
-			
-			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
-			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-			
-			JSONObject jsonObject = null;
-			jsonObject = JSONFactoryUtil
-					.createJSONObject();
-			jsonObject.put("id", StringPool.BLANK);
-			jsonObject.put("text", LanguageUtil.get(themeDisplay.getLocale(), "domainCode", "domainCode"));
-			jsonObject.put("children", JSONFactoryUtil.createJSONArray());
-			
-			jsonObject.put("idCHK", StringPool.BLANK);
-			jsonArray.put(jsonObject);
-			int countPeriod = 0;
-			
-				for (DictItem dictItem : result) {
-					
-					jsonObject = JSONFactoryUtil
-							.createJSONObject();
-					String[] treeIn = dictItem.getTreeIndex().split(StringPool.BACK_SLASH+StringPool.PERIOD);
-					
-					countPeriod = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
-					
-					if(countPeriod <= level){
-						
-						if(isCode){
-							jsonObject.put("id", dictItem.getItemCode());
-						}else{
-							jsonObject.put("id", StringUtil.valueOf(dictItem.getDictItemId()));
-						}
-						
-						jsonObject.put("text", dictItem.getItemName(themeDisplay.getLocale()));
-						
-						
-						jsonObject.put("children", JSONFactoryUtil.createJSONArray());
-						
-						jsonObject.put("idCHK", StringUtil.valueOf(dictItem.getDictItemId()));
-						
-						if(countPeriod > 0){
-							
-							jsonObject.put("parentId", StringUtil.valueOf(treeIn[countPeriod-1]));
-							
-							for (int y = 0; y < jsonArray.length(); y++) {
-								
-								buildChildJsonComboboxTreeData(jsonObject, 0, jsonArray.getJSONObject(y));
-								
-							}
-						}else{
-							
-							jsonArray.put(jsonObject);
-							
-						}
-						
-					}
+		long groupId = themeDisplay.getScopeGroupId();
+
+		// get chirentDataSource
+		List<DictItem> result = PortletUtil.getDictItemInUseByCode(groupId,
+				collectionCode, itemCode);
+
+		JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		JSONObject jsonObject = null;
+		jsonObject = JSONFactoryUtil.createJSONObject();
+		jsonObject.put("id", StringPool.BLANK);
+		jsonObject.put("text", LanguageUtil.get(themeDisplay.getLocale(),
+				"domainCode", "domainCode"));
+		jsonObject.put("children", JSONFactoryUtil.createJSONArray());
+
+		jsonObject.put("idCHK", StringPool.BLANK);
+		jsonArray.put(jsonObject);
+		int countPeriod = 0;
+
+		for (DictItem dictItem : result) {
+
+			jsonObject = JSONFactoryUtil.createJSONObject();
+			String[] treeIn = dictItem.getTreeIndex().split(
+					StringPool.BACK_SLASH + StringPool.PERIOD);
+
+			countPeriod = StringUtil.count(dictItem.getTreeIndex(),
+					StringPool.PERIOD);
+
+			if (countPeriod <= level) {
+
+				if (isCode) {
+					jsonObject.put("id", dictItem.getItemCode());
+				} else {
+					jsonObject.put("id",
+							StringUtil.valueOf(dictItem.getDictItemId()));
 				}
-			
-			
-			return jsonArray.toString();
+
+				jsonObject.put("text",
+						dictItem.getItemName(themeDisplay.getLocale()));
+
+				jsonObject.put("children", JSONFactoryUtil.createJSONArray());
+
+				jsonObject.put("idCHK",
+						StringUtil.valueOf(dictItem.getDictItemId()));
+
+				if (countPeriod > 0) {
+
+					jsonObject.put("parentId",
+							StringUtil.valueOf(treeIn[countPeriod - 1]));
+
+					for (int y = 0; y < jsonArray.length(); y++) {
+
+						buildChildJsonComboboxTreeData(jsonObject, 0,
+								jsonArray.getJSONObject(y));
+
+					}
+				} else {
+
+					jsonArray.put(jsonObject);
+
+				}
+
+			}
 		}
-	public static void buildChildJsonComboboxTreeData(JSONObject newJsonObject, int i, JSONObject compareJsonObject) {
-		
+
+		return jsonArray.toString();
+	}
+
+	public static void buildChildJsonComboboxTreeData(JSONObject newJsonObject,
+			int i, JSONObject compareJsonObject) {
+
 		JSONObject childObj = compareJsonObject;
-		
-		if(Validator.isNotNull(compareJsonObject.getJSONArray("children").getJSONObject(i)) && i > 0){
-			childObj = compareJsonObject.getJSONArray("children").getJSONObject(i);
+
+		if (Validator.isNotNull(compareJsonObject.getJSONArray("children")
+				.getJSONObject(i)) && i > 0) {
+			childObj = compareJsonObject.getJSONArray("children")
+					.getJSONObject(i);
 		}
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-		
-		if(childObj != null){
+
+		if (childObj != null) {
 
 			jsonArray = childObj.getJSONArray("children");
-			
-			if(newJsonObject.getString("parentId").equals(childObj.getString("idCHK"))){
+
+			if (newJsonObject.getString("parentId").equals(
+					childObj.getString("idCHK"))) {
 
 				jsonArray.put(newJsonObject);
-				
+
 				childObj.put("children", jsonArray);
 			}
-			
+
 			i++;
-				
-			JSONObject objChk = compareJsonObject.getJSONArray("children").getJSONObject(i);
-				
-			if(Validator.isNotNull(objChk)){
-				
-				buildChildJsonComboboxTreeData(newJsonObject, i, compareJsonObject);
+
+			JSONObject objChk = compareJsonObject.getJSONArray("children")
+					.getJSONObject(i);
+
+			if (Validator.isNotNull(objChk)) {
+
+				buildChildJsonComboboxTreeData(newJsonObject, i,
+						compareJsonObject);
 			}
-			
-		}		
+
+		}
 	}
-	private static Log _log =
-    		LogFactoryUtil.getLog(ProcessOrderUtils.class.getName());
+	
+	public static String generateTreeView(
+			String[] itemCodes, String myLabel, int level, String type,
+			boolean isCode, RenderRequest renderRequest)
+			throws SystemException, PortalException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
+				.getAttribute(WebKeys.THEME_DISPLAY);
+
+		//long groupId = themeDisplay.getScopeGroupId();
+
+		// get chirentDataSource
+		List<DictItem> result = new ArrayList<DictItem>();
+		
+		if(itemCodes != null){
+			for(int i = 0; i < itemCodes.length; i++){
+				DictItem dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCodes[i]);
+				result.add(dictItem);
+			}
+		}
+
+		JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		JSONObject jsonObjectRoot = JSONFactoryUtil.createJSONObject();
+		JSONObject jsonObject = null;
+
+		int countPeriod = 0;
+
+		for (DictItem dictItem : result) {
+
+			jsonObject = JSONFactoryUtil.createJSONObject();
+			String[] treeIn = dictItem.getTreeIndex().split(
+					StringPool.BACK_SLASH + StringPool.PERIOD);
+
+			countPeriod = StringUtil.count(dictItem.getTreeIndex(),
+					StringPool.PERIOD);
+
+			if (countPeriod <= level) {
+
+				jsonObject.put("label",
+						dictItem.getItemName(themeDisplay.getLocale()));
+
+				jsonObject.put("type", type);
+
+				if (isCode) {
+					jsonObject.put("id", dictItem.getItemCode());
+				} else {
+					jsonObject.put("id",
+							StringUtil.valueOf(dictItem.getDictItemId()));
+				}
+
+				jsonObject.put("expanded", true);
+
+				if (countPeriod < level) {
+
+					jsonObject.put("leaf", false);
+
+				} else {
+					jsonObject.put("leaf", true);
+				}
+
+				jsonObject.put("children", JSONFactoryUtil.createJSONArray());
+
+				if (countPeriod > 0) {
+
+					jsonObject.put("parentId",
+							StringUtil.valueOf(treeIn[countPeriod - 1]));
+
+					for (int y = 0; y < jsonArray.length(); y++) {
+
+						buildChildJsonTreeData(jsonObject, 0,
+								jsonArray.getJSONObject(y));
+
+					}
+				} else {
+
+					jsonArray.put(jsonObject);
+
+				}
+
+			}
+		}
+
+		jsonObjectRoot.put("children", jsonArray);
+
+		jsonObjectRoot.put("expanded", true);
+
+		jsonObjectRoot.put("label", myLabel);
+
+		jsonArrayRoot.put(jsonObjectRoot);
+
+		return jsonArrayRoot.toString();
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(ProcessOrderUtils.class
+			.getName());
 }

@@ -41,6 +41,7 @@ import org.opencps.usermgt.model.Employee;
 import org.opencps.usermgt.service.EmployeeLocalServiceUtil;
 import org.opencps.util.AccountUtil;
 import org.opencps.util.MessageBusKeys;
+import org.opencps.util.PortletPropsKeys;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.SendMailUtils;
 
@@ -63,6 +64,7 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
+import com.liferay.util.portlet.PortletProps;
 
 /**
  * @author nhanhoang
@@ -181,7 +183,7 @@ public class NotificationUtils {
 			body = StringUtil.replace(body, "{receptionNo}", dossier.getReceptionNo());
 			body =
 				StringUtil.replace(
-					body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
+					body, "{event}", PortletProps.get(message.getNotificationEventName()));
 			body = StringUtil.replace(body, "{message}", message.getNotificationContent());
 
 			_log.info("fromAddress:" + fromAddress);

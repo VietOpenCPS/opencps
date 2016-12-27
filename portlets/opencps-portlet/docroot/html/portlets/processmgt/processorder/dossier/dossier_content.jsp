@@ -51,6 +51,11 @@
 <%@ include file="../../init.jsp"%>
 
 <div class="ocps-dossier-content">
+<aui:row cssClass="header-title custom-title">
+	<aui:col width="100">
+		<liferay-ui:message key="dossier_content"/>
+	</aui:col>
+</aui:row>
 <%
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 
@@ -199,10 +204,10 @@
 													value="<%=String.valueOf(isOnlineData) %>"
 												/>
 												
-												<portlet:param 
+												<%-- <portlet:param 
 													name="isCBXL" 
 													value="true"
-												/>
+												/> --%>
 											</liferay-util:include>
 										</span>
 									</div>
@@ -274,14 +279,11 @@
 															value="<%=String.valueOf(isEditDossier) %>"
 														/>
 														
-														<portlet:param 
+														
+														<%-- <portlet:param 
 															name="isCBXL" 
 															value="true"
-														/>
-														<portlet:param 
-															name="isCBXL" 
-															value="true"
-														/>
+														/> --%>
 													</liferay-util:include>
 												</span>
 											</div>
@@ -364,10 +366,10 @@
 													value="<%=String.valueOf(isEditDossier) %>"
 												/>
 												
-												<portlet:param 
+												<%-- <portlet:param 
 													name="isCBXL" 
 													value="true"
-												/>
+												/> --%>
 											</liferay-util:include>
 											<%
 											index ++;

@@ -22,13 +22,14 @@
 <%@ include file="../init.jsp"%>
 
 <%
+	boolean isMultiAssign = false;
 	
 	String todolistDisplayStyle = GetterUtil.getString(portletPreferences.getValue("todolistDisplayStyle", "default"));
 	
 	String justfinishedlistDisplayStyle = GetterUtil.getString(portletPreferences.getValue("justfinishedlistDisplayStyle", "default"));
 	
 	String todolistOrderByType = preferences.getValue("todolistOrderByType", WebKeys.ORDER_BY_DESC);
-	String justfinishedlistOrderByType = preferences.getValue("oderByJustFinish", WebKeys.ORDER_BY_DESC);
+	String justfinishedlistOrderByType = preferences.getValue("justfinishedlistOrderByType", WebKeys.ORDER_BY_DESC);
 	
 	String todolistOrderByField = preferences.getValue("todolistOrderByField", ProcessOrderDisplayTerms.MODIFIEDDATE);
 	String justfinishedlistOrderByField = preferences.getValue("justfinishedlistOrderByField", ProcessOrderDisplayTerms.MODIFIEDDATE);
@@ -48,6 +49,9 @@
 	double offsetY = GetterUtil.getDouble(preferences.getValue("offsetY", "0.0"), 0.0);
 	
 	double imageZoom = GetterUtil.getDouble(preferences.getValue("imageZoom", "1.0"), 1.0);
+	
+	String processOrderDetailPage = GetterUtil.getString(portletPreferences.getValue("processOrderViewer", "default"));
 
-	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
+	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"));
+
 %>

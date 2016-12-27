@@ -378,6 +378,65 @@
 		</footer-portlet-javascript>
 		<css-class-wrapper>1001-portlet</css-class-wrapper>
 	</portlet>
+
+	
+	<portlet>
+		<portlet-name>30</portlet-name>
+
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>30-portlet</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>32</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/statistics.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>32-portlet</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>33</portlet-name>
+		<icon>/icon.png</icon>
+		<configuration-action-class>org.opencps.statisticsmgt.dashboard.portlet.YearlyDashBoardConfigurationImpl</configuration-action-class>
+		<template-handler>org.opencps.statisticsmgt.dashboard.template.YearlyDashBoardPortletDisplayTemplateHandler</template-handler>
+		<header-portlet-css>/css/statistics.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>33-portlet</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>34</portlet-name>
+		<icon>/icon.png</icon>
+		<configuration-action-class>org.opencps.statisticsmgt.dashboard.portlet.MonthlyDashBoardConfigurationImpl</configuration-action-class>
+		<template-handler>org.opencps.statisticsmgt.dashboard.template.MonthlyDashBoardPortletDisplayTemplateHandler</template-handler>
+		<header-portlet-css>/css/statistics.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>34-portlet</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>35</portlet-name>
+		<icon>/icon.png</icon>
+		<configuration-action-class>org.opencps.statisticsmgt.dashboard.portlet.TreeDashBoardConfigurationImpl</configuration-action-class>
+		<template-handler>org.opencps.statisticsmgt.dashboard.template.TreeDashBoardPortletDisplayTemplateHandler</template-handler>
+		<header-portlet-css>/css/statistics.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>35-portlet</css-class-wrapper>
+	</portlet>
+
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

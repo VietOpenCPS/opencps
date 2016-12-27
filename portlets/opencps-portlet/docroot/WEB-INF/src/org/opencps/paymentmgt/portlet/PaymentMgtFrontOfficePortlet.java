@@ -203,6 +203,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 				paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED);
 				paymentFile.setPaymentMethod(PaymentMgtUtil.PAYMENT_METHOD_BANK);
 				paymentFile.setModifiedDate(new Date());
+				paymentFile.setConfirmDatetime(new Date());
 
 				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 

@@ -114,6 +114,11 @@
 
 %>
 <div class="ocps-dossier-process">
+<aui:row cssClass="header-title custom-title">
+	<aui:col width="100">
+		<liferay-ui:message key="process"/>
+	</aui:col>
+</aui:row>
 	<table class="process-workflow-info">
 	  <tr class="odd">
 	    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="step-name"/></td>
@@ -129,11 +134,10 @@
 	    <td width="30%"><%=latestWorkflowActionHistory != null ? DateTimeUtil.convertDateToString(latestWorkflowActionHistory.getActionDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : StringPool.BLANK %></td>
 	  </tr>
 	  
-	  
-	  <tr class="odd">
+	  <%-- <tr class="odd">
 	    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="pre-action"/></td>
 	    <td width="80%" colspan="3"><%=latestWorkflowActionHistory != null ? latestWorkflowActionHistory.getActionName() : StringPool.BLANK %></td>
-	  </tr>
+	  </tr> --%>
 	  
 	  <tr class="even">
 	    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="pre-action-note"/></td>
@@ -500,33 +504,36 @@
 
 </div>
 
-<aui:script use="aui-base,liferay-portlet-url,aui-io">
+<aui:script use="aui-base,liferay-portlet-url,aui-io,aui-loading-mask-deprecated">
 
-	var required = false;
-	
-	Liferay.provide(window, '<portlet:namespace/>validateRequiredResult', function(dossierId, processStepId, processWorkflowId) {
+	function validateRequiredResult(dossierId, processStepId, processWorkflowId) {
 		
 		var A = AUI();
+
+		var actionNote = A.one('#<portlet:namespace />actionNote');
 		
 		var requiredDossierPartIds = [];
+		var requiredActionNote = false;
+		var required = false;
 		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
 		portletURL.setParameter("javax.portlet.action", "validateAssignTask");
 		portletURL.setWindowState('<%=WindowState.NORMAL%>');
-		var loadingMask = new A.LoadingMask(
+		/* var loadingMask = new A.LoadingMask(
 			{
 				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "validate") %>',
 				target: A.one('#<portlet:namespace/>pofm')
 			}
 		);
 		
-		loadingMask.show();
+		loadingMask.show(); */
 		
 		A.io.request(
 			portletURL.toString(),
 			{
 				dataType : 'text/html',
 				method : 'POST',
+				sync: true,
 			    data:{
 			    	<portlet:namespace/>dossierId : dossierId,
 			    	<portlet:namespace/>processStepId: processStepId,
@@ -536,8 +543,14 @@
 			    	success: function(event, id, obj) {
 			    		
 			    		var response = this.get('responseData');
+			    		
+						responseObj = JSON.parse(response);
 						
-						requiredDossierPartIds = JSON.parse(response);
+						requiredDossierPartIds = responseObj.arrayDossierpartIds;
+						
+						requiredActionNote = responseObj.requiedActionNote;
+						
+						//requiredDossierPartIds = JSON.parse(response);
 						
 						for(var i = 0; i < requiredDossierPartIds.length; i++){
 							var id = requiredDossierPartIds[i];
@@ -551,17 +564,30 @@
 								}
 							}
 						}
-						
-						loadingMask.hide();
-							
 					},
 			    	error: function(){}
 				}
 			}
 		);
 		
+		//loadingMask.hide();
 		
-	},['aui-base','liferay-portlet-url','aui-io','aui-loading-mask-deprecated']);
+		if (required){
+			return 'please-upload-dossier-part-required-before-send';
+		}
+		if (requiredActionNote == true && actionNote.val() == ''){
+			actionNote.addClass('changeDefErr');
+			A.one('#<portlet:namespace/>defErrActionNote').addClass('displayDefErr');
+			
+			return 'please-add-note-before-send';
+		} else {
+			actionNote.removeClass('changeDefErr');
+			A.one('#<portlet:namespace/>defErrActionNote').removeClass('displayDefErr');
+		}
+		
+		return '';
+	}
+	
 
 	Liferay.provide(window, '<portlet:namespace/>assignToUser', function(e) {
 		
@@ -609,9 +635,10 @@
 		if(assignFormDisplayStyle == 'popup' ) {
 			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
 			portletURL.setParameter("backURL", '<%=backURL%>');
-			<portlet:namespace/>validateRequiredResult(dossierId, processStepId, processWorkflowId);
-			if(required === true) {
-				alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+			//<portlet:namespace/>validateRequiredResult(dossierId, processStepId, processWorkflowId);
+			var msg = validateRequiredResult(dossierId, processStepId, processWorkflowId);
+			if(msg != '') {
+				alert(Liferay.Language.get(msg));
 				return;
 			} 
 			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
@@ -625,6 +652,7 @@
 				{
 					dataType : 'text/html',
 					method : 'POST',
+					sync : true,
 				    data:{
 				    },   
 				    on: {
@@ -653,12 +681,11 @@
 									form.attr('action', action);
 								}
 							
-								
 								if(submitButton){
 									submitButton.on('click', function(){
-										<portlet:namespace/>validateRequiredResult(dossierId, processStepId, processWorkflowId);
-										if(required === true) {
-											alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+										var msg = validateRequiredResult(dossierId, processStepId, processWorkflowId);
+										if(msg != '') {
+											alert(Liferay.Language.get(msg));
 											return;
 										} else{
 											A.io.request(
@@ -994,14 +1021,14 @@
 										completeSignature(sign, signFieldName, filePath, fileName, $("#<portlet:namespace/>dossierId").val(), dossierFileId, dossierPartId, index, indexSize, '<%=signatureURL%>');
 										
 	 								}else{
-	 									alert("signer error");
+	 									alert('<%=LanguageUtil.get(pageContext, "signer-error") %>');
 	 					            }
 								}else{
-									alert(msg);
+									alert('<%=LanguageUtil.get(pageContext, "signer-error-lien-he") %>');
 								}
 					        	
 					        } else {
-					         	alert("Plugin is not working");
+					        	alert('<%=LanguageUtil.get(pageContext, "plugin-is-not-working") %>');
 					        }
 						}
 					}
@@ -1047,11 +1074,11 @@
 									
 								}
 							} else {
-									alert("--------- vao day completeSignature- ky so ko dc-------------");
+								alert('<%=LanguageUtil.get(pageContext, "signer-error") %>');
 							}
 					},
 			    	error: function(){
-			    		alert("--------- vao day completeSignature- ky so ko dc-------------");
+			    		alert('<%=LanguageUtil.get(pageContext, "signer-fail") %>');
 			    	}
 				}
 			}

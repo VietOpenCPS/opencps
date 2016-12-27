@@ -19,22 +19,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../../../init.jsp"%>
-<%@page import="java.util.List"%>
 <%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearchUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="com.liferay.portal.kernel.util.StringPool"%>
-<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
-<%@page import="org.opencps.util.DLFileEntryUtil"%>
 <%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%> 
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
-<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearchUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
+
+<%@ include file="../../../init.jsp"%>
 <%
 	long dossierTemplateId = ParamUtil.getLong(request, "dossierTemplateId");
 
@@ -73,7 +70,7 @@
 				if(Validator.isNotNull(dossierId)) {
 					dossierFiles = DossierFileLocalServiceUtil
 									.getDossierFileResult(dossierId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-										DossierSearchUtil.getDossierFileOrderByComparator(orderFieldDossierFile, orderBydDossierFile));
+										DossierSearchUtil.getDossierFileOrderByComparator(dossierFileListOrderByField, dossierFileListOrderByType));
 				}
 			} catch (Exception e) {
 				

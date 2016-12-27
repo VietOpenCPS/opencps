@@ -23,7 +23,6 @@
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.DuplicateDossierTemplateNumberException"%>

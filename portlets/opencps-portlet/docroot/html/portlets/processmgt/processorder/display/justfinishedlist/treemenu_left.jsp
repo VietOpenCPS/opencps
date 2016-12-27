@@ -250,13 +250,19 @@
 										<div class="span3 bold-label">
 											<liferay-ui:message key="reception-no"/>
 										</div>
-										<span class="span9">
+										<span class="span8">
 											<%=processOrder.getReceptionNo() %>
 										</span>
 									</div>
 
 									<div class="row-fluid">
-										<span class="span12">
+
+										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+										</div>
+										<div class="span3 bold-label">
+											<liferay-ui:message key="service-name"/>
+										</div>
+										<span class="span8">
 											<%=processOrder.getServiceName() %>
 										</span>
 									</div>

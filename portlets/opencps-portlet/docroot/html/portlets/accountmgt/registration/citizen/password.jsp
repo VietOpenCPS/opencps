@@ -43,7 +43,9 @@
 
 <aui:row cssClass="nav-content-row-2">
 	<aui:col>
-		<aui:input type="password" name="<%=CitizenDisplayTerms.RE_PASSWORD %>" />
+		<aui:input type="password" name="<%=CitizenDisplayTerms.RE_PASSWORD %>" >
+ 			 <aui:validator name="equalTo">'#<portlet:namespace /><%=CitizenDisplayTerms.NEW_PASSWORD %>'</aui:validator>
+		</aui:input>
 	</aui:col>
 </aui:row>
 

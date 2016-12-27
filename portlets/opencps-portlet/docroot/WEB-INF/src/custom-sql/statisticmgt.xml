@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.[COLUMN-NAMES-0]">	
+		<![CDATA[
+			count(opencps_processorder.processOrderId) AS COL0
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.[DATA-TYPES-0]">	
+		<![CDATA[
+			INTEGER
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.[COLUMN-NAMES-1]">	
+		<![CDATA[
+			opencps_processorder.processOrderId AS COL0,
+			count(opencps_processorder.processOrderId) AS COL1,
+			opencps_processorder.govAgencyCode AS COL2,
+			d.itemCode AS COL3, 
+			d.treeIndex AS COL4,
+			g.treeIndex AS COL5,
+			g.itemCode AS COL6
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.[DATA-TYPES-1]">	
+		<![CDATA[
+			LONG,
+			INTEGER,
+			STRING,
+			STRING,
+			STRING,
+			STRING,
+			STRING
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.[COLUMN-NAMES-2]">	
+		<![CDATA[
+			opencps_processorder.processOrderId AS COL0,
+			count(opencps_processorder.processOrderId) AS COL1,
+			opencps_processorder.govAgencyCode AS COL2,
+			g.treeIndex AS COL3,
+			g.itemCode AS COL4
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.[DATA-TYPES-2]">	
+		<![CDATA[
+			LONG,
+			INTEGER,
+			STRING,
+			STRING,
+			STRING
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.[received]">	
+		<![CDATA[
+			WHERE
+				(opencps_processorder.groupId = ?)
+			AND
+				(month(opencps_dossier.receiveDatetime) = ?)
+			AND
+				(year(opencps_dossier.receiveDatetime) = ?)
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.[finished]">	
+		<![CDATA[
+			WHERE
+				(opencps_processorder.groupId = ?)
+			AND
+				(opencps_dossier.delayStatus = ?)
+			AND
+				(month(opencps_dossier.finishDatetime) = ?)
+			AND
+				(year(opencps_dossier.finishDatetime) = ?)
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.[processing]">	
+		<![CDATA[
+			WHERE
+				(opencps_processorder.groupId = ?)
+			AND
+				(opencps_dossier.delayStatus = ?)
+			AND
+				(opencps_dossier.finishDatetime IS NULL)
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.generalStatistics">	
+		<![CDATA[
+	    	SELECT 
+				$COLUMNS$
+			FROM 
+				opencps_processorder
+			INNER JOIN 
+				opencps_dossier
+			ON 
+				opencps_processorder.dossierId = opencps_dossier.dossierId
+    
+				$FILTER$
+				
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.statisticsByDomain">	
+		<![CDATA[
+	    	SELECT 
+				$COLUMNS$
+			FROM 
+				opencps_processorder
+			INNER JOIN 
+				opencps_dossier
+			ON 
+				opencps_processorder.dossierId = opencps_dossier.dossierId
+    
+			INNER JOIN 
+			(
+				SELECT 
+					opencps_serviceinfo.serviceinfoId, 
+					opencps_dictitem.itemCode, 
+					opencps_dictitem.treeIndex
+				FROM 
+					opencps_serviceinfo
+				INNER JOIN
+					opencps_dictitem
+				ON
+					opencps_serviceinfo.domainCode = opencps_dictitem.dictItemId
+				INNER JOIN
+					opencps_dictcollection
+				ON
+					opencps_dictitem.dictCollectionId = opencps_dictcollection.dictCollectionId
+				WHERE 
+					opencps_dictcollection.collectionCode = 'SERVICE_DOMAIN'
+			) AS d
+
+			ON
+				opencps_processorder.serviceInfoId = d.serviceinfoId
+			INNER JOIN 
+			(
+				SELECT
+					opencps_dictitem.itemCode, 
+					opencps_dictitem.treeIndex
+				FROM 
+					opencps_dictitem
+				INNER JOIN 
+					opencps_dictcollection
+				ON 
+					opencps_dictitem.dictCollectionId = opencps_dictcollection.dictCollectionId
+				WHERE
+					opencps_dictcollection.collectionCode = 'GOVERNMENT_AGENCY'
+			) AS g
+				 
+			ON 
+				opencps_processorder.govAgencyCode = g.itemCode
+			
+				$FILTER$
+				
+			GROUP BY 
+				opencps_processorder.govAgencyCode;
+			
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.statisticsByGovagency">	
+		<![CDATA[
+	    	SELECT 
+				$COLUMNS$
+			FROM 
+				opencps_processorder
+			INNER JOIN 
+				opencps_dossier
+			ON 
+				opencps_processorder.dossierId = opencps_dossier.dossierId
+   
+			INNER JOIN 
+			(
+				SELECT
+					opencps_dictitem.itemCode, 
+					opencps_dictitem.treeIndex
+				FROM 
+					opencps_dictitem
+				INNER JOIN 
+					opencps_dictcollection
+				ON 
+					opencps_dictitem.dictCollectionId = opencps_dictcollection.dictCollectionId
+				WHERE
+					opencps_dictcollection.collectionCode = 'GOVERNMENT_AGENCY'
+			) AS g
+				 
+			ON 
+				opencps_processorder.govAgencyCode = g.itemCode
+			
+				$FILTER$
+				
+			GROUP BY 
+				opencps_processorder.govAgencyCode;
+		]]>
+	</sql>
+	
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.getMonths">	
+		<![CDATA[
+	    	SELECT 
+				DISTINCT opencps_dossierstatistics.month AS COL0
+			FROM 
+				opencps_dossierstatistics
+			WHERE
+				(groupId = ?)
+			AND 
+				(opencps_dossierstatistics.year = ?)
+			ORDER BY
+				opencps_dossierstatistics.month;
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.getStatsByDomain">	
+		<![CDATA[
+	    	SELECT 
+				opencps_dossierstatistics.*
+			FROM 
+				opencps_dossierstatistics
+			WHERE
+				(groupId = ?)
+			AND 
+				(opencps_dossierstatistics.domainCode != '')
+			AND 
+				(opencps_dossierstatistics.govAgencyCode = '')
+			AND 
+				(opencps_dossierstatistics.administrationLevel = 0)
+			ORDER BY
+				opencps_dossierstatistics.month;
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.getStatsByGovAndDomain">	
+		<![CDATA[
+	    	SELECT 
+				opencps_dossierstatistics.*
+			FROM 
+				opencps_dossierstatistics
+			WHERE
+				(groupId = ?)
+			AND 
+				(opencps_dossierstatistics.domainCode = ?)
+			AND 
+				(opencps_dossierstatistics.govAgencyCode = ?)
+			AND 
+				(opencps_dossierstatistics.administrationLevel = ?)
+			AND 
+				(opencps_dossierstatistics.month = ?)
+			AND 
+				(opencps_dossierstatistics.year = ?)
+			ORDER BY
+				opencps_dossierstatistics.month;
+		]]>
+	</sql>
+</custom-sql>

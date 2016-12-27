@@ -36,20 +36,23 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
 /**
- * The implementation of the process order local service. <p> All custom service
- * methods should be put in this class. Whenever methods are added, rerun
- * ServiceBuilder to copy their definitions into the
+ * The implementation of the process order local service.
+ * <p>
+ * All custom service methods should be put in this class. Whenever methods are
+ * added, rerun ServiceBuilder to copy their definitions into the
  * {@link org.opencps.processmgt.service.ProcessOrderLocalService} interface.
- * <p> This is a local service. Methods of this service will not have security
+ * <p>
+ * This is a local service. Methods of this service will not have security
  * checks based on the propagated JAAS credentials because this service can only
- * be accessed from within the same VM. </p>
+ * be accessed from within the same VM.
+ * </p>
  *
  * @author trungnt
  * @see org.opencps.processmgt.service.base.ProcessOrderLocalServiceBaseImpl
  * @see org.opencps.processmgt.service.ProcessOrderLocalServiceUtil
  */
-public class ProcessOrderLocalServiceImpl
-	extends ProcessOrderLocalServiceBaseImpl {
+public class ProcessOrderLocalServiceImpl extends
+		ProcessOrderLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS: Never reference this interface directly. Always use
 	 * {@link org.opencps.processmgt.service.ProcessOrderLocalServiceUtil} to
@@ -76,85 +79,55 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public ProcessOrder addProcessOrder(
-		long dossierId, long fileGroupId, long serviceProcessId,
-		long processStepId, long processWorkflowId, long actionUserId,
-		Date actionDatetime, String stepName, String actionName,
-		String actionNote, long assignToUserId, String dossierStatus,
-		int daysDoing, int daysDelay, ServiceContext serviceContext)
-		throws SystemException, PortalException {
+	public ProcessOrder addProcessOrder(long dossierId, long fileGroupId,
+			long serviceProcessId, long processStepId, long processWorkflowId,
+			long actionUserId, Date actionDatetime, String stepName,
+			String actionName, String actionNote, long assignToUserId,
+			String dossierStatus, int daysDoing, int daysDelay,
+			ServiceContext serviceContext) throws SystemException,
+			PortalException {
 
-		long processOrderId = counterLocalService
-			.increment(ProcessOrder.class
+		long processOrderId = counterLocalService.increment(ProcessOrder.class
 				.getName());
 		ProcessOrder processOrder = processOrderPersistence
-			.create(processOrderId);
+				.create(processOrderId);
 
-		Dossier dossier = DossierLocalServiceUtil
-			.getDossier(dossierId);
+		Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
 		Date now = new Date();
 
-		processOrder
-			.setUserId(serviceContext
-				.getUserId());
-		processOrder
-			.setGroupId(serviceContext
-				.getScopeGroupId());
-		processOrder
-			.setCompanyId(serviceContext
-				.getCompanyId());
-		processOrder
-			.setCreateDate(now);
-		processOrder
-			.setModifiedDate(now);
+		processOrder.setUserId(serviceContext.getUserId());
+		processOrder.setGroupId(serviceContext.getScopeGroupId());
+		processOrder.setCompanyId(serviceContext.getCompanyId());
+		processOrder.setCreateDate(now);
+		processOrder.setModifiedDate(now);
 
-		processOrder
-			.setActionDatetime(actionDatetime);
-		processOrder
-			.setActionNote(actionNote);
-		processOrder
-			.setActionUserId(actionUserId);
-		processOrder
-			.setAssignToUserId(assignToUserId);
-		processOrder
-			.setDossierId(dossierId);
-		processOrder
-			.setDossierStatus(dossierStatus);
-		processOrder
-			.setDossierTemplateId(dossier
-				.getDossierTemplateId());
+		processOrder.setActionDatetime(actionDatetime);
+		processOrder.setActionNote(actionNote);
+		processOrder.setActionUserId(actionUserId);
+		processOrder.setAssignToUserId(assignToUserId);
+		processOrder.setDossierId(dossierId);
+		processOrder.setDossierStatus(dossierStatus);
+		processOrder.setDossierTemplateId(dossier.getDossierTemplateId());
 		// processOrder.setErrorInfo(errorInfo);
-		processOrder
-			.setFileGroupId(fileGroupId);
-		processOrder
-			.setGovAgencyCode(dossier
-				.getGovAgencyCode());
-		processOrder
-			.setGovAgencyName(dossier
-				.getGovAgencyName());
-		processOrder
-			.setGovAgencyOrganizationId(dossier
+		processOrder.setFileGroupId(fileGroupId);
+		processOrder.setGovAgencyCode(dossier.getGovAgencyCode());
+		processOrder.setGovAgencyName(dossier.getGovAgencyName());
+		processOrder.setGovAgencyOrganizationId(dossier
 				.getGovAgencyOrganizationId());
-		processOrder
-			.setProcessOrderId(processOrderId);
-		processOrder
-			.setProcessStepId(processStepId);
-		processOrder
-			.setProcessWorkflowId(processWorkflowId);
-		processOrder
-			.setServiceInfoId(dossier
-				.getServiceInfoId());
-		processOrder
-			.setServiceProcessId(serviceProcessId);
+		processOrder.setProcessOrderId(processOrderId);
+		processOrder.setProcessStepId(processStepId);
+		processOrder.setProcessWorkflowId(processWorkflowId);
+		processOrder.setServiceInfoId(dossier.getServiceInfoId());
+		processOrder.setServiceProcessId(serviceProcessId);
 
-/*		actionHistoryLocalService
-			.addActionHistory(processOrderId, processWorkflowId, actionDatetime,
-				stepName, actionName, actionNote, actionUserId, daysDoing,
-				daysDelay, serviceContext);*/
+		/*
+		 * actionHistoryLocalService .addActionHistory(processOrderId,
+		 * processWorkflowId, actionDatetime, stepName, actionName, actionNote,
+		 * actionUserId, daysDoing, daysDelay, serviceContext);
+		 */
 
-		return processOrderPersistence
-			.update(processOrder);
+		return processOrderPersistence.update(processOrder);
 	}
 
 	/**
@@ -177,87 +150,56 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public ProcessOrder addProcessOrder(
-		long userId, long dossierId, long fileGroupId, long serviceProcessId,
-		long processStepId, long processWorkflowId, long actionUserId,
-		Date actionDatetime, String stepName, String actionName,
-		String actionNote, long assignToUserId, String dossierStatus,
-		int daysDoing, int daysDelay)
-		throws SystemException, PortalException {
+	public ProcessOrder addProcessOrder(long userId, long dossierId,
+			long fileGroupId, long serviceProcessId, long processStepId,
+			long processWorkflowId, long actionUserId, Date actionDatetime,
+			String stepName, String actionName, String actionNote,
+			long assignToUserId, String dossierStatus, int daysDoing,
+			int daysDelay) throws SystemException, PortalException {
 
-		long processOrderId = counterLocalService
-			.increment(ProcessOrder.class
+		long processOrderId = counterLocalService.increment(ProcessOrder.class
 				.getName());
 		ProcessOrder processOrder = processOrderPersistence
-			.create(processOrderId);
+				.create(processOrderId);
 
-		Dossier dossier = DossierLocalServiceUtil
-			.getDossier(dossierId);
+		Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
 		Date now = new Date();
 
-		processOrder
-			.setUserId(userId);
-		processOrder
-			.setGroupId(dossier
-				.getGroupId());
-		processOrder
-			.setCompanyId(dossier
-				.getCompanyId());
-		processOrder
-			.setCreateDate(now);
-		processOrder
-			.setModifiedDate(now);
+		processOrder.setUserId(userId);
+		processOrder.setGroupId(dossier.getGroupId());
+		processOrder.setCompanyId(dossier.getCompanyId());
+		processOrder.setCreateDate(now);
+		processOrder.setModifiedDate(now);
 
-		processOrder
-			.setActionDatetime(actionDatetime);
-		processOrder
-			.setActionNote(actionNote);
-		processOrder
-			.setActionUserId(actionUserId);
-		processOrder
-			.setAssignToUserId(assignToUserId);
-		processOrder
-			.setDossierId(dossierId);
-		processOrder
-			.setDossierStatus(dossierStatus);
-		processOrder
-			.setDossierTemplateId(dossier
-				.getDossierTemplateId());
+		processOrder.setActionDatetime(actionDatetime);
+		processOrder.setActionNote(actionNote);
+		processOrder.setActionUserId(actionUserId);
+		processOrder.setAssignToUserId(assignToUserId);
+		processOrder.setDossierId(dossierId);
+		processOrder.setDossierStatus(dossierStatus);
+		processOrder.setDossierTemplateId(dossier.getDossierTemplateId());
 		// processOrder.setErrorInfo(errorInfo);
-		processOrder
-			.setFileGroupId(fileGroupId);
-		processOrder
-			.setGovAgencyCode(dossier
-				.getGovAgencyCode());
-		processOrder
-			.setGovAgencyName(dossier
-				.getGovAgencyName());
-		processOrder
-			.setGovAgencyOrganizationId(dossier
+		processOrder.setFileGroupId(fileGroupId);
+		processOrder.setGovAgencyCode(dossier.getGovAgencyCode());
+		processOrder.setGovAgencyName(dossier.getGovAgencyName());
+		processOrder.setGovAgencyOrganizationId(dossier
 				.getGovAgencyOrganizationId());
-		processOrder
-			.setProcessOrderId(processOrderId);
-		processOrder
-			.setProcessStepId(processStepId);
-		processOrder
-			.setProcessWorkflowId(processWorkflowId);
-		processOrder
-			.setServiceInfoId(dossier
-				.getServiceInfoId());
-		processOrder
-			.setServiceProcessId(serviceProcessId);
+		processOrder.setProcessOrderId(processOrderId);
+		processOrder.setProcessStepId(processStepId);
+		processOrder.setProcessWorkflowId(processWorkflowId);
+		processOrder.setServiceInfoId(dossier.getServiceInfoId());
+		processOrder.setServiceProcessId(serviceProcessId);
 
-//		actionHistoryLocalService
-//			.addActionHistory(userId, dossier
-//				.getGroupId(), dossier
-//					.getCompanyId(),
-//				processOrderId, processWorkflowId, actionDatetime, stepName,
-//				actionName, actionNote, actionUserId, daysDoing, daysDelay,
-//				PortletConstants.DOSSIER_STATUS_RECEIVING);
+		// actionHistoryLocalService
+		// .addActionHistory(userId, dossier
+		// .getGroupId(), dossier
+		// .getCompanyId(),
+		// processOrderId, processWorkflowId, actionDatetime, stepName,
+		// actionName, actionNote, actionUserId, daysDoing, daysDelay,
+		// PortletConstants.DOSSIER_STATUS_RECEIVING);
 
-		return processOrderPersistence
-			.update(processOrder);
+		return processOrderPersistence.update(processOrder);
 	}
 
 	/**
@@ -267,13 +209,11 @@ public class ProcessOrderLocalServiceImpl
 	 * @param actionUserId
 	 * @return
 	 */
-	public int countProcessOrder(
-		long serviceInfoId, long processStepId, long loginUserId,
-		long actionUserId) {
+	public int countProcessOrder(long serviceInfoId, long processStepId,
+			long loginUserId, long actionUserId) {
 
-		return processOrderFinder
-			.countProcessOrder(serviceInfoId, processStepId, loginUserId,
-				actionUserId);
+		return processOrderFinder.countProcessOrder(serviceInfoId,
+				processStepId, loginUserId, actionUserId);
 	}
 
 	/**
@@ -282,12 +222,11 @@ public class ProcessOrderLocalServiceImpl
 	 * @param actionUserId
 	 * @return
 	 */
-	public int countProcessOrderJustFinished(
-		long serviceInfoId, long processStepId, long actionUserId) {
+	public int countProcessOrderJustFinished(long serviceInfoId,
+			long processStepId, long actionUserId) {
 
-		return processOrderFinder
-			.countProcessOrderJustFinished(serviceInfoId, processStepId,
-				actionUserId);
+		return processOrderFinder.countProcessOrderJustFinished(serviceInfoId,
+				processStepId, actionUserId);
 	}
 
 	/**
@@ -298,10 +237,9 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public ProcessOrder getProcessOrder(long dossierId, long fileGroupId)
-		throws NoSuchProcessOrderException, SystemException {
+			throws NoSuchProcessOrderException, SystemException {
 
-		return processOrderPersistence
-			.findByD_F(dossierId, fileGroupId);
+		return processOrderPersistence.findByD_F(dossierId, fileGroupId);
 	}
 
 	/**
@@ -310,8 +248,7 @@ public class ProcessOrderLocalServiceImpl
 	 */
 	public List getProcessOrderServiceByUser(long loginUserId) {
 
-		return processOrderFinder
-			.getProcessOrderServiceByUser(loginUserId);
+		return processOrderFinder.getProcessOrderServiceByUser(loginUserId);
 	}
 
 	/**
@@ -321,7 +258,7 @@ public class ProcessOrderLocalServiceImpl
 	public List getProcessOrderServiceJustFinishedByUser(long loginUserId) {
 
 		return processOrderFinder
-			.getProcessOrderServiceJustFinishedByUser(loginUserId);
+				.getProcessOrderServiceJustFinishedByUser(loginUserId);
 	}
 
 	/**
@@ -332,7 +269,7 @@ public class ProcessOrderLocalServiceImpl
 	public List getUserProcessStep(long loginUserId, long serviceInfoId) {
 
 		return processOrderFinder
-			.getUserProcessStep(loginUserId, serviceInfoId);
+				.getUserProcessStep(loginUserId, serviceInfoId);
 	}
 
 	/**
@@ -340,11 +277,11 @@ public class ProcessOrderLocalServiceImpl
 	 * @param serviceInfoId
 	 * @return
 	 */
-	public List getUserProcessStepJustFinished(
-		long loginUserId, long serviceInfoId) {
+	public List getUserProcessStepJustFinished(long loginUserId,
+			long serviceInfoId) {
 
-		return processOrderFinder
-			.getUserProcessStepJustFinished(loginUserId, serviceInfoId);
+		return processOrderFinder.getUserProcessStepJustFinished(loginUserId,
+				serviceInfoId);
 	}
 
 	/**
@@ -352,20 +289,17 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public ProcessOrder initProcessOrder()
-		throws PortalException, SystemException {
+	public ProcessOrder initProcessOrder() throws PortalException,
+			SystemException {
 
 		ProcessOrder order = null;
 
-		long processOrderId = counterLocalService
-			.increment(ProcessOrder.class
+		long processOrderId = counterLocalService.increment(ProcessOrder.class
 				.getName());
 
-		order = processOrderPersistence
-			.create(processOrderId);
+		order = processOrderPersistence.create(processOrderId);
 
-		processOrderPersistence
-			.update(order);
+		processOrderPersistence.update(order);
 
 		return order;
 	}
@@ -386,53 +320,37 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public ProcessOrder initProcessOrder(
-		long userId, long companyId, long groupId, long serviceInfoId,
-		long dossierTemplateId, String govAgencyCode, String govAgencyName,
-		long govAgencyOrganizationId, long serviceProcessId, long dossierId,
-		long fileGroupId)
-		throws PortalException, SystemException {
+	public ProcessOrder initProcessOrder(long userId, long companyId,
+			long groupId, long serviceInfoId, long dossierTemplateId,
+			String govAgencyCode, String govAgencyName,
+			long govAgencyOrganizationId, long serviceProcessId,
+			long dossierId, long fileGroupId) throws PortalException,
+			SystemException {
 
 		ProcessOrder order = null;
 
-		long processOrderId = counterLocalService
-			.increment(ProcessOrder.class
+		long processOrderId = counterLocalService.increment(ProcessOrder.class
 				.getName());
 
-		order = processOrderPersistence
-			.create(processOrderId);
+		order = processOrderPersistence.create(processOrderId);
 
 		Date now = new Date();
 
-		order
-			.setCreateDate(now);
-		order
-			.setModifiedDate(now);
-		order
-			.setUserId(userId);
-		order
-			.setCompanyId(companyId);
-		order
-			.setGroupId(groupId);
-		order
-			.setServiceInfoId(serviceInfoId);
-		order
-			.setDossierTemplateId(dossierTemplateId);
-		order
-			.setGovAgencyCode(govAgencyCode);
-		order
-			.setGovAgencyName(govAgencyName);
-		order
-			.setGovAgencyOrganizationId(govAgencyOrganizationId);
-		order
-			.setServiceProcessId(serviceProcessId);
-		order
-			.setDossierId(dossierId);
-		order
-			.setFileGroupId(fileGroupId);
+		order.setCreateDate(now);
+		order.setModifiedDate(now);
+		order.setUserId(userId);
+		order.setCompanyId(companyId);
+		order.setGroupId(groupId);
+		order.setServiceInfoId(serviceInfoId);
+		order.setDossierTemplateId(dossierTemplateId);
+		order.setGovAgencyCode(govAgencyCode);
+		order.setGovAgencyName(govAgencyName);
+		order.setGovAgencyOrganizationId(govAgencyOrganizationId);
+		order.setServiceProcessId(serviceProcessId);
+		order.setDossierId(dossierId);
+		order.setFileGroupId(fileGroupId);
 
-		processOrderPersistence
-			.update(order);
+		processOrderPersistence.update(order);
 
 		return order;
 	}
@@ -461,62 +379,45 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public ProcessOrder initProcessOrder(
-		long userId, long companyId, long groupId, long serviceInfoId,
-		long dossierTemplateId, String govAgencyCode, String govAgencyName,
-		long govAgencyOrganizationId, long serviceProcessId, long dossierId,
-		long fileGroupId, long processWorkflowId, Date actionDatetime,
-		String stepName, String actionName, String actionNote,
-		long actionUserId, int daysDoing, int daysDelay, String dossierStatus)
-		throws PortalException, SystemException {
+	public ProcessOrder initProcessOrder(long userId, long companyId,
+			long groupId, long serviceInfoId, long dossierTemplateId,
+			String govAgencyCode, String govAgencyName,
+			long govAgencyOrganizationId, long serviceProcessId,
+			long dossierId, long fileGroupId, long processWorkflowId,
+			Date actionDatetime, String stepName, String actionName,
+			String actionNote, long actionUserId, int daysDoing, int daysDelay,
+			String dossierStatus) throws PortalException, SystemException {
 
 		ProcessOrder order = null;
 
-		long processOrderId = counterLocalService
-			.increment(ProcessOrder.class
+		long processOrderId = counterLocalService.increment(ProcessOrder.class
 				.getName());
 
-		order = processOrderPersistence
-			.create(processOrderId);
+		order = processOrderPersistence.create(processOrderId);
 
 		Date now = new Date();
 
-		order
-			.setCreateDate(now);
-		order
-			.setModifiedDate(now);
-		order
-			.setUserId(userId);
-		order
-			.setCompanyId(companyId);
-		order
-			.setGroupId(groupId);
-		order
-			.setServiceInfoId(serviceInfoId);
-		order
-			.setDossierTemplateId(dossierTemplateId);
-		order
-			.setGovAgencyCode(govAgencyCode);
-		order
-			.setGovAgencyName(govAgencyName);
-		order
-			.setGovAgencyOrganizationId(govAgencyOrganizationId);
-		order
-			.setServiceProcessId(serviceProcessId);
-		order
-			.setDossierId(dossierId);
-		order
-			.setFileGroupId(fileGroupId);
-		order
-			.setProcessWorkflowId(processWorkflowId);
+		order.setCreateDate(now);
+		order.setModifiedDate(now);
+		order.setUserId(userId);
+		order.setCompanyId(companyId);
+		order.setGroupId(groupId);
+		order.setServiceInfoId(serviceInfoId);
+		order.setDossierTemplateId(dossierTemplateId);
+		order.setGovAgencyCode(govAgencyCode);
+		order.setGovAgencyName(govAgencyName);
+		order.setGovAgencyOrganizationId(govAgencyOrganizationId);
+		order.setServiceProcessId(serviceProcessId);
+		order.setDossierId(dossierId);
+		order.setFileGroupId(fileGroupId);
+		order.setProcessWorkflowId(processWorkflowId);
 
-		processOrderPersistence
-			.update(order);
+		processOrderPersistence.update(order);
 
-//		actionHistoryLocalService
-//			.addActionHistory(userId, fileGroupId, companyId, processOrderId,
-//				processWorkflowId, actionDatetime, stepName, actionName,
-//				actionNote, actionUserId, daysDoing, daysDelay, dossierStatus);
+		// actionHistoryLocalService
+		// .addActionHistory(userId, fileGroupId, companyId, processOrderId,
+		// processWorkflowId, actionDatetime, stepName, actionName,
+		// actionNote, actionUserId, daysDoing, daysDelay, dossierStatus);
 
 		return order;
 	}
@@ -531,25 +432,25 @@ public class ProcessOrderLocalServiceImpl
 	 * @param orderByComparator
 	 * @return
 	 */
-	public List searchProcessOrder(
-		long serviceInfoId, long processStepId, long loginUserId,
-		long actionUserId, int start, int end, OrderByComparator orderByComparator) {
-/*		
-		List<ProcessOrder> al = new ArrayList<ProcessOrder>();
-		// add elements to al, including duplicates
-		
-		Set<ProcessOrder> hs = new HashSet<ProcessOrder>();		
-		
-		hs.addAll(processOrderFinder
-			.searchProcessOrder(serviceInfoId, processStepId, loginUserId,
-				actionUserId, start, end, orderByComparator));
-		
-		al.clear();
-		al.addAll(hs);*/
-		
-		return processOrderFinder
-						.searchProcessOrder(serviceInfoId, processStepId, loginUserId,
-							actionUserId, start, end, orderByComparator);
+	public List searchProcessOrder(long serviceInfoId, long processStepId,
+			long loginUserId, long actionUserId, int start, int end,
+			OrderByComparator orderByComparator) {
+		/*
+		 * List<ProcessOrder> al = new ArrayList<ProcessOrder>(); // add
+		 * elements to al, including duplicates
+		 * 
+		 * Set<ProcessOrder> hs = new HashSet<ProcessOrder>();
+		 * 
+		 * hs.addAll(processOrderFinder .searchProcessOrder(serviceInfoId,
+		 * processStepId, loginUserId, actionUserId, start, end,
+		 * orderByComparator));
+		 * 
+		 * al.clear(); al.addAll(hs);
+		 */
+
+		return processOrderFinder.searchProcessOrder(serviceInfoId,
+				processStepId, loginUserId, actionUserId, start, end,
+				orderByComparator);
 	}
 
 	/**
@@ -561,13 +462,12 @@ public class ProcessOrderLocalServiceImpl
 	 * @param orderByComparator
 	 * @return
 	 */
-	public List searchProcessOrderJustFinished(
-		long serviceInfoId, long processStepId, long actionUserId, int start,
-		int end, OrderByComparator orderByComparator) {
+	public List searchProcessOrderJustFinished(long serviceInfoId,
+			long processStepId, long actionUserId, int start, int end,
+			OrderByComparator orderByComparator) {
 
-		return processOrderFinder
-			.searchProcessOrderJustFinished(serviceInfoId, processStepId,
-				actionUserId, start, end, orderByComparator);
+		return processOrderFinder.searchProcessOrderJustFinished(serviceInfoId,
+				processStepId, actionUserId, start, end, orderByComparator);
 	}
 
 	/**
@@ -580,16 +480,14 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public ProcessOrder updateInitStep(long processOrderId, long processStepId)
-		throws PortalException, SystemException {
+			throws PortalException, SystemException {
 
 		ProcessOrder order = processOrderPersistence
-			.fetchByPrimaryKey(processOrderId);
+				.fetchByPrimaryKey(processOrderId);
 
-		order
-			.setProcessStepId(processStepId);
+		order.setProcessStepId(processStepId);
 
-		processOrderPersistence
-			.update(order);
+		processOrderPersistence.update(order);
 
 		return order;
 
@@ -606,30 +504,23 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws NoSuchProcessOrderException
 	 * @throws SystemException
 	 */
-	public ProcessOrder updateProcessOrder(
-		long processOrderId, long processStepId, long actionUserId,
-		Date actionDatetime, String actionNote, long assignToUserId)
-		throws NoSuchProcessOrderException, SystemException {
+	public ProcessOrder updateProcessOrder(long processOrderId,
+			long processStepId, long actionUserId, Date actionDatetime,
+			String actionNote, long assignToUserId)
+			throws NoSuchProcessOrderException, SystemException {
 
 		ProcessOrder processOrder = processOrderPersistence
-			.findByPrimaryKey(processOrderId);
+				.findByPrimaryKey(processOrderId);
 
-		processOrder
-			.setModifiedDate(new Date());
+		processOrder.setModifiedDate(new Date());
 
-		processOrder
-			.setProcessStepId(processStepId);
-		processOrder
-			.setActionUserId(actionUserId);
-		processOrder
-			.setActionDatetime(actionDatetime);
-		processOrder
-			.setActionNote(actionNote);
-		processOrder
-			.setAssignToUserId(assignToUserId);
+		processOrder.setProcessStepId(processStepId);
+		processOrder.setActionUserId(actionUserId);
+		processOrder.setActionDatetime(actionDatetime);
+		processOrder.setActionNote(actionNote);
+		processOrder.setAssignToUserId(assignToUserId);
 
-		return processOrderPersistence
-			.update(processOrder);
+		return processOrderPersistence.update(processOrder);
 	}
 
 	/**
@@ -649,47 +540,36 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws NoSuchProcessOrderException
 	 * @throws SystemException
 	 */
-	public ProcessOrder updateProcessOrder(
-		long processOrderId, long processStepId, long processWorkflowId,
-		long actionUserId, Date actionDatetime, String actionNote,
-		long assignToUserId, String stepName, String actionName, int daysDoing,
-		int daysDelay, String dossierStatus)
-		throws NoSuchProcessOrderException, SystemException {
+	public ProcessOrder updateProcessOrder(long processOrderId,
+			long processStepId, long processWorkflowId, long actionUserId,
+			Date actionDatetime, String actionNote, long assignToUserId,
+			String stepName, String actionName, int daysDoing, int daysDelay,
+			String dossierStatus) throws NoSuchProcessOrderException,
+			SystemException {
 
 		ProcessOrder processOrder = processOrderPersistence
-			.findByPrimaryKey(processOrderId);
+				.findByPrimaryKey(processOrderId);
 
-		processOrder
-			.setDossierStatus(dossierStatus);
+		processOrder.setDossierStatus(dossierStatus);
 
-		processOrder
-			.setModifiedDate(new Date());
+		processOrder.setModifiedDate(new Date());
 
-		processOrder
-			.setProcessStepId(processStepId);
-		processOrder
-			.setActionUserId(actionUserId);
-		processOrder
-			.setActionDatetime(actionDatetime);
-		processOrder
-			.setActionNote(actionNote);
-		processOrder
-			.setAssignToUserId(assignToUserId);
+		processOrder.setProcessStepId(processStepId);
+		processOrder.setActionUserId(actionUserId);
+		processOrder.setActionDatetime(actionDatetime);
+		processOrder.setActionNote(actionNote);
+		processOrder.setAssignToUserId(assignToUserId);
 
-		processOrder
-			.setProcessWorkflowId(processWorkflowId);
+		processOrder.setProcessWorkflowId(processWorkflowId);
 
-/*		actionHistoryLocalService
-			.addActionHistory(processOrder
-				.getUserId(), processOrder
-					.getGroupId(),
-				processOrder
-					.getCompanyId(),
-				processOrderId, processWorkflowId, actionDatetime, stepName,
-				actionName, actionNote, actionUserId, daysDoing, daysDelay,
-				dossierStatus);*/
-		return processOrderPersistence
-			.update(processOrder);
+		/*
+		 * actionHistoryLocalService .addActionHistory(processOrder
+		 * .getUserId(), processOrder .getGroupId(), processOrder
+		 * .getCompanyId(), processOrderId, processWorkflowId, actionDatetime,
+		 * stepName, actionName, actionNote, actionUserId, daysDoing, daysDelay,
+		 * dossierStatus);
+		 */
+		return processOrderPersistence.update(processOrder);
 	}
 
 	/**
@@ -699,31 +579,28 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws NoSuchProcessOrderException
 	 * @throws SystemException
 	 */
-	public ProcessOrder updateProcessOrderStatus(
-		long processOrderId, String dossierStatus)
-		throws NoSuchProcessOrderException, SystemException {
+	public ProcessOrder updateProcessOrderStatus(long processOrderId,
+			String dossierStatus) throws NoSuchProcessOrderException,
+			SystemException {
 
 		ProcessOrder processOrder = processOrderPersistence
-			.findByPrimaryKey(processOrderId);
-		processOrder
-			.setModifiedDate(new Date());
-		processOrder
-			.setDossierStatus(dossierStatus);
-		return processOrderPersistence
-			.update(processOrder);
+				.findByPrimaryKey(processOrderId);
+		processOrder.setModifiedDate(new Date());
+		processOrder.setDossierStatus(dossierStatus);
+		return processOrderPersistence.update(processOrder);
 
 	}
-	
+
 	/**
 	 * @param serviceinfoId
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<ProcessOrder> getProcessOrdersByServiceInfoId(long serviceinfoId) 
-					throws SystemException {
+	public List<ProcessOrder> getProcessOrdersByServiceInfoId(long serviceinfoId)
+			throws SystemException {
 		return processOrderPersistence.findByServiceInfoId(serviceinfoId);
 	}
-	
+
 	/**
 	 * @param processStepId
 	 * @return
@@ -731,11 +608,41 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<ProcessOrder> getProcessOrderByStep(long processStepId)
-	    throws PortalException, SystemException {
+			throws PortalException, SystemException {
 
 		return processOrderPersistence.findByprocessStepId(processStepId);
 	}
+
+	/**
+	 * @param actionUserId
+	 * @param start
+	 * @param end
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<ProcessOrder> getProcessOrderByActionUserId(long actionUserId,
+			int start, int end) throws SystemException {
+		return processOrderPersistence.findByactionUserId(actionUserId, start, end);
+	}
 	
+	/**
+	 * @param actionUserId
+	 * @return
+	 * @throws SystemException
+	 */
+	public int countProcessOrderByActionUserId(long actionUserId)
+			throws SystemException {
+		return processOrderPersistence.countByactionUserId(actionUserId);
+	}
+	
+	public List<ProcessOrder> searchReAssigToUser(long actionUserId, int start,
+			int end) throws SystemException {
+		return processOrderFinder.searchReAssigToUser(actionUserId, start, end);
+	}
+
+	public int countReAssigToUser(long actionUserId) throws SystemException {
+		return processOrderFinder.countReAssigToUser(actionUserId);
+	}	
 	/**
 	 * @param serviceInfoId
 	 * @param processStepId
@@ -746,11 +653,11 @@ public class ProcessOrderLocalServiceImpl
 	 */
 	public int countProcessOrderKeyWords(
 		long serviceInfoId, long processStepId, long loginUserId,
-		long actionUserId, String keyWords, String dossierSubStatus) {
+		long actionUserId, String keyWords, String dossierSubStatus, String processOrderStage) {
 
 		return processOrderFinder
 			.countProcessOrderKeyWords(serviceInfoId, processStepId, loginUserId,
-				actionUserId, keyWords, dossierSubStatus);
+				actionUserId, keyWords, dossierSubStatus, processOrderStage);
 	}
 	/**
 	 * @param serviceInfoId
@@ -765,10 +672,10 @@ public class ProcessOrderLocalServiceImpl
 	 */
 	public List searchProcessOrderKeyWords(
 		long serviceInfoId, long processStepId, long loginUserId,
-		long actionUserId, String keyWords, String dossierSubStatus, int start, int end, OrderByComparator orderByComparator) {
+		long actionUserId, String keyWords, String dossierSubStatus, String processOrderStage, int start, int end, OrderByComparator orderByComparator) {
 		
 		return processOrderFinder
 						.searchProcessOrderKeyWords(serviceInfoId, processStepId, loginUserId,
-							actionUserId, keyWords, dossierSubStatus, start, end, orderByComparator);
+							actionUserId, keyWords, dossierSubStatus, processOrderStage, start, end, orderByComparator);
 	}
 }

@@ -524,6 +524,49 @@
 				createDate DESC
 		]]>
 	</sql>
+	
+	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.searchReAssigToUser">	
+		<![CDATA[
+			SELECT
+				DISTINCT po.processOrderId, po.*
+			FROM
+				opencps_processorder AS po
+			LEFT JOIN
+				opencps_stepallowance AS pal
+			ON
+				po.processStepId = pal.processStepId
+			WHERE
+				po.actionUserId = ?
+			AND (
+				po.assignToUserId > 0 AND po.assignToUserId != ?)
+			OR (
+				po.processStepId = pal.processStepId AND po.actionUserId = ? AND pal.readOnly = FALSE )
+			ORDER BY
+				po.modifiedDate DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.countReAssigToUser">	
+		<![CDATA[
+			SELECT
+				count(DISTINCT po.processOrderId) AS COUNT_VALUE
+			FROM
+				opencps_processorder AS po
+			LEFT JOIN
+				opencps_stepallowance AS pal
+			ON
+				po.processStepId = pal.processStepId
+			WHERE
+				po.actionUserId = ?
+			AND (
+				po.assignToUserId > 0 AND po.assignToUserId != ?)
+			OR (
+				po.processStepId = pal.processStepId AND po.actionUserId = ? AND pal.readOnly = FALSE )
+			ORDER BY
+				po.modifiedDate DESC
+		]]>
+	</sql>
+
 
 	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.searchProcessOrderKeyWords">	
 		<![CDATA[
@@ -582,20 +625,17 @@
 					) AS role
                 ON
 					opencps_stepallowance.roleId = role.roleId
+					AND opencps_stepallowance.readOnly = ?
 			) AS stepallowance
 			ON
 				stepallowance.processStepId = opencps_processstep.processStepId
+				
 			WHERE 
 			(
-				opencps_processorder.assignToUserId = 0 
-				
-				OR 
-				(
-					opencps_processorder.assignToUserId != 0 
-					AND stepallowance.userId != opencps_processorder.assignToUserId 
-					AND stepallowance.readOnly = TRUE
-				)
-			)
+                opencps_processorder.assignToUserId = 0 
+                
+                OR opencps_processorder.assignToUserId = ?
+            )
 			AND opencps_processstep.dossierSubStatus = ?
 			AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)
 			ORDER BY 
@@ -649,19 +689,16 @@
 					) AS role
                 ON
 					opencps_stepallowance.roleId = role.roleId
+					AND opencps_stepallowance.readOnly = ?
             ) AS stepallowance
             ON
             	stepallowance.processStepId = opencps_processstep.processStepId
+            	
             WHERE 
             (
                 opencps_processorder.assignToUserId = 0 
                 
-                OR 
-                (
-                    opencps_processorder.assignToUserId != 0 
-                    AND stepallowance.userId != opencps_processorder.assignToUserId 
-                    AND stepallowance.readOnly = TRUE
-                )
+                OR opencps_processorder.assignToUserId = ?
             )
             AND opencps_processstep.dossierSubStatus = ?
             AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)

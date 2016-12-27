@@ -251,4 +251,9 @@ public class ProcessStepLocalServiceImpl
 		return processStepPersistence.findByProcessStepIds(groupId, processStepIds);
 	    
     }
+	
+	public List<ProcessStep> findByDossierSubStatus(String dossierSubStatus) throws SystemException {
+		return processStepPersistence.findByF_dossierSubStatus(dossierSubStatus);
+	    
+    }
 }

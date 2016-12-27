@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFileLog"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
@@ -69,7 +70,15 @@
 	 
 	
 %>
+
 <div class="ocps-title-detail">
+
+<aui:row cssClass="header-title custom-title">
+	<aui:col width="100">
+		<liferay-ui:message key="history"/>
+	</aui:col>
+</aui:row>
+
 	<div class="ocps-title-detail-top">	
 		<label class="service-reception-label">
 			<liferay-ui:message key="reception-no"/> 
@@ -200,11 +209,12 @@
 									%>
 										<span style="padding: 3px; display: block;">
 											<%= StringPool.GREATER_THAN %> 
-												 <aui:a href="#" >
+											<%= LanguageUtil.get(pageContext, "history-file-action-"+lf.getActionCode()) %> : 
+												 <span>
 												 	<%= lf.getFileName() %> 
 												 	<span style="font: smaller; color: #cbcbcb;">(<%= sdf.format(lf.getModifiedDate()) %> )</span>
 												 	
-												 </aui:a>
+												 </span>
 										</span>
 									<%
 										}

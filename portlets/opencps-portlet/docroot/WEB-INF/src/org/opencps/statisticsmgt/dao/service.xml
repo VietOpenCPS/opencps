@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.statisticsmgt">
+	<author>trungnt</author>
+	<namespace>statistics</namespace>
+    <entity name="DossiersStatistics" local-service="true" table="opencps_dossierstatistics">
+        <column name="dossierStatisticId" type="long" primary="true"/>
+        <!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+        <column name="remainingNumber" type="int"></column>
+        <column name="receivedNumber" type="int"></column>
+        <column name="ontimeNumber" type="int"></column>
+        <column name="overtimeNumber" type="int"></column>
+        <column name="processingNumber" type="int"></column>
+        <column name="delayingNumber" type="int"></column>
+        <column name="month" type="int"></column>
+        <column name="year" type="int"></column>
+        <column name="govAgencyCode" type="String"></column>
+        <column name="domainCode" type="String"></column>
+        <column name="administrationLevel" type="int"></column>
+        <finder name="Month" return-type="Collection">
+            <finder-column name="month"></finder-column>
+            <finder-column name="year"></finder-column>
+        </finder>
+        <finder name="Year" return-type="Collection">
+            <finder-column name="year"></finder-column>
+        </finder>
+        <finder name="G_DC_M_Y" return-type="DossiersStatistics">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="domainCode"></finder-column>
+            <finder-column name="month"></finder-column>
+            <finder-column name="year"></finder-column>
+        </finder>
+        <finder name="G_GC_DC" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="govAgencyCode" arrayable-operator="AND"></finder-column>
+            <finder-column name="domainCode" arrayable-operator="AND"></finder-column>
+        </finder>
+        <finder name="G_GC_DC_Y" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="govAgencyCode"></finder-column>
+            <finder-column name="domainCode"></finder-column>
+            <finder-column name="year"></finder-column>
+        </finder>
+        <finder name="G_GC_DC_M_Y_L" return-type="DossiersStatistics">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="govAgencyCode"></finder-column>
+            <finder-column name="domainCode"></finder-column>
+            <finder-column name="month"></finder-column>
+            <finder-column name="year"></finder-column>
+            <finder-column name="administrationLevel"></finder-column>
+        </finder>
+        <finder name="G_M_Y" return-type="DossiersStatistics">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="month"></finder-column>
+            <finder-column name="year"></finder-column>
+        </finder>
+    </entity>
+    <entity name="GovagencyLevel" local-service="true" table="opencps_govagencylevel">
+        <column name="govagencylevel" type="long" primary="true"></column>
+        <!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+        <column name="govAgencyCode" type="String"></column>
+        <column name="administrationLevel" type="int"></column>
+    </entity>
+</service-builder>

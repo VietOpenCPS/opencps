@@ -468,8 +468,13 @@
         <column name="removed" type="int"/>
         <column name="original" type="int"/>
         <column name="syncStatus" type="int"/>
-        <column name="version" type="int"></column>
-        <column name="signed" type="boolean"></column>
+        <column name="version" type="int" />
+        <column name="signed" type="boolean" />
+        <column name="signCheck" type="int" />
+        <column name="signInfo" type="String" />
+        <order>
+        	<order-column name="modifiedDate" order-by="desc" />
+        </order>
         <finder name="DID_DP_R" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>

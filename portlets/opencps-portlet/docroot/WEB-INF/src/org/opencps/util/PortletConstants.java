@@ -17,11 +17,18 @@
 
 package org.opencps.util;
 
+import com.liferay.portal.kernel.util.Validator;
+
 /**
  * @author trungnt
  */
 public class PortletConstants {
 
+	public static final String DOSSIER_FILE_NO_KEY = "_dossierFileNo";
+	public static final String DOSSIER_FILE_NO_DATE = "_dossierFileDate";
+	public static final String DOSSIER_PART_RESULT_PATTERN = "dossier_part_result_pattern";
+	public static final String DOSSIER_PART_RESULT_PATTERN_UNIQUE_INCREMENT_NUMBER = "6789";
+	public static final String DOSSIER_PART_RESULT_PATTERN_NO = "_soGiayChungNhan";
 	public static final int DRAFTING = 0;
 	public static final int INUSE = 1;
 	public static final int EXPIRED = 2;
@@ -135,9 +142,9 @@ public class PortletConstants {
 	public static final String DOSSIER_STATUS_SYSTEM = "system";
 	public static final String DOSSIER_STATUS_ENDED = "ended";
 	public static final String DOSSIER_STATUS_ERROR = "error";
-	
+
 	public static final String DOSSIER_STATUS_UPDATE = "updated";
-	
+
 	public static final String DOSSIER_ACTION_SEND = "send-dossier";
 	public static final String DOSSIER_ACTION_RESEND = "resend-dossier";
 	public static final String DOSSIER_ACTION_REVICE = "revice-dossier";
@@ -151,7 +158,6 @@ public class PortletConstants {
 	public static final String DOSSIER_ACTION_CONFIRM_CASH_PAYMENT = "confirm-payment-cash";
 	public static final String DOSSIER_ACTION_ONLINE_PAYMENT = "online-payment";
 
-
 	public static final String DOSSIER_ACTION_CREATE_PROCESS_ORDER = "create-process-order";
 	public static final String DOSSIER_ACTION_ADD_ATTACHMENT_FILE = "add-attachment-file";
 	public static final String DOSSIER_ACTION_CLONE_ATTACHMENT_FILE = "clone-attachment-file";
@@ -159,7 +165,6 @@ public class PortletConstants {
 	public static final String DOSSIER_ACTION_SIGN_FILE = "sign-file";
 	public static final String DOSSIER_ACTION_EXPORT_FILE = "export-file";
 	public static final String DOSSIER_ACTION_UPDATE_VERSION_FILE = "update-version-file";
-
 
 	public static final int DOSSIER_LOG_NORMAL = 0;
 	public static final int DOSSIER_LOG_WARNING = 2;
@@ -175,8 +180,7 @@ public class PortletConstants {
 
 	public static final String JMS_CONNECTION_FACTORY = "ConnectionFactory";
 
-	public static final String JMS_REMOTE_CONNECTION_FACTORY =
-		"jms/RemoteConnectionFactory";
+	public static final String JMS_REMOTE_CONNECTION_FACTORY = "jms/RemoteConnectionFactory";
 
 	public static enum AlpacaArguments {
 		data, schema, options, view, render, postRender, error, connector;
@@ -184,37 +188,36 @@ public class PortletConstants {
 
 	public static final String TEMP_RANDOM_SUFFIX = "--tempRandomSuffix--";
 
-	public static final String UNKNOW_ALPACA_SCHEMA =
-		"{\"schema\": {\"title\":\"No Dynamic Form\",\"description\":\"Can not load alpaca scheme\",\"type\":\"object\"}}";
-	
+	public static final String UNKNOW_ALPACA_SCHEMA = "{\"schema\": {\"title\":\"No Dynamic Form\",\"description\":\"Can not load alpaca scheme\",\"type\":\"object\"}}";
+
 	public static final String PAYMENT_TYPE_BANK = "paymentTypeBank";
-	
+
 	public static final String PAYMENT_TYPE_ONLINE = "paymentTypeOnline";
-	
+
 	public static final String PAYMENT_TYPE_CONFIRM_BANK = "paymentConfirmBank";
-	
+
 	public static final String PAYMENT_TYPE_CONFIRM_CASH = "paymentConfirmCash";
-	
+
 	public static final String PAYMENT_TYPE = "paymentType";
-	
+
 	public static final int TREE_VIEW_LEVER_0 = 0;
-	
+
 	public static final int TREE_VIEW_LEVER_1 = 1;
-	
+
 	public static final int TREE_VIEW_LEVER_2 = 2;
-	
+
 	public static final int TREE_VIEW_LEVER_3 = 3;
-	
+
 	public static final String TREE_VIEW_ALL_ITEM = "-1";
-	
+
 	public static final String TREE_VIEW_DEFAULT_ITEM_CODE = "0";
-	
+
 	public static final String REQUEST_COMMAND_PAYMENT = "paymentRequest";
-	
+
 	public static final String REQUEST_COMMAND_RESUBMIT = "resubmitRequest";
-	
+
 	public static final String EMAIL_CONFIG_2_STEP = "2";
-	
+
 	public static final String EMAIL_CONFIG_3_STEP = "3";
 	public static final int DOSSIER_FILE_ADD = 1;
 	public static final int DOSSIER_FILE_DUPLICATE = 2;
@@ -223,14 +226,48 @@ public class PortletConstants {
 	public static final int DOSSIER_FILE_SIGN = 5;
 	public static final int DOSSIER_FILE_UPDATE = 6;
 	
-
-	
-	public static final String SIZE_UNIT_B = "B";
-	public static final String SIZE_UNIT_KB = "kB";
-	public static final String SIZE_UNIT_MB = "MB";
-	public static final String SIZE_UNIT_GB = "GB";
-	
 	public static final int PAYMENT_METHOD_CASH = 1;
 	public static final int PAYMENT_METHOD_KEYPAY = 2;
 	public static final int PAYMENT_METHOD_BANK = 3;
+
+
+	public static enum FileSizeUnit {
+		B("byte"), KB("kilobyte"), MB("megabyte"), GB("gigabyte"), TB(
+				"terabyte");
+
+		private String value;
+
+		FileSizeUnit(String value) {
+
+			if(Validator.isNull(value)) {
+				value = "megabyte";
+			}
+			
+			this.value = value;
+		}
+
+		public String getValue() {
+
+			return value;
+		}
+
+		@Override
+		public String toString() {
+
+			return this.getValue();
+		}
+
+		public static FileSizeUnit getEnum(String value) {
+			if(Validator.isNull(value)) {
+				value = FileSizeUnit.MB.toString();
+			}
+			for (FileSizeUnit v : values()) {
+				if (v.getValue().equalsIgnoreCase(value)){
+					return v;
+				}
+			}
+					
+			return FileSizeUnit.MB;
+		}
+	}
 }

@@ -321,6 +321,12 @@ public class WorkingUnitLocalServiceImpl
 					throws NoSuchWorkingUnitException, SystemException {
 		return workingUnitPersistence.fetchByMappingOrganisationId(groupId, mappingOrganisationId);
 	}
+
+	public WorkingUnit getWorkingUnitName(String name)
+		throws NoSuchWorkingUnitException, SystemException {
+
+		return workingUnitPersistence.findByName(name);
+	}
 	
 	private Log _log = LogFactoryUtil.getLog(WorkingUnitLocalServiceImpl.class);
 }

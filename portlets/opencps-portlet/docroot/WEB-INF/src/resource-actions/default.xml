@@ -107,6 +107,93 @@
 		</permissions>
 	</portlet-resource>
 	
+	<portlet-resource>
+		<portlet-name>32</portlet-name>
+		<permissions>
+			<supports>
+				<action-key>ADD_TO_PAGE</action-key>
+				<action-key>CONFIGURATION</action-key>
+				<action-key>VIEW</action-key>
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_TO_PAGE</action-key>
+				<action-key>CONFIGURATION</action-key>
+			</guest-unsupported>
+		</permissions>
+	</portlet-resource>
+	
+	<portlet-resource>
+		<portlet-name>33</portlet-name>
+		<permissions>
+			<supports>
+				<action-key>ADD_PORTLET_DISPLAY_TEMPLATE</action-key>
+				<action-key>ADD_TO_PAGE</action-key>
+				<action-key>CONFIGURATION</action-key>
+				<action-key>VIEW</action-key>
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_TO_PAGE</action-key>
+				<action-key>CONFIGURATION</action-key>
+			</guest-unsupported>
+		</permissions>
+	</portlet-resource>
+	
+	<portlet-resource>
+		<portlet-name>34</portlet-name>
+		<permissions>
+			<supports>
+				<action-key>ADD_PORTLET_DISPLAY_TEMPLATE</action-key>
+				<action-key>ADD_TO_PAGE</action-key>
+				<action-key>CONFIGURATION</action-key>
+				<action-key>VIEW</action-key>
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_TO_PAGE</action-key>
+				<action-key>CONFIGURATION</action-key>
+			</guest-unsupported>
+		</permissions>
+	</portlet-resource>
+	
+	<portlet-resource>
+		<portlet-name>35</portlet-name>
+		<permissions>
+			<supports>
+				<action-key>ADD_PORTLET_DISPLAY_TEMPLATE</action-key>
+				<action-key>ADD_TO_PAGE</action-key>
+				<action-key>CONFIGURATION</action-key>
+				<action-key>VIEW</action-key>
+			</supports>
+			<site-member-defaults>
+				<action-key>VIEW</action-key>
+			</site-member-defaults>
+			<guest-defaults>
+				<action-key>VIEW</action-key>
+			</guest-defaults>
+			<guest-unsupported>
+				<action-key>ADD_TO_PAGE</action-key>
+				<action-key>CONFIGURATION</action-key>
+			</guest-unsupported>
+		</permissions>
+	</portlet-resource>
+	
 	<model-resource>
 		<model-name>org.opencps.datamgt.model.DictCollection</model-name>
 		<portlet-ref>

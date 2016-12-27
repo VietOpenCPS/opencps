@@ -16,22 +16,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../../../init.jsp"%>
-<%@page import="java.util.List"%>
+
 <%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearchUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="com.liferay.portal.kernel.util.StringPool"%>
-<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
-<%@page import="org.opencps.util.DLFileEntryUtil"%>
 <%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%> 
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="java.util.List"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
+
+<%@ include file="../../../init.jsp"%>
 <%
 	List<DossierPart> dossierPartsLevel1 = (List<DossierPart>) request.getAttribute("dossierPartsLevel1");
 	Dossier dossier = (Dossier) request.getAttribute("dossier");
@@ -119,7 +117,7 @@
 								</aui:row>
 							</aui:col>
 							<aui:col width="50">
-								<span class="span3 bold">
+								<span class="span3 bold status-color-denied">
 									<liferay-ui:message key="dossier-file-name"/>
 								</span>
 								<span class="span6">
@@ -201,7 +199,7 @@
 						</aui:row>
 					</aui:col>
 					<aui:col width="50">
-						<span class="span3 bold">
+						<span class="span3 bold status-color-denied">
 							<liferay-ui:message key="dossier-file-name"/>
 						</span>
 						<span class="span6">

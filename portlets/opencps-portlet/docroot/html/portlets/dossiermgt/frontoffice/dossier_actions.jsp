@@ -18,10 +18,8 @@
 	 */
 %>
 <%@page import="org.opencps.backend.util.BackendUtils"%>
-<%@page
-	import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
-<%@page
-	import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
+<%@page	import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page	import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@page import="org.opencps.dossiermgt.bean.DossierBean"%>
@@ -29,16 +27,11 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
-<%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 <%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
-<%@page import="com.liferay.portal.kernel.log.Log"%>
-<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.backend.util.BackendUtils"%>
 
 <%@page pageEncoding="UTF-8"%>
 
@@ -77,19 +70,23 @@
 
 <%-- <liferay-ui:icon-menu> --%>
 <portlet:renderURL var="viewDossierURL">
-	<portlet:param name="mvcPath"
-		value='<%=templatePath + "edit_dossier.jsp"%>' />
-	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
-		value="<%=String.valueOf(dossier.getDossierId())%>" />
+	<portlet:param 
+		name="mvcPath"
+		value='<%=templatePath + "edit_dossier.jsp"%>' 
+	/>
+	<portlet:param 
+		name="<%=DossierDisplayTerms.DOSSIER_ID%>"
+		value="<%=String.valueOf(dossier.getDossierId())%>" 
+	/>
 	<portlet:param name="<%=Constants.CMD%>" value="<%=Constants.VIEW%>" />
 	<portlet:param name="isEditDossier" value="<%=String.valueOf(false)%>" />
 	<portlet:param name="redirectURL" value="<%=currentURL%>" />
 	<portlet:param name="backURL" value="<%=currentURL %>"/>
 </portlet:renderURL>
 	<c:choose>
-		<c:when test="<%=showTabDossierResultFirst %>">
+		<c:when test="<%=Validator.isNotNull(dossierTabFocus) %>">
 			<%
-				String viewResultDossierURL = viewDossierURL.toString() + "#" +renderResponse.getNamespace() +"tab="+ renderResponse.getNamespace() + "result";
+				String viewResultDossierURL = viewDossierURL.toString() + "#" +renderResponse.getNamespace() +"tab="+ renderResponse.getNamespace() + dossierTabFocus;
 			%> 
 			<liferay-ui:icon 
 				cssClass="search-container-action fa view" 
@@ -111,70 +108,99 @@
 	</c:choose>
 
 <c:choose>
-	<c:when
-		test="<%=dossier.getDossierStatus().equals(
+	<c:when	test="<%=dossier.getDossierStatus().equals(
 						PortletConstants.DOSSIER_STATUS_NEW) ||
 						dossier.getDossierStatus().equals(
-							PortletConstants.DOSSIER_STATUS_WAITING)%>">
-		<c:if
-			test="<%=DossierPermission.contains(
-							permissionChecker, scopeGroupId, ActionKeys.UPDATE)%>">
+							PortletConstants.DOSSIER_STATUS_WAITING)%>"
+	>
+		<c:if test="<%=DossierPermission.contains(
+							permissionChecker, scopeGroupId, ActionKeys.UPDATE)%>"
+		>
 			<portlet:renderURL var="updateDossierURL">
-				<portlet:param name="mvcPath"
-					value='<%=templatePath + "edit_dossier.jsp"%>' />
-				<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
-					value="<%=String.valueOf(dossier.getDossierId())%>" />
+				<portlet:param 
+					name="mvcPath"
+					value='<%=templatePath + "edit_dossier.jsp"%>' 
+				/>
+				<portlet:param 
+					name="<%=DossierDisplayTerms.DOSSIER_ID%>"
+					value="<%=String.valueOf(dossier.getDossierId())%>" 
+				/>
 				<portlet:param name="redirectURL" value="<%=currentURL%>" />
 				<portlet:param name="backURL" value="<%=currentURL%>" />
-				<portlet:param name="isEditDossier"
-					value="<%=String.valueOf(true)%>" />
+				<portlet:param 
+					name="isEditDossier"
+					value="<%=String.valueOf(true)%>" 
+				/>
 			</portlet:renderURL>
-			<liferay-ui:icon cssClass="search-container-action fa edit"
-				image="edit" message="edit-on-action" url="<%=updateDossierURL.toString()%>" />
+
+			<c:choose>
+				<c:when test="<%=dossier.getDossierStatus().equals(
+						PortletConstants.DOSSIER_STATUS_WAITING) %>">
+					<liferay-ui:icon cssClass="search-container-action fa edit"
+					image="edit" message="edit-on-action" url="<%=updateDossierURL.toString() + \"#\" +renderResponse.getNamespace() +\"tab=\"+ renderResponse.getNamespace() + \"result\"%>" />
+				</c:when>
+				<c:otherwise>
+					<liferay-ui:icon cssClass="search-container-action fa edit"
+						image="edit" message="edit-on-action" url="<%=updateDossierURL.toString() %>" />
+				</c:otherwise>
+			</c:choose>
+
 			<c:if
 				test="<%=dossier.getDossierStatus().equals(
 								PortletConstants.DOSSIER_STATUS_NEW)%>">
 				<portlet:actionURL var="updateDossierStatusURL"
 					name="updateDossierStatus">
+
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
 						value="<%=String.valueOf(dossier.getDossierId())%>" />
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS%>"
 						value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW)%>" />
 					<portlet:param name="redirectURL" value="<%=currentURL%>" />
 				</portlet:actionURL>
+
 				<liferay-ui:icon cssClass="search-container-action fa forward"
 					image="forward" message="send-dossier"
 					url="<%=updateDossierStatusURL.toString()%>" />
+
 			</c:if>
 
-			<c:if
-				test="<%=dossier.getDossierStatus().equals(
-								PortletConstants.DOSSIER_STATUS_WAITING)%>">
-				<portlet:actionURL var="updateDossierStatusURL"
-					name="updateDossierStatus">
+			<c:if test="<%=dossier.getDossierStatus().equals(
+								PortletConstants.DOSSIER_STATUS_WAITING)%>"
+			>
+				<portlet:actionURL 
+					var="updateDossierStatusURL"
+					name="updateDossierStatus"
+				>
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
 						value="<%=String.valueOf(dossier.getDossierId())%>" />
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS%>"
 						value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_WAITING)%>" />
 					<portlet:param name="redirectURL" value="<%=currentURL%>" />
 				</portlet:actionURL>
-				<liferay-ui:icon cssClass="search-container-action fa forward"
-					image="reply" message="resend"
-					url="<%=updateDossierStatusURL.toString()%>" />
+				<liferay-ui:icon 
+					cssClass="search-container-action fa forward"
+					image="reply" 
+					message="resend"
+					url="<%=updateDossierStatusURL.toString()%>" 
+				/>
 			</c:if>
 		</c:if>
 
-		<c:if
-			test="<%=DossierPermission.contains(
+		<c:if test="<%=DossierPermission.contains(
 							permissionChecker, scopeGroupId, ActionKeys.DELETE) &&
 							dossier.getDossierStatus().equals(
-								PortletConstants.DOSSIER_STATUS_NEW)%>">
+								PortletConstants.DOSSIER_STATUS_NEW)%>"
+		>
 			<portlet:actionURL var="deleteDossierURL" name="deleteDossier">
-				<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
-					value="<%=String.valueOf(dossier.getDossierId())%>" />
+				<portlet:param 
+					name="<%=DossierDisplayTerms.DOSSIER_ID%>"
+					value="<%=String.valueOf(dossier.getDossierId())%>" 
+				/>
 				<portlet:param name="redirectURL" value="<%=currentURL%>" />
-				<portlet:param name="dossierStatus"
-					value="<%=dossier.getDossierStatus()%>" />
+				<portlet:param 
+					name="dossierStatus"
+					value="<%=dossier.getDossierStatus()%>" 
+				/>
 			</portlet:actionURL>
 			<liferay-ui:icon-delete image="delete"
 				cssClass="search-container-action fa delete"

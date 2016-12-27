@@ -15,15 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.util.MessageKeys"%>
-<%@page import="javax.portlet.PortletConfig"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.dossiermgt.permissions.DossierPartPermission"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierPartSearchTerms"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.search.DossierPartSearch"%>
 <%@page import="java.util.ArrayList"%>

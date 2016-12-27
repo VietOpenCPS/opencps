@@ -87,6 +87,8 @@
 			ON
 				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			WHERE
+				opencps_dossier.receptionNo <> ''
+			AND
 				(opencps_dossier.groupId = ?)
 			AND
 				((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
@@ -105,6 +107,9 @@
 			
 			AND 
 				(opencps_dossier.govAgencyCode IN (?))
+			
+			AND 
+				(opencps_dossier.dossierStatus IN (?))
 		]]>
 	</sql>	
 	
@@ -119,6 +124,8 @@
 			ON
 				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			WHERE
+				opencps_dossier.receptionNo <> ''
+			AND
 				(opencps_dossier.groupId = ?)
 			AND
 				((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
@@ -137,29 +144,37 @@
 			
 			AND 
 				(opencps_dossier.govAgencyCode IN (?))
+			AND 
+				(opencps_dossier.dossierStatus IN (?))
 		]]>
 	</sql>
 
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.countDossierFile">	
 		<![CDATA[
 			SELECT
-				count(*) AS COUNT_VALUE
+				COUNT(DISTINCT (opencps_dossier_file.dossierFileId)) AS COUNT_VALUE
 			FROM
 				opencps_dossier_file
-			LEFT JOIN
-				opencps_dossierpart 
+			INNER JOIN
+				opencps_dossierpart
 			ON
 				opencps_dossier_file.dossierPartId = opencps_dossierpart.dossierpartId
+			INNER JOIN 
+				dlfileentry
+			ON
+				opencps_dossier_file.fileEntryId = dlfileentry.fileEntryId
 			WHERE
 				(opencps_dossier_file.groupId = ?)
+			AND 
+				(opencps_dossier_file.syncStatus = ?)
+			AND 
+				(opencps_dossier_file.removed = ?)
 			AND  
 				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
 				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier_file.fileEntryId = ?)
-			AND 
-				(opencps_dossier_file.fileEntryId > 0)
 			AND
 				(opencps_dossier_file.dossierFileType = ?)
 			AND
@@ -170,23 +185,29 @@
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFile">
 		<![CDATA[
 			SELECT
-				*
+				DISTINCT opencps_dossier_file.*
 			FROM
 				opencps_dossier_file
-			LEFT JOIN
+			INNER JOIN
 				opencps_dossierpart 
 			ON
 				opencps_dossier_file.dossierPartId = opencps_dossierpart.dossierpartId
+			INNER JOIN 
+				dlfileentry
+			ON
+				opencps_dossier_file.fileEntryId = dlfileentry.fileEntryId
 			WHERE
 				(opencps_dossier_file.groupId = ?)
+			AND 
+				(opencps_dossier_file.syncStatus = ?)
+			AND 
+				(opencps_dossier_file.removed = ?)
 			AND 
 				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
 				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier_file.fileEntryId = ?)
-			AND 
-				(opencps_dossier_file.fileEntryId > 0)
 			AND
 				(opencps_dossier_file.dossierFileType = ?)
 			AND
@@ -1052,7 +1073,8 @@
 			ON 
 				d.dossierId = df.dossierId
 			AND 
-				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ?)
+				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ? AND
+				(lower(df.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$]) AND d.ownerOrganizationId = ?)
 			INNER JOIN 
 				opencps_dossierpart AS p
 			ON 
@@ -1074,7 +1096,8 @@
 			ON 
 				d.dossierId = df.dossierId
 			AND 
-				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ?)
+				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ? AND
+				(lower(df.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$]) AND d.ownerOrganizationId = ?)
 			INNER JOIN 
 				opencps_dossierpart AS p
 			ON 
@@ -1082,6 +1105,21 @@
 			AND p.partType IN (?) AND p.partNo IN (?)
 			ORDER BY 
 				d.modifiedDate DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFileSugesstion">	
+		<![CDATA[
+			SELECT 
+			    *
+			FROM
+			    opencps_dossier_file AS odf
+			        INNER JOIN
+			    opencps_dossierpart AS odp ON odf.dossierPartId = odp.dossierpartId
+			        AND odf.removed = 0
+			        AND odf.syncStatus = 2
+			        AND odf.dossierId = ?
+			        AND odf.templateFileNo IN (?)
 		]]>
 	</sql>
 	

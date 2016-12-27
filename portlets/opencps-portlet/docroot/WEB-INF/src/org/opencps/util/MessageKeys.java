@@ -87,6 +87,7 @@ public class MessageKeys {
 	
 	//default message
 	public static final String DEFAULT_SUCCESS_KEY = "your-request-completed-successfully";
+	public static final String DEFAULT_ERROR_KEY = "your-request-completed-error";
 	public static final String DEFAULT_SUCCESS_KEY_X = "message-x";
 	
 	public static final String HOLIDAYCONFIG_ADD_SUCESS = "holidayconfig.add.sucess";
