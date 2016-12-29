@@ -35,9 +35,9 @@ public class UnitMockitoTest {
 	public void test()
 	    throws SystemException {
 
-/*		PowerMockito.mockStatic(UserLocalServiceUtil.class);
+		PowerMockito.mockStatic(UserLocalServiceUtil.class);
 		when(UserLocalServiceUtil.getUsersCount()).thenReturn(5);
-		assertEquals(5, UserLocalServiceUtil.getUsersCount());*/
+		assertEquals(5, UserLocalServiceUtil.getUsersCount());
 	}
 
 }
