@@ -1,82 +1,32 @@
-language: java
 sudo: required
 
-jdk:
-  - oraclejdk7
-
+services:
+  - docker
+  
 cache:
   directories:
-    - liferay
+  - /opt
+  - /usr/java
 
-before_install: 
-  - wget --progress=bar:force 'http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.2.5%20GA6/liferay-portal-jboss-6.2-ce-ga6-20160112152609836.zip' -O liferay.zip
-  - unzip -o -q liferay.zip -d liferay
-  - export LIFERAY_HOME=liferay/liferay-portal-6.2-ce-ga6
-  - ls -lht $LIFERAY_HOME/*
-  - chmod +x liferay/liferay-portal-6.2-ce-ga6/jboss-7.1.1/bin/*
-  - sed -i 's/jboss.bind.address.management:127.0.0.1/jboss.bind.address.management:0.0.0.0/g'  $LIFERAY_HOME/jboss-7.1.1/standalone/configuration/standalone.xml
-  - sed -i 's/jboss.bind.address:127.0.0.1/jboss.bind.address:0.0.0.0/g'  $LIFERAY_HOME/jboss-7.1.1/standalone/configuration/standalone.xml
-  - sed -i 's/jboss.bind.address.unsecure:127.0.0.1/jboss.bind.address.unsecure:0.0.0.0/g' $LIFERAY_HOME/jboss-7.1.1/standalone/configuration/standalone.xml
-  - sed -i 's/deployment-timeout="120"/deployment-timeout="6000"/g'  $LIFERAY_HOME/jboss-7.1.1/standalone/configuration/standalone.xml
-  - sed -i 's/MaxPermSize=256m/MaxPermSize=4096m/g' $LIFERAY_HOME/jboss-7.1.1/bin/standalone.conf
+before_install:
+  - cd $TRAVIS_BUILD_DIR && cd ../
+  - docker pull centos:7
+  #download setenv.sh and dockerfile1
+  - curl -J -O --insecure https://drive.fds.vn/index.php/s/NzWbGDaFNNrvoc9/download 
+  - chmod +x setenv.sh
+  - curl -J -O --insecure https://drive.fds.vn/index.php/s/OHpXcVCl7McOzYE/download
+  #Create Eviroment Docker Image
+  - docker build -t "opencps:enviroment" -f dockerfile1 .
+  
+  #download build.sh
+  - curl -J -O --insecure https://drive.fds.vn/index.php/s/s5RZczUPRLh572O/download
+  - chmod +x build.sh
+  - curl -J -O --insecure https://drive.fds.vn/index.php/s/qHyShIKDzaRrdvZ/download
+ 
+script:
+  #Create Build Docker Image
+  - docker build -t "opencps:build" -f dockerfile2 .
 
-# Get the SDK and unpack it
-  - wget --progress=bar:force 'http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.2.5%20GA6/liferay-plugins-sdk-6.2-ce-ga6-20160112152609836.zip' -O liferay-plugins-sdk.zip
-  - unzip -o -q liferay-plugins-sdk.zip -d liferay-plugins
-  - cp build.travis.properties liferay-plugins/liferay-plugins-sdk-6.2
-
-# Copy SDK folder content to OpenCPS code base
-  - cp -r liferay-plugins/liferay-plugins-sdk-6.2/* .
-  - sed -i '341d' build.properties
-  - sed -i '341i ivy.jar.url=https://repository.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/org.apache.ivy/${ivy.version}/org.apache.ivy-${ivy.version}.jar' build.properties
-
-# Install ECJ
-  - sudo apt-get install ecj
-  - sudo ln -s /usr/share/java/ecj.jar /usr/share/ant/lib/ecj.jar
-
-#Build service OpenCPS
-
-\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-
-\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-
-\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-
-\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-
-\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-
-\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-
-\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-
-\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-
-\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-
-\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/statisticsmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
-ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
-
-# Start the application server
-#  - $LIFERAY_HOME/jboss-7.1.1/bin/standalone.sh
-# Prepare the database
-#  - sudo apt-get install mysql-server
-#  - cp scripts/portal-ext.properties $LIFERAY_HOME
-#  - mysql -uroot -p opencps < "db_script/opencps_portal.sql"
-
-script: 
-  - sudo ant -buildfile portlets/opencps-portlet/build.xml test-unit
-
+  
 notifications:
-email: true
-#2017
+  email: false
