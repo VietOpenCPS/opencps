@@ -29,3 +29,48 @@
 @import url(toptabs.css);
 @import url(content.css);
 @import url(footer.css);
+
+
+
+/*----- Lucene Menu -----*/
+.opencps-theme.ux .lucene-menu-wrapper {
+    border: 1px solid #ccc;
+}
+.opencps-theme.ux .lucene-menu-wrapper .level-1 {
+	background-color: #0074cd;
+	margin: -1px -1px 0;
+	padding: 1px 1px 0;
+	font-family: 'Roboto-Bold';
+}
+.opencps-theme.ux .lucene-menu-wrapper .menu-item {
+	border-bottom: 1px solid #ccc;
+}
+.opencps-theme.ux .lucene-menu-wrapper .menu-item a {
+    display: block;
+    padding: 5px 10px;
+    position: relative;
+}
+.opencps-theme.ux .lucene-menu-wrapper .level-1 a {
+	color: white;
+}
+.opencps-theme.ux .lucene-menu-wrapper .level-3 {
+    padding-left: 20px;
+}
+.opencps-theme.ux .lucene-menu-wrapper .level-4 {
+    padding-left: 40px;
+}
+.opencps-theme.ux .lucene-menu-wrapper .menu-item .item-value {
+    display: inline-block;
+    padding: 2px 9px;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 14px;
+    color: #fff;
+    vertical-align: baseline;
+    white-space: nowrap;
+    background-color: #999;
+    border-radius: 9px;
+    position: absolute;
+    top: 5px;
+    right: 8px;
+}
